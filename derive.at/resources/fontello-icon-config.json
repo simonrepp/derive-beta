@@ -1,0 +1,112 @@
+{
+  "name": "icons",
+  "css_prefix_text": "icon-",
+  "css_use_suffix": false,
+  "hinting": true,
+  "units_per_em": 1000,
+  "ascent": 850,
+  "glyphs": [
+    {
+      "uid": "f04a5d24e9e659145b966739c4fde82a",
+      "css": "bookmark",
+      "code": 59392,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "a3f89e106175a5c5c4e9738870b12e55",
+      "css": "tags",
+      "code": 59393,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "5de9370846a26947e03f63142a3f1c07",
+      "css": "top",
+      "code": 61702,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "ccc2329632396dc096bb638d4b46fb98",
+      "css": "mail",
+      "code": 61664,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "9dd9e835aebe1060ba7190ad2b2ed951",
+      "css": "search",
+      "code": 59394,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "559647a6f430b3aeadbecd67194451dd",
+      "css": "menu",
+      "code": 61641,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "9affc98d652b86628d650ee58dbf0357",
+      "css": "kiosk",
+      "code": 59395,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "6b44ce2430177c5b05a1d1575ccaaf5c",
+      "css": "vimeo",
+      "code": 62077,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "627abcdb627cb1789e009c08e2678ef9",
+      "css": "twitter",
+      "code": 61593,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "8e04c98c8f5ca0a035776e3001ad2638",
+      "css": "facebook",
+      "code": 61594,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "a9862b9d5197886c1ad693ecd7120b31",
+      "css": "youtube",
+      "code": 61799,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "649004fb1ed50395a33c3780236ba8aa",
+      "css": "flickr",
+      "code": 61806,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "dd6c6b221a1088ff8a9b9cd32d0b3dd5",
+      "css": "checkbox-checked",
+      "code": 59396,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "4b900d04e8ab8c82f080c1cfbac5772c",
+      "css": "checkbox",
+      "code": 61590,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "f3f90c8c89795da30f7444634476ea4f",
+      "css": "previous",
+      "code": 61700,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "7bf14281af5633a597f85b061ef1cfb9",
+      "css": "next",
+      "code": 61701,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "7277ded7695b2a307a5f9d50097bb64c",
+      "css": "print",
+      "code": 59397,
+      "src": "fontawesome"
+    }
+  ]
+}

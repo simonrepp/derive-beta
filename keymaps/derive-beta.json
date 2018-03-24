@@ -1,0 +1,6 @@
+{
+  "atom-workspace": {
+    "f5": "derive-beta:refresh",
+    "ctrl-f5": "derive-beta:deploy-staging.urbanize.at"
+  }
+}

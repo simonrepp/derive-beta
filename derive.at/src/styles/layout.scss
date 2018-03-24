@@ -1,0 +1,37 @@
+.layout__content {
+  flex-grow: 1;
+  height: 100vh;
+  position: relative;
+}
+
+.layout__header {
+  pointer-events: none;
+  position: absolute;
+  width: 100%;
+  z-index: 2;
+}
+
+.layout__offset {
+  padding: 260px 1.33em 0 1.33em;
+}
+
+.layout__overlap {
+  max-width: 1312px !important;
+}
+
+.layout__restraint {
+  margin: 0 auto;
+  max-width: 1300px;
+}
+
+.layout__scroll {
+  height: 100%;
+  overflow-y: scroll;
+  position: absolute;
+  width: 100%;
+  z-index: 1;
+}
+
+.layout__split {
+  display: flex;
+}

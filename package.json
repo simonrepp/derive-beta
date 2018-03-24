@@ -1,7 +1,7 @@
 {
   "name": "derive-beta",
   "main": "./lib/main",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Derive Publishing Plugin Prototyp",
   "repository": "https://github.com/simonrepp/derive-beta",
   "author": "Simon Repp <simon@fdpl.io> (https://simonrepp.com)",
@@ -15,5 +15,17 @@
         "2.0.0": "getProvider"
       }
     }
+  },
+  "dependencies": {
+    "fs-extra": "^5.0.0",
+    "glob": "^7.1.2",
+    "graceful-fs": "^4.1.11",
+    "http-server": "^0.11.1",
+    "markdown-it": "^8.4.1",
+    "moment": "^2.21.0",
+    "sass": "^1.0.0-rc.1",
+    "sharp": "^0.19.0",
+    "toml-j0.4": "^1.1.1",
+    "uglify-es": "^3.3.9"
   }
 }

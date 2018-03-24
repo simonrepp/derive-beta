@@ -1,0 +1,60 @@
+@font-face {
+  font-family: 'icons';
+  src: url('/icons/icons.woff2?4793465') format('woff2'),
+       url('/icons/icons.woff?4793465') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+ 
+ [class^="icon-"]:before, [class*=" icon-"]:before {
+  font-family: "icons";
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+ 
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  margin-right: .2em;
+  text-align: center;
+  /* opacity: .8; */
+ 
+  /* For safety - reset parent styles, that can break glyph codes*/
+  font-variant: normal;
+  text-transform: none;
+ 
+  /* fix buttons height, for twitter bootstrap */
+  line-height: 1em;
+ 
+  /* Animation center compensation - margins should be symmetric */
+  /* remove if not needed */
+  margin-left: .2em;
+ 
+  /* you can be more comfortable with increased icons size */
+  /* font-size: 120%; */
+ 
+  /* Font smoothing. That was taken from TWBS */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+ 
+  /* Uncomment for 3D effect */
+  /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
+}
+ 
+.icon-bookmark:before { content: '\e800'; } /* '' */
+.icon-tags:before { content: '\e801'; } /* '' */
+.icon-search:before { content: '\e802'; } /* '' */
+.icon-kiosk:before { content: '\e803'; } /* '' */
+.icon-checkbox-checked:before { content: '\e804'; } /* '' */
+.icon-print:before { content: '\e805'; } /* '' */
+.icon-checkbox:before { content: '\f096'; } /* '' */
+.icon-twitter:before { content: '\f099'; } /* '' */
+.icon-facebook:before { content: '\f09a'; } /* '' */
+.icon-menu:before { content: '\f0c9'; } /* '' */
+.icon-mail:before { content: '\f0e0'; } /* '' */
+.icon-previous:before { content: '\f104'; } /* '' */
+.icon-next:before { content: '\f105'; } /* '' */
+.icon-top:before { content: '\f106'; } /* '' */
+.icon-youtube:before { content: '\f167'; } /* '' */
+.icon-flickr:before { content: '\f16e'; } /* '' */
+.icon-vimeo:before { content: '\f27d'; } /* '' */

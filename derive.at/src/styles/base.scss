@@ -1,0 +1,48 @@
+@import './colors.scss';
+
+body {
+  background-color: $color-beige;
+  color: $color-text;
+  margin: 0;
+  overflow: hidden;
+}
+
+body,
+button,
+input {
+  font-family: 'FunctionPro-Book';
+  font-size: 18px;
+}
+
+a {
+  color: $color-text;
+  cursor: pointer;
+  text-decoration-color: $color-grey;
+
+  &:hover {
+    text-decoration-color: $color-text;
+  }
+}
+
+.a__no-underline {
+  text-decoration: none;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #979797;
+  height: 0;
+}
+
+.hr__light {
+  border-top: 1px solid #d3cfcd;
+}
+
+img {
+  max-width: 100%;
+}
+
+strong {
+  font-family: 'FunctionPro-Medium';
+  font-weight: 400;
+}

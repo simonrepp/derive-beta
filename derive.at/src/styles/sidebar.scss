@@ -1,0 +1,90 @@
+.sidebar {
+  background-color: $color-almost-white;
+  box-sizing: border-box;
+  height: 100vh;
+  padding-top: 2em;
+}
+
+.sidebar__item {
+  position: relative;
+}
+
+.sidebar__link {
+  align-items: center;
+  box-sizing: border-box;
+  display: flex;
+  font-size: 1.1em;
+  height: 3em;
+  justify-content: center;
+  text-decoration: none;
+  width: 3.25em;
+}
+
+.sidebar__link:hover {
+  border-bottom: 1px solid $color-beige;
+  border-top: 1px solid $color-beige;
+}
+
+.sidebar__link__edition {
+  line-height: 0.9em;
+}
+
+.sidebar__link__top {
+  bottom: 0;
+  opacity: 0;
+  position: absolute;
+  transition: bottom 0.5s, opacity 0.5s;
+}
+
+.sidebar__link__top.active {
+  bottom: 2em;
+  opacity: 1;
+}
+
+.sidebar__searchform {
+  align-items: flex-end;
+  display: flex;
+  flex-direction: column;
+
+  & > div {
+    margin: 0.15em 0;
+  }
+
+  button {
+    background-color: $color-beige;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-top: 1em;
+    padding: 0.5em;
+    width: 100%;
+  }
+
+  input[type="checkbox"] {
+    outline: none;
+  }
+
+  input[type="search"] {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid $color-beige;
+    margin-bottom: 1em;
+    width: 100%;
+  }
+}
+
+.sidebar__widget {
+  background-color: $color-almost-white;
+  box-sizing: border-box;
+  display: none;
+  left: -200px;
+  padding: 1em;
+  position: absolute;
+  top: 1px;
+  width: 200px;
+  z-index: 2;
+}
+
+.sidebar__link.active + .sidebar__widget {
+  display: block;
+}

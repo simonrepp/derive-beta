@@ -1,19 +1,11 @@
 {
-  "context-menu": {
-    "atom-text-editor": [
-      {
-        "label": "derive.at deployen",
-        "command": "derive:toggle"
-      }
-    ]
-  },
   "menu": [
     {
       "label": "Derive",
       "submenu": [
         {
-          "label": "Build derive.at",
-          "command": "derive-beta:build-derive"
+          "label": "Aktualisieren",
+          "command": "derive-beta:refresh"
         },
         {
           "type": "separator"
@@ -24,6 +16,10 @@
         },
         {
           "label": "Neuer Akteur",
+          "command": "derive-beta:new-player"
+        },
+        {
+          "label": "Neues Buch",
           "command": "derive-beta:new-player"
         },
         {
@@ -46,41 +42,75 @@
           "type": "separator"
         },
         {
-          "label": "Artikel auflisten",
-          "command": "derive-beta:list-tags"
-        },
-        {
-          "label": "Radiosendungen auflisten",
-          "command": "derive-beta:list-tags"
-        },
-        {
-          "label": "Tags auflisten",
-          "command": "derive-beta:list-tags"
-        },
-        {
-          "type": "separator"
-        },
-        {
-          "label": "Seite deployen",
+          "label": "Auflistungen",
           "submenu": [
             {
-              "label": "derive.at",
-              "command": "derive-beta:deploy-derive"
+              "label": "Artikel",
+              "command": "derive-beta:list-tags"
             },
             {
-              "label": "staging.derive.at",
-              "command": "derive-beta:deploy-derive"
+              "label": "Ausgaben",
+              "command": "derive-beta:list-tags"
+            },
+            {
+              "label": "Kategorien",
+              "command": "derive-beta:list-tags"
+            },
+            {
+              "label": "Radiosendungen",
+              "command": "derive-beta:list-tags"
+            },
+            {
+              "label": "Seiten",
+              "command": "derive-beta:list-tags"
+            },
+            {
+              "label": "Tags",
+              "command": "derive-beta:list-tags"
+            },
+            {
+              "label": "Veranstaltungen",
+              "command": "derive-beta:list-tags"
+            }
+          ]
+        },
+        {
+          "label": "Dokumentation",
+          "submenu": [
+            {
+              "label": "Markdown Handbuch",
+              "command": "derive-beta:markdown-reference"
+            },
+            {
+              "label": "TOML Handbuch",
+              "command": "derive-beta:markdown-reference"
             },
             {
               "type": "separator"
             },
             {
-              "label": "urbanize.at",
-              "command": "derive-beta:deploy-urbanize"
+              "label": "Artikel Schema",
+              "command": "derive-beta:markdown-reference"
             },
             {
-              "label": "staging.urbanize.at",
-              "command": "derive-beta:deploy-urbanize"
+              "label": "Akteur Schema",
+              "command": "derive-beta:markdown-reference"
+            },
+            {
+              "label": "Ausgabe Schema",
+              "command": "derive-beta:markdown-reference"
+            },
+            {
+              "label": "Radiosendung Schema",
+              "command": "derive-beta:markdown-reference"
+            },
+            {
+              "label": "Seiten Schema",
+              "command": "derive-beta:markdown-reference"
+            },
+            {
+              "label": "Veranstaltung Schema",
+              "command": "derive-beta:markdown-reference"
             }
           ]
         },
@@ -88,12 +118,43 @@
           "type": "separator"
         },
         {
-          "label": "Markdown Referenz",
-          "command": "derive-beta:markdown-reference"
+          "label": "derive.at",
+          "submenu": [
+            {
+              "label": "staging.derive.at aktualisieren",
+              "command": "derive-beta:deploy-staging.derive.at"
+            },
+            {
+              "label": "derive.at aktualisieren",
+              "command": "derive-beta:deploy-derive.at"
+            }
+          ]
         },
         {
-          "label": "TOML Referenz",
-          "command": "derive-beta:markdown-reference"
+          "label": "urbanize.at",
+          "submenu": [
+            {
+              "label": "staging.urbanize.at aktualisieren",
+              "command": "derive-beta:deploy-staging.urbanize.at"
+            },
+            {
+              "label": "urbanize.at aktualisieren",
+              "command": "derive-beta:deploy-urbanize.at"
+            }
+          ]
+        },
+        {
+          "label": "berlin.urbanize.at",
+          "submenu": [
+            {
+              "label": "staging.berlin.urbanize.at aktualisieren",
+              "command": "derive-beta:deploy-staging.berlin.urbanize.at"
+            },
+            {
+              "label": "berlin.urbanize.at aktualisieren",
+              "command": "derive-beta:deploy-berlin.urbanize.at"
+            }
+          ]
         }
       ]
     }
