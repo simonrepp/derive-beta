@@ -1,0 +1,33 @@
+# AUSGABE
+
+authors = [ "Autor", "Autor"]
+categories = [ "Kategorie", "Kategorie" ]
+date = "2018-01-01"
+in_issue_on_page = "49"
+language = "DE"
+permalink = "perma-link"
+publish = true
+reviewed_books = [ "Buch" ]
+subtitle = ""
+tags = [ "Tag", "Tag" ]
+title = "Titel"
+urbanize = ""
+visible = true
+
+abstract = """
+Das Abstract ...
+...
+Mehrzeilig.
+"""
+
+text = """
+# Erste Überschrift
+## Zweite Überschrift
+### Dritte Überschrift
+
+*Kursiv*
+**Fett**
+
+[Link](www.link.com)
+![Bild](/bild.jpg)
+"""

@@ -1,0 +1,101 @@
+{
+  "context-menu": {
+    "atom-text-editor": [
+      {
+        "label": "derive.at deployen",
+        "command": "derive:toggle"
+      }
+    ]
+  },
+  "menu": [
+    {
+      "label": "Derive",
+      "submenu": [
+        {
+          "label": "Build derive.at",
+          "command": "derive-beta:build-derive"
+        },
+        {
+          "type": "separator"
+        },
+        {
+          "label": "Neuer Artikel",
+          "command": "derive-beta:new-article"
+        },
+        {
+          "label": "Neuer Akteur",
+          "command": "derive-beta:new-player"
+        },
+        {
+          "label": "Neues Heft",
+          "command": "derive-beta:new-issue"
+        },
+        {
+          "label": "Neue Radiosendung",
+          "command": "derive-beta:new-program"
+        },
+        {
+          "label": "Neue Seite",
+          "command": "derive-beta:new-page"
+        },
+        {
+          "label": "Neue Veranstaltung",
+          "command": "derive-beta:new-event"
+        },
+        {
+          "type": "separator"
+        },
+        {
+          "label": "Artikel auflisten",
+          "command": "derive-beta:list-tags"
+        },
+        {
+          "label": "Radiosendungen auflisten",
+          "command": "derive-beta:list-tags"
+        },
+        {
+          "label": "Tags auflisten",
+          "command": "derive-beta:list-tags"
+        },
+        {
+          "type": "separator"
+        },
+        {
+          "label": "Seite deployen",
+          "submenu": [
+            {
+              "label": "derive.at",
+              "command": "derive-beta:deploy-derive"
+            },
+            {
+              "label": "staging.derive.at",
+              "command": "derive-beta:deploy-derive"
+            },
+            {
+              "type": "separator"
+            },
+            {
+              "label": "urbanize.at",
+              "command": "derive-beta:deploy-urbanize"
+            },
+            {
+              "label": "staging.urbanize.at",
+              "command": "derive-beta:deploy-urbanize"
+            }
+          ]
+        },
+        {
+          "type": "separator"
+        },
+        {
+          "label": "Markdown Referenz",
+          "command": "derive-beta:markdown-reference"
+        },
+        {
+          "label": "TOML Referenz",
+          "command": "derive-beta:markdown-reference"
+        }
+      ]
+    }
+  ]
+}
