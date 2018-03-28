@@ -38,7 +38,6 @@ module.exports = async (data, city) => {
     await write(eventPage(urbanize, event), `veranstaltungen/${event.permalink}/index.html`);
   }
 
-  // TODO: Possibly without the seiten/ prefix but watch collisions
   for(let i = 0; i < urbanize.pages.length; i++) {
     const page = urbanize.pages[i];
     await write(pagePage(urbanize, page), `seiten/${page.permalink}/index.html`);

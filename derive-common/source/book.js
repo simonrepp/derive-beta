@@ -5,6 +5,7 @@ const fsExtra = require('fs-extra'),
 const { loadToml } = require('../lib.js'),
       { validateArray,
         validateEmpty,
+        validateInteger,
         validateMarkdown,
         validatePath,
         validateString } = require('../validate.js');
@@ -39,7 +40,7 @@ module.exports = async (data, tomlPath) => {
     book.url = validateString(document, 'URL');
     book.placeOfPublication = validateString(document, 'Erscheinungsort');
     book.yearOfPublication = validateString(document, 'Erscheinungsjahr');
-    book.numberOfPages = validateString(document, 'Seitenanzahl');
+    book.numberOfPages = validateInteger(document, 'Seitenanzahl');
     book.price = validateString(document, 'Preis');
     book.authors = validateArray(document, 'Autoren_Herausgeber');
     book.publishers = validateArray(document, 'Verleger');

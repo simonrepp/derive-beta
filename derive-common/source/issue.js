@@ -37,8 +37,8 @@ module.exports = async (data, tomlPath) => {
   const issue = { sourceFile: tomlPath };
 
   try {
-    issue.number = validateInteger(document, 'Nummer');
-    issue.quarter = validateString(document, 'Quartal');
+    issue.number = validateInteger(document, 'Nummer', true);
+    issue.quarter = validateInteger(document, 'Quartal');
     issue.title = validateString(document, 'Titel', true);
     issue.cover = validatePath(document, 'Cover', data);
     issue.cooperation = validateString(document, 'Kooperation');

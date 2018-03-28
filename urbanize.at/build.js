@@ -3,10 +3,6 @@ const fsExtra = require('fs-extra'),
       sass = require('sass'),
       uglifyEs = require('uglify-es');
 
-// TODO: check if in .htacces it should be
-// ErrorDocument 404 /seite-nicht-gefunden/index.html OR JUST
-// ErrorDocument 404 /seite-nicht-gefunden/
-
 const { loadFile, writeFile } = require('../derive-common/lib.js'),
       // postprocess = require('./postprocess.js'),
       write = require('./write.js');
@@ -42,7 +38,7 @@ const compileSass = data => {
   });
 };
 
-module.exports = async (data, city) => { // TODO: site
+module.exports = async (data, city) => {
   try {
     await fsExtra.emptyDir(data.buildDir);
 
@@ -50,7 +46,6 @@ module.exports = async (data, city) => { // TODO: site
 
     // await write(data); // TODO: All these reintegrate please
     // await index(data);
-    // await suggestions(data);
     // await postprocess(data); // TODO: Rewrite media paths from backend layout to web-facing layout and naming everywhere
 
     await Promise.all([

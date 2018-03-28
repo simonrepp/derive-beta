@@ -38,7 +38,7 @@ exports.validateBoolean = (document, field) => {
     delete document[field];
     return false;
   } else {
-    throw `Das Feld "${field}" muss den Wert "Ja" oder "Nein" enthalten, enthält aber einen anderen Wert.`;
+    throw `Das Feld "${field}" muss den Wert "Ja" oder "Nein" enthalten, enthält aber den Wert "${document[field]}".`;
   }
 };
 
@@ -84,24 +84,28 @@ exports.validateEnum = (document, field, choices, required = false) => {
   return choice;
 };
 
-// TODO: This validates some optional fields -> there can be no "optional" int though, needs to be other type then (see article->in_issue ...)
-exports.validateInteger = (document, field) => {
+exports.validateInteger = (document, field, required = false) => {
   if(!document.hasOwnProperty(field)) {
     throw `Fehlendes Feld "${field}" - Falls das Feld angegeben wurde eventuell nach Tippfehlern Ausschau halten und auch die Gross/Kleinschreibung beachten.`;
   }
 
-  const integer = parseInt(document[field]);
-  delete document[field];
+  if((required || document[field].trim())) {
+    const integer = parseInt(document[field]);
 
-  if(integer === NaN) {
-    throw `Das Feld "${field}" muss eine Nummer enthalten, enthält aber "${document[field]}".`;
+    if(integer === NaN) {
+      throw `Das Feld "${field}" muss eine Ganzzahl enthalten, enthält aber "${document[field]}".`;
+    } else {
+      delete document[field];
+      return integer;
+    }
   } else {
-    return integer;
+    delete document[field];
+    return null;
   }
 };
 
 // TODO: Pluggable, modulare regex components to build the md/html rules - also think more in terms of inception matching (no src="" inside src="", no ![]() inside ![]() ..)
-exports.validateMarkdown = (document, field, data, dbgTODO) => {
+exports.validateMarkdown = (document, field, data) => {
   if(!document.hasOwnProperty(field)) {
     throw `Fehlendes Feld "${field}" - Falls das Feld angegeben wurde eventuell nach Tippfehlern Ausschau halten und auch die Gross/Kleinschreibung beachten.`;
   }
@@ -182,17 +186,12 @@ exports.validateMarkdown = (document, field, data, dbgTODO) => {
   //   files: ['/Dateien/foo.jpg', '/Dateien/Buchcover/Fanta.mp3'] <<<<< Can use this in postprocessing to text replace that in the renderedHTML (because verbatim copied there too!!)
   // }
 
-  // TODO: Check linked media existence
-  // TODO: Markdown-it error handling ??
   // TODO: Custom markdown processing necessary ?? (footnotes?)
   const markdown = markdownIt.render(document[field]);
   delete document[field];
 
-  // if(dbgTODO) console.log({txt: markdown });
-  //
   // const matches = markdown.match(/src\s*=\s*['"](.*?)['"]/g);
   // if(matches) {
-  //   if(dbgTODO) console.log({matches: matches});
   //   matches.forEach(match => {
   //     match = match.replace(/^src\s*=\s*['"]/, '');
   //     match = match.replace(/['"]$/, '');
@@ -201,8 +200,6 @@ exports.validateMarkdown = (document, field, data, dbgTODO) => {
   //     if(match.match(/^\s*\/\/|^\s*https?:\/\//)) { return; }
   //
   //     const filePath = match.replace(/^\//, '');
-  //
-  //     if(dbgTODO) console.log(filePath);
   //
   //     // TODO: Normalize paths as in validatePath ? See TODO there
   //     if(data.media.has(filePath)) {

@@ -46,12 +46,9 @@ module.exports = async data => {
 
     await fsExtra.emptyDir(data.buildDir);
 
-    // TODO: await postprocess(data); >>> consider folder structure requirements (what already exists when ? etc.)
-
-    // await write(data); // TODO: All these reintegrate please
-    // await index(data);
-    // await suggestions(data);
+    // await index(data); // TODO: All these reintegrate please
     // await postprocess(data); // TODO: Rewrite media paths from backend layout to web-facing layout and naming everywhere
+                                // consider folder structure requirements (what already exists when ? etc.)
 
     await Promise.all([
       compileJs(data),
