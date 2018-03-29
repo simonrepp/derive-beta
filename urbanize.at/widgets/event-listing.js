@@ -5,7 +5,7 @@ module.exports = events => `
     ${events.map(event => `
       <div class="list-item">
         ${event.image ? `
-          <img class="teaser-image" src="${event.image}" />
+          <img class="teaser-image" src="${event.image.written}" />
         `:''}
 
         <div class="emphasized">

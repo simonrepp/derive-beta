@@ -15,7 +15,9 @@ module.exports = article => `
       </a>
     </h2>
 
-    <img src="${article.image}" /><br/><br/>
+    ${article.image ? `
+      <img src="${article.image.written}" /><br/><br/>
+    `:''}
 
     TODO Ausgabe 2016 / 1<br/><br/>
 

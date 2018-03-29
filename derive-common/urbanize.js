@@ -1,52 +1,63 @@
 module.exports = data => {
   data.urbanize = {
     berlin: {
-      categories: {},
+      categories: new Map(),
       events: [],
       eventsByDate: new Map(),
       pages: [],
       participants: new Set(),
-      tags: {}
+      tags: new Map()
     },
     wien: {
-      categories: {},
+      categories: new Map(),
       events: [],
       eventsByDate: new Map(),
       pages: [],
       participants: new Set(),
-      tags: {}
+      tags: new Map()
     }
   };
 
   data.events.forEach(event => {
     ['berlin', 'wien'].forEach(city => {
-      if(event.urbanize === (city === 'berlin' ? 'Berlin 2018': 'Wien 2018')) {
+      // if(event.urbanize === (city === 'berlin' ? 'Berlin 2018': 'Wien 2018')) {
+      if(event.urbanize === (city === 'berlin' ? 'Hamburg 2016': 'Wien 2016')) {
         data.urbanize[city].events.push(event);
 
-        const date = event.startDate;
-        if(data.urbanize[city].eventsByDate.has(event.startDate)) {
-          data.urbanize[city].eventsByDate.get(event.startDate).push(event);
-        } else {
-          data.urbanize[city].eventsByDate.set(event.startDate, [event]);
-        }
-
-        event.categories.forEach(category => {
-          if(!data.urbanize[city].categories.hasOwnProperty(category)) {
-            data.urbanize[city].categories[category] = [];
+        event.dates.forEach(date => {
+          if(data.urbanize[city].eventsByDate.has(date.date)) {
+            data.urbanize[city].eventsByDate.get(date.date).push(event);
+          } else {
+            data.urbanize[city].eventsByDate.set(date.date, [event]);
           }
-
-          data.urbanize[city].categories[category].push(event);
         });
 
-        event.hosts.forEach(host => data.urbanize[city].participants.add(host));
-        event.participants.forEach(participant => data.urbanize[city].participants.add(participant));
+        event.categories.forEach(category => {
+          const existingCategory = data.urbanize[city].categories.get(category);
+          
+          if(existingCategory) {
+            existingCategory.push(event);
+          } else {
+            data.urbanize[city].categories.set(category, [event]);
+          }
+        });
+
+        event.hosts.connected.forEach(host =>
+          data.urbanize[city].participants.add(host)
+        );
+        
+        event.participants.connected.forEach(participant =>
+          data.urbanize[city].participants.add(participant)
+        );
 
         event.tags.forEach(tag => {
-          if(!data.urbanize[city].tags.hasOwnProperty(tag)) {
-            data.urbanize[city].tags[tag] = [];
+          const existingTag = data.urbanize[city].tags.get(tag);
+          
+          if(existingTag) {
+            existingTag.push(event);
+          } else {
+            data.urbanize[city].tags.set(tag, [event]);
           }
-
-          data.urbanize[city].tags[tag].push(event);
         });
       }
     });
@@ -54,11 +65,11 @@ module.exports = data => {
 
   data.pages.forEach(page => {
     ['berlin', 'wien'].forEach(city => {
-      if(page.urbanize === (city === 'berlin' ? 'Berlin 2018': 'Wien 2018')) {
+      
+      // if(page.urbanize === (city === 'berlin' ? 'Berlin 2018': 'Wien 2018')) {
+      if(page.urbanize === (city === 'berlin' ? 'Hamburg 2016': 'Wien 2016')) {
         data.urbanize[city].pages.push(page);
       }
     });
   });
-
-  console.log(data);
 };

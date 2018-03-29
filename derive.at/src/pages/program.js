@@ -8,19 +8,23 @@ module.exports = program => {
     <div class="feature">
 
       <div class="feature__image">
-        <img src="${program.image}" />
-        Cover-Design: TODO Elke Rauth
+        ${program.image ? `
+          <img src="${program.image.written}" />
+          Cover-Design: TODO Elke Rauth
+        `:''}
       </div>
 
       <div class="feature__text">
         <h1>${program.title}</h1>
         <strong>${program.subtitle}</strong>
 
-        AUDIO PLAYER<br/><br/>
+        <audio controls src="${program.soundfile.written}"></audio>
+
+        <br/><br/>
 
         <div class="generic__margin-vertical">
           <strong>Redaktion</strong>
-          ${authors(program.editors)}
+          ${authors(program.editors.connected)}
         </div>
 
         ${tags(program.tags)}

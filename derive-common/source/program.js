@@ -1,66 +1,98 @@
-const fsExtra = require('fs-extra'),
-      path = require('path'),
-      sharp = require('sharp');
-
-const { loadToml } = require('../lib.js'), // TODO: util.js instead ?
+const { loadPlain, statFile } = require('../util.js'),
+      { PlainDataParseError } = require('../../plaindata/plaindata.js'),
       { validateArray,
         validateDate,
-        validateEmpty,
+        validateKeys,
         validateMarkdown,
         validatePath,
-        validateString } = require('../validate.js');
+        validateString,
+        ValidationError } = require('../validate.js');
 
-module.exports = async (data, tomlPath) => {
-  let document;
+const specifiedKeys = [
+  'Abstract',
+  'Bild',
+  'Erstausstrahlung',
+  'Kategorien',
+  'Permalink',
+  'Redaktion',
+  'Soundfile',
+  'Sprache',
+  'Tags',
+  'Text',
+  'Titel',
+  'Untertitel'
+];
 
-  try {
-    document = await loadToml(data.root, tomlPath);
-  } catch(err) {
-    data.programs.delete(tomlPath);
+module.exports = async (data, plainPath) => {
+  const cached = data.cache.get(plainPath);
+  const stats = await statFile(data.root, plainPath);
+  
+  if(cached && stats.size === cached.stats.size && stats.mTimeMs === cached.stats.mTimeMs) {
+    data.programs.set(plainPath, cached.program);
+  } else {     
+    let document;
 
-    data.warnings.push({
-      description: `Bis zur Lösung des Problems scheint die betroffene Radiosendung nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${tomlPath}`,
-      detail: `Ab Zeile ${err.line} und Spalte ${err.column} war das parsen nicht mehr möglich. Der eigentliche Fehler liegt in der Regel bereits davor, oft auch in einer vorherigen Zeile.\n \nTypische Fehlerquellen: Fehlende oder überschüssige Anführungszeichen, Beistriche, eckige Klammern.\n \nDie originale Fehlermeldung des Parsers war:\n-----------\n${err.message}`,
-      files: [{
-        column: err.column,
-        line: err.line,
-        path: tomlPath
-      }],
-      header: `Unkritischer Fehler beim parsen der TOML Daten einer Radiosendung`
-    });
+    try {
+      document = await loadPlain(data.root, plainPath);
+    } catch(err) {
+      data.cache.delete(plainPath);
+      
+      if(err instanceof PlainDataParseError) {
+        data.warnings.push({
+          description: `Bis zur Lösung des Problems scheint die betroffene Radiosendung nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${plainPath}`,
+          detail: err.message,
+          files: [{
+            beginColumn: err.beginColumn,
+            beginLine: err.beginLine,
+            column: err.column,
+            line: err.line,
+            path: plainPath
+          }],
+          header: `Problem gefunden beim einlesen der plaindata Daten einer Radiosendung`
+        });
 
-    return;
+        return;
+      } else {
+        throw err;
+      }
+    }
+
+    const program = { sourceFile: plainPath };
+
+    try {
+      program.title = validateString(document, 'Titel', { required: true });
+      program.permalink = validateString(document, 'Permalink', { required: true });
+      program.firstBroadcast = validateDate(document, 'Erstausstrahlung', { required: true });
+
+      validateKeys(document, specifiedKeys);
+
+      program.subtitle = validateString(document, 'Untertitel');
+      program.image = validatePath(document, 'Bild');
+      program.soundfile = validatePath(document, 'Soundfile');
+      program.editors = { sourced: validateArray(document, 'Redaktion') };
+      program.language = validateString(document, 'Sprache'); // TODO: What is the usecase of this actually? (same for articles)
+      program.categories = validateArray(document, 'Kategorien');
+      program.tags = validateArray(document, 'Tags');
+      program.abstract = validateMarkdown(document, 'Abstract');
+      program.text = validateMarkdown(document, 'Text', { process: false });
+    } catch(err) {
+      data.cache.delete(plainPath);
+      
+      if(err instanceof ValidationError) {
+        data.warnings.push({
+          description: 'Bis der Fehler korrigiert wurde wird die Datei ignoriert, dies kann auch weitere Dateien betreffen wenn diese auf die Datei bzw. deren Inhalte referenzieren.',
+          detail: err.message,
+          files: [{ path: plainPath }],
+          header: `**${plainPath}**\n\nProblem: Die Daten ${program.title ? `der Radiosendung "${program.title}"` : 'einer Radiosendung'} konnten nicht erfolgreich validiert werden.`
+        });
+
+        return;
+      } else {
+        throw err;
+      }
+    }
+  
+    data.cache.set(plainPath, { program: program, stats: stats });
+    data.programs.set(plainPath, program);
   }
-
-  const program = { sourceFile: tomlPath };
-
-  try {
-    program.title = validateString(document, 'Titel', true);
-    program.subtitle = validateString(document, 'Untertitel');
-    program.image = validatePath(document, 'Bild', data);
-    program.soundfile = validatePath(document, 'Soundfile', data);
-    program.editors = validateArray(document, 'Redaktion');
-    program.firstBroadcast = validateDate(document, 'Erstausstrahlung', true);
-    program.language = validateString(document, 'Sprache');
-    program.categories = validateArray(document, 'Kategorien');
-    program.tags = validateArray(document, 'Tags');
-    program.permalink = validateString(document, 'Permalink', true);
-    program.abstract = validateMarkdown(document, 'Abstract', data);
-    program.text = validateMarkdown(document, 'Text', data);
-
-    validateEmpty(document);
-  } catch(err) {
-    data.programs.delete(tomlPath);
-
-    data.warnings.push({
-      description: `Bis zur Lösung des Problems scheint die betroffene Radiosendung nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${tomlPath}`,
-      detail: err,
-      files: [{ path: tomlPath }],
-      header: `Unkritischer Fehler beim prüfen der Daten ${program.title ? `der Radiosendung "${program.title}"` : 'einer Radiosendung'}`
-    });
-
-    return;
-  }
-
-  data.programs.set(tomlPath, program);
 };

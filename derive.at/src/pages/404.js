@@ -7,5 +7,5 @@ module.exports = () => {
     </div>
   `;
 
-  return layout(html, { title: '404 | Seite nicht gefunden' });
+  return layout(html, { title: 'Seite nicht gefunden' });
 };

@@ -1,80 +1,60 @@
-const path = require('path');
+const path = require('path'),
+      shell = require('shell');
 
 const checkup = require('./checkup.js'),
       connect = require('./connect.js'),
+      connectMedia = require('./connect-media.js'),
       crossvalidate = require('./crossvalidate.js'),
       expand = require('./expand.js'),
       source = require('./source.js'),
       urbanize = require('./urbanize.js');
 
-module.exports = async (data, file) => {
-  await source(data, file); // Read all source files and validate their data
-                            // Documents that are not valid are not taken into the system
+// TODO: Consider a "wipe" step that resets all intelligent fields that have to be wiped always (=are only optionally overwritten by processing), eg. backreferences
+
+module.exports = async data => {
+  console.time('transform');
+  console.time('source');
+
+  await source(data); // Read all source files and validate their data
+                      // Documents that are not valid are not taken into the system
+
+  console.timeEnd('source');
+  console.time('connectMedia');
+  
+  await connectMedia(data); // Ensure all referenced media are found
+                            // Documents with invalid references are kicked out
+  
+  console.timeEnd('connectMedia');
+  console.time('crossvalidate');
 
   crossvalidate(data); // Ensure uniqueness of primary keys before attempting to connect everything
                        // Conflicting documents are removed (the later ones)
 
+ console.timeEnd('crossvalidate');
+ console.time('connect');
+
   connect(data); // Create relational references between all objects
 
-  expand(data); // Create tags, connected to their referenced objects
+  console.timeEnd('connect');
+  console.time('expand');
+
+  expand(data); // Create categories and tags, connected to their referenced objects
                 // Create refined collections: authors, bookAuthors, publishers
+
+  console.timeEnd('expand');
+  console.time('urbanize');
 
   urbanize(data); // Create refined collections for current urbanize festival(s)
 
+  console.timeEnd('urbanize');
+  console.time('checkup');
+
   checkup(data); // Provide additional warnings for unused media
 
-  if(data.warnings) {
-    const first = data.warnings[0];
-
-    [0, 1, 2].forEach(index => {
-      if(data.warnings.length >= index + 1) {
-        const warning = data.warnings[index];
-
-        atom.notifications.addWarning(
-          warning.header,
-          {
-            buttons: warning.files ? warning.files.map(file => ({
-              onDidClick: () => atom.workspace.open(
-                path.join(data.root, file.path),
-                {
-                  initialColumn: file.column || 0,
-                  initialLine: file.line || 0
-                }
-              ),
-              text: `${file.label || 'Datei'} öffnen`
-            })) : [],
-            dismissable: true,
-            detail: warning.detail,
-            description: warning.description,
-            icon: 'issue-opened'
-          }
-        );
-      }
-    })
-
-    if(data.warnings.length > 3) {
-      atom.notifications.addWarning(
-        `Insgesamt wurden ${data.warnings.length - 3} Probleme festgestellt.`,
-        {
-          buttons: [{
-            onDidClick: () => {
-              atom.workspace.open().then(editor => {
-                const report = data.warnings.map(warning =>
-                  `${warning.header}\n${warning.detail}\n${warning.description}\n${warning.files.map(file => file.path).join(', ')}`
-                ).join('\n\n------------------------------------------\n\n')
-
-                editor.insertText(report);
-              });
-            },
-            text: 'Komplette Auflistung'
-          }],
-          dismissable: true,
-          detail: 'Bis zur Lösung der Probleme scheinen manche Unterseiten nicht auf, abgesehen davon gibt es keine Auswirkungen.',
-          icon: 'issue-opened'
-        }
-      );
-    }
-  }
+  console.timeEnd('checkup');
+  console.timeEnd('transform');
+  
+  console.log(data); // TODO: Remove after all is done
 
   return data;
 };

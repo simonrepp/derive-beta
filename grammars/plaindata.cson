@@ -1,0 +1,63 @@
+scopeName: 'source.plain'
+name: 'Plain Data'
+fileTypes: [
+  'plain'
+]
+patterns: [
+  {
+    # Multiline string
+    'begin': '^(-{3,})\\s*(\\S|\\S.*\\S)\\s*$'
+    'beginCaptures':
+      '1': 'name': 'constant.character.entity.plain'
+      '2': 'name': 'constant.character.entity.plain'
+    'end': '^(-{3,})\\s*(\\S|\\S.*\\S)\\s*$'
+    'endCaptures':
+      '1': 'name': 'constant.character.entity.plain'
+      '2': 'name': 'constant.character.entity.plain'
+    # 'name': 'keyword.operator.assignment.plain'
+    # 'include': 'source.gfm' #works but overrides begin/endCaptures ? TODO: markdown scope inside the multiline string!
+  }
+  {
+    # Comment line
+    'match': '^(>)\\s*(\\S|\\S.*\\S)?\\s*$'
+    'captures':
+      '1': 'name': 'TODO.operator.comment.plain'
+      '2': 'name': 'punctuation.definition.comment.plain'
+  }
+  {
+    # Array entry
+    'match': '^\\s*(-)\\s*(\\S|\\S.*\\S)?\\s*$'
+    'captures':
+      '1': 'name': 'punctuation.definition.variable.plain'
+      '2': 'name': 'string.plain'
+  }
+  {
+    # Subsection 1st level
+    'match': '^(#)\\s*([^#\\s]|[^#\\s].*\\S)\\s*$'
+    'captures':
+      '1': 'name': 'entity.name.type.instance.plain'
+      '2': 'name': 'entity.name.type.instance.plain'
+  }
+  {
+    # Subsection 2nd level
+    'match': '^(##)\\s*([^#\\s]|[^#\\s].*\\S)\\s*$'
+    'captures':
+      '1': 'name': 'support.function.plain'
+      '2': 'name': 'support.function.plain'
+  }
+  {
+    # Subsection 3rd to 5th level
+    'match': '^(#{3,5})\\s*([^#\\s]|[^#\\s].*\\S)\\s*$'
+    'captures':
+      '1': 'name': 'constant.character.entity.plain'
+      '2': 'name': 'constant.character.entity.plain'
+  }
+  {
+    # String
+    'match': '^\\s*([^:]+)\\s*(:)\\s*(\\S+|\\S.*\\S)?\\s*$'
+    'captures':
+      '1': 'name': 'punctuation.definition.variable.plain'
+      '2': 'name': 'keyword.operator.assignment.plain'
+      '3': 'name': 'string.plain'
+  }
+]

@@ -24,8 +24,8 @@ module.exports = urbanize => `
     <div class="indented">
       ${Array.from(urbanize.eventsByDate.keys()).map(date => `
         <div>
-          <a href="/${date}/">
-            ${moment(date).format('D.MM.YYYY')}
+          <a href="/${moment(date).locale('de').format('D-MMMM-YYYY')}/">
+            ${moment(date).locale('de').format('D. M. YYYY')}
           </a>
         </div>
       `).join('')}
@@ -33,7 +33,7 @@ module.exports = urbanize => `
 
     <p>KATEGORIEN</p>
 
-    ${Object.keys(urbanize.categories).map(category => `
+    ${Array.from(urbanize.categories.keys()).map(category => `
       <div>
         <a href="/kategorien/${category}/">
           ${category}

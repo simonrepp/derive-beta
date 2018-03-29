@@ -1,0 +1,116 @@
+> Dies ist das Plain Data Handbuch - es ist selbst als Plain Data
+> Datei verfasst, erkennbar an der Dateiendung: ".plain".
+
+> In 5 Punkten und < 5 Minuten Lesezeit erklärt dir dieses Handbuch alles was du 
+> wissen musst um jede beliebige .plain Datei verstehen und editieren zu können!
+
+> 1. Kommentare
+> Jede Zeile die mit ">" startet (wie diese und die vorherigen) ist eine
+> Kommentarzeile, in der beliebiger Text stehen darf, beim einlesen eines
+> Plain Data Dokuments werden diese Zeilen vom Computer ignoriert, sie dienen
+> also lediglich dazu, dass wir uns selbst Notizen machen können.
+
+> 2. Wertzuweisungen
+> Plain Data dient zum notieren von Daten, die einfachste Form sieht so aus:
+
+Temperatur: Sehr angenehm
+
+> Damit legen wir ein Schlüssel-Wert-Paar mit dem Schlüssel "Temperatur" und 
+> dem Wert "Sehr angenehm" fest, wobei der Schlüssel (in diesem Fall 
+> "Temperatur") stets von der Vorlage kommt, wir müssen uns immer nur mit dem 
+> Wert (in diesem Fall "Angenehm") befassen. Ein paar weitere Beispiele:
+
+Nachname: Schneider
+Website: www.anna-schneider.de
+Beruf: Freischaffende Grafikerin
+
+> 2. Kein Wert
+> Wollen wir keinen Wert angeben, lassen wir die rechte Seite einfach leer:
+
+Mehr Informationen:
+
+> 3. Listen von Werten
+> Wollen wir einem Schlüssel mehrere Werte zuweisen, sieht das so aus:
+
+Einkaufsliste:
+- Brot
+- Joghurt
+- Bananen (nicht zu reif)
+
+> Eine leere Liste notieren wir wie einen einfachen leeren Wert:
+
+Einkaufsliste:
+
+> 4. Mehrzeilige Texte als Wert
+> Wollen wir mehrere Zeilen als Wert zuweisen, gehen wir so vor:
+
+--- Lange Beschreibung
+Die vorherige Zeile markiert einen Textblock der in dieser Zeile beginnt.
+
+Bis die Zeile mit der der Textblock begonnen wird, ein weiteres Mal auftaucht,
+können wir beliebige Inhalte verfassen, beliebig viele Leerzeilen einbauen ...
+
+
+... usw. 
+
+Mit --- teilen wir Plain Data mit, dass wir einen Textblock starten wollen,
+und der Text danach (in diesem Fall "Lange Beschreibung") ist wiederum der 
+Schlüssel der dem Wert (dem Textblock) einen Namen gibt.
+
+In der nächsten Zeile endet der Textblock!
+--- Lange Beschreibung
+
+> 5. Untersektionen
+> Zuletzt wollen wir mehrere Werte in einer Untersektion gruppieren:
+
+# Kontaktdaten
+
+Telefon: +43 699 104734953
+Email: anna.schneider@anna-schneider.de
+
+> Hier werden sämtliche Schlüssel-Wert-Paare die nach dem Beginn der
+> Untersektion "Kontaktdaten" folgen, dieser untergeordnet.
+> Man kann auch beliebige Unter-Unter-usw.-sektionen definieren:
+
+# Kontakdaten
+
+## Telefonnummern
+
+### Anna
+
+Festnetz: +43 1 0468648
+Mobil: +43 699 104734953
+
+### Uwe
+
+Festnetz: +43 1 0468648
+Mobil: +43 699 104734953
+
+> Und damit weisst du auch schon alles was du brauchst um beliebige Plain Data
+> Dateien zu editieren! Zum Abschluss noch einmal eine Demonstration, die
+> alle der oben erklärten Möglichkeiten kombiniert.
+
+# Steckbrief
+
+Name: John Doe
+Haarfarbe: braun/grau
+Alter:
+Hobbys:
+- Fischerei
+- Reiten
+
+--- Zitat
+Ich habe mir das Plain Data Handbuch durchgelesen, alles war sehr schlüssig,
+bis auf diesen sinnfreien Beispieltext hier.
+--- Zitat
+
+## Freunde
+
+Falsche Freunde:
+
+Enge Freunde:
+- Jane Doe
+- Jean Doe
+
+Beiläufige Bekanntschaften:
+- John Dear

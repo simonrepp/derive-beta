@@ -4,6 +4,8 @@ const eventListing = require('../widgets/event-listing.js'),
       layout = require('../layout.js');
 
 module.exports = (urbanize, date, events) => {
+  const timeframe = date instanceof Date ? `am ${moment(date).format('D.MM.YYYY')}` : date;
+  
   const html = `
     <div>
       <div class="breadcrumb">
@@ -15,12 +17,12 @@ module.exports = (urbanize, date, events) => {
       </div>
 
       <div class="title">
-        Alle Termine ${date.match(/^20\d\d$/) ? date : `am ${moment(date).format('D.MM.YYYY')}`}
+        Alle Termine ${timeframe}
       </div>
 
       ${eventListing(events)}
     </div>
   `;
 
-  return layout(html, urbanize, { title: `Alle Termine ${date.match(/20\d\d/) ? date : `am ${moment(date).format('D.MM.YYYY')}`}` });
+  return layout(html, urbanize, { title: `Alle Termine ${timeframe}` });
 };

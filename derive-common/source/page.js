@@ -1,56 +1,82 @@
-const path = require('path');
-
-const { loadToml } = require('../lib.js'),
+const { loadPlain, statFile } = require('../util.js'),
+      { PlainDataParseError } = require('../../plaindata/plaindata.js'),
       { URBANIZE_ENUM,
         validateArray,
-        validateEmpty,
+        validateKeys,
         validateEnum,
         validateMarkdown,
-        validateString } = require('../validate.js');
+        validateString,
+        ValidationError } = require('../validate.js');
 
-module.exports = async (data, tomlPath) => {
-  let document;
+const specifiedKeys = [
+  'Permalink',
+  'Text',
+  'Titel',
+  'Urbanize'
+];
 
-  try {
-    document = await loadToml(data.root, tomlPath);
-  } catch(err) {
-    data.pages.delete(tomlPath);
+module.exports = async (data, plainPath) => {
+  const cached = data.cache.get(plainPath);
+  const stats = await statFile(data.root, plainPath);
+  
+  if(cached && stats.size === cached.stats.size && stats.mTimeMs === cached.stats.mTimeMs) {
+    data.pages.set(plainPath, cached.page);
+  } else {    
+    let document;
 
-    data.warnings.push({
-      description: `Bis zur Lösung des Problems scheint die betroffene Seite nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${tomlPath}`,
-      detail: `Ab Zeile ${err.line} und Spalte ${err.column} war das parsen nicht mehr möglich. Der eigentliche Fehler liegt in der Regel bereits davor, oft auch in einer vorherigen Zeile.\n \nTypische Fehlerquellen: Fehlende oder überschüssige Anführungszeichen, Beistriche, eckige Klammern.\n \nDie originale Fehlermeldung des Parsers war:\n-----------\n${err.message}`,
-      files: [{
-        column: err.column,
-        line: err.line,
-        path: tomlPath
-      }],
-      header: `Unkritischer Fehler beim parsen der TOML Daten einer Seite`
-    });
+    try {
+      document = await loadPlain(data.root, plainPath);
+    } catch(err) {
+      data.cache.delete(plainPath);
+      
+      if(err instanceof PlainDataParseError) {
+        data.warnings.push({
+          description: `Bis zur Lösung des Problems scheint die betroffene Seite nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${plainPath}`,
+          detail: err.message,
+          files: [{
+            beginColumn: err.beginColumn,
+            beginLine: err.beginLine,
+            column: err.column,
+            line: err.line,
+            path: plainPath
+          }],
+          header: `Problem gefunden beim einlesen der plaindata Daten einer Seite`
+        });
 
-    return;
+        return;
+      } else {
+        throw err;
+      }
+    }
+
+    const page = { sourceFile: plainPath };
+
+    try {
+      page.title = validateString(document, 'Titel', { required: true });
+      page.permalink = validateString(document, 'Permalink', { required: true });
+
+      validateKeys(document, specifiedKeys);
+
+      page.urbanize = validateEnum(document, 'Urbanize', URBANIZE_ENUM);
+      page.text = validateMarkdown(document, 'Text', { process: false });
+    } catch(err) {
+      data.cache.delete(plainPath);
+      
+      if(err instanceof ValidationError) {
+        data.warnings.push({
+          description: `Bis zur Lösung des Problems scheint die betroffene Seite nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${plainPath}`,
+          detail: err.message,
+          files: [{ path: plainPath }],
+          header: `Problem gefunden beim prüfen der Daten ${page.name ? `der Seite "${page.name}"` : 'einer Seite'}`
+        });
+
+        return;
+      } else {
+        throw err;
+      }
+    }
+  
+    data.cache.set(plainPath, { page: page, stats: stats });
+    data.pages.set(plainPath, page);
   }
-
-  const page = { sourceFile: tomlPath };
-
-  try {
-    page.title = validateString(document, 'Titel', true);
-    page.permalink = validateString(document, 'Permalink', true);
-    page.urbanize = validateEnum(document, 'Urbanize', URBANIZE_ENUM);
-    page.text = validateMarkdown(document, 'Text', data);
-
-    validateEmpty(document);
-  } catch(err) {
-    data.pages.delete(tomlPath);
-
-    data.warnings.push({
-      description: `Bis zur Lösung des Problems scheint die betroffene Seite nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${tomlPath}`,
-      detail: err,
-      files: [{ path: tomlPath }],
-      header: `Unkritischer Fehler beim prüfen der Daten ${page.name ? `der Seite "${page.name}"` : 'einer Seite'}`
-    });
-
-    return;
-  }
-
-  data.pages.set(tomlPath, page);
 };

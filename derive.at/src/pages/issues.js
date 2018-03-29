@@ -29,7 +29,7 @@ module.exports = data => {
     <div>
       <div class="feature">
         <div class="feature__image">
-          <img src="${latest.cover}"/>
+          <img src="${latest.cover.written}"/>
           Design: Jemand statischer
         </div>
 
@@ -73,7 +73,7 @@ module.exports = data => {
                   <a class="buy" href="/shop/TODO-where-take-the-link-from/">Kaufen</a>
                 </div>
 
-                <img src="${issue.cover}"/>
+                <img src="${issue.cover.written}"/>
               </div>
 
               <div class="tile__magazine__label">

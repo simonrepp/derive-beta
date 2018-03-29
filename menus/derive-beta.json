@@ -4,7 +4,7 @@
       "label": "Derive",
       "submenu": [
         {
-          "label": "Aktualisieren",
+          "label": "Daten aktualisieren",
           "command": "derive-beta:refresh"
         },
         {
@@ -82,35 +82,39 @@
               "command": "derive-beta:markdown-reference"
             },
             {
-              "label": "TOML Handbuch",
-              "command": "derive-beta:markdown-reference"
+              "label": "Plain Data Handbuch",
+              "command": "derive-beta:plaindata-reference"
             },
             {
               "type": "separator"
             },
             {
-              "label": "Artikel Schema",
-              "command": "derive-beta:markdown-reference"
+              "label": "Akteur",
+              "command": "derive-beta:player-reference"
             },
             {
-              "label": "Akteur Schema",
-              "command": "derive-beta:markdown-reference"
+              "label": "Artikel",
+              "command": "derive-beta:article-reference"
             },
             {
-              "label": "Ausgabe Schema",
-              "command": "derive-beta:markdown-reference"
+              "label": "Ausgabe",
+              "command": "derive-beta:issue-reference"
             },
             {
-              "label": "Radiosendung Schema",
-              "command": "derive-beta:markdown-reference"
+              "label": "Buch",
+              "command": "derive-beta:book-reference"
             },
             {
-              "label": "Seiten Schema",
-              "command": "derive-beta:markdown-reference"
+              "label": "Radiosendung",
+              "command": "derive-beta:program-reference"
             },
             {
-              "label": "Veranstaltung Schema",
-              "command": "derive-beta:markdown-reference"
+              "label": "Seite",
+              "command": "derive-beta:page-reference"
+            },
+            {
+              "label": "Veranstaltung",
+              "command": "derive-beta:event-reference"
             }
           ]
         },
@@ -155,6 +159,13 @@
               "command": "derive-beta:deploy-berlin.urbanize.at"
             }
           ]
+        },
+        {
+          "type": "separator"
+        },
+        {
+          "label": "Server Backup erstellen",
+          "command": "derive-beta:backup"
         }
       ]
     }

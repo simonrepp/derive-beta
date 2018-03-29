@@ -14,8 +14,10 @@ module.exports = data => {
     <div class="feature">
 
       <div class="feature__image">
-        <img src="${latest.image}" />
-        Cover-Design: TODO Elke Rauth
+        ${latest.image ? `
+          <img src="${latest.image.written}" />
+          Cover-Design: TODO Elke Rauth
+        `:''}
       </div>
 
       <div class="feature__text">

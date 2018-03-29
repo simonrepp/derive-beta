@@ -16,7 +16,7 @@ module.exports = (urbanize, page) => {
       </div>
 
       <div>
-        ${page.text}
+        ${page.text ? page.text.written : ''}
       </div>
     </div>
   `;

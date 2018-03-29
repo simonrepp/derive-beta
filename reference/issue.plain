@@ -1,0 +1,45 @@
+Nummer: 99
+Quartal: 2
+Titel: Erforderlich
+
+Cover: /Zeitschrift/Cover/99.jpg
+
+Kooperation: 
+Partner:
+
+Schwerpunkte:
+- Beispielhafte Dinge
+
+Vergriffen: Nein
+Datum: 2020-12-31
+
+Tags:
+- Exempel
+- Vorlage
+
+Veröffentlichen: Ja
+
+--- Beschreibung
+Die Beschreibung.
+Markdown aber keine Medien.
+--- Beschreibung
+
+
+# Rubrik
+Titel: Editorial
+
+## Artikel
+Titel: Editorial dérive 99
+Seite(n): 1
+
+
+# Rubrik
+Titel: Beispielhafte Rubrik
+
+## Artikel
+Titel: Vorlagenhafter Beitrag
+Seite(n): 4-9
+
+## Artikel
+Titel:  Beispielhafte Vorlage
+Seite(n): 10-14

@@ -3,14 +3,16 @@ const fsExtra = require('fs-extra'),
       sass = require('sass'),
       uglifyEs = require('uglify-es');
 
-const { loadFile, writeFile } = require('../derive-common/lib.js'),
-      postprocess = require('./postprocess.js'),
-      write = require('./write.js');
+const { loadFile, writeFile } = require('../derive-common/util.js'),
+      index = require('./index.js'),
+      writeDirectories = require('./write-directories.js'),
+      writeMedia = require('./write-media.js'),
+      writePages = require('./write-pages.js');
 
 const compileJs = async data => {
-  const scroll = await loadFile(path.join(__dirname, 'src/scripts/scroll.js'));
-  const sidebar = await loadFile(path.join(__dirname, 'src/scripts/sidebar.js'));
-  const turbolinks = await loadFile(path.join(__dirname, 'src/scripts/turbolinks.js'));
+  const scroll = await loadFile(path.join(__dirname, 'scripts/scroll.js'));
+  const sidebar = await loadFile(path.join(__dirname, 'scripts/sidebar.js'));
+  const turbolinks = await loadFile(path.join(__dirname, 'scripts/turbolinks.js'));
 
   const result = uglifyEs.minify({
     'scroll.js': scroll,
@@ -21,44 +23,48 @@ const compileJs = async data => {
   if(result.error) {
     console.log(result.error);
   } else {
-    await writeFile(path.join(data.buildDir, 'bundle.js'), result.code);
+    await writeFile(data.buildDir, 'bundle.js', result.code);
   }
 };
 
 const compileSass = data => {
   return new Promise((resolve, reject) => {
     sass.render({
-      file: path.join(__dirname, 'src/styles/main.scss'),
+      file: path.join(__dirname, 'styles/main.scss'),
       outputStyle: 'compressed',
     }, (err, result) => {
       if(err) {
         reject(err);
       } else {
-        writeFile(path.join(data.buildDir, 'styles.css'), result.css).then(resolve);
+        writeFile(data.buildDir, 'styles.css', result.css).then(resolve);
       }
     });
   });
 };
 
 module.exports = async data => {
-  try {
-    console.time('build time');
+  console.time('build');
+  
+  console.time('writeDirectories');
+  await writeDirectories(data);
+  console.timeEnd('writeDirectories');
 
-    await fsExtra.emptyDir(data.buildDir);
+  console.time('writeMedia');
+  await writeMedia(data);
+  console.timeEnd('writeMedia');
 
-    // await index(data); // TODO: All these reintegrate please
-    // await postprocess(data); // TODO: Rewrite media paths from backend layout to web-facing layout and naming everywhere
-                                // consider folder structure requirements (what already exists when ? etc.)
+  console.time('writePages');
+  await Promise.all([
+    compileJs(data),
+    compileSass(data),
+    fsExtra.copy(path.join(__dirname, 'static/'), data.buildDir),
+    writePages(data)
+  ]);
+  console.timeEnd('writePages');
 
-    await Promise.all([
-      compileJs(data),
-      compileSass(data),
-      fsExtra.copy(path.join(__dirname, 'static/'), data.buildDir),
-      write(data)
-    ]);
+  console.time('index');
+  await index(data);
+  console.timeEnd('index');
 
-    console.timeEnd('build time');
-  } catch(err) {
-    console.log(err);
-  }
+  console.timeEnd('build');
 };

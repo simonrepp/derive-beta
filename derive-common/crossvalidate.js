@@ -11,7 +11,7 @@ module.exports = data => {
     if(data.articlesByTitle.has(article.title)) {
       data.warnings.push({
         description: `Bis zur Lösung des Problems scheint einer der Artikel auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${data.articlesByTitle.get(article.title).sourceFile}\n\n**B (wird verworfen)** - ${article.sourceFile}`,
-        detail: `Es existieren zwei Artikel mit dem Namen "${article.title}"`,
+        detail: `Es existieren zwei Artikel mit dem Titel "${article.title}"`,
         files: [
           { path: data.articlesByTitle.get(article.title).sourceFile, label: 'A' },
           { path: article.sourceFile, label: 'B' }
@@ -21,10 +21,9 @@ module.exports = data => {
 
 
       data.articles.delete(article.sourceFile);
-    } else {
-      data.articlesByTitle.set(article.title, article);
+      return;
     }
-
+    
     if(data.articlesByPermalink.has(article.permalink)) {
       data.warnings.push({
         description: `Bis zur Lösung des Problems scheint einer der Artikel auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${data.articlesByPermalink.get(article.permalink).sourceFile}\n\n**B (wird verworfen)** - ${article.sourceFile}`,
@@ -37,9 +36,11 @@ module.exports = data => {
       });
 
       data.articles.delete(article.sourceFile);
-    } else {
-      data.articlesByPermalink.set(article.permalink, article);
+      return;
     }
+    
+    data.articlesByPermalink.set(article.permalink, article);
+    data.articlesByTitle.set(article.title, article);
   });
 
   data.booksByPermalink.clear();
@@ -57,8 +58,7 @@ module.exports = data => {
       });
 
       data.books.delete(book.sourceFile);
-    } else {
-      data.booksByTitle.set(book.title, book);
+      return;
     }
 
     if(data.booksByPermalink.has(book.permalink)) {
@@ -73,9 +73,11 @@ module.exports = data => {
       });
 
       data.books.delete(book.sourceFile);
-    } else {
-      data.booksByPermalink.set(book.permalink, book);
+      return;
     }
+    
+    data.booksByPermalink.set(book.permalink, book);
+    data.booksByTitle.set(book.title, book);
   });
 
   data.eventsByPermalink.clear();
@@ -117,26 +119,26 @@ module.exports = data => {
   });
 
   data.playersByName.clear();
+  data.playersByPermalink.clear();
   data.players.forEach(player => {
     if(data.playersByName.has(player.name)) {
       data.warnings.push({
-        description: `Bis zur Lösung des Problems scheint einer der Akteure auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${data.playersByName.get(player.name).sourceFile}\n\n**B (wird verworfen)** - ${player.sourceFile}`,
+        description: `Bis zur Lösung des Problems scheint eine der AkteurInnen auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${data.playersByName.get(player.name).sourceFile}\n\n**B (wird verworfen)** - ${player.sourceFile}`,
         detail: `Es existieren zwei Akteure mit dem Namen "${player.name}"`,
         files: [
           { path: data.playersByName.get(player.name).sourceFile, label: 'A' },
           { path: player.sourceFile, label: 'B' }
         ],
-        header: 'Unkritischer Fehler beim prüfen aller Akteure'
+        header: 'Problem beim gegenseitigem prüfen der Namen aller Akteure'
       });
 
       data.players.delete(player.sourceFile);
-    } else {
-      data.playersByName.set(player.name, player);
+      return;
     }
 
     if(data.playersByPermalink.has(player.permalink)) {
       data.warnings.push({
-        description: `Bis zur Lösung des Problems scheint einer der Akteure auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${data.playersByPermalink.get(player.permalink).sourceFile}\n\n**B (wird verworfen)** - ${player.sourceFile}`,
+        description: `Bis zur Lösung des Problems scheint eine der AkteurInnen auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${data.playersByPermalink.get(player.permalink).sourceFile}\n\n**B (wird verworfen)** - ${player.sourceFile}`,
         detail: `Es existieren zwei Akteure mit dem Permalink "${player.permalink}"`,
         files: [
           { path: data.playersByPermalink.get(player.permalink).sourceFile, label: 'A' },
@@ -146,9 +148,11 @@ module.exports = data => {
       });
 
       data.players.delete(player.sourceFile);
-    } else {
-      data.playersByPermalink.set(player.permalink, player);
+      return;
     }
+    
+    data.playersByName.set(player.name, player);
+    data.playersByPermalink.set(player.permalink, player);
   });
 
   data.pagesByPermalink.clear();

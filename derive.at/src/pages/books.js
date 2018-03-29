@@ -10,8 +10,10 @@ module.exports = data => {
     <div class="feature">
 
       <div class="feature__image">
-        <img src="${latest.image}" />
-        Cover-Design: TODO Elke Rauth
+        ${latest.cover ? `
+          <img src="${latest.cover.written}" />
+          Cover-Design: TODO Elke Rauth
+        `:''}
       </div>
 
       <div class="feature__text">
@@ -24,7 +26,7 @@ module.exports = data => {
         <div class="generic__margin-vertical">
           ${[
             latest.placeOfPublication ? `${latest.placeOfPublication}:` : '',
-            latest.publishers.map(publisher => `<a href="/verlage/${publisher.permalink}/">${publisher.name}</a>`).join(', '),
+            latest.publishers.connected.map(publisher => `<a href="/verlage/${publisher.permalink}/">${publisher.name}</a>`).join(', '),
             latest.yearOfPublication ? `(${latest.yearOfPublication})` : ''
           ].join(' ').trim()}
         </div>

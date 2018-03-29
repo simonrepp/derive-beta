@@ -17,5 +17,5 @@ module.exports = urbanize => {
     </div>
   `;
 
-  return layout(html, urbanize, { title: '404 | Seite nicht gefunden' });
+  return layout(html, urbanize, { title: 'Seite nicht gefunden' });
 };

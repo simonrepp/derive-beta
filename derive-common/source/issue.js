@@ -1,88 +1,124 @@
-const fsExtra = require('fs-extra'),
-      path = require('path'),
-      sharp = require('sharp');
-
-const { loadToml } = require('../lib.js'),
+const { loadPlain, statFile } = require('../util.js'),
+      { PlainDataParseError } = require('../../plaindata/plaindata.js'),
       { validateArray,
         validateBoolean,
         validateDate,
-        validateEmpty,
+        validateKeys,
         validateInteger,
         validateMarkdown,
         validatePath,
-        validateString } = require('../validate.js');
+        validateString,
+        ValidationError } = require('../validate.js');
 
-module.exports = async (data, tomlPath) => {
-  let document;
+const specifiedKeys = [
+  'Beschreibung',
+  'Cover',
+  'Datum',
+  'Kooperation',
+  'Nummer',
+  'Partner',
+  'Quartal',
+  'Rubrik',
+  'Schwerpunkte',
+  'Tags',
+  'Titel',
+  'Vergriffen',
+  'Veröffentlichen'
+];
 
-  try {
-    document = await loadToml(data.root, tomlPath);
-  } catch(err) {
-    data.issues.delete(tomlPath);
+module.exports = async (data, plainPath) => {
+  const cached = data.cache.get(plainPath);
+  const stats = await statFile(data.root, plainPath);
+  
+  if(cached && stats.size === cached.stats.size && stats.mTimeMs === cached.stats.mTimeMs) {
+    data.issues.set(plainPath, cached.issue);
+  } else {  
+    let document;
 
-    data.warnings.push({
-      description: `Bis zur Lösung des Problems scheint die betroffene Zeitschrift nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${tomlPath}`,
-      detail: `Ab Zeile ${err.line} und Spalte ${err.column} war das parsen nicht mehr möglich. Der eigentliche Fehler liegt in der Regel bereits davor, oft auch in einer vorherigen Zeile.\n \nTypische Fehlerquellen: Fehlende oder überschüssige Anführungszeichen, Beistriche, eckige Klammern.\n \nDie originale Fehlermeldung des Parsers war:\n-----------\n${err.message}`,
-      files: [{
-        column: err.column,
-        line: err.line,
-        path: tomlPath
-      }],
-      header: `Unkritischer Fehler beim parsen der TOML Daten einer Zeitschrift`
-    });
+    try {
+      document = await loadPlain(data.root, plainPath);
+    } catch(err) {
+      data.cache.delete(plainPath);
+      
+      if(err instanceof PlainDataParseError) {
+        data.warnings.push({
+          description: `Bis zur Lösung des Problems scheint die betroffene Zeitschrift nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${plainPath}`,
+          detail: err.message,
+          files: [{
+            beginColumn: err.beginColumn,
+            beginLine: err.beginLine,
+            column: err.column,
+            line: err.line,
+            path: plainPath
+          }],
+          header: `Problem gefunden beim einlesen der plaindata Daten einer Zeitschrift`
+        });
 
-    return;
-  }
-
-  const issue = { sourceFile: tomlPath };
-
-  try {
-    issue.number = validateInteger(document, 'Nummer', true);
-    issue.quarter = validateInteger(document, 'Quartal');
-    issue.title = validateString(document, 'Titel', true);
-    issue.cover = validatePath(document, 'Cover', data);
-    issue.cooperation = validateString(document, 'Kooperation');
-    issue.partners = validateArray(document, 'Partner');
-    issue.features = validateArray(document, 'Schwerpunkte');
-    issue.outOfPrint = validateBoolean(document, 'Vergriffen');
-    issue.date = validateDate(document, 'Datum');
-    issue.tags = validateArray(document, 'Tags');
-    issue.publish = validateBoolean(document, 'Veroeffentlichen');
-    issue.description = validateMarkdown(document, 'Beschreibung', data);
-
-    issue.sections = validateArray(document, 'Rubrik');
-
-    issue.sections = issue.sections.map(section => {
-      const validatedSection = {};
-
-      try {
-        validatedSection.title = validateString(section, 'Titel');
-        validatedSection.articles = validateArray(section, 'Artikel');
-
-        validateEmpty(section);
-      } catch(err) {
-        throw `Fehler in einer Rubrik - ${err}`;
+        return;
+      } else {
+        throw err;
       }
+    }
 
-      return validatedSection;
-    });
+    const issue = { sourceFile: plainPath };
 
-    validateEmpty(document);
-  } catch(err) {
-    data.issues.delete(tomlPath);
+    try {
+      issue.number = validateInteger(document, 'Nummer', { required: true });
+      issue.title = validateString(document, 'Titel', { required: true });
+      issue.cover = validatePath(document, 'Cover', { required: true });
 
-    data.warnings.push({
-      description: `Bis zur Lösung des Problems scheint die betroffene Zeitschrift nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${tomlPath}`,
-      detail: err,
-      files: [{ path: tomlPath }],
-      header: `Unkritischer Fehler beim prüfen der Daten ${issue.number ? `der Zeitschrift #${issue.number}` : 'einer Zeitschrift'}`
-    });
+      validateKeys(document, specifiedKeys);
 
-    return;
+      issue.quarter = validateInteger(document, 'Quartal');
+      issue.cooperation = validateString(document, 'Kooperation');
+      issue.partners = { sourced: validateArray(document, 'Partner') };
+      issue.features = validateArray(document, 'Schwerpunkte');
+      issue.outOfPrint = validateBoolean(document, 'Vergriffen');
+      issue.date = validateDate(document, 'Datum');
+      issue.tags = validateArray(document, 'Tags');
+      issue.publish = validateBoolean(document, 'Veröffentlichen');
+      issue.description = validateMarkdown(document, 'Beschreibung');
+
+      issue.sections = validateArray(document, 'Rubrik');
+
+      issue.sections = issue.sections.map(section => {
+        const validatedSection = {};
+
+        validatedSection.title = validateString(section, 'Titel', { required: true });
+        validatedSection.articles = validateArray(section, 'Artikel', { optional: true });
+
+        validatedSection.articles = validatedSection.articles.map(article => {
+          const validatedArticle = {};
+
+          validatedArticle.title = validateString(article, 'Titel', { required: true });
+          validatedArticle.pages = validateString(article, 'Seite(n)', { required: true });
+
+          return validatedArticle;
+        });
+
+        return validatedSection;
+      });
+    } catch(err) {
+      data.cache.delete(plainPath);
+      
+      if(err instanceof ValidationError) {
+        data.warnings.push({
+          description: `Bis zur Lösung des Problems scheint die betroffene Zeitschrift nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${plainPath}`,
+          detail: err.message,
+          files: [{ path: plainPath }],
+          header: `Problem gefunden beim prüfen der Daten ${issue.number ? `der Zeitschrift #${issue.number}` : 'einer Zeitschrift'}`
+        });
+
+        return;
+      } else {
+        throw err;
+      }
+    }
+
+    // TODO: Maybe have this already in the file itself (maybe this should supersede date, if that is equivalent with quarter/year anway, or we just want a custom "3 / 2016" thing that is *not required*)
+    issue.year = issue.date.getFullYear();
+  
+    data.cache.set(plainPath, { issue: issue, stats: stats });
+    data.issues.set(plainPath, issue);
   }
-
-  // TODO: Maybe have this already in the file itself (maybe this should supersede date, if that is equivalent with quarter/year anway, or we just want a custom "3 / 2016" thing that is *not required*)
-  issue.year = issue.date.substr(0, 4);
-
-  data.issues.set(tomlPath, issue);
 };

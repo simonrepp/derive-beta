@@ -1,0 +1,50 @@
+Titel: Erforderlich
+Untertitel:
+URL: 
+
+Veranstalter:
+- Beispielgruppe
+
+Teilnehmer:
+- John Doe
+- Maxime Musterfrau
+
+Kategorien:
+- Exempel
+
+Tags:
+- Vorlage
+- Beispiel
+
+Bild: /Dateien/Urbanize 2018/beispiel_bild.png
+Permalink: erforder-lich
+
+Urbanize: Wien 2018
+
+Adresse:
+
+--- Abstract
+Die Kurzfassung.
+Markdown aber keine Medien.
+--- Abstract
+
+--- Zusatzinfo
+Das Addendum zur Kurzfassung.
+Markdown aber keine Medien.
+--- Zusatzinfo
+
+--- Text
+Langer Text ...
+
+Markdown und Medien unterstützt.
+
+... ist lang.
+--- Text
+
+# Termin
+Datum: 2018-12-30
+Zeit: 17:00
+
+# Termin
+Datum: 2018-12-31
+Zeit: 19:00 - 21:00

@@ -3,9 +3,10 @@ const fsExtra = require('fs-extra'),
       sass = require('sass'),
       uglifyEs = require('uglify-es');
 
-const { loadFile, writeFile } = require('../derive-common/lib.js'),
-      // postprocess = require('./postprocess.js'),
-      write = require('./write.js');
+const { loadFile, writeFile } = require('../derive-common/util.js'),
+      writeDirectories = require('./write-directories.js'),
+      writeMedia = require('./write-media.js'),
+      writePages = require('./write-pages.js');
 
 const compileJs = async data => {
   const search = await loadFile(path.join(__dirname, 'scripts/search.js'));
@@ -19,7 +20,7 @@ const compileJs = async data => {
   if(result.error) {
     console.log(result.error);
   } else {
-    await writeFile(path.join(data.buildDir, 'bundle.js'), result.code);
+    await writeFile(data.buildDir, 'bundle.js', result.code);
   }
 };
 
@@ -32,29 +33,37 @@ const compileSass = data => {
       if(err) {
         reject(err);
       } else {
-        writeFile(path.join(data.buildDir, 'styles.css'), result.css).then(resolve);
+        writeFile(data.buildDir, 'styles.css', result.css).then(resolve);
       }
     });
   });
 };
 
 module.exports = async (data, city) => {
-  try {
-    await fsExtra.emptyDir(data.buildDir);
+  console.time('build');
+  
+  const urbanize = data.urbanize[city];
+  
+  console.time('writeDirectories');
+  await writeDirectories(data, urbanize);
+  console.timeEnd('writeDirectories');
 
-    // TODO: await postprocess(data); >>> consider folder structure requirements (what already exists when ? etc.)
+  console.time('writeMedia');
+  await writeMedia(data, urbanize);
+  console.timeEnd('writeMedia');
 
-    // await write(data); // TODO: All these reintegrate please
-    // await index(data);
-    // await postprocess(data); // TODO: Rewrite media paths from backend layout to web-facing layout and naming everywhere
+  console.time('writePages');
+  await Promise.all([
+    compileJs(data),
+    compileSass(data),
+    fsExtra.copy(path.join(__dirname, 'static/'), data.buildDir),
+    writePages(data, urbanize)
+  ]);
+  console.timeEnd('writePages');
 
-    await Promise.all([
-      compileJs(data),
-      compileSass(data),
-      fsExtra.copy(path.join(__dirname, 'static/'), data.buildDir),
-      write(data, city)
-    ]);
-  } catch(err) {
-    console.log(err);
-  }
+  console.time('index');
+  // await index(data); // TODO: Needs to be javascript though
+  console.timeEnd('index');    
+  
+  console.timeEnd('build');
 };

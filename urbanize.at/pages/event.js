@@ -43,7 +43,7 @@ module.exports = (urbanize, event) => {
       <hr/>
 
       <div>
-        ${event.text}
+        ${event.text ? event.text.written : ''}
       </div>
 
       <hr/>

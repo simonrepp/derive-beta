@@ -1,0 +1,45 @@
+Titel: Erforderlich
+Untertitel:
+
+Bild: Texte/Heft XY/Bilder/Beispiel.jpg
+
+Autoren:
+- Jane Doe
+
+Datum: 2018-12-31
+Sprache: DE
+
+Kategorien:
+- Muster
+- Beispiele
+
+Tags: 
+- Exempel
+
+Permalink: erforder-lich
+
+Buchbesprechungen:
+- Musterbuch
+
+Veröffentlichen: Ja
+Sichtbar: Ja
+
+Urbanize:
+
+--- Abstract
+Die Kurzfassung.
+Markdown aber keine Medien.
+--- Abstract
+
+--- Text
+Langer Text ...
+
+Markdown und Medien unterstützt.
+
+... ist lang.
+--- Text
+
+--- Literaturverzeichnis
+Markdown aber keine Medien.
+**Last, First** (Hg.): The Title, City 2000
+--- Literaturverzeichnis

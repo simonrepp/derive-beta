@@ -16,13 +16,13 @@ module.exports = program => `
     </h2>
 
     <strong>Redaktion</strong><br/>
-   
-    ${authors(program.editors)}
+
+    ${authors(program.editors.connected)}
 
     <br/><br/>
 
     <strong>Erstaustrahlung</strong><br/>
-   
-    ${moment(program.first_broadcast).locale('de').format('Do MMMM YYYY')}
+
+    ${moment(program.firstBroadcast).locale('de').format('Do MMMM YYYY')}
   </div>
 `;

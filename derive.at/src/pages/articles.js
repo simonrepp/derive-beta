@@ -13,8 +13,10 @@ module.exports = data => {
     <div class="feature">
 
       <div class="feature__image">
-        <img src="${latest.image}" />
-        Cover-Design: Elke Rauth
+        ${latest.image ? `
+          <img src="${latest.image.written}" />
+          Cover-Design: Elke Rauth
+        `:''}
       </div>
 
       <div class="feature__text">
@@ -25,7 +27,7 @@ module.exports = data => {
 
         TODO derive N°64 (Jan–März /2016) (link auf issue)
 
-        ${latest.abstract}
+        ${latest.abstract ? latest.abstract.html : ''}
 
         ${tags(latest.tags)}
 
@@ -38,7 +40,8 @@ module.exports = data => {
     <div class="pagination">
 
     </div>
-    <div class="booktiles">
+    <div class="tiles">
+      TODO article special tilethingys on articles page
       ${Array.from(data.articles.values()).map(article => `
         <div class="articletile">
           <h1>

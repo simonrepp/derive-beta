@@ -10,8 +10,8 @@ module.exports = book => `
       </a>
     </h1>
 
-    ${book.image ? `
-      <img src="${book.image}" />
+    ${book.cover ? `
+      <img src="${book.cover.written}" />
     `:''}
 
     ${authors(book.authors)}
@@ -19,12 +19,13 @@ module.exports = book => `
     <div class="generic__margin-vertical">
       ${[
         book.placeOfPublication ? `${book.placeOfPublication}:` : '',
-        book.publishers.map(publisher => `<a href="/verlage/${publisher.permalink}/">${publisher.name}</a>`).join(', '),
+        book.publishers.connected.map(publisher => `<a href="/verlage/${publisher.permalink}/">${publisher.name}</a>`).join(', '),
         book.yearOfPublication ? `(${book.yearOfPublication})` : ''
       ].join(' ').trim()}
     </div>
 
-    ${book.reviews ? `
+    // TODO multiple rezensionen
+    ${book.reviews.length > 0 ? `
       <a href="/texte/${book.reviews[0].permalink}/">Rezension lesen</a>
     `:''}
   </div>

@@ -8,8 +8,10 @@ module.exports = (book) => {
     <div class="feature">
 
       <div class="feature__image">
-        <img src="${book.image}" />
-        Cover-Design: TODO Elke Rauth
+        ${book.cover ? `
+          <img src="${book.cover.written}" />
+          Cover-Design: TODO Elke Rauth
+        `:''}
       </div>
 
       <div class="feature__text">
@@ -22,12 +24,12 @@ module.exports = (book) => {
         <div class="generic__margin-vertical">
           ${[
             book.placeOfPublication ? `${book.placeOfPublication}:` : '',
-            book.publishers.map(publisher => `<a href="/verlage/${publisher.permalink}/">${publisher.name}</a>`).join(', '),
+            book.publishers.connected.map(publisher => `<a href="/verlage/${publisher.permalink}/">${publisher.name}</a>`).join(', '),
             book.yearOfPublication ? `(${book.yearOfPublication})` : ''
           ].join(' ').trim()}
         </div>
 
-        ${book.reviews ? `
+        ${book.reviews.length > 0 ? `
           <strong>
             <a href="/texte/${book.reviews[0].permalink}/">Rezension lesen</a>
           </strong>

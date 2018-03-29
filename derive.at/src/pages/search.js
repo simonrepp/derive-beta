@@ -33,7 +33,7 @@ module.exports = () => {
                                     .replace(/bereiche=[^$&]+/, function(kv) {
                                       return kv.replace('bereiche', 'sections')
                                                .replace('autoren', 'authors')
-                                               .replace('bücher', 'books')
+                                               .replace('b%C3%BCcher', 'books')
                                                .replace('radio', 'programs')
                                                .replace('texte', 'articles')
                                                .replace('zeitschrift', 'issues');
@@ -42,7 +42,7 @@ module.exports = () => {
       const url = '/api/search/' + params;
 
       if(location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
-        showError('Lokales Environment - Die Suche ist nicht verfügbar.')
+        showError('Die Suche ist beim lokalen Testen nicht verfügbar da sie auf PHP angewiesen ist.')
       } else {
         let request = new XMLHttpRequest();
 

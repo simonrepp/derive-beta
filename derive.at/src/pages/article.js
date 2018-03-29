@@ -8,16 +8,16 @@ module.exports = (article) => {
     <div class="article-single">
 
       ${article.image ? `
-        <img src="${article.image}" />
+        <img src="${article.image.written}" />
       `:''}
       Cover-Design: Someone STATIC TODO
 
       ${authors(article.authors)}
 
       <h1>${article.title}</h1>
-      <strong>${article.subtitle}</strong>
+      ${article.subtitle ? `<strong>${article.subtitle}</strong>` : ''}
 
-      ${article.text}
+      ${article.text ? article.text.written : 'Kein Text vorhanden'}
 
       ${tags(article.tags)}
 

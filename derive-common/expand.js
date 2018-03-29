@@ -1,15 +1,42 @@
-const add = (data, collection) => {
+const addToCategories = (data, collection) => {
+  data[collection].forEach(document => {
+    document.categories.forEach(category => {
+      const existingCategory = data.categories.get(category);
+
+      if(existingCategory) {
+        const existingCategoryCollection = existingCategory.get(collection);
+
+        if(existingCategoryCollection) {
+          existingCategoryCollection.push(document);
+        } else {
+          existingCategory.set(collection, [document]);
+        }
+
+        existingCategory.set('referenceCount', existingCategory.get('referenceCount') + 1);
+      } else {
+        data.categories.set(category, new Map([[ collection, [document] ], [ 'referenceCount', 1 ]]))
+      }
+    });
+  });
+};
+
+const addToTags = (data, collection) => {
   data[collection].forEach(document => {
     document.tags.forEach(tag => {
-      if(data.tags[tag]) {
-        if(data.tags[tag][collection]) {
-          data.tags[tag][collection].push(document);
+      const existingTag = data.tags.get(tag);
+
+      if(existingTag) {
+        const existingTagCollection = existingTag.get(collection);
+
+        if(existingTagCollection) {
+          existingTagCollection.push(document);
         } else {
-          data.tags[tag][collection] = [document];
+          existingTag.set(collection, [document]);
         }
+
+        existingTag.set('referenceCount', existingTag.get('referenceCount') + 1);
       } else {
-        data.tags[tag] = {};
-        data.tags[tag][collection] = [document];
+        data.tags.set(tag, new Map([[ collection, [document] ], [ 'referenceCount', 1 ]]))
       }
     });
   });
@@ -17,15 +44,20 @@ const add = (data, collection) => {
 
 module.exports = data => {
 
-  // TODO: Consider a map for tags
-  data.tags = {};
+  data.categories.clear();
 
-  add(data, 'articles');
-  add(data, 'books');
-  add(data, 'events');
-  add(data, 'issues');
-  add(data, 'players');
-  add(data, 'programs');
+  addToCategories(data, 'articles');
+  addToCategories(data, 'events');
+  addToCategories(data, 'programs');
+
+  data.tags.clear();
+
+  addToTags(data, 'articles');
+  addToTags(data, 'books');
+  addToTags(data, 'events');
+  addToTags(data, 'issues');
+  addToTags(data, 'players');
+  addToTags(data, 'programs');
 
   data.authors = [];
   data.bookAuthors = [];

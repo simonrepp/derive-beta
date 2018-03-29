@@ -1,6 +1,6 @@
 const path = require('path');
 
-const { globFiles, loadToml } = require('./lib.js'),
+const { globFiles } = require('./util.js'),
       sourceArticle = require('./source/article.js'),
       sourceBook = require('./source/book.js'),
       sourceEvent = require('./source/event.js'),
@@ -9,48 +9,72 @@ const { globFiles, loadToml } = require('./lib.js'),
       sourcePlayer = require('./source/player.js'),
       sourceProgram = require('./source/program.js');
 
-// TODO: Copy markdown embeddded images I guess? Phew!! :) CHALLENGE ACCEPTED
-// TODO: Enforce required fields where it makes sense
-// TODO: When we switch to .plain -> Have fun with umlaute and sonderzeichen in data keys!!! :DD
-// TODO: Also .plain relevant: Adapt parse/validation so it handles array fields as single value/empy OR array smoothly
+// TODO: Gradually refactor warnings to simpler format?
+//       Place of occurrence -> Description and consequences -> Solution -> File/Line/Column Shortcut 
 
-module.exports = async (data, file) => {
+const forbiddenFilenameCharacters = /[\\\?\*:\|"<>]/;
+
+module.exports = async data => {
+  data.articles.clear();
+  data.books.clear();
+  data.events.clear();
+  data.issues.clear();
+  data.media.clear();
+  data.pages.clear();
+  data.players.clear();
+  data.programs.clear();
   data.warnings = [];
 
-  const tomlPaths = [];
+  const plainPaths = [];
+  const globPaths = await globFiles(data.root, '**/*');
 
-  if(file) {
-    tomlPaths.push(file);
-  } else {
-    const paths = await globFiles(data.root, '**/*');
+  for(let filePath of globPaths) {
+    
+    if(filePath.match(forbiddenFilenameCharacters)) {
+      
+      data.warnings.push({
+        description: 'Bis der Dateiname korrigiert wurde wird die Datei ignoriert, dies kann auch weitere Dateien betreffen wenn diese auf die Datei bzw. deren Inhalte referenzieren.',
+        detail: 'Lösung: Die nicht erlaubten Zeichen sollten entfernt bzw. durch Leerzeichen oder alternative Zeichen wie "_" oder "-" ersetzt werden.',
+        files: [{ path: filePath }],
+        header: `**${filePath}**\n\nProblem: Im Namen der Datei bzw. des Ordners wurde eines der nicht erlaubten Zeichen  / \\ ? * : | " < > vorgefunden.`
+      });
+      
+    } else if(path.extname(filePath) === '.plain') {
+      
+      if(filePath.match(/^Akteure\//)) {
+        
+        await sourcePlayer(data, filePath);
+          
+      } else if(filePath.match(/^Bücher\//)) {
 
-    data.media.clear();
+        await sourceBook(data, filePath);
 
-    paths.forEach(filePath => {
-      if(path.extname(filePath) === '.toml') {
-        tomlPaths.push(filePath);
-      } else {
-        data.media.set(filePath, 0)
+      } else if(filePath.match(/^Radiosendungen\//)) {
+
+        await sourceProgram(data, filePath);
+
+      } else if(filePath.match(/^Seiten\//)) {
+
+        await sourcePage(data, filePath);
+
+      } else if(filePath.match(/^Texte\//)) {
+
+        await sourceArticle(data, filePath);
+
+      } else if(filePath.match(/^Veranstaltungen\//)) {
+
+        await sourceEvent(data, filePath);
+
+      } else if(filePath.match(/^Zeitschrift\//)) {
+
+        await sourceIssue(data, filePath);
+
       }
-    })
-  }
-
-  // TODO: Reintroduce some async again? :) (in batches of [n] as configured in settings ?)
-  for(let i = 0; i < tomlPaths.length; i++) {
-    if(tomlPaths[i].match(/^Akteure\//)) {
-      await sourcePlayer(data, tomlPaths[i]);
-    } else if(tomlPaths[i].match(/^Bücher\//)) {
-      await sourceBook(data, tomlPaths[i]);
-    } else if(tomlPaths[i].match(/^Radiosendungen\//)) {
-      await sourceProgram(data, tomlPaths[i]);
-    } else if(tomlPaths[i].match(/^Seiten\//)) {
-      await sourcePage(data, tomlPaths[i]);
-    } else if(tomlPaths[i].match(/^Texte\//)) {
-      await sourceArticle(data, tomlPaths[i]);
-    } else if(tomlPaths[i].match(/^Veranstaltungen\//)) {
-      await sourceEvent(data, tomlPaths[i]);
-    } else if(tomlPaths[i].match(/^Zeitschrift\//)) {
-      await sourceIssue(data, tomlPaths[i]);
+      
+    } else {
+      
+      data.media.set(filePath, false); // initially mark as unused
+    
     }
   }
 

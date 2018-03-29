@@ -1,0 +1,34 @@
+Titel: Erforderlich
+Untertitel: 
+
+Bild: 
+
+Soundfile: /Radiosendungen/Soundfiles/Beispiel.mp3
+
+Redaktion:
+- Jane Smith
+
+Erstausstrahlung: 2016-12-31
+Sprache: DE
+
+Kategorien:
+- Exempel
+
+Tags:
+- Beispiele
+- Vorlagen
+
+Permalink: erforder-lich
+
+--- Abstract
+Die Kurzfassung.
+Markdown aber keine Medien.
+--- Abstract
+
+--- Text
+Langer Text ...
+
+Markdown und Medien unterstützt.
+
+... ist lang.
+--- Text

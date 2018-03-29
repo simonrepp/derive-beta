@@ -1,67 +1,100 @@
-const fsExtra = require('fs-extra'),
-      path = require('path'),
-      sharp = require('sharp');
-
-const { loadToml } = require('../lib.js'),
+const { loadPlain, statFile } = require('../util.js'),
+      { PlainDataParseError } = require('../../plaindata/plaindata.js'),
       { validateArray,
-        validateEmpty,
+        validateKeys,
         validateInteger,
         validateMarkdown,
         validatePath,
-        validateString } = require('../validate.js');
+        validateString,
+        ValidationError } = require('../validate.js');
 
-module.exports = async (data, tomlPath) => {
-  let document;
+const specifiedKeys = [
+  'Autoren/Herausgeber',
+  'Cover',
+  'Erscheinungsjahr',
+  'Erscheinungsort',
+  'ISBN/ISSN',
+  'Permalink',
+  'Preis',
+  'Seitenanzahl',
+  'Tags',
+  'Titel',
+  'URL',
+  'Verlagstext',
+  'Verleger'
+];
 
-  try {
-    document = await loadToml(data.root, tomlPath);
-  } catch(err) {
-    data.books.delete(tomlPath);
+module.exports = async (data, plainPath) => {
+  const cached = data.cache.get(plainPath);
+  const stats = await statFile(data.root, plainPath);
+  
+  if(cached && stats.size === cached.stats.size && stats.mTimeMs === cached.stats.mTimeMs) {
+    data.books.set(plainPath, cached.book);
+  } else {
+    let document;
 
-    data.warnings.push({
-      description: `Bis zur Lösung des Problems scheint das betroffene Buch nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${tomlPath}`,
-      detail: `Ab Zeile ${err.line} und Spalte ${err.column} war das parsen nicht mehr möglich. Der eigentliche Fehler liegt in der Regel bereits davor, oft auch in einer vorherigen Zeile.\n \nTypische Fehlerquellen: Fehlende oder überschüssige Anführungszeichen, Beistriche, eckige Klammern.\n \nDie originale Fehlermeldung des Parsers war:\n-----------\n${err.message}`,
-      files: [{
-        column: err.column,
-        line: err.line,
-        path: tomlPath
-      }],
-      header: `Unkritischer Fehler beim parsen der TOML Daten eines Buchs`
-    });
+    try {
+      document = await loadPlain(data.root, plainPath);
+    } catch(err) {
+      data.cache.delete(plainPath);
+      
+      if(err instanceof PlainDataParseError) {
+        data.warnings.push({
+          description: `Bis zur Lösung des Problems scheint das betroffene Buch nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${plainPath}`,
+          detail: err.message,
+          files: [{
+            beginColumn: err.beginColumn,
+            beginLine: err.beginLine,
+            column: err.column,
+            line: err.line,
+            path: plainPath
+          }],
+          header: `Problem gefunden beim einlesen der plaindata Daten eines Buchs`
+        });
 
-    return;
+        return;
+      } else {
+        throw err;
+      }
+    }
+
+    const book = { sourceFile: plainPath };
+
+    try {
+      book.title = validateString(document, 'Titel', { required: true });
+      book.permalink = validateString(document, 'Permalink', { required: true });
+
+      validateKeys(document, specifiedKeys);
+
+      book.isxn = validateString(document, 'ISBN/ISSN');
+      book.url = validateString(document, 'URL');
+      book.placeOfPublication = validateString(document, 'Erscheinungsort');
+      book.yearOfPublication = validateString(document, 'Erscheinungsjahr');
+      book.numberOfPages = validateInteger(document, 'Seitenanzahl');
+      book.price = validateString(document, 'Preis');
+      book.authors = { sourced: validateArray(document, 'Autoren/Herausgeber') };
+      book.publishers = { sourced: validateArray(document, 'Verleger') };
+      book.tags = validateArray(document, 'Tags');
+      book.cover = validatePath(document, 'Cover');
+      book.description = validateMarkdown(document, 'Verlagstext');
+    } catch(err) {
+      data.cache.delete(plainPath);
+      
+      if(err instanceof ValidationError) {
+        data.warnings.push({
+          description: `Bis zur Lösung des Problems scheint das betroffene Buch nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${plainPath}`,
+          detail: err.message,
+          files: [{ path: plainPath }],
+          header: `Problem gefunden beim prüfen der Daten ${book.title ? `des Buchs "${book.title}"` : 'eines Buchs'}`
+        });
+
+        return;
+      } else {
+        throw err;
+      }
+    }
+    
+    data.cache.set(plainPath, { book: book, stats: stats });
+    data.books.set(plainPath, book);
   }
-
-  const book = { sourceFile: tomlPath };
-
-  try {
-    book.title = validateString(document, 'Titel', true);
-    book.isxn = validateString(document, 'ISBN_ISSN');
-    book.url = validateString(document, 'URL');
-    book.placeOfPublication = validateString(document, 'Erscheinungsort');
-    book.yearOfPublication = validateString(document, 'Erscheinungsjahr');
-    book.numberOfPages = validateInteger(document, 'Seitenanzahl');
-    book.price = validateString(document, 'Preis');
-    book.authors = validateArray(document, 'Autoren_Herausgeber');
-    book.publishers = validateArray(document, 'Verleger');
-    book.tags = validateArray(document, 'Tags');
-    book.cover = validatePath(document, 'Cover', data);
-    book.permalink = validateString(document, 'Permalink', true);
-    book.description = validateMarkdown(document, 'Verlagstext', data);
-
-    validateEmpty(document);
-  } catch(err) {
-    data.books.delete(tomlPath);
-
-    data.warnings.push({
-      description: `Bis zur Lösung des Problems scheint das betroffene Buch nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${tomlPath}`,
-      detail: err,
-      files: [{ path: tomlPath }],
-      header: `Unkritischer Fehler beim prüfen der Daten ${book.title ? `des Buchs "${book.title}"` : 'eines Buchs'}`
-    });
-
-    return;
-  }
-
-  data.books.set(tomlPath, book);
 };

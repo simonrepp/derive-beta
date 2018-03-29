@@ -8,6 +8,7 @@ module.exports = urbanize => {
       TODO Gestaltung Index mit Elke<br/><br/>
 
       ${urbanize.events.length} Veranstaltungen<br/>
+      ${urbanize.pages.length} Seiten<br/>
       ${urbanize.participants.size} Teilnehmer<br/>
       ${Object.keys(urbanize.categories).length} Kategorien<br/>
       ${Object.keys(urbanize.tags).length} Tags<br/>
