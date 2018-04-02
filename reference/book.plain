@@ -4,6 +4,8 @@ URL:
 Erscheinungsort:
 Erscheinungsjahr:
 Seitenanzahl:
+
+> Freitext, kein spezielles Format erforderlich.
 Preis: 
 
 Autoren/Herausgeber:
@@ -16,6 +18,8 @@ Tags:
 - Variante
 
 Cover: Bücher/Cover/beispiel.jpg
+
+> Jedes Buch muss einen einzigartigen Permalink besitzen
 Permalink: erforder-lich
 
 --- Verlagstext

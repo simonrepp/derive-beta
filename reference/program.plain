@@ -3,12 +3,16 @@ Untertitel:
 
 Bild: 
 
+> Für jede Sendung muss ein Soundfile existieren
 Soundfile: /Radiosendungen/Soundfiles/Beispiel.mp3
 
 Redaktion:
 - Jane Smith
 
+> Datumsangaben immer im Format YYYY-MM-DD
 Erstausstrahlung: 2016-12-31
+
+> Ein Wert wie DE, EN, usw.
 Sprache: DE
 
 Kategorien:
@@ -18,6 +22,7 @@ Tags:
 - Beispiele
 - Vorlagen
 
+> Jede Radiosendung muss einen einzigartigen Permalink besitzen
 Permalink: erforder-lich
 
 --- Abstract

@@ -1,5 +1,14 @@
 Titel: Erforderlich
+
+> Jede Seite muss einen in ihrem Kontext einzigartigen Permalink besitzen.
+> Z.b. für jedes Urbanize Festival kann es nur eine Seite mit Permalink
+> "impressum" geben, bzw. unter den Seiten die keinem Urbanize Festival
+> zugeordnet sind kann es z.b. nur eine Seite mit dem Permalink 
+> "bestellungen" geben.
 Permalink: erforder-lich
+
+> Aktuell für das urbanize Festival 2018 sind die Werte "Wien 2018"
+> und "Berlin 2018" vorgesehen.
 Urbanize: Berlin 2018
 
 --- Text

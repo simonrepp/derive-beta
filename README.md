@@ -1,3 +1,3 @@
 # derive-beta
 
-Derive Publishing Plugin **Prototyp**.
+dérive Publishing Plugin **Prototyp**.

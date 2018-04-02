@@ -17,8 +17,12 @@ Tags:
 - Beispiel
 
 Bild: /Dateien/Urbanize 2018/beispiel_bild.png
+
+> Jede Veranstaltung muss einen einzigartigen Permalink besitzen
 Permalink: erforder-lich
 
+> Aktuell für das urbanize Festival 2018 sind die Werte "Wien 2018"
+> und "Berlin 2018" vorgesehen.
 Urbanize: Wien 2018
 
 Adresse:
@@ -41,8 +45,13 @@ Markdown und Medien unterstützt.
 ... ist lang.
 --- Text
 
+> Es koennen beliebig
 # Termin
+
+> Datumsangaben immer im Format YYYY-MM-DD
 Datum: 2018-12-30
+
+> Freitext, aber in der Regel HH:MM bzw. HH:MM - HH:MM
 Zeit: 17:00
 
 # Termin

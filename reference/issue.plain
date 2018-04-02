@@ -10,13 +10,17 @@ Partner:
 Schwerpunkte:
 - Beispielhafte Dinge
 
+> Ja oder Nein
 Vergriffen: Nein
+
+> Datumsangaben immer im Format YYYY-MM-DD
 Datum: 2020-12-31
 
 Tags:
 - Exempel
 - Vorlage
 
+> Ja oder Nein
 Veröffentlichen: Ja
 
 --- Beschreibung
@@ -24,12 +28,19 @@ Die Beschreibung.
 Markdown aber keine Medien.
 --- Beschreibung
 
-
 # Rubrik
+
+> Jede Rubrik Untersektion muss einen Titel haben
 Titel: Editorial
 
+
+> In einer Rubrik kann es mehrere Artikel Untersektionen geben
 ## Artikel
+
+> Dieser Titel muss mit einem Artikeltitel übereinstimmen
 Titel: Editorial dérive 99
+
+> Freitext, aber in der Regel N oder N-M
 Seite(n): 1
 
 

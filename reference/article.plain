@@ -6,7 +6,10 @@ Bild: Texte/Heft XY/Bilder/Beispiel.jpg
 Autoren:
 - Jane Doe
 
+> Datumsangaben immer im Format YYYY-MM-DD
 Datum: 2018-12-31
+
+> Ein Wert wie DE, EN, usw.
 Sprache: DE
 
 Kategorien:
@@ -16,14 +19,18 @@ Kategorien:
 Tags: 
 - Exempel
 
+> Jeder Artikel muss einen einzigartigen Permalink besitzen
 Permalink: erforder-lich
 
+> Fra
 Buchbesprechungen:
 - Musterbuch
 
 Veröffentlichen: Ja
 Sichtbar: Ja
 
+> Aktuell für das urbanize Festival 2018 sind die Werte "Wien 2018"
+> und "Berlin 2018" vorgesehen.
 Urbanize:
 
 --- Abstract
