@@ -45,24 +45,32 @@
           "label": "Auflistungen",
           "submenu": [
             {
+              "label": "Akteure",
+              "command": "derive-beta:list-players"
+            },
+            {
               "label": "Artikel",
-              "command": "derive-beta:list-tags"
+              "command": "derive-beta:list-articles"
             },
             {
               "label": "Ausgaben",
-              "command": "derive-beta:list-tags"
+              "command": "derive-beta:list-issues"
+            },
+            {
+              "label": "Bücher",
+              "command": "derive-beta:list-books"
             },
             {
               "label": "Kategorien",
-              "command": "derive-beta:list-tags"
+              "command": "derive-beta:list-categories"
             },
             {
               "label": "Radiosendungen",
-              "command": "derive-beta:list-tags"
+              "command": "derive-beta:list-programs"
             },
             {
               "label": "Seiten",
-              "command": "derive-beta:list-tags"
+              "command": "derive-beta:list-pages"
             },
             {
               "label": "Tags",
@@ -70,7 +78,7 @@
             },
             {
               "label": "Veranstaltungen",
-              "command": "derive-beta:list-tags"
+              "command": "derive-beta:list-events"
             }
           ]
         },
