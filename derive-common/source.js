@@ -10,7 +10,7 @@ const { globFiles } = require('./util.js'),
       sourceProgram = require('./source/program.js');
 
 // TODO: Gradually refactor warnings to simpler format?
-//       Place of occurrence -> Description and consequences -> Solution -> File/Line/Column Shortcut 
+//       Place of occurrence -> Description and consequences -> Solution -> File/Line/Column Shortcut
 
 const forbiddenFilenameCharacters = /[\\\?\*:\|"<>]/;
 
@@ -29,22 +29,22 @@ module.exports = async data => {
   const globPaths = await globFiles(data.root, '**/*');
 
   for(let filePath of globPaths) {
-    
+
     if(filePath.match(forbiddenFilenameCharacters)) {
-      
+
       data.warnings.push({
         description: 'Bis der Dateiname korrigiert wurde wird die Datei ignoriert, dies kann auch weitere Dateien betreffen wenn diese auf die Datei bzw. deren Inhalte referenzieren.',
         detail: 'Lösung: Die nicht erlaubten Zeichen sollten entfernt bzw. durch Leerzeichen oder alternative Zeichen wie "_" oder "-" ersetzt werden.',
         files: [{ path: filePath }],
         header: `**${filePath}**\n\nProblem: Im Namen der Datei bzw. des Ordners wurde eines der nicht erlaubten Zeichen  / \\ ? * : | " < > vorgefunden.`
       });
-      
+
     } else if(path.extname(filePath) === '.plain') {
-      
+
       if(filePath.match(/^Akteure\//)) {
-        
+
         await sourcePlayer(data, filePath);
-          
+
       } else if(filePath.match(/^Bücher\//)) {
 
         await sourceBook(data, filePath);
@@ -70,11 +70,11 @@ module.exports = async data => {
         await sourceIssue(data, filePath);
 
       }
-      
-    } else {
-      
+
+    } else if(!filePath.match(/^Dokumentation\//)) {
+
       data.media.set(filePath, false); // initially mark as unused
-    
+
     }
   }
 

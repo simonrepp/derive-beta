@@ -1,6 +1,8 @@
 {
-  "atom-workspace": {
+  ".editor:not(.mini)": {
     "f5": "derive-beta:refresh",
-    "ctrl-f5": "derive-beta:deploy-staging.urbanize.at"
+    "ctrl-1": "derive-beta:preview-derive.at",
+    "ctrl-2": "derive-beta:preview-urbanize.at",
+    "ctrl-3": "derive-beta:preview-berlin.urbanize.at"
   }
 }

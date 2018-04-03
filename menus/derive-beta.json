@@ -133,6 +133,13 @@
           "label": "derive.at",
           "submenu": [
             {
+              "label": "Lokale Seitenvorschau",
+              "command": "derive-beta:preview-derive.at"
+            },
+            {
+              "type": "separator"
+            },
+            {
               "label": "staging.derive.at aktualisieren",
               "command": "derive-beta:deploy-staging.derive.at"
             },
@@ -146,6 +153,13 @@
           "label": "urbanize.at",
           "submenu": [
             {
+              "label": "Lokale Seitenvorschau",
+              "command": "derive-beta:preview-urbanize.at"
+            },
+            {
+              "type": "separator"
+            },
+            {
               "label": "staging.urbanize.at aktualisieren",
               "command": "derive-beta:deploy-staging.urbanize.at"
             },
@@ -158,6 +172,13 @@
         {
           "label": "berlin.urbanize.at",
           "submenu": [
+            {
+              "label": "Lokale Seitenvorschau",
+              "command": "derive-beta:preview-berlin.urbanize.at"
+            },
+            {
+              "type": "separator"
+            },
             {
               "label": "staging.berlin.urbanize.at aktualisieren",
               "command": "derive-beta:deploy-staging.berlin.urbanize.at"
