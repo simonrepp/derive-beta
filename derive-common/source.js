@@ -73,7 +73,7 @@ module.exports = async data => {
 
     } else if(!filePath.match(/^Dokumentation\//)) {
 
-      data.media.set(filePath, false); // initially mark as unused
+      data.media.set(filePath.normalize(), false); // initially mark as unused
 
     }
   }

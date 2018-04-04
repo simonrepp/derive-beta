@@ -28,7 +28,7 @@ const markdownMediaRegex = /(!|)\[(?:(?!\[.*\]).)*\]\((?!https?:\/\/|\/\/)(\S(?:
 
 
 const connectMedia = (data, mediaPath) => {
-  const normalizedPath = mediaPath.replace(/^\//, '');
+  const normalizedPath = mediaPath.replace(/^\//, '').normalize();
 
   if(data.media.has(normalizedPath)) {
     data.media.set(normalizedPath, true);
@@ -43,10 +43,10 @@ const connectMedia = (data, mediaPath) => {
 
 const connectMarkdownMedia = (data, field, fieldName) => {
   if(field.hasOwnProperty('downloads') && field.hasOwnProperty('embeds')) {
-    ['downloads', 'embeds'].forEach(mediaType => {      
+    ['downloads', 'embeds'].forEach(mediaType => {
       field[mediaType].forEach((replacedMediaPath, originalMediaPath) => {
-        const normalizedFilePath = originalMediaPath.replace(/^\//, '');
-        
+        const normalizedFilePath = originalMediaPath.replace(/^\//, '').normalize();
+
         if(data.media.has(normalizedFilePath)) {
           data.media.set(normalizedFilePath, true);
         } else {
@@ -56,42 +56,42 @@ const connectMarkdownMedia = (data, field, fieldName) => {
     })
   } else {
     let markdown = field.sourced;
-    
+
     const downloads = new Map();
     const embeds = new Map();
     let downloadNumber = 1;
     let embedNumber = 1;
-    
+
     const connectEmbeddedMedia  = (fullMatch, typeMatch, urlMatch) => {
-      const normalizedFilePath = urlMatch.replace(/^\//, '');
-      
+      const normalizedFilePath = urlMatch.replace(/^\//, '').normalize();
+
       if(data.media.has(normalizedFilePath)) {
         const fileExtension = path.extname(urlMatch);
-        
+
         if(typeMatch === '!' || typeMatch === 'src') {
           if(verbatimEmbeddableMediaExtensions.includes(fileExtension)) {
             const replacedFilePath = `${fieldName.toLowerCase()}-embed-${embedNumber++}${fileExtension}`;
-            
+
             data.media.set(normalizedFilePath, true);
             embeds.set(urlMatch, replacedFilePath);
-            
+
             return fullMatch.replace(urlMatch, replacedFilePath);
           } else if(conversionEmbeddableMediaExtensions.includes(fileExtension)) {
             const replacedFilePath = `${fieldName.toLowerCase()}-embed-${embedNumber++}.png`;
-            
+
             data.media.set(normalizedFilePath, true);
             embeds.set(urlMatch, replacedFilePath);
-            
+
             return fullMatch.replace(urlMatch, replacedFilePath);
           } else {
             throw new ConnectMediaError(`Das Markdown-Feld "${fieldName}" enthält einen Embed der Datei "${urlMatch}", dessen Dateityp ist aber für Embeds nicht erlaubt.`);
           }
         } else if(typeMatch === '' || typeMatch === 'href') {
           const replacedFilePath = `${fieldName.toLowerCase()}-download-${downloadNumber++}${fileExtension}`;
-          
+
           data.media.set(normalizedFilePath, true);
           downloads.set(urlMatch, replacedFilePath);
-          
+
           return fullMatch.replace(urlMatch, replacedFilePath);
         } else {
           throw('Interner Fehler bei der RegExp-basierten Detektion von referenzierten Mediendateien.')
@@ -100,19 +100,19 @@ const connectMarkdownMedia = (data, field, fieldName) => {
         throw new ConnectMediaError(`Das Markdown-Feld "${fieldName}" enthält einen Verweis auf die Datei "${urlMatch}", diese wurde aber nicht gefunden.`);
       }
     };
-    
+
     markdown = markdown.replace(markdownMediaRegex, connectEmbeddedMedia);
     markdown = markdown.replace(htmlMediaRegex, connectEmbeddedMedia);
-    
+
     let html;
-    
+
     try {
       html = renderMarkdown(markdown);
     } catch(err) {
       // Unclear if this could ever happen - quickly consult md-it documentation ?
       throw new ValidationError(`Das Markdown im Feld "${fieldName}" hat beim konvertieren einen Fehler ausgelöst: ${err}`);
     }
-    
+
     field.connected = html;
     field.downloads = downloads;
     field.embeds = embeds;
@@ -135,7 +135,7 @@ module.exports = data => {
         data.articles.delete(article.sourceFile);
       }
     }
-    
+
     if(article.text) {
       try {
         connectMarkdownMedia(data, article.text, 'Text');
@@ -147,7 +147,7 @@ module.exports = data => {
             files: [{ path: article.sourceFile }],
             header: `Problem beim prüfen der eingebetteten Mediendateien im Artikel "${article.title}"`
           });
-          
+
           data.articles.delete(article.sourceFile);
         } else {
           throw err;
@@ -190,7 +190,7 @@ module.exports = data => {
         data.events.delete(event.sourceFile);
       }
     }
-    
+
     if(event.text) {
       try {
         connectMarkdownMedia(data, event.text, 'Text');
@@ -202,7 +202,7 @@ module.exports = data => {
             files: [{ path: event.sourceFile }],
             header: `Problem beim prüfen der eingebetteten Mediendateien in der Veranstaltung "${event.title}"`
           });
-          
+
           data.events.delete(event.sourceFile);
         } else {
           throw err;
@@ -228,7 +228,7 @@ module.exports = data => {
       }
     }
   });
-  
+
   data.pages.forEach(page => {
     if(page.text) {
       try {
@@ -241,7 +241,7 @@ module.exports = data => {
             files: [{ path: page.sourceFile }],
             header: `Problem beim prüfen der eingebetteten Mediendateien auf der Seite "${page.title}"`
           });
-          
+
           data.pages.delete(page.sourceFile);
         } else {
           throw err;
@@ -249,7 +249,7 @@ module.exports = data => {
       }
     }
   });
-  
+
   data.programs.forEach(program => {
     if(program.image) {
       if(connectMedia(data, program.image.sourced)) {
@@ -266,7 +266,7 @@ module.exports = data => {
         return
       }
     }
-    
+
     if(program.soundfile) {
       if(connectMedia(data, program.soundfile.sourced)) {
         program.soundfile.connected = program.soundfile.sourced;
@@ -282,7 +282,7 @@ module.exports = data => {
         return
       }
     }
-    
+
     if(program.text) {
       try {
         connectMarkdownMedia(data, program.text, 'Text');
@@ -294,7 +294,7 @@ module.exports = data => {
             files: [{ path: program.sourceFile }],
             header: `Problem beim prüfen der eingebetteten Mediendateien in der Radiosendung "${program.title}"`
           });
-          
+
           data.programs.delete(program.sourceFile);
         } else {
           throw err;
