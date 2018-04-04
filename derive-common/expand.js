@@ -1,20 +1,34 @@
+const slug = require('speakingurl');
+
 const addToCategories = (data, collection) => {
   data[collection].forEach(document => {
-    document.categories.forEach(category => {
-      const existingCategory = data.categories.get(category);
+    document.categories.connected = [];
+    document.categories.sourced.forEach(category => {
+      const categoryPermalink = slug(category);
+      const existingCategory = data.categories.get(categoryPermalink);
 
       if(existingCategory) {
-        const existingCategoryCollection = existingCategory.get(collection);
-
-        if(existingCategoryCollection) {
-          existingCategoryCollection.push(document);
+        if(existingCategory.hasOwnProperty(collection)) {
+          existingCategory[collection].push(document);
         } else {
-          existingCategory.set(collection, [document]);
+          existingCategory[collection] = [document];
         }
 
-        existingCategory.set('referenceCount', existingCategory.get('referenceCount') + 1);
+        existingCategory.referenceCount += 1;
+        existingCategory.spellings.add(category);
+        document.categories.connected.push(existingCategory);
       } else {
-        data.categories.set(category, new Map([[ collection, [document] ], [ 'referenceCount', 1 ]]))
+        const categoryData = {
+          name: category,
+          permalink: categoryPermalink,
+          referenceCount: 1,
+          spellings: new Set([category])
+        };
+
+        categoryData[collection] = [document];
+
+        data.categories.set(categoryPermalink, categoryData);
+        document.categories.connected.push(categoryData);
       }
     });
   });
@@ -22,21 +36,33 @@ const addToCategories = (data, collection) => {
 
 const addToTags = (data, collection) => {
   data[collection].forEach(document => {
-    document.tags.forEach(tag => {
-      const existingTag = data.tags.get(tag);
+    document.tags.connected = [];
+    document.tags.sourced.forEach(tag => {
+      const tagPermalink = slug(tag);
+      const existingTag = data.tags.get(tagPermalink);
 
       if(existingTag) {
-        const existingTagCollection = existingTag.get(collection);
-
-        if(existingTagCollection) {
-          existingTagCollection.push(document);
+        if(existingTag.hasOwnProperty(collection)) {
+          existingTag[collection].push(document);
         } else {
-          existingTag.set(collection, [document]);
+          existingTag[collection] = [document];
         }
 
-        existingTag.set('referenceCount', existingTag.get('referenceCount') + 1);
+        existingTag.referenceCount += 1;
+        existingTag.spellings.add(tag);
+        document.tags.connected.push(existingTag);
       } else {
-        data.tags.set(tag, new Map([[ collection, [document] ], [ 'referenceCount', 1 ]]))
+        const tagData = {
+          name: tag,
+          permalink: tagPermalink,
+          referenceCount: 1,
+          spellings: new Set([tag])
+        };
+
+        tagData[collection] = [document];
+
+        data.tags.set(tagPermalink, tagData);
+        document.tags.connected.push(tagData);
       }
     });
   });

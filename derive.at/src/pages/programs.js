@@ -32,7 +32,7 @@ module.exports = data => {
           ${authors(latest.authors)}
         </div>
 
-        ${tags(latest.tags)}
+        ${tags(latest.tags.connected)}
 
         <hr class="hr__light" />
 

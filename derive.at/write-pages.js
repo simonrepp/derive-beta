@@ -1,6 +1,6 @@
 const fsExtra = require('fs-extra'),
       path = require('path');
-      
+
 const { writeFile } = require('../derive-common/util.js');
 
 const articlePage = require('./src/pages/article.js'),
@@ -20,7 +20,7 @@ const articlePage = require('./src/pages/article.js'),
       programPage = require('./src/pages/program.js'),
       programsPage = require('./src/pages/programs.js'),
       searchPage = require('./src/pages/search.js'),
-      tagPage = require('./src/pages/tag.js');
+      tagPage = require('./pages/tag.js');
 
 module.exports = async data => {
   const write = (html, filePath) => fsExtra.outputFile(path.join(data.buildDir, filePath), html);
@@ -71,7 +71,7 @@ module.exports = async data => {
     await writeFile(data.buildDir, `radio/${program.permalink}/index.html`, programPage(program));
   }
 
-  for(let [tag, tagData] of data.tags.entries()) {
-    await writeFile(data.buildDir, `tags/${tag.replace('/', '-')}/index.html`, tagPage(tag, tagData)); // TODO: Move / escaping to expand() - see comment in create-folder-structure.js
+  for(let tag of data.tags.values()) {
+    await writeFile(data.buildDir, `tags/${tag.permalink}/index.html`, tagPage(tag));
   }
 };

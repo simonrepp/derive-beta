@@ -48,8 +48,8 @@ module.exports = (urbanize, event) => {
 
       <hr/>
 
-      ${categories(event.categories)}
-      ${tags(event.tags)}
+      ${categories(event.categories.connected)}
+      ${tags(event.tags.connected)}
 
       ${addThis(`/veranstaltungen/${event.permalink}/`)}
     </div>

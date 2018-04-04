@@ -29,17 +29,17 @@ const specifiedKeys = [
 module.exports = async (data, plainPath) => {
   const cached = data.cache.get(plainPath);
   const stats = await statFile(data.root, plainPath);
-  
+
   if(cached && stats.size === cached.stats.size && stats.mTimeMs === cached.stats.mTimeMs) {
     data.issues.set(plainPath, cached.issue);
-  } else {  
+  } else {
     let document;
 
     try {
       document = await loadPlain(data.root, plainPath);
     } catch(err) {
       data.cache.delete(plainPath);
-      
+
       if(err instanceof PlainDataParseError) {
         data.warnings.push({
           description: `Bis zur Lösung des Problems scheint die betroffene Zeitschrift nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${plainPath}`,
@@ -75,7 +75,7 @@ module.exports = async (data, plainPath) => {
       issue.features = validateArray(document, 'Schwerpunkte');
       issue.outOfPrint = validateBoolean(document, 'Vergriffen');
       issue.date = validateDate(document, 'Datum');
-      issue.tags = validateArray(document, 'Tags');
+      issue.tags = { sourced: validateArray(document, 'Tags') };
       issue.publish = validateBoolean(document, 'Veröffentlichen');
       issue.description = validateMarkdown(document, 'Beschreibung');
 
@@ -100,7 +100,7 @@ module.exports = async (data, plainPath) => {
       });
     } catch(err) {
       data.cache.delete(plainPath);
-      
+
       if(err instanceof ValidationError) {
         data.warnings.push({
           description: `Bis zur Lösung des Problems scheint die betroffene Zeitschrift nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${plainPath}`,
@@ -117,7 +117,7 @@ module.exports = async (data, plainPath) => {
 
     // TODO: Maybe have this already in the file itself (maybe this should supersede date, if that is equivalent with quarter/year anway, or we just want a custom "3 / 2016" thing that is *not required*)
     issue.year = issue.date.getFullYear();
-  
+
     data.cache.set(plainPath, { issue: issue, stats: stats });
     data.issues.set(plainPath, issue);
   }

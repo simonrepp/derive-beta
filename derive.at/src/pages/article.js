@@ -19,7 +19,7 @@ module.exports = (article) => {
 
       ${article.text ? article.text.written : 'Kein Text vorhanden'}
 
-      ${tags(article.tags)}
+      ${tags(article.tags.connected)}
 
       <a href="#">Heft kaufen</a>
 

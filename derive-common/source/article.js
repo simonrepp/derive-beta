@@ -34,17 +34,17 @@ const specifiedKeys = [
 module.exports = async (data, plainPath) => {
   const cached = data.cache.get(plainPath);
   const stats = await statFile(data.root, plainPath);
-  
+
   if(cached && stats.size === cached.stats.size && stats.mTimeMs === cached.stats.mTimeMs) {
     data.articles.set(plainPath, cached.article);
   } else {
     let document;
-    
+
     try {
       document = await loadPlain(data.root, plainPath);
     } catch(err) {
       data.cache.delete(plainPath);
-      
+
       if(err instanceof PlainDataParseError) {
         data.warnings.push({
           description: `Bis zur Lösung des Problems scheint der betroffene Artikel nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${plainPath}`,
@@ -79,8 +79,8 @@ module.exports = async (data, plainPath) => {
       article.authors = { sourced: validateArray(document, 'Autoren') };
       article.date = validateString(document, 'Datum');
       article.language = validateString(document, 'Sprache');
-      article.categories = validateArray(document, 'Kategorien');
-      article.tags = validateArray(document, 'Tags');
+      article.categories = { sourced: validateArray(document, 'Kategorien') };
+      article.tags = { sourced: validateArray(document, 'Tags') };
       article.bookReviews = { sourced: validateArray(document, 'Buchbesprechungen') };
       article.publish = validateBoolean(document, 'Veröffentlichen');
       article.visible = validateBoolean(document, 'Sichtbar');
@@ -90,7 +90,7 @@ module.exports = async (data, plainPath) => {
       article.text = validateMarkdown(document, 'Text', { process: false });
     } catch(err) {
       data.cache.delete(plainPath);
-      
+
       if(err instanceof ValidationError) {
         data.warnings.push({
           description: `Bis zur Lösung des Problems scheint der betroffene Artikel nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${plainPath}`,
@@ -104,7 +104,7 @@ module.exports = async (data, plainPath) => {
         throw err;
       }
     }
-    
+
     data.cache.set(plainPath, { article: article, stats: stats });
     data.articles.set(plainPath, article);
   }

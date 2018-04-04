@@ -9,6 +9,7 @@ const { globFiles } = require('./util.js'),
       sourcePlayer = require('./source/player.js'),
       sourceProgram = require('./source/program.js');
 
+// TODO: Ensure permalinks are really permalinks ? permalink !== slug(permalink) -> warning
 // TODO: Gradually refactor warnings to simpler format?
 //       Place of occurrence -> Description and consequences -> Solution -> File/Line/Column Shortcut
 

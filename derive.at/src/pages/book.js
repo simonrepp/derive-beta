@@ -35,7 +35,7 @@ module.exports = (book) => {
           </strong>
         `:''}
 
-        ${tags(book.tags)}
+        ${tags(book.tags.connected)}
 
         <hr class="hr__light" />
 

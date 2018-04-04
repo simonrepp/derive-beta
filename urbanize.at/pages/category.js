@@ -1,7 +1,7 @@
 const eventListing = require('../widgets/event-listing.js'),
       layout = require('../layout.js');
 
-module.exports = (urbanize, category, events) => {
+module.exports = (urbanize, category) => {
   const html = `
     <div>
       <div class="breadcrumb">
@@ -9,14 +9,14 @@ module.exports = (urbanize, category, events) => {
           Home
         </a>
         <span> › </span>
-        Kategorie: ${category}
+        Kategorie: ${category.name}
       </div>
 
       <div class="title">
-        Kategorie: ${category}
+        Kategorie: ${category.name}
       </div>
 
-      ${eventListing(events)}
+      ${eventListing(category.events)}
     </div>
   `;
 

@@ -1,7 +1,7 @@
 const eventListing = require('../widgets/event-listing.js')
       layout = require('../layout.js');
 
-module.exports = (urbanize, tag, events) => {
+module.exports = (urbanize, tag) => {
   const html = `
     <div>
       <div class="breadcrumb">
@@ -9,14 +9,14 @@ module.exports = (urbanize, tag, events) => {
           Home
         </a>
         <span> › </span>
-        Tag: ${tag}
+        Tag: ${tag.name}
       </div>
 
       <div class="title">
-        Tag: ${tag}
+        Tag: ${tag.name}
       </div>
 
-      ${eventListing(events)}
+      ${eventListing(tag.events)}
     </div>
   `;
 

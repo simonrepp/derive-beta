@@ -31,13 +31,19 @@ module.exports = data => {
           }
         });
 
-        event.categories.forEach(category => {
-          const existingCategory = data.urbanize[city].categories.get(category);
+        event.categories.connected.forEach(category => {
+          const existingCategory = data.urbanize[city].categories.get(category.permalink);
 
           if(existingCategory) {
-            existingCategory.push(event);
+            existingCategory.events.push(event);
           } else {
-            data.urbanize[city].categories.set(category, [event]);
+            const categoryData = {
+              events: [event],
+              name: category.name,
+              permalink: category.permalink
+            };
+
+            data.urbanize[city].categories.set(category.permalink, categoryData);
           }
         });
 
@@ -49,13 +55,19 @@ module.exports = data => {
           data.urbanize[city].participants.add(participant)
         );
 
-        event.tags.forEach(tag => {
-          const existingTag = data.urbanize[city].tags.get(tag);
+        event.tags.connected.forEach(tag => {
+          const existingTag = data.urbanize[city].tags.get(tag.permalink);
 
           if(existingTag) {
-            existingTag.push(event);
+            existingTag.events.push(event);
           } else {
-            data.urbanize[city].tags.set(tag, [event]);
+            const tagData = {
+              events: [event],
+              name: tag.name,
+              permalink: tag.permalink
+            };
+
+            data.urbanize[city].tags.set(tag.permalink, tagData);
           }
         });
       }

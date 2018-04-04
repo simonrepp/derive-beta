@@ -29,7 +29,7 @@ module.exports = data => {
 
         ${latest.abstract ? latest.abstract.html : ''}
 
-        ${tags(latest.tags)}
+        ${tags(latest.tags.connected)}
 
         TODO Heft kaufen link auf kiosk
 

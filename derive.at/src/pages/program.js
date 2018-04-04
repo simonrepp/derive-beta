@@ -27,7 +27,7 @@ module.exports = program => {
           ${authors(program.editors.connected)}
         </div>
 
-        ${tags(program.tags)}
+        ${tags(program.tags.connected)}
 
         <hr class="hr__light" />
 

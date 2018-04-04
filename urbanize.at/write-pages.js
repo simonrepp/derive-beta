@@ -33,11 +33,11 @@ module.exports = async (data, urbanize) => {
     await writeFile(data.buildDir, `seiten/${page.permalink}/index.html`, pagePage(urbanize, page));
   }
 
-  for(let [category, events] of urbanize.categories.entries()) {
-    await writeFile(data.buildDir, `kategorien/${category}/index.html`, categoryPage(urbanize, category, events));  // TODO: category permalink sanitization elsewhere plz
+  for(let category of urbanize.categories.values()) {
+    await writeFile(data.buildDir, `kategorien/${category.permalink}/index.html`, categoryPage(urbanize, category));
   }
 
-  for(let [tag, events] of urbanize.tags.entries()) {
-    await writeFile(data.buildDir, `tags/${tag.replace('/', '-')}/index.html`, tagPage(urbanize, tag, events)); // TODO: tag permalink sanitization elsewhere plz
+  for(let tag of urbanize.tags.values()) {
+    await writeFile(data.buildDir, `tags/${tag.permalink}/index.html`, tagPage(urbanize, tag));
   }
 };

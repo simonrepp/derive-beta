@@ -50,7 +50,7 @@ module.exports = data => {
           Juna Selzbach, Bernhard Kernegger, Christian Klettner, Elke Rauch, Christoph Laimer, Svetlana Boijevics
 
           Tags
-          ${tags(latest.tags)}
+          ${tags(latest.tags.connected)}
 
           ${share(latest.title, 'https://derive.at/TODO/')}
         </div>

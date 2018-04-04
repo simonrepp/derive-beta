@@ -27,7 +27,7 @@ const specifiedKeys = [
 module.exports = async (data, plainPath) => {
   const cached = data.cache.get(plainPath);
   const stats = await statFile(data.root, plainPath);
-  
+
   if(cached && stats.size === cached.stats.size && stats.mTimeMs === cached.stats.mTimeMs) {
     data.books.set(plainPath, cached.book);
   } else {
@@ -37,7 +37,7 @@ module.exports = async (data, plainPath) => {
       document = await loadPlain(data.root, plainPath);
     } catch(err) {
       data.cache.delete(plainPath);
-      
+
       if(err instanceof PlainDataParseError) {
         data.warnings.push({
           description: `Bis zur Lösung des Problems scheint das betroffene Buch nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${plainPath}`,
@@ -74,12 +74,12 @@ module.exports = async (data, plainPath) => {
       book.price = validateString(document, 'Preis');
       book.authors = { sourced: validateArray(document, 'Autoren/Herausgeber') };
       book.publishers = { sourced: validateArray(document, 'Verleger') };
-      book.tags = validateArray(document, 'Tags');
+      book.tags = { sourced: validateArray(document, 'Tags') };
       book.cover = validatePath(document, 'Cover');
       book.description = validateMarkdown(document, 'Verlagstext');
     } catch(err) {
       data.cache.delete(plainPath);
-      
+
       if(err instanceof ValidationError) {
         data.warnings.push({
           description: `Bis zur Lösung des Problems scheint das betroffene Buch nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${plainPath}`,
@@ -93,7 +93,7 @@ module.exports = async (data, plainPath) => {
         throw err;
       }
     }
-    
+
     data.cache.set(plainPath, { book: book, stats: stats });
     data.books.set(plainPath, book);
   }

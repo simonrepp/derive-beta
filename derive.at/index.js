@@ -1,6 +1,6 @@
 const fsExtra = require('fs-extra'),
       striptags = require('striptags');
-      
+
 const { writeFile } = require('../derive-common/util.js');
 
 const indexArticles = data => {
@@ -8,8 +8,8 @@ const indexArticles = data => {
     const boosted = `${article.title} ${article.subtitle || ''}`;
     const regular = [article.abstract ? striptags(article.abstract) : '',
                      article.authors.connected.map(author => author.name).join(' '),
-                     article.categories.join(' '),
-                     article.tags.join(' '),
+                     article.categories.connected.map(category => category.name).join(' '),
+                     article.tags.connected.map(tag => tag.name).join(' '),
                      article.text ? striptags(article.text.html) : ''].join(' ');
 
     return {
@@ -28,7 +28,7 @@ const indexAuthors = data => {
     const boosted = `${author.name} ${author.biography ? striptags(author.biography) : ''}`;
     const regular = [author.city || '',
                      author.country || '',
-                     author.tags.join(' '),
+                     author.tags.connected.map(tag => tag.name).join(' '),
                      author.text ? striptags(author.text) : '',
                      author.website || ''].join(' ');
 
@@ -49,7 +49,7 @@ const indexBooks = data => {
     const regular = [book.authors.connected.map(author => author.name).join(' '),
                      book.description ? striptags(book.description) : '',
                      book.publishers.connected.map(publisher => publisher.name).join(' '),
-                     book.tags.join(' '),
+                     book.tags.connected.map(tag => tag.name).join(' '),
                      book.placeOfPublication || '',
                      book.url || '',
                      book.yearOfPublication || ''].join(' ');
@@ -73,7 +73,7 @@ const indexIssues = data => {
     const regular = [issue.cooperation || '',
                      issue.description ? striptags(issue.description) : '',
                      issue.partners.connected.map(partner => partner.name).join(' '), // TODO: Is this field really used enough to keep it?
-                     issue.tags.join(' ')].join(' ');
+                     issue.tags.connected.map(tag => tag.name).join(' ')].join(' ');
 
     return {
       route: `/zeitschrift/${issue.number}/`, // TODO: issues url scheme
@@ -91,8 +91,8 @@ const indexPrograms = data => {
     const boosted = [program.title, program.subtitle].join(' ');
     const regular = [program.abstract ? striptags(program.abstract) : '',
                      program.editors.connected.map(editor => editor.name).join(' '),
-                     program.categories.join(' '),
-                     program.tags.join(' '),
+                     program.categories.connected.map(category => category.name).join(' '),
+                     program.tags.connected.map(tag => tag.name).join(' '),
                      program.text ? striptags(program.text.html) : ''].join(' ');
 
     return {

@@ -31,7 +31,7 @@ const specifiedKeys = [
 module.exports = async (data, plainPath) => {
   const cached = data.cache.get(plainPath);
   const stats = await statFile(data.root, plainPath);
-  
+
   if(cached && stats.size === cached.stats.size && stats.mTimeMs === cached.stats.mTimeMs) {
     data.events.set(plainPath, cached.event);
   } else {
@@ -41,7 +41,7 @@ module.exports = async (data, plainPath) => {
       document = await loadPlain(data.root, plainPath);
     } catch(err) {
       data.cache.delete(plainPath);
-      
+
       if(err instanceof PlainDataParseError) {
         data.warnings.push({
           description: `Bis zur Lösung des Problems scheint die betroffene Veranstaltung nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${plainPath}`,
@@ -74,8 +74,8 @@ module.exports = async (data, plainPath) => {
       event.url = validateString(document, 'URL');
       event.hosts = { sourced: validateArray(document, 'Veranstalter') };
       event.participants = { sourced: validateArray(document, 'Teilnehmer') };
-      event.categories = validateArray(document, 'Kategorien');
-      event.tags = validateArray(document, 'Tags');
+      event.categories = { sourced: validateArray(document, 'Kategorien') };
+      event.tags = { sourced: validateArray(document, 'Tags') };
       event.image = validatePath(document, 'Bild');
       event.urbanize = validateEnum(document, 'Urbanize', URBANIZE_ENUM);
       event.address = validateString(document, 'Adresse');
@@ -94,7 +94,7 @@ module.exports = async (data, plainPath) => {
       });
     } catch(err) {
       data.cache.delete(plainPath);
-      
+
       if(err instanceof ValidationError) {
         data.warnings.push({
           description: `Bis zur Lösung des Problems scheint die betroffene Veranstaltung nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${plainPath}`,

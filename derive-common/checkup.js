@@ -1,7 +1,25 @@
 const path = require('path');
 
 module.exports = data => {
-  const exts = new Set();
+  data.categories.forEach(category => {
+    if(category.spellings.size > 1) {
+      data.warnings.push({
+        description: `Dies ist nur ein Hinweis, ansonsten bestehen keine Auswirkungen.`,
+        detail: `Für eine Kategorie wurden mehrere Schreibweisen gefunden: ${[...category.spellings].map(spelling => `"${spelling}"`).join(', ')}. Dies sollte manuell (mit Hilfe der Volltextsuche) korrigiert werden.`,
+        header: `**Verschiedene Schreibweisen einer Kategorie**`
+      });
+    }
+  });
+
+  data.tags.forEach(tag => {
+    if(tag.spellings.size > 1) {
+      data.warnings.push({
+        description: `Dies ist nur ein Hinweis, ansonsten bestehen keine Auswirkungen.`,
+        detail: `Für einen Tag wurden mehrere Schreibweisen gefunden: ${[...tag.spellings].map(spelling => `"${spelling}"`).join(', ')}. Dies sollte manuell (mit Hilfe der Volltextsuche) korrigiert werden.`,
+        header: `**Verschiedene Schreibweisen eines Tags**`
+      });
+    }
+  });
 
   data.media.forEach((touched, filePath) => {
     if(!touched) {

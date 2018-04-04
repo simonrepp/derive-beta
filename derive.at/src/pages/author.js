@@ -8,7 +8,7 @@ module.exports = (author) => {
   const html = `
     <div>
       <h1>${author.name}</h1>
-        
+
       ${author.bio ? `<strong>${author.bio}</strong>` : ''}
 
       ${author.text ? `
@@ -19,7 +19,7 @@ module.exports = (author) => {
         <a href="${author.website}">Zur Website von ${author.name}</a>
       `:''}
 
-      ${tags(author.tags)}
+      ${tags(author.tags.connected)}
     </div>
 
     ${author.articles ? `

@@ -26,17 +26,17 @@ const specifiedKeys = [
 module.exports = async (data, plainPath) => {
   const cached = data.cache.get(plainPath);
   const stats = await statFile(data.root, plainPath);
-  
+
   if(cached && stats.size === cached.stats.size && stats.mTimeMs === cached.stats.mTimeMs) {
     data.programs.set(plainPath, cached.program);
-  } else {     
+  } else {
     let document;
 
     try {
       document = await loadPlain(data.root, plainPath);
     } catch(err) {
       data.cache.delete(plainPath);
-      
+
       if(err instanceof PlainDataParseError) {
         data.warnings.push({
           description: `Bis zur Lösung des Problems scheint die betroffene Radiosendung nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${plainPath}`,
@@ -71,13 +71,13 @@ module.exports = async (data, plainPath) => {
       program.soundfile = validatePath(document, 'Soundfile');
       program.editors = { sourced: validateArray(document, 'Redaktion') };
       program.language = validateString(document, 'Sprache'); // TODO: What is the usecase of this actually? (same for articles)
-      program.categories = validateArray(document, 'Kategorien');
-      program.tags = validateArray(document, 'Tags');
+      program.categories = { sourced: validateArray(document, 'Kategorien') };
+      program.tags = { sourced: validateArray(document, 'Tags') };
       program.abstract = validateMarkdown(document, 'Abstract');
       program.text = validateMarkdown(document, 'Text', { process: false });
     } catch(err) {
       data.cache.delete(plainPath);
-      
+
       if(err instanceof ValidationError) {
         data.warnings.push({
           description: 'Bis der Fehler korrigiert wurde wird die Datei ignoriert, dies kann auch weitere Dateien betreffen wenn diese auf die Datei bzw. deren Inhalte referenzieren.',
@@ -91,7 +91,7 @@ module.exports = async (data, plainPath) => {
         throw err;
       }
     }
-  
+
     data.cache.set(plainPath, { program: program, stats: stats });
     data.programs.set(plainPath, program);
   }

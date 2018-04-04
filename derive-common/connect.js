@@ -41,13 +41,13 @@ const connectPlayers = (data, collection, field, backReferenceField) => {
   });
 };
 
-// TODO: Have it be .connected on backReferenceFields too, because consistency ... (even though they have no sourced)
+// TODO: Have it be .connected on backReferenceFields too, because consistency ... (even though they have no .sourced)
 
 const clearBackReferences = data => {
   data.books.forEach(book => {
     book.reviews = [];
   });
-  
+
   data.players.forEach(player => {
     player.articles = [];
     player.authoredBooks = [];
@@ -61,7 +61,7 @@ const clearBackReferences = data => {
 
 module.exports = data => {
   clearBackReferences(data);
-  
+
   connectBooks(data, 'articles', 'bookReviews', 'reviews');
 
   connectPlayers(data, 'articles', 'authors', 'articles');

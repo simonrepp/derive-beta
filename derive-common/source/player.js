@@ -20,17 +20,17 @@ const specifiedKeys = [
 module.exports = async (data, plainPath) => {
   const cached = data.cache.get(plainPath);
   const stats = await statFile(data.root, plainPath);
-  
+
   if(cached && stats.size === cached.stats.size && stats.mTimeMs === cached.stats.mTimeMs) {
     data.players.set(plainPath, cached.player);
-  } else {     
+  } else {
     let document;
 
     try {
       document = await loadPlain(data.root, plainPath);
     } catch(err) {
       data.cache.delete(plainPath);
-      
+
       if(err instanceof PlainDataParseError) {
         data.warnings.push({
           description: `Bis zur Lösung des Problems scheint der betroffene Akteur nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${plainPath}`,
@@ -61,13 +61,13 @@ module.exports = async (data, plainPath) => {
 
       player.country = validateString(document, 'Land');
       player.city = validateString(document, 'Stadt');
-      player.tags = validateArray(document, 'Tags');
+      player.tags = { sourced: validateArray(document, 'Tags') };
       player.website = validateString(document, 'Website');
       player.biography = validateMarkdown(document, 'Biographie');
       player.text = validateMarkdown(document, 'Text');
     } catch(err) {
       data.cache.delete(plainPath);
-      
+
       if(err instanceof ValidationError) {
         data.warnings.push({
           description: `Bis zur Lösung des Problems scheint der betroffene Akteur nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${plainPath}`,
@@ -81,7 +81,7 @@ module.exports = async (data, plainPath) => {
         throw err;
       }
     }
-  
+
     data.cache.set(plainPath, { player: player, stats: stats });
     data.players.set(plainPath, player);
   }
