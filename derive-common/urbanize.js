@@ -20,8 +20,7 @@ module.exports = data => {
 
   data.events.forEach(event => {
     ['berlin', 'wien'].forEach(city => {
-      // if(event.urbanize === (city === 'berlin' ? 'Berlin 2018': 'Wien 2018')) {
-      if(event.urbanize === (city === 'berlin' ? 'Hamburg 2016': 'Wien 2016')) {
+      if(event.urbanize === (city === 'berlin' ? 'Berlin 2018': 'Wien 2018')) {
         data.urbanize[city].events.push(event);
 
         event.dates.forEach(date => {
@@ -34,7 +33,7 @@ module.exports = data => {
 
         event.categories.forEach(category => {
           const existingCategory = data.urbanize[city].categories.get(category);
-          
+
           if(existingCategory) {
             existingCategory.push(event);
           } else {
@@ -45,14 +44,14 @@ module.exports = data => {
         event.hosts.connected.forEach(host =>
           data.urbanize[city].participants.add(host)
         );
-        
+
         event.participants.connected.forEach(participant =>
           data.urbanize[city].participants.add(participant)
         );
 
         event.tags.forEach(tag => {
           const existingTag = data.urbanize[city].tags.get(tag);
-          
+
           if(existingTag) {
             existingTag.push(event);
           } else {
@@ -65,9 +64,8 @@ module.exports = data => {
 
   data.pages.forEach(page => {
     ['berlin', 'wien'].forEach(city => {
-      
-      // if(page.urbanize === (city === 'berlin' ? 'Berlin 2018': 'Wien 2018')) {
-      if(page.urbanize === (city === 'berlin' ? 'Hamburg 2016': 'Wien 2016')) {
+
+      if(page.urbanize === (city === 'berlin' ? 'Berlin 2018': 'Wien 2018')) {
         data.urbanize[city].pages.push(page);
       }
     });
