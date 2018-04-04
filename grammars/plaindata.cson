@@ -14,8 +14,10 @@ patterns: [
     'endCaptures':
       '1': 'name': 'constant.character.entity.plain'
       '2': 'name': 'constant.character.entity.plain'
-    # 'name': 'keyword.operator.assignment.plain'
-    # 'include': 'source.gfm' #works but overrides begin/endCaptures ? TODO: markdown scope inside the multiline string!
+    'patterns': [
+      { 'include': 'text.md' }
+      { 'include': 'source.gfm' }
+    ]
   }
   {
     # Comment line
