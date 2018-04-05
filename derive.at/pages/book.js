@@ -1,6 +1,7 @@
 const authors = require('../widgets/authors.js'),
       layout = require('./layout.js'),
       share = require('../widgets/share.js'),
+      reviews = require('../widgets/reviews.js'),
       tags = require('../widgets/tags.js');
 
 module.exports = (book) => {
@@ -26,11 +27,7 @@ module.exports = (book) => {
           ].join(' ').trim()}
         </div>
 
-        ${book.reviews.length > 0 ? `
-          <strong>
-            <a href="/texte/${book.reviews[0].permalink}/">Rezension lesen</a>
-          </strong>
-        `:''}
+        ${book.reviews.length > 1 ? `<strong>${reviews(book.reviews)}</strong>` : ''}
 
         ${tags(book.tags.connected)}
 

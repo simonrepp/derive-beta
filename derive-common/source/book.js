@@ -70,7 +70,7 @@ module.exports = async (data, plainPath) => {
       book.isxn = validateString(document, 'ISBN/ISSN');
       book.url = validateString(document, 'URL');
       book.placeOfPublication = validateString(document, 'Erscheinungsort');
-      book.yearOfPublication = validateString(document, 'Erscheinungsjahr');
+      book.yearOfPublication = validateInteger(document, 'Erscheinungsjahr');
       book.numberOfPages = validateInteger(document, 'Seitenanzahl');
       book.price = validateString(document, 'Preis');
       book.authors = { sourced: validateArray(document, 'Autoren/Herausgeber') };

@@ -39,6 +39,8 @@ module.exports = async data => {
   data.tags.forEach(tag => midDirectories.add(`tags/${tag.permalink}`));
   letters.forEach(letter => midDirectories.add(`autoren/${letter}`));
 
+  data.booksPaginated.forEach(pagination => midDirectories.add(`bücher/${pagination.label}/`));
+
   await Promise.all([...midDirectories].map(dir => createDir(data.buildDir, dir)));
 
   const deepDirectories = [];

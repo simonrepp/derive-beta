@@ -1,6 +1,7 @@
 const moment = require('moment');
 
-const authors = require('./authors.js');
+const authors = require('./authors.js'),
+      reviews = require('./reviews.js');
 
 module.exports = book => `
   <div class="tile">
@@ -24,12 +25,6 @@ module.exports = book => `
       ].join(' ').trim()}
     </div>
 
-    ${book.reviews.length > 1 ? `
-      Rezensionen lesen: ${book.reviews.map((review, index) => `<a href="/texte/${review.permalink}/">${index + 1}</a>`).join(' ')}
-    `:''}
-
-    ${book.reviews.length === 1 ? `
-      <a href="/texte/${book.reviews[0].permalink}/">Rezension lesen</a>
-    `:''}
+    ${book.reviews.length > 1 ? reviews(book.reviews) : ''}
   </div>
 `;

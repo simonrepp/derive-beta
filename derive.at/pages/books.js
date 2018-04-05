@@ -1,51 +1,50 @@
 const authors = require('../widgets/authors.js'),
       bookTile = require('../widgets/book-tile.js'),
       layout = require('./layout.js'),
+      reviews = require('../widgets/reviews.js'),
       share = require('../widgets/share.js');
 
-module.exports = data => {
-  const latest = Array.from(data.books.values()).sort((a, b) => a.yearOfPublication > b.yearOfPublication)[0];
+module.exports = (data, pagination) => {
+  const first = pagination.books[0];
 
   const html = `
     <div class="feature">
 
       <div class="feature__image">
-        ${latest.cover ? `<img src="${latest.cover.written}" />` : ''}
+        ${first.cover ? `<img src="${first.cover.written}" />` : ''}
       </div>
 
       <div class="feature__text">
-        ${authors(latest.authors)}
+        ${authors(first.authors)}
 
-        <h1>${latest.title}</h1>
+        <h1>${first.title}</h1>
 
-        ${latest.description}
+        ${first.description ? first.description ? : ''}
 
         <div class="generic__margin-vertical">
           ${[
-            latest.placeOfPublication ? `${latest.placeOfPublication}:` : '',
-            latest.publishers.connected.map(publisher => `<a href="/verlage/${publisher.permalink}/">${publisher.name}</a>`).join(', '),
-            latest.yearOfPublication ? `(${latest.yearOfPublication})` : ''
+            first.placeOfPublication ? `${first.placeOfPublication}:` : '',
+            first.publishers.connected.map(publisher => `<a href="/verlage/${publisher.permalink}/">${publisher.name}</a>`).join(', '),
+            first.yearOfPublication ? `(${first.yearOfPublication})` : ''
           ].join(' ').trim()}
         </div>
 
-        ${latest.reviews ? `
-          <strong>
-            <a href="/texte/${latest.reviews[0].permalink}/">Rezension lesen</a>
-          </strong>
-        `:''}
+        ${first.reviews.length > 1 ? `<strong>${reviews(first.reviews)}</strong>` : ''}
 
         <hr class="hr__light" />
 
-        ${share(latest.title, `/bücher/${latest.permalink}/`)}
+        ${share(first.title, `/bücher/${first.permalink}/`)}
       </div>
     </div>
 
     <div class="pagination">
-      <span class="icon-previous"></span> 1 / 190 TODO <span class="icon-next"></span>
+      ${data.booksPaginated.map(paginationIterated => `
+        <a ${paginationIterated === pagination ? 'class="pagination--active"' : ''} href="/bücher/${paginationIterated.label}/">${paginationIterated.label}</a>
+      `).join(' / ')}
     </div>
 
     <div class="tiles">
-      ${Array.from(data.books.values()).map(bookTile).join('')}
+      ${pagination.books.map(bookTile).join('')}
     </div>
   `;
 

@@ -100,4 +100,15 @@ module.exports = data => {
       data.bookAuthors.push(player);
     }
   });
+
+  data.booksPaginated = [];
+  const booksSorted = Array.from(data.books.values()).sort((a, b) => b.yearOfPublication - a.yearOfPublication);
+  for(let index = 0; index < booksSorted.length; index += 100) {
+    const pagination = {
+      books: booksSorted.slice(index, index + 100),
+      label: `${index + 1}-${index + 100 >= data.books.size ? data.books.size : index + 100}`
+    };
+
+    data.booksPaginated.push(pagination);
+  }
 };

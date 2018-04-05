@@ -44,7 +44,7 @@ const compileSass = data => {
 
 module.exports = async data => {
   console.time('build');
-  
+
   console.time('writeDirectories');
   await writeDirectories(data);
   console.timeEnd('writeDirectories');

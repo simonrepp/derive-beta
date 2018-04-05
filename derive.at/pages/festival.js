@@ -1,19 +1,17 @@
 const layout = require('./layout.js'),
       share = require('../widgets/share.js');
 
-// TODO: Images for festivals
+const festivals = [
+  { image: '/images/urbanize.png', url: 'https://2011.urbanize.at' },
+  { image: '/images/urbanize.png', url: 'https://2012.urbanize.at' },
+  { image: '/images/urbanize.png', url: 'https://2013.urbanize.at' },
+  { image: '/images/urbanize.png', url: 'https://2014.urbanize.at' },
+  { image: '/images/urbanize.png', url: 'https://2015.urbanize.at' },
+  { image: '/images/urbanize.png', url: 'https://2016.urbanize.at' },
+  { image: '/images/urbanize.png', url: 'https://2017.urbanize.at' }
+];
 
 module.exports = () => {
-  const festivals = [
-    '2011',
-    '2012',
-    '2013',
-    '2014',
-    '2015',
-    '2016',
-    '2017'
-  ];
-
   const html = `
     <div class="feature">
 
@@ -45,7 +43,9 @@ module.exports = () => {
       ${festivals.map(festival => `
         <div class="tile">
           <!-- TODO simon: tile types ? here we need generic tiles without padding -->
-          <img src="${festival}" />
+          <a href="${festival.url}">
+            <img src="${festival.image}" />
+          </a>
         </div>
       `).join('')}
     </div>

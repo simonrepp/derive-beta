@@ -28,7 +28,7 @@ module.exports = async data => {
   await Promise.all([
     writeFile(data.buildDir, 'texte/index.html', articlesPage(data)),
     writeFile(data.buildDir, 'autoren/index.html', authorsPage(data)),
-    writeFile(data.buildDir, 'bücher/index.html', booksPage(data)),
+    writeFile(data.buildDir, 'bücher/index.html', booksPage(data, data.booksPaginated[0])),
     writeFile(data.buildDir, 'festival/index.html', festivalPage()),
     writeFile(data.buildDir, 'imprint.html', imprintPage()),
     writeFile(data.buildDir, 'index.html', indexPage()),
@@ -53,6 +53,10 @@ module.exports = async data => {
 
   for(let author of data.authors) {
     await writeFile(data.buildDir, `autoren/${author.permalink}/index.html`, authorPage(author));
+  }
+
+  for(let pagination of data.booksPaginated) {
+    await writeFile(data.buildDir, `bücher/${pagination.label}/index.html`, booksPage(data, pagination));
   }
 
   for(let author of data.bookAuthors) {
