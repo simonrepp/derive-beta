@@ -59,6 +59,30 @@ const clearBackReferences = data => {
   });
 };
 
+const connectIssuesWithArticles = data => {
+  data.issues.forEach(issue => {
+    issue.sections.forEach(section => {
+      section.articles.forEach(article => {
+        const articleInstance = data.articlesByTitle.get(article.title);
+
+        if(articleInstance) {
+          article.connected = articleInstance;
+
+          articleInstance.issue = issue;
+          articleInstance.inIssueOnPages = article.pages;
+        } else {
+          data.warnings.push({
+            description: `Bis zur Lösung des Problems scheint die betroffene Verbindung zum referenzierten Artikel nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${issue.sourceFile}`,
+            detail: '',
+            files: [{ path: issue.sourceFile }],
+            header: `**${issue.sourceFile}**\n\nIn Ausgabe No ${issue.number} wird in der Rubrik "${section.title}" der Artikel "${article.title}" referenziert, es wurde aber kein Artikel mit diesem Titel gefunden.`
+          });
+        }
+      });
+    })
+  })
+};
+
 module.exports = data => {
   clearBackReferences(data);
 
@@ -72,10 +96,7 @@ module.exports = data => {
   connectPlayers(data, 'issues', 'partners', 'partnerships');
   connectPlayers(data, 'programs', 'editors', 'programs');
 
-  // TODO: issues articles connection
-           // Note: article titles might not be unique - maybe combine matching with in_issue_blablabla?..
-           // Note: should include the article.issue single connection :) ()
-          //        currently this is a two way link , maybe should just be one way (consider sorted sections though etc.)
+  connectIssuesWithArticles(data);
 
   return;
 };

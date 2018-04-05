@@ -1,5 +1,5 @@
 const bookTile = require('../widgets/book-tile.js'),
-      layout = require('../layout.js'),
+      layout = require('./layout.js'),
       tags = require('../widgets/tags.js');
 
 // TODO: Centered reduced simple layout for Verlag and Autor Page

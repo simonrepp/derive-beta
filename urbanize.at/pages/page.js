@@ -1,4 +1,4 @@
-const layout = require('../layout.js');
+const layout = require('./layout.js');
 
 module.exports = (urbanize, page) => {
   const html = `

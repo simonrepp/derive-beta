@@ -1,7 +1,3 @@
-// TODO: All * are now being removed from the system on conflict!
-//       Careful though - here we're iterating all * during deletion!
-//       So make sure this is actually allowed and does not have funny side effects
-
 // TODO: Possibly encapsulate the error reporting here ... bit repetitive
 
 module.exports = data => {
@@ -23,7 +19,7 @@ module.exports = data => {
       data.articles.delete(article.sourceFile);
       return;
     }
-    
+
     if(data.articlesByPermalink.has(article.permalink)) {
       data.warnings.push({
         description: `Bis zur Lösung des Problems scheint einer der Artikel auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${data.articlesByPermalink.get(article.permalink).sourceFile}\n\n**B (wird verworfen)** - ${article.sourceFile}`,
@@ -38,7 +34,7 @@ module.exports = data => {
       data.articles.delete(article.sourceFile);
       return;
     }
-    
+
     data.articlesByPermalink.set(article.permalink, article);
     data.articlesByTitle.set(article.title, article);
   });
@@ -75,7 +71,7 @@ module.exports = data => {
       data.books.delete(book.sourceFile);
       return;
     }
-    
+
     data.booksByPermalink.set(book.permalink, book);
     data.booksByTitle.set(book.title, book);
   });
@@ -150,7 +146,7 @@ module.exports = data => {
       data.players.delete(player.sourceFile);
       return;
     }
-    
+
     data.playersByName.set(player.name, player);
     data.playersByPermalink.set(player.permalink, player);
   });

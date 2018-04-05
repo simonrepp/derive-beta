@@ -5,6 +5,7 @@ const { loadPlain, statFile } = require('../util.js'),
         validateKeys,
         validateMarkdown,
         validatePath,
+        validatePermalink,
         validateString,
         ValidationError } = require('../validate.js');
 
@@ -61,7 +62,7 @@ module.exports = async (data, plainPath) => {
 
     try {
       program.title = validateString(document, 'Titel', { required: true });
-      program.permalink = validateString(document, 'Permalink', { required: true });
+      program.permalink = validatePermalink(document, 'Permalink', { required: true });
       program.firstBroadcast = validateDate(document, 'Erstausstrahlung', { required: true });
 
       validateKeys(document, specifiedKeys);

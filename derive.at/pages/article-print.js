@@ -1,4 +1,4 @@
-const printLayout = require('../layout-print.js');
+const printLayout = require('./layout-print.js');
 
 module.exports = (article) => {
   const html = `

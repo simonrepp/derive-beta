@@ -1,5 +1,5 @@
 const authors = require('../widgets/authors.js'),
-      layout = require('../layout.js'),
+      layout = require('./layout.js'),
       share = require('../widgets/share.js'),
       tags = require('../widgets/tags.js');
 
@@ -7,10 +7,7 @@ module.exports = (article) => {
   const html = `
     <div class="article-single">
 
-      ${article.image ? `
-        <img src="${article.image.written}" />
-      `:''}
-      Cover-Design: Someone STATIC TODO
+      ${article.image ? `<img src="${article.image.written}" />` : ''}
 
       ${authors(article.authors)}
 
@@ -21,7 +18,9 @@ module.exports = (article) => {
 
       ${tags(article.tags.connected)}
 
-      <a href="#">Heft kaufen</a>
+      ${article.issue && article.issue.shopLink ? `
+        <a href="${article.issue.shopLink}">Heft kaufen</a>
+      `:''}
 
       ${share(article.title, `https://derive.at/texte/${article.permalink}/`)}
     </div>

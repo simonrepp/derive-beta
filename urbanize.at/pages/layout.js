@@ -1,10 +1,10 @@
-const footer = require('./widgets/footer.js'),
-      header = require('./widgets/header.js'),
-      sidebar = require('./widgets/sidebar.js');
+const footer = require('../widgets/footer.js'),
+      header = require('../widgets/header.js'),
+      sidebar = require('../widgets/sidebar.js');
 
-const DEFAULT_TITLE = 'dérive | Zeitschrift für Stadtforschung';
+const DEFAULT_TITLE = 'Ur9anize 2018';
 
-module.exports = (content, options = {}) => `
+module.exports = (content, urbanize, options = {}) => `
   <!DOCTYPE html>
   <html>
     <head>
@@ -29,25 +29,19 @@ module.exports = (content, options = {}) => `
     </head>
 
     <body>
-      <div class="layout__split">
-        <div class="layout__content">
-          <div class="layout__header">
-            <div class="layout__overlap layout__restraint">
-              ${header(options)}
-            </div>
-          </div>
-          
-          <div class="layout__scroll">
-            <div class="layout__offset layout__restraint">
-              ${content}
+      <div>
+        ${header}
 
-              ${footer()}
+        <div class="restraint">
+          <div class="split">
+            <div class="content">
+              ${content}
             </div>
+
+            ${sidebar(urbanize)}
           </div>
-        </div>
-        
-        <div class="layout__sidebar">
-          ${sidebar}
+
+          ${footer}
         </div>
       </div>
     </body>

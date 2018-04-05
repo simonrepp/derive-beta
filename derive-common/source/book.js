@@ -5,6 +5,7 @@ const { loadPlain, statFile } = require('../util.js'),
         validateInteger,
         validateMarkdown,
         validatePath,
+        validatePermalink,
         validateString,
         ValidationError } = require('../validate.js');
 
@@ -62,7 +63,7 @@ module.exports = async (data, plainPath) => {
 
     try {
       book.title = validateString(document, 'Titel', { required: true });
-      book.permalink = validateString(document, 'Permalink', { required: true });
+      book.permalink = validatePermalink(document, 'Permalink', { required: true });
 
       validateKeys(document, specifiedKeys);
 

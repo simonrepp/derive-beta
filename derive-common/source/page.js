@@ -5,6 +5,7 @@ const { loadPlain, statFile } = require('../util.js'),
         validateKeys,
         validateEnum,
         validateMarkdown,
+        validatePermalink,
         validateString,
         ValidationError } = require('../validate.js');
 
@@ -18,17 +19,17 @@ const specifiedKeys = [
 module.exports = async (data, plainPath) => {
   const cached = data.cache.get(plainPath);
   const stats = await statFile(data.root, plainPath);
-  
+
   if(cached && stats.size === cached.stats.size && stats.mTimeMs === cached.stats.mTimeMs) {
     data.pages.set(plainPath, cached.page);
-  } else {    
+  } else {
     let document;
 
     try {
       document = await loadPlain(data.root, plainPath);
     } catch(err) {
       data.cache.delete(plainPath);
-      
+
       if(err instanceof PlainDataParseError) {
         data.warnings.push({
           description: `Bis zur Lösung des Problems scheint die betroffene Seite nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${plainPath}`,
@@ -53,7 +54,7 @@ module.exports = async (data, plainPath) => {
 
     try {
       page.title = validateString(document, 'Titel', { required: true });
-      page.permalink = validateString(document, 'Permalink', { required: true });
+      page.permalink = validatePermalink(document, 'Permalink', { required: true });
 
       validateKeys(document, specifiedKeys);
 
@@ -61,7 +62,7 @@ module.exports = async (data, plainPath) => {
       page.text = validateMarkdown(document, 'Text', { process: false });
     } catch(err) {
       data.cache.delete(plainPath);
-      
+
       if(err instanceof ValidationError) {
         data.warnings.push({
           description: `Bis zur Lösung des Problems scheint die betroffene Seite nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${plainPath}`,
@@ -75,7 +76,7 @@ module.exports = async (data, plainPath) => {
         throw err;
       }
     }
-  
+
     data.cache.set(plainPath, { page: page, stats: stats });
     data.pages.set(plainPath, page);
   }

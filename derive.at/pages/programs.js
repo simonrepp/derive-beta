@@ -1,7 +1,7 @@
 const moment = require('moment');
 
 const authors = require('../widgets/authors.js'),
-      layout = require('../layout.js'),
+      layout = require('./layout.js'),
       programTile = require('../widgets/program-tile.js'),
       share = require('../widgets/share.js'),
       tags = require('../widgets/tags.js');
@@ -14,10 +14,7 @@ module.exports = data => {
     <div class="feature">
 
       <div class="feature__image">
-        ${latest.image ? `
-          <img src="${latest.image.written}" />
-          Cover-Design: TODO Elke Rauth
-        `:''}
+        ${latest.image ? `<img src="${latest.image.written}" />` : ''}
       </div>
 
       <div class="feature__text">
@@ -29,7 +26,7 @@ module.exports = data => {
 
         <div class="generic__margin-vertical">
           <strong>Redaktion</strong>
-          ${authors(latest.authors)}
+          ${authors(latest.editors.connected)}
         </div>
 
         ${tags(latest.tags.connected)}

@@ -7,6 +7,7 @@ const { loadPlain, statFile } = require('../util.js'),
         validateEnum,
         validateMarkdown,
         validatePath,
+        validatePermalink,
         validateString,
         ValidationError } = require('../validate.js');
 
@@ -66,7 +67,7 @@ module.exports = async (data, plainPath) => {
 
     try {
       event.title = validateString(document, 'Titel', { required: true });
-      event.permalink = validateString(document, 'Permalink', { required: true });
+      event.permalink = validatePermalink(document, 'Permalink', { required: true });
 
       validateKeys(document, specifiedKeys);
 

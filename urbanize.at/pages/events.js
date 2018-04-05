@@ -1,7 +1,7 @@
 const moment = require('moment');
 
 const eventListing = require('../widgets/event-listing.js'),
-      layout = require('../layout.js');
+      layout = require('./layout.js');
 
 module.exports = (urbanize, date, events) => {
   const timeframe = date instanceof Date ? `am ${moment(date).format('D.MM.YYYY')}` : date;

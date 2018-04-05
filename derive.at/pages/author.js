@@ -1,6 +1,7 @@
-const layout = require('../layout.js'),
+const layout = require('./layout.js'),
       articleTile = require('../widgets/article-tile.js'),
       bookTile = require('../widgets/book-tile.js'),
+      eventTile = require('../widgets/event-tile.js'),
       programTile = require('../widgets/program-tile.js'),
       tags = require('../widgets/tags.js');
 
@@ -50,7 +51,9 @@ module.exports = (author) => {
     ${author.events ? `
       <h1>Veranstaltungen</h1>
 
-      ${author.events.length} TODO!
+      <div class="tiles">
+        ${author.events.map(eventTile).join('')}
+      </div>
     `:''}
   `;
 

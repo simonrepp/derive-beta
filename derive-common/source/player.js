@@ -3,6 +3,7 @@ const { loadPlain, statFile } = require('../util.js'),
       { validateArray,
         validateKeys,
         validateMarkdown,
+        validatePermalink,
         validateString,
         ValidationError } = require('../validate.js');
 
@@ -55,7 +56,7 @@ module.exports = async (data, plainPath) => {
 
     try {
       player.name = validateString(document, 'Name', { required: true });
-      player.permalink = validateString(document, 'Permalink', { required: true });
+      player.permalink = validatePermalink(document, 'Permalink', { required: true });
 
       validateKeys(document, specifiedKeys);
 

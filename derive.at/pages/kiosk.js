@@ -1,4 +1,4 @@
-const layout = require('../layout.js');
+const layout = require('./layout.js');
 
 // TODO: Simple implementation for this and relink from header,
 //       or alternatively remove this template as it's not needed.

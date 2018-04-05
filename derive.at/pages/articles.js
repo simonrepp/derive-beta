@@ -1,7 +1,8 @@
 const moment = require('moment');
 
 const authors = require('../widgets/authors.js'),
-      layout = require('../layout.js'),
+      { fullIssueTitle } = require('../widgets/issue-labeling.js'),
+      layout = require('./layout.js'),
       tags = require('../widgets/tags.js');
 
 module.exports = data => {
@@ -13,10 +14,7 @@ module.exports = data => {
     <div class="feature">
 
       <div class="feature__image">
-        ${latest.image ? `
-          <img src="${latest.image.written}" />
-          Cover-Design: Elke Rauth
-        `:''}
+        ${latest.image ? `<img src="${latest.image.written}" />` : ''}
       </div>
 
       <div class="feature__text">
@@ -25,13 +23,15 @@ module.exports = data => {
         <h1>${latest.title}</h1>
         <strong>${latest.subtitle}</strong>
 
-        TODO derive N°64 (Jan–März /2016) (link auf issue)
+        ${latest.issue ? fullIssueTitle(latest.issue) : ''}<br/>
 
         ${latest.abstract ? latest.abstract.html : ''}
 
         ${tags(latest.tags.connected)}
 
-        TODO Heft kaufen link auf kiosk
+        ${latest.issue && latest.issue.shopLink ? `
+          <a href="${latest.issue.shopLink}">Heft kaufen</a>
+        `:''}
 
         TODO derive: "used with Radio" ?
         ${moment(latest.date).locale('de').format('MMMM YYYY')} (used with Radio)

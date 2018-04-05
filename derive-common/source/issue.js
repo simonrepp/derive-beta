@@ -20,6 +20,7 @@ const specifiedKeys = [
   'Quartal',
   'Rubrik',
   'Schwerpunkte',
+  'Link zum Shop',
   'Tags',
   'Titel',
   'Vergriffen',
@@ -69,6 +70,7 @@ module.exports = async (data, plainPath) => {
 
       validateKeys(document, specifiedKeys);
 
+      issue.shopLink = validateString(document, 'Link zum Shop');
       issue.quarter = validateInteger(document, 'Quartal');
       issue.cooperation = validateString(document, 'Kooperation');
       issue.partners = { sourced: validateArray(document, 'Partner') };
@@ -76,7 +78,7 @@ module.exports = async (data, plainPath) => {
       issue.outOfPrint = validateBoolean(document, 'Vergriffen');
       issue.date = validateDate(document, 'Datum');
       issue.tags = { sourced: validateArray(document, 'Tags') };
-      issue.publish = validateBoolean(document, 'Veröffentlichen');
+      issue.publish = validateBoolean(document, 'Veröffentlichen'); // TODO: Purpose of this? If "to test out things" we can maybe remove it because we now have staging, except long time process
       issue.description = validateMarkdown(document, 'Beschreibung');
 
       issue.sections = validateArray(document, 'Rubrik');

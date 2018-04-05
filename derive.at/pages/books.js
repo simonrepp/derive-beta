@@ -1,6 +1,6 @@
 const authors = require('../widgets/authors.js'),
       bookTile = require('../widgets/book-tile.js'),
-      layout = require('../layout.js'),
+      layout = require('./layout.js'),
       share = require('../widgets/share.js');
 
 module.exports = data => {
@@ -10,10 +10,7 @@ module.exports = data => {
     <div class="feature">
 
       <div class="feature__image">
-        ${latest.cover ? `
-          <img src="${latest.cover.written}" />
-          Cover-Design: TODO Elke Rauth
-        `:''}
+        ${latest.cover ? `<img src="${latest.cover.written}" />` : ''}
       </div>
 
       <div class="feature__text">

@@ -1,4 +1,4 @@
-const layout = require('../layout.js'),
+const layout = require('./layout.js'),
       participantListing = require('../widgets/participant-listing.js');
 
 module.exports = urbanize => {

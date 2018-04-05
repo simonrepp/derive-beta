@@ -1,4 +1,5 @@
-const { renderMarkdown } = require('./util.js');
+const { renderMarkdown } = require('./util.js'),
+      slug = require('speakingurl');
 
 class ValidationError extends Error {
   constructor(...args) {
@@ -163,13 +164,13 @@ exports.validateMarkdown = (document, field, options = { process: true }) => {
   } else if(typeof markdown === 'string') {
     if(options.process) {
       try {
-        return renderMarkdown(markdown);      
+        return renderMarkdown(markdown);
       } catch(err) {
         // TODO: Unclear if this could ever happen - quickly consult md-it documentation ?
         throw new ValidationError(`Das Markdown im Feld "${field}" hat beim konvertieren einen Fehler ausgelöst: ${err}`);
       }
     }
-    
+
     return { sourced: markdown };
   } else {
     throw new ValidationError(`Das Feld "${field}" muss ein Textfeld sein, enthält aber einen anderen Datentyp.`);
@@ -193,6 +194,32 @@ exports.validatePath = (document, field, data, options = { required: false }) =>
     return { sourced: value };
   } else {
     throw new ValidationError(`Das Feld "${field}" muss ein Dateifeld sein, enthält aber einen anderen Datentyp.`);
+  }
+};
+
+exports.validatePermalink = (document, field, options = { required: false }) => {
+  if(!document.hasOwnProperty(field)) {
+    throw new ValidationError(`Fehlendes Feld "${field}" - Falls das Feld angegeben wurde eventuell nach Tippfehlern Ausschau halten und auch die Gross/Kleinschreibung beachten.`);
+  }
+
+  const value = document[field];
+
+  if(value === null) {
+    if(options.required) {
+      throw new ValidationError(`Das Textfeld "${field}" muss ausgefüllt sein.`);
+    } else {
+      return null;
+    }
+  } else if(typeof value === 'string') {
+    const slugified = slug(value);
+
+    if(value === slugified) {
+      return value;
+    } else {
+      throw new ValidationError(`Das Permalink-Feld "${field}" enthält den Wert "${value}", dieser entspricht aber nicht den Anforderungen, eine erlaubte Variante wäre zum Beispiel: ${slugified}.`);
+    }
+  } else {
+    throw new ValidationError(`Das Feld "${field}" muss ein Textfeld sein, enthält aber einen anderen Datentyp.`);
   }
 };
 

@@ -67,7 +67,7 @@ const indexBooks = data => {
 
 const indexIssues = data => {
   const indexed = Array.from(data.issues.values()).map(issue => {
-    const boosted = [`dérive № ${issue.number}`,
+    const boosted = [`dérive N° ${issue.number}`,
                      issue.title,
                      issue.features.join(' ')].join(' ');
     const regular = [issue.cooperation || '',
@@ -79,7 +79,7 @@ const indexIssues = data => {
       route: `/zeitschrift/${issue.number}/`, // TODO: issues url scheme
       textBoosted: boosted,
       textRegular: regular,
-      title: `dérive № ${issue.number}`
+      title: `dérive N° ${issue.number}`
     };
   });
 

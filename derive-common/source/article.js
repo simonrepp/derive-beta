@@ -9,6 +9,7 @@ const { loadPlain, statFile } = require('../util.js'),
         validateInteger,
         validateMarkdown,
         validatePath,
+        validatePermalink,
         validateString,
         ValidationError } = require('../validate.js');
 
@@ -70,7 +71,7 @@ module.exports = async (data, plainPath) => {
     try {
 
       article.title = validateString(document, 'Titel', { required: true });
-      article.permalink = validateString(document, 'Permalink', { required: true });
+      article.permalink = validatePermalink(document, 'Permalink', { required: true });
 
       validateKeys(document, specifiedKeys);
 

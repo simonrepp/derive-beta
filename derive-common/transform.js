@@ -20,10 +20,10 @@ module.exports = async data => {
 
   console.timeEnd('source');
   console.time('connectMedia');
-  
+
   await connectMedia(data); // Ensure all referenced media are found
                             // Documents with invalid references are kicked out
-  
+
   console.timeEnd('connectMedia');
   console.time('crossvalidate');
 
@@ -53,7 +53,7 @@ module.exports = async data => {
 
   console.timeEnd('checkup');
   console.timeEnd('transform');
-  
+
   console.log(data); // TODO: Remove after all is done
 
   return data;

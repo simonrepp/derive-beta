@@ -3,7 +3,7 @@ const fsExtra = require('fs-extra');
 // TODO: replace fs-extra with fs where possible!
 
 const { createDir } = require('../derive-common/util.js'),
-      { letters } = require('./src/pages/authors.js');
+      { letters } = require('./pages/authors.js');
 
 module.exports = async data => {
   await fsExtra.emptyDir(data.buildDir);

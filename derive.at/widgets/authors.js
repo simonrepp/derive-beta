@@ -1,5 +1,5 @@
 module.exports = authors => {
-  if(authors && authors.length > 0) {
+  if(authors.length > 0) {
     return authors.map(author => `
       <a href="/autoren/${author.permalink}/">${author.name}</a>
     `).join(', ')

@@ -1,5 +1,5 @@
 const eventListing = require('../widgets/event-listing.js'),
-      layout = require('../layout.js'),
+      layout = require('./layout.js'),
       pageListing = require('../widgets/page-listing.js');
 
 module.exports = urbanize => {

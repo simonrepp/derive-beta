@@ -1,10 +1,13 @@
-const footer = require('./widgets/footer.js'),
-      header = require('./widgets/header.js'),
-      sidebar = require('./widgets/sidebar.js');
+const footer = require('../widgets/footer.js'),
+      header = require('../widgets/header.js'),
+      sidebar = require('../widgets/sidebar.js');
 
-const DEFAULT_TITLE = 'Ur9anize 2018';
+const DEFAULT_TITLE = 'dérive | Zeitschrift für Stadtforschung';
 
-module.exports = (content, urbanize, options = {}) => `
+// TODO: Refine print layout and print views (decide what collections need print views)
+//       Also refactor share widget to (conditionally and optimally) integrate print button
+
+module.exports = (content, options = {}) => `
   <!DOCTYPE html>
   <html>
     <head>
@@ -24,25 +27,11 @@ module.exports = (content, urbanize, options = {}) => `
       <meta name="theme-color" content="#ffffff">
 
       <link rel="stylesheet" href="/styles.css">
-
-      <script defer src="/bundle.js"></script>
     </head>
 
     <body>
-      <div>
-        ${header}
-
-        <div class="restraint">
-          <div class="split">
-            <div class="content">
-              ${content}
-            </div>
-
-            ${sidebar(urbanize)}
-          </div>
-
-          ${footer}
-        </div>
+      <div class="layout__scroll">
+        ${content}
       </div>
     </body>
   </html>

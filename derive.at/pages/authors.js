@@ -1,4 +1,4 @@
-const layout = require('../layout.js');
+const layout = require('./layout.js');
 
 // TODO: Active style definition for current letter (class already there!)
 // TODO: Match folded tiles style against rowild reference style and adapt

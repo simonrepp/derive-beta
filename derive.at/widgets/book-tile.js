@@ -24,8 +24,11 @@ module.exports = book => `
       ].join(' ').trim()}
     </div>
 
-    // TODO multiple rezensionen
-    ${book.reviews.length > 0 ? `
+    ${book.reviews.length > 1 ? `
+      Rezensionen lesen: ${book.reviews.map((review, index) => `<a href="/texte/${review.permalink}/">${index + 1}</a>`).join(' ')}
+    `:''}
+
+    ${book.reviews.length === 1 ? `
       <a href="/texte/${book.reviews[0].permalink}/">Rezension lesen</a>
     `:''}
   </div>

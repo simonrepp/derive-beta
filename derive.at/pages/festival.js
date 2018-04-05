@@ -1,4 +1,4 @@
-const layout = require('../layout.js'),
+const layout = require('./layout.js'),
       share = require('../widgets/share.js');
 
 // TODO: Images for festivals
@@ -19,7 +19,6 @@ module.exports = () => {
 
       <div class="feature__image">
         <img src="/images/urbanize.png"/>
-        Design: Jemand statischer
       </div>
 
       <div class="feature__text">
@@ -34,7 +33,7 @@ module.exports = () => {
           <a href="https://urbanize.at">urbanize.at</a>
         </div>
 
-        ${share('urbanize! Festival', 'https://derive.at/TODO/')}
+        ${share('urbanize! Festival', 'https://derive.at/festival/')}
       </div>
     </div>
 

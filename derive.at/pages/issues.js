@@ -1,13 +1,8 @@
-const layout = require('../layout.js'),
+const layout = require('./layout.js'),
+      authors = require('../widgets/authors.js'),
+      { formattedQuarter, fullIssueTitle } = require('../widgets/issue-labeling.js'),
       share = require('../widgets/share.js'),
       tags = require('../widgets/tags.js');
-
-const formattedQuarter = {
-  1: 'Jän - Mär',
-  2: 'Apr - Juni',
-  3: 'Juli - Sept',
-  4: 'Okt - Dez'
-};
 
 module.exports = data => {
   const sortedDescending = Array.from(data.issues.values()).sort((a, b) => b.number - a.number);
@@ -24,35 +19,41 @@ module.exports = data => {
     }
   });
 
+  const latestAuthors = new Set();
+  latest.sections.forEach(section =>
+    section.articles.forEach(article =>
+      article.connected.authors.forEach(author => latestAuthors.add(author))
+    )
+  );
 
   const html = `
     <div>
       <div class="feature">
         <div class="feature__image">
           <img src="${latest.cover.written}"/>
-          Design: Jemand statischer
         </div>
 
         <div class="feature__text">
-          <a href="#">dérive No ${latest.number} (${formattedQuarter[latest.quarter]} / ${latest.year})</a>
+          ${fullIssueTitle(latest)}
 
           <h1>
-            <a href="#">
+            <a href="/zeitschrift/${latest.number}">
               ${latest.title}
             </a>
           </h1>
 
-          <span>
-            ${latest.description}
-          </span>
+          ${latest.description ? `
+            <div class="generic__margin-vertical">
+              ${latest.description}
+            </div>
+          `:''}
 
-          TODO Mit Beiträgen von:<br/>
-          Juna Selzbach, Bernhard Kernegger, Christian Klettner, Elke Rauch, Christoph Laimer, Svetlana Boijevics
+          Mit Beiträgen von:<br/>
+          ${authors([...latestAuthors])}<br/><br/>
 
-          Tags
           ${tags(latest.tags.connected)}
 
-          ${share(latest.title, 'https://derive.at/TODO/')}
+          ${share(latest.title, `https://derive.at/zeitschrift/${latest.number}/`)}
         </div>
       </div>
 
@@ -70,7 +71,9 @@ module.exports = data => {
                   <div class="quarter">${formattedQuarter[issue.quarter]}</div>
                   <div class="title">${issue.title}</div>
                   <a class="view" href="/zeitschrift/${issue.number}/">Ansehen</a>
-                  <a class="buy" href="/shop/TODO-where-take-the-link-from/">Kaufen</a>
+                  ${issue.shopLink ? `
+                    <a class="buy" href="${issue.shopLink}">Kaufen</a>
+                  `:''}
                 </div>
 
                 <img src="${issue.cover.written}"/>

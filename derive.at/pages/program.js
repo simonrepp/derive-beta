@@ -1,5 +1,5 @@
 const authors = require('../widgets/authors.js'),
-      layout = require('../layout.js'),
+      layout = require('./layout.js'),
       share = require('../widgets/share.js'),
       tags = require('../widgets/tags.js');
 
@@ -8,10 +8,7 @@ module.exports = program => {
     <div class="feature">
 
       <div class="feature__image">
-        ${program.image ? `
-          <img src="${program.image.written}" />
-          Cover-Design: TODO Elke Rauth
-        `:''}
+        ${program.image ? `<img src="${program.image.written}" />` : ''}
       </div>
 
       <div class="feature__text">
