@@ -10,7 +10,7 @@ module.exports = (author) => {
     <div>
       <h1>${author.name}</h1>
 
-      ${author.bio ? `<strong>${author.bio}</strong>` : ''}
+      ${author.biography ? `<strong>${author.biography}</strong>` : ''}
 
       ${author.text ? `
         ${author.text}

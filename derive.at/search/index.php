@@ -7,7 +7,7 @@
     http_response_code(400);
     echo '{"error":"No query parameter supplied"}';
     return;
-  } 
+  }
 
   if(!isset($_GET['sections'])) {
     http_response_code(400);
@@ -18,7 +18,8 @@
   $query = $_GET['query'];
   $sections = explode(',', $_GET['sections']);
 
-  $results = [];
+  $boosted_results = array();
+  $regular_results = array();
 
   foreach($sections as $section) {
 
@@ -31,25 +32,40 @@
     $json = file_get_contents("./{$section}.json");
     $entries = json_decode($json, true);
 
-    $boosted_matches = array();
-    $regular_matches = array();
-
     foreach($entries as $entry) {
       if(preg_match("/{$query}/i", $entry['textBoosted'])) {
-        $boosted_matches[] = (object) [
-          'title' => $entry['title'],
-          'route' => $entry['route']
-        ];
+
+        if($section == 'articles') {
+          $boosted_results[] = (object) [ 'article' => $entry['article'] ];
+        } else if($section == 'authors') {
+          $boosted_results[] = (object) [ 'author' => $entry['author'] ];
+        } else if($section == 'books') {
+          $boosted_results[] = (object) [ 'book' => $entry['book'] ];
+        } else if($section == 'issues') {
+          $boosted_results[] = (object) [ 'issue' => $entry['issue'] ];
+        } else if($section == 'programs') {
+          $boosted_results[] = (object) [ 'program' => $entry['program'] ];
+        }
+
       } else if(preg_match("/{$query}/i", $entry['textRegular'])) {
-        $regular_matches[] = (object) [
-          'title' => $entry['title'],
-          'route' => $entry['route']
-        ];
+
+        if($section == 'articles') {
+          $regular_results[] = (object) [ 'article' => $entry['article'] ];
+        } else if($section == 'authors') {
+          $regular_results[] = (object) [ 'author' => $entry['author'] ];
+        } else if($section == 'books') {
+          $regular_results[] = (object) [ 'book' => $entry['book'] ];
+        } else if($section == 'issues') {
+          $regular_results[] = (object) [ 'issue' => $entry['issue'] ];
+        } else if($section == 'programs') {
+          $regular_results[] = (object) [ 'program' => $entry['program'] ];
+        }
+
       }
     }
-
-    $results[$section] = array_merge($boosted_matches, $regular_matches);
   }
+
+  $results = array_merge($boosted_results, $regular_results);
 
   echo json_encode($results);
 

@@ -44,7 +44,7 @@ exports.authorsPage = (data, letter) => {
             </a>
           </h1>
 
-          ${author.bio ? `<strong>${author.bio}</strong>` : ''}
+          ${author.biography ? `<strong>${author.biography}</strong>` : ''}
 
           ${author.text}
         </div>

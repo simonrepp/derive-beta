@@ -9,7 +9,7 @@ module.exports = publisher => {
     <div>
       <h1>${publisher.name}</h1>
 
-      ${publisher.bio ? `<strong>${publisher.bio}</strong>` : ''}
+      ${publisher.biography ? `<strong>${publisher.biography}</strong>` : ''}
 
       ${publisher.text ? `
         ${publisher.text}

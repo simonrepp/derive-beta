@@ -5,7 +5,7 @@ module.exports = () => {
     <div>
       <h1>Suche</h1>
 
-      <div class="results">
+      <div class="results tiles">
         Suche läuft ...
       </div>
     </div>
@@ -15,11 +15,38 @@ module.exports = () => {
       const showResults = function(results) {
         let html = '';
 
-        Object.keys(results).forEach(function(section) {
-          html += '<h1>' + section + '</h1>'
-          html += results[section].map(function(entry) {
-            return '<div><a href="' + entry.route + '">' + entry.title + '</a></div>'
-          }).join('');
+        results.forEach(function(result) {
+          if(result.hasOwnProperty('article')) {
+            const article = result.article;
+
+            html += '<div><a href="/texte/' + article.permalink + '/">' + article.title + '</a></div>';
+          } else if(result.hasOwnProperty('author')) {
+            const author = result.author;
+
+            html += '<div class="tile">';
+            html += '  <h1>';
+            html += '    <a href="/autoren/' + author.permalink + '/">' + author.name + '</a>';
+            html += '  </h1>';
+            if(author.biography) {
+              html += '<strong>' + author.biography + '</strong>';
+            }
+            html += '</div>';
+            ;
+          } else if(result.hasOwnProperty('book')) {
+            const book = result.book;
+
+            html += '<div><a href="/bücher/' + book.permalink + '/">' + book.title + '</a></div>';
+          } else if(result.hasOwnProperty('issue')) {
+            const issue = result.issue;
+
+            html += '<div><a href="/zeitschrift/' + issue.number + '/">' + issue.title + '</a></div>';
+          } else if(result.hasOwnProperty('program')) {
+            const program = result.program;
+
+            html += '<div><a href="/radio/' + program.permalink + '/">' + program.title + '</a></div>';
+          } else {
+            html += '<div>TODO something else not yet handled</div>';
+          }
         });
 
         document.querySelector('.results').innerHTML = html;

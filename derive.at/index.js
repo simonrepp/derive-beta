@@ -5,19 +5,36 @@ const fsExtra = require('fs-extra'),
 const { writeFile } = require('../derive-common/util.js');
 
 const indexArticles = data => {
-  const indexed = Array.from(data.articles.values()).map(article => {
+  const indexed = data.visibleArticles.map(article => {
     const boosted = `${article.title} ${article.subtitle || ''}`;
     const regular = [article.abstract ? striptags(article.abstract) : '',
                      article.authors.connected.map(author => author.name).join(' '),
                      article.categories.connected.map(category => category.name).join(' '),
                      article.tags.connected.map(tag => tag.name).join(' '),
-                     article.text ? striptags(article.text.html) : ''].join(' ');
+                     article.text ? striptags(article.text.written) : ''].join(' ');
 
     return {
-      route: `/texte/${article.permalink}/`,
+      article: {
+        authors: {
+          connected: article.authors.connected.map(author => ({
+            name: author.name,
+            permalink: author.permalink
+          }))
+        },
+        image: article.image ? { written: article.image.written } : null,
+        inIssueOnPages: article.inIssueOnPages,
+        issue: article.issue ? {
+          cover: { written: article.issue.cover },
+          number: article.issue.number,
+          quarter: article.issue.quarter,
+          year: article.issue.year
+        } : null,
+        permalink: article.permalink,
+        subtitle: article.subtitle,
+        title: article.title
+      },
       textBoosted: boosted,
-      textRegular: regular,
-      title: article.title
+      textRegular: regular
     };
   });
 
@@ -34,10 +51,13 @@ const indexAuthors = data => {
                      author.website || ''].join(' ');
 
     return {
-      route: `/autoren/${author.permalink}/`,
+      author: {
+        biography: author.biography,
+        name: author.name,
+        permalink: author.permalink
+      },
       textBoosted: boosted,
       textRegular: regular,
-      title: author.name
     };
   });
 
@@ -56,10 +76,31 @@ const indexBooks = data => {
                      book.yearOfPublication || ''].join(' ');
 
     return {
-      route: `/bücher/${book.permalink}/`,
+      book: {
+        authors: {
+          connected: book.authors.connected.map(author => ({
+            name: author.name,
+            permalink: author.permalink
+          }))
+        },
+        cover: book.cover ? { written: book.cover.written } : null,
+        permalink: book.permalink,
+        placeOfPublication: book.placeOfPublication,
+        publishers: {
+          connected: book.publishers.connected.map(publisher => ({
+            name: publisher.name,
+            permalink: publisher.permalink
+          }))
+        },
+        reviews: book.reviews.map(review => ({
+          permalink: review.permalink
+        })),
+        subtitle: book.subtitle,
+        title: book.title,
+        yearOfPublication: book.yearOfPublication
+      },
       textBoosted: boosted,
-      textRegular: regular,
-      title: book.title
+      textRegular: regular
     };
   });
 
@@ -77,10 +118,17 @@ const indexIssues = data => {
                      issue.tags.connected.map(tag => tag.name).join(' ')].join(' ');
 
     return {
-      route: `/zeitschrift/${issue.number}/`, // TODO: issues url scheme
+      issue: {
+        cover: { written: issue.cover },
+        number: issue.number,
+        outOfPrint: issue.outOfPrint,
+        pages: issue.pages,
+        quarter: issue.quarter,
+        title: issue.title,
+        year: issue.year
+      },
       textBoosted: boosted,
-      textRegular: regular,
-      title: `dérive N° ${issue.number}`
+      textRegular: regular
     };
   });
 
@@ -94,13 +142,23 @@ const indexPrograms = data => {
                      program.editors.connected.map(editor => editor.name).join(' '),
                      program.categories.connected.map(category => category.name).join(' '),
                      program.tags.connected.map(tag => tag.name).join(' '),
-                     program.text ? striptags(program.text.html) : ''].join(' ');
+                     program.text ? striptags(program.text.written) : ''].join(' ');
 
     return {
-      route: `/radio/${program.permalink}/`,
+      program: {
+        editors: {
+          connected: program.editors.connected.map(editor => ({
+            name: editor.name,
+            permalink: editor.permalink
+          }))
+        },
+        firstBroadcast: program.firstBroadcast,
+        permalink: program.permalink,
+        subtitle: program.subtitle,
+        title: program.title
+      },
       textBoosted: boosted,
-      textRegular: regular,
-      title: program.title
+      textRegular: regular
     };
   });
 
