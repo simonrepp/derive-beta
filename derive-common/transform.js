@@ -1,6 +1,3 @@
-const path = require('path'),
-      shell = require('shell');
-
 const checkup = require('./checkup.js'),
       connect = require('./connect.js'),
       connectMedia = require('./connect-media.js'),
@@ -40,6 +37,7 @@ module.exports = async data => {
 
   expand(data); // Create categories and tags, connected to their referenced objects
                 // Create refined collections: authors, bookAuthors, publishers
+                // Create paginated collections: booksPaginated, programsPaginated
 
   console.timeEnd('expand');
   console.time('urbanize');

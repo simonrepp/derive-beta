@@ -68,6 +68,55 @@ const addToTags = (data, collection) => {
   });
 };
 
+const paginateArticles = data => {
+  data.articlesPaginated = [];
+  const articlesSorted = data.visibleArticles.sort((a, b) => b.date - a.date);
+
+  for(let index = 0; index < articlesSorted.length; index += 100) {
+    const pagination = {
+      articles: articlesSorted.slice(index, index + 100),
+      label: `${index + 1}-${index + 100 >= articlesSorted.length ? articlesSorted.length : index + 100}`
+    };
+
+    data.articlesPaginated.push(pagination);
+  }
+};
+
+const paginateBooks = data => {
+  data.booksPaginated = [];
+  const booksSorted = Array.from(data.books.values()).sort((a, b) => b.yearOfPublication - a.yearOfPublication);
+
+  for(let index = 0; index < booksSorted.length; index += 100) {
+    const pagination = {
+      books: booksSorted.slice(index, index + 100),
+      label: `${index + 1}-${index + 100 >= booksSorted.length ? booksSorted.length : index + 100}`
+    };
+
+    data.booksPaginated.push(pagination);
+  }
+};
+
+const paginatePrograms = data => {
+  data.programsPaginated = [];
+  const programsSorted = Array.from(data.programs.values()).sort((a, b) => b.firstBroadcast - a.firstBroadcast);
+
+  programsSorted.forEach(program => {
+    const label = program.firstBroadcast.getFullYear().toString();
+    const existingPagination = data.programsPaginated.find(pagination => pagination.label === label);
+
+    if(existingPagination) {
+      existingPagination.programs.push(program);
+    } else {
+      const pagination = {
+        label: label,
+        programs: [program]
+      };
+
+      data.programsPaginated.push(pagination);
+    }
+  });
+};
+
 module.exports = data => {
 
   data.categories.clear();
@@ -101,14 +150,11 @@ module.exports = data => {
     }
   });
 
-  data.booksPaginated = [];
-  const booksSorted = Array.from(data.books.values()).sort((a, b) => b.yearOfPublication - a.yearOfPublication);
-  for(let index = 0; index < booksSorted.length; index += 100) {
-    const pagination = {
-      books: booksSorted.slice(index, index + 100),
-      label: `${index + 1}-${index + 100 >= data.books.size ? data.books.size : index + 100}`
-    };
+  data.visibleArticles = Array.from(data.articles.values()).filter(article =>
+    article.publish && article.visible
+  );
 
-    data.booksPaginated.push(pagination);
-  }
+  paginateArticles(data);
+  paginateBooks(data);
+  paginatePrograms(data);
 };

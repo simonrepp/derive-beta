@@ -6,15 +6,14 @@ const authors = require('../widgets/authors.js'),
       share = require('../widgets/share.js'),
       tags = require('../widgets/tags.js');
 
-module.exports = data => {
-  const sortedPrograms = Array.from(data.programs.values()).sort((a, b) => b.date - a.date)
-  const latest = sortedPrograms[0];
+module.exports = (data, pagination) => {
+  const first = pagination.programs[0];
 
   const html = `
     <div class="feature">
 
       <div class="feature__image">
-        ${latest.image ? `<img src="${latest.image.written}" />` : ''}
+        ${first.image ? `<img src="${first.image.written}" />` : ''}
       </div>
 
       <div class="feature__text">
@@ -26,23 +25,25 @@ module.exports = data => {
 
         <div class="generic__margin-vertical">
           <strong>Redaktion</strong>
-          ${authors(latest.editors.connected)}
+          ${authors(first.editors.connected)}
         </div>
 
-        ${tags(latest.tags.connected)}
+        ${tags(first.tags.connected)}
 
         <hr class="hr__light" />
 
-        ${share(latest.title, `/radio/${latest.permalink}/`)}
+        ${share(first.title, `/radio/${first.permalink}/`)}
       </div>
     </div>
 
     <div class="pagination">
-      <span class="icon-previous"></span> 1 / 190 TODO <span class="icon-next"></span>
+      ${data.programsPaginated.map(paginationIterated => `
+        <a ${paginationIterated === pagination ? 'class="pagination--active"' : ''} href="/radio/${paginationIterated.label}/">${paginationIterated.label}</a>
+      `).join(' / ')}
     </div>
 
     <div class="tiles">
-      ${sortedPrograms.map(programTile).join('')}
+      ${pagination.programs.map(programTile).join('')}
     </div>
   `;
 

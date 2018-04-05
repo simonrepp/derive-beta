@@ -76,9 +76,9 @@ exports.validateDate = (document, field, options = { required: false }) => {
       return null;
     }
   } else if(typeof value === 'string') {
-    let match;
+    const match = dateRegex.exec(value);
 
-    if(match = dateRegex.exec(value)) {
+    if(match) {
       return new Date(match[1], parseInt(match[2]) - 1, match[3]);
     } else {
       throw new ValidationError(`Das Feld "${field}" muss als Datum im Format "YYYY-MM-DD" formatiert sein, vorgefunden wurde aber "${value}".`);
@@ -128,7 +128,7 @@ exports.validateInteger = (document, field, options = { required: false }) => {
   } else if(typeof value === 'string') {
     const integer = parseInt(value);
 
-    if(integer === NaN) {
+    if(isNaN(integer)) {
       throw new ValidationError(`Das Feld "${field}" muss eine Ganzzahl enthalten, enthält aber "${document[field]}".`);
     } else {
       return integer;

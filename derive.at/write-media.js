@@ -2,6 +2,8 @@ const fsExtra = require('fs-extra'),
       path = require('path'),
       sharp = require('sharp');
 
+// TODO: Only write published && visible dirs, pages, media!
+
 module.exports = async data => {
 
   const copy = (fromRelative, toRelative) => {
@@ -31,7 +33,7 @@ module.exports = async data => {
   //
   //       if(article.image && !article.image.written) ... what we used but does not work like that
 
-  for(let article of data.articles.values()) {
+  for(let article of data.visibleArticles) {
     if(article.image) {
       const finalPath = path.join('/texte', article.permalink, `bild${path.extname(article.image.connected)}`);
       article.image.written = finalPath;

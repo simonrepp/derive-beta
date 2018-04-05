@@ -10,7 +10,9 @@ module.exports = event => `
       </a>
     </h1>
 
-    // TODO TIME
+    ${event.dates.map(date =>
+      `${moment(date.date).format('D.M.YYYY')} ${date.time || ''}`.trim()
+    ).join('<br/>')}
 
     ${event.image ? `
       <img src="${event.image.written}" />

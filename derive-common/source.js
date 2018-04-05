@@ -12,7 +12,7 @@ const { globFiles } = require('./util.js'),
 // TODO: Gradually refactor warnings to simpler format?
 //       Place of occurrence -> Description and consequences -> Solution -> File/Line/Column Shortcut
 
-const forbiddenFilenameCharacters = /[\\\?\*:\|"<>]/;
+const forbiddenFilenameCharacters = /[\\?*:|"<>]/;
 
 module.exports = async data => {
   data.articles.clear();
@@ -25,7 +25,6 @@ module.exports = async data => {
   data.programs.clear();
   data.warnings = [];
 
-  const plainPaths = [];
   const globPaths = await globFiles(data.root, '**/*');
 
   for(let filePath of globPaths) {

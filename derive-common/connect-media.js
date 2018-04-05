@@ -53,7 +53,7 @@ const connectMarkdownMedia = (data, field, fieldName) => {
           throw new ConnectMediaError(`Das Markdown-Feld "${fieldName}" enthält einen Verweis auf die Datei "${originalMediaPath}", diese wurde aber nicht gefunden.`);
         }
       });
-    })
+    });
   } else {
     let markdown = field.sourced;
 
@@ -94,7 +94,7 @@ const connectMarkdownMedia = (data, field, fieldName) => {
 
           return fullMatch.replace(urlMatch, replacedFilePath);
         } else {
-          throw('Interner Fehler bei der RegExp-basierten Detektion von referenzierten Mediendateien.')
+          throw('Interner Fehler bei der RegExp-basierten Detektion von referenzierten Mediendateien.');
         }
       } else {
         throw new ConnectMediaError(`Das Markdown-Feld "${fieldName}" enthält einen Verweis auf die Datei "${urlMatch}", diese wurde aber nicht gefunden.`);
@@ -110,7 +110,7 @@ const connectMarkdownMedia = (data, field, fieldName) => {
       html = renderMarkdown(markdown);
     } catch(err) {
       // Unclear if this could ever happen - quickly consult md-it documentation ?
-      throw new ValidationError(`Das Markdown im Feld "${fieldName}" hat beim konvertieren einen Fehler ausgelöst: ${err}`);
+      throw new ConnectMediaError(`Das Markdown im Feld "${fieldName}" hat beim konvertieren einen Fehler ausgelöst: ${err}`);
     }
 
     field.connected = html;
@@ -263,7 +263,7 @@ module.exports = data => {
         });
 
         data.programs.delete(program.sourceFile);
-        return
+        return;
       }
     }
 
@@ -279,7 +279,7 @@ module.exports = data => {
         });
 
         data.programs.delete(program.sourceFile);
-        return
+        return;
       }
     }
 

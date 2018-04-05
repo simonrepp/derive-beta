@@ -1,6 +1,3 @@
-const fsExtra = require('fs-extra'),
-      path = require('path');
-
 const { writeFile } = require('../derive-common/util.js');
 
 const articlePage = require('./pages/article.js'),
@@ -23,10 +20,8 @@ const articlePage = require('./pages/article.js'),
       tagPage = require('./pages/tag.js');
 
 module.exports = async data => {
-  const write = (html, filePath) => fsExtra.outputFile(path.join(data.buildDir, filePath), html);
-
   await Promise.all([
-    writeFile(data.buildDir, 'texte/index.html', articlesPage(data)),
+    writeFile(data.buildDir, 'texte/index.html', articlesPage(data, data.articlesPaginated[0])),
     writeFile(data.buildDir, 'autoren/index.html', authorsPage(data)),
     writeFile(data.buildDir, 'bücher/index.html', booksPage(data, data.booksPaginated[0])),
     writeFile(data.buildDir, 'festival/index.html', festivalPage()),
@@ -35,15 +30,19 @@ module.exports = async data => {
     writeFile(data.buildDir, 'kiosk/index.html', kioskPage()),
     writeFile(data.buildDir, 'zeitschrift/index.html', issuesPage(data)),
     writeFile(data.buildDir, 'seite-nicht-gefunden/index.html', notFoundPage()),
-    writeFile(data.buildDir, 'radio/index.html', programsPage(data)),
+    writeFile(data.buildDir, 'radio/index.html', programsPage(data, data.programsPaginated[0])),
     writeFile(data.buildDir, 'suche/index.html', searchPage())
   ]);
 
-  for(let article of data.articles.values()) {
+  for(let pagination of data.articlesPaginated) {
+    await writeFile(data.buildDir, `texte/${pagination.label}/index.html`, articlesPage(data, pagination));
+  }
+
+  for(let article of data.visibleArticles) {
     await writeFile(data.buildDir, `texte/${article.permalink}/index.html`, articlePage(article));
   }
 
-  for(let article of data.articles.values()) {
+  for(let article of data.visibleArticles) {
     await writeFile(data.buildDir, `texte/${article.permalink}/druckversion/index.html`, articlePrintPage(article));
   }
 
@@ -69,6 +68,10 @@ module.exports = async data => {
 
   for(let book of data.books.values()) {
     await writeFile(data.buildDir, `bücher/${book.permalink}/index.html`, bookPage(book));
+  }
+
+  for(let pagination of data.programsPaginated) {
+    await writeFile(data.buildDir, `radio/${pagination.label}/index.html`, programsPage(data, pagination));
   }
 
   for(let program of data.programs.values()) {

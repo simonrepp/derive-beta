@@ -1,6 +1,5 @@
 const layout = require('./layout.js');
 
-// TODO: Active style definition for current letter (class already there!)
 // TODO: Match folded tiles style against rowild reference style and adapt
 // TODO: Clip/Ellipsis content of author tiles when too big (fix current glitches)
 

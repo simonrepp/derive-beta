@@ -20,9 +20,9 @@ module.exports = data => {
   });
 
   const latestAuthors = new Set();
-  latest.sections.forEach(section =>
+  sortedDescending[3].sections.forEach(section =>
     section.articles.forEach(article =>
-      article.connected.authors.forEach(author => latestAuthors.add(author))
+      article.connected.authors.connected.forEach(author => latestAuthors.add(author))
     )
   );
 

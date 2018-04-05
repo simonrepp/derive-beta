@@ -1,4 +1,5 @@
 const fsExtra = require('fs-extra'),
+      path = require('path'),
       striptags = require('striptags');
 
 const { writeFile } = require('../derive-common/util.js');

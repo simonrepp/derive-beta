@@ -9,11 +9,15 @@ module.exports = program => `
         ${program.title}
       </a>
     </h1>
-    <h2>
-      <a href="/radio/${program.permalink}/">
-        ${program.subtitle}
-      </a>
-    </h2>
+
+    ${program.subtitle ? `
+      <h2>
+        <a href="/radio/${program.permalink}/">
+          ${program.subtitle}
+        </a>
+      </h2>
+    `:''}
+
 
     <strong>Redaktion</strong><br/>
 

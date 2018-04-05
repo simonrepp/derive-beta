@@ -79,8 +79,8 @@ const connectIssuesWithArticles = data => {
           });
         }
       });
-    })
-  })
+    });
+  });
 };
 
 module.exports = data => {

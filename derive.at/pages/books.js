@@ -1,39 +1,40 @@
 const authors = require('../widgets/authors.js'),
       bookTile = require('../widgets/book-tile.js'),
       layout = require('./layout.js'),
+      { random } = require('../util.js'),
       reviews = require('../widgets/reviews.js'),
       share = require('../widgets/share.js');
 
 module.exports = (data, pagination) => {
-  const first = pagination.books[0];
+  const featured = random(pagination.books);
 
   const html = `
     <div class="feature">
 
       <div class="feature__image">
-        ${first.cover ? `<img src="${first.cover.written}" />` : ''}
+        ${featured.cover ? `<img src="${featured.cover.written}" />` : ''}
       </div>
 
       <div class="feature__text">
-        ${authors(first.authors)}
+        ${authors(featured.authors)}
 
-        <h1>${first.title}</h1>
+        <h1>${featured.title}</h1>
 
-        ${first.description ? first.description ? : ''}
+        ${featured.description ? featured.description : ''}
 
         <div class="generic__margin-vertical">
           ${[
-            first.placeOfPublication ? `${first.placeOfPublication}:` : '',
-            first.publishers.connected.map(publisher => `<a href="/verlage/${publisher.permalink}/">${publisher.name}</a>`).join(', '),
-            first.yearOfPublication ? `(${first.yearOfPublication})` : ''
+            featured.placeOfPublication ? `${featured.placeOfPublication}:` : '',
+            featured.publishers.connected.map(publisher => `<a href="/verlage/${publisher.permalink}/">${publisher.name}</a>`).join(', '),
+            featured.yearOfPublication ? `(${featured.yearOfPublication})` : ''
           ].join(' ').trim()}
         </div>
 
-        ${first.reviews.length > 1 ? `<strong>${reviews(first.reviews)}</strong>` : ''}
+        ${featured.reviews.length > 1 ? `<strong>${reviews(featured.reviews)}</strong>` : ''}
 
         <hr class="hr__light" />
 
-        ${share(first.title, `/bücher/${first.permalink}/`)}
+        ${share(featured.title, `/bücher/${featured.permalink}/`)}
       </div>
     </div>
 
