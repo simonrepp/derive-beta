@@ -1,4 +1,5 @@
-const authors = require('../widgets/authors.js'),
+const editors = require('../widgets/editors.js'),
+      firstBroadcast = require('../widgets/first-broadcast.js'),
       layout = require('./layout.js'),
       share = require('../widgets/share.js'),
       tags = require('../widgets/tags.js');
@@ -12,17 +13,21 @@ module.exports = program => {
       </div>
 
       <div class="feature__text">
+        <!-- TODO without header, see https://derive.rowild.at/radio-single.html -->
+        ${editors(program.editors.connected)}
+
         <h1>${program.title}</h1>
-        <strong>${program.subtitle}</strong>
+
+        ${program.subtitle ? `
+          <strong>${program.subtitle}</strong>
+        `:''}
+
+        ${firstBroadcast(program.firstBroadcast)}
 
         <audio controls src="${program.soundfile.written}"></audio>
 
         <br/><br/>
 
-        <div class="generic__margin-vertical">
-          <strong>Redaktion</strong>
-          ${authors(program.editors.connected)}
-        </div>
 
         ${tags(program.tags.connected)}
 

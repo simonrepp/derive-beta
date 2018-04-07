@@ -1,6 +1,5 @@
-const moment = require('moment');
-
-const authors = require('./authors.js');
+const editors = require('../widgets/editors.js'),
+      firstBroadcast = require('../widgets/first-broadcast.js');
 
 module.exports = program => `
   <div class="tile">
@@ -18,15 +17,8 @@ module.exports = program => `
       </h2>
     `:''}
 
+    ${editors(program.editors.connected)}
 
-    <strong>Redaktion</strong><br/>
-
-    ${authors(program.editors.connected)}
-
-    <br/><br/>
-
-    <strong>Erstaustrahlung</strong><br/>
-
-    ${moment(program.firstBroadcast).locale('de').format('Do MMMM YYYY')}
+    ${firstBroadcast(program.firstBroadcast)}
   </div>
 `;

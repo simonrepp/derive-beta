@@ -46,7 +46,7 @@ exports.authorsPage = (data, letter) => {
 
           ${author.biography ? `<strong>${author.biography}</strong>` : ''}
 
-          ${author.text}
+          ${author.text ? author.text : ''}
         </div>
       `).join('')}
     </div>

@@ -1,6 +1,6 @@
 const moment = require('moment');
 
-const authors = require('../widgets/authors.js'),
+const editors = require('../widgets/editors.js'),
       layout = require('./layout.js'),
       programTile = require('../widgets/program-tile.js'),
       share = require('../widgets/share.js'),
@@ -23,11 +23,10 @@ module.exports = (data, pagination) => {
 
         Sendungsarchiv zum Nachhören: <a href="http://cba.fro.at/series/1235">http://cba.fro.at/series/1235</a><br/><br/>
 
-        <div class="generic__margin-vertical">
-          <strong>Redaktion</strong>
-          ${authors(first.editors.connected)}
-        </div>
+        <!-- TODO: "Allgemeine" Redaktion sollten wohl als globale Konfiguration vorliegen -->
+        ${editors(first.editors.connected)}
 
+        <!-- TODO "Allgemeine" Tags? Von allen Radiosendungen ist wohl zuviel ... Also globale Konfiguration, oder weg. -->
         ${tags(first.tags.connected)}
 
         <hr class="hr__light" />
