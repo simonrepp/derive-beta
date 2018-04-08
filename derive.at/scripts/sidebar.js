@@ -1,4 +1,10 @@
+let audio;
+let radioNoticeShown = false;
+
 document.addEventListener('click', function(event) {
+  if(event.button !== 0) {
+    return;
+  }
 
   // TODO: Make the No69 widget toggle into a direct link to issue page when
   //       vertical height on device is too small to display the widget
@@ -7,7 +13,6 @@ document.addEventListener('click', function(event) {
   const widgetToggles = document.querySelectorAll('.sidebar__widget-toggle');
   for(let toggleLink of widgetToggles) {
     if(toggleLink.contains(event.target)) {
-      console.log('a toggle link for sure');
 
       for(let toggleLinkReiterated of widgetToggles) {
         if(toggleLinkReiterated === toggleLink) {
@@ -24,6 +29,24 @@ document.addEventListener('click', function(event) {
 
       return;
     }
+  }
+
+  const radioPlaybackControl = document.querySelector('.sidebar__link__playback');
+  if(radioPlaybackControl.contains(event.target)) {
+    const icon = radioPlaybackControl.querySelector('.sidebar__playback-icon');
+
+    icon.classList.toggle('icon-play');
+    icon.classList.toggle('icon-pause');
+
+    if(audio) {
+      if(audio.paused) {
+        audio.play();
+      } else {
+        audio.pause();
+      }
+    }
+
+    return;
   }
 
   const toTopLink = document.querySelector('.sidebar__link__top');
@@ -60,5 +83,68 @@ document.addEventListener('click', function(event) {
     includedSections.value = sections.join(',');
 
     return;
+  }
+});
+
+document.addEventListener('play', function(event) {
+  if(event.target.tagName === 'AUDIO') {
+    const previousAudio = audio;
+
+    audio = event.target;
+
+    if(previousAudio && previousAudio !== audio) {
+      previousAudio.pause();
+    }
+
+    const radioPlaybackControl = document.querySelector('.sidebar__link__playback');
+    radioPlaybackControl.title = 'Du hörst: ' + event.target.dataset.title;
+    radioPlaybackControl.classList.remove('sidebar__link--disabled');
+
+    const icon = radioPlaybackControl.querySelector('.sidebar__playback-icon');
+
+    icon.classList.remove('icon-play');
+    icon.classList.add('icon-pause');
+
+    if(!radioNoticeShown) {
+      document.querySelector('.radio__notice').classList.add('radio__notice--shown');
+      // TODO: Fade out message
+      radioNoticeShown = true;
+    }
+  }
+}, true);
+
+document.addEventListener('pause', function(event) {
+  if(audio && event.target === audio) {
+    const icon = document.querySelector('.sidebar__playback-icon');
+
+    icon.classList.add('icon-play');
+    icon.classList.remove('icon-pause');
+  }
+}, true);
+
+document.addEventListener('ended', function(event) {
+  if(audio && event.target === audio) {
+    audio.currentTime = 0;
+
+    const icon = document.querySelector('.sidebar__playback-icon');
+    icon.classList.remove('icon-pause');
+    icon.classList.add('icon-play');
+  }
+}, true);
+
+document.addEventListener('turbolinks:click', function(event) {
+  if(audio) {
+    document.querySelector('.sidebar__link__playback')
+            .append(audio);
+  }
+});
+
+document.addEventListener('turbolinks:before-render', function(event) {
+  if(audio) {
+    const radio = event.data.newBody.querySelector('.feature__radio audio');
+
+    if(radio && radio.src === audio.src) {
+      radio.parentNode.replaceChild(audio, radio);
+    }
   }
 });

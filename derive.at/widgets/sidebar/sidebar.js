@@ -47,6 +47,12 @@ module.exports = data => `
       </div>
     </div>
 
+    <a class="sidebar__link sidebar__link__playback sidebar__link--disabled"
+       data-turbolinks-permanent
+       id="sidebar-radio-permanent">
+      <span class="sidebar__playback-icon icon-play"></span>
+    </a>
+
     <a class="sidebar__link sidebar__link__top">
       <span class="icon-top"></span>
     </a>

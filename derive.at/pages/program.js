@@ -24,7 +24,19 @@ module.exports = (data, program) => {
 
         ${firstBroadcast(program.firstBroadcast)}
 
-        <audio controls src="${program.soundfile.written}"></audio>
+        <div class="feature__radio">
+          <audio controls
+                 data-title="${program.title}"
+                 src="${program.soundfile.written}">
+          </audio>
+        </div>
+
+        <div class="radio__notice">
+          Die Radiosendung spielt im Hintergrund weiter, du kannst dich während
+          dem zuhören frei durch die Seite bewegen. Eine Button zum pausieren
+          bzw. anschliessendem weiterführen der Wiedergabe wurde in der
+          Seitenleiste hinzugefügt und ist jederzeit verfügbar.
+        </div>
 
         <br/><br/>
 

@@ -36,8 +36,7 @@ module.exports = (data, pagination) => {
           <a href="${featured.issue.shopLink}">Heft kaufen</a>
         `:''}
 
-        TODO derive: "used with Radio" ?
-        ${moment(featured.date).locale('de').format('MMMM YYYY')} (used with Radio)
+        ${moment(featured.date).locale('de').format('MMMM YYYY')}
       </div>
     </div>
 

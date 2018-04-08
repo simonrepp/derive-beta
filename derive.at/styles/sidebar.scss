@@ -24,6 +24,10 @@
   width: 3.25em;
 }
 
+.sidebar__link--disabled {
+  display: none;
+}
+
 .sidebar__link:hover {
   border-bottom: 1px solid $color-beige;
   border-top: 1px solid $color-beige;
@@ -31,6 +35,12 @@
 
 .sidebar__link__edition {
   line-height: 0.9em;
+}
+
+.sidebar__link__playback {
+  audio {
+    display: none;
+  }
 }
 
 .sidebar__link__top {
