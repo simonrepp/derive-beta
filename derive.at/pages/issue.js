@@ -30,7 +30,7 @@ module.exports = (data, issue) => {
 
           ${issue.description ? `
             <div class="generic__margin-vertical">
-              ${issue.description}
+              ${issue.description.sourced}
             </div>
           `:''}
 

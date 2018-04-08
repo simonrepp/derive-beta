@@ -42,7 +42,7 @@ const compileSass = data => {
   });
 };
 
-module.exports = async data => {
+module.exports = async (data, options = { preview: false }) => {
   console.time('build');
 
   console.time('writeDirectories');
@@ -50,7 +50,7 @@ module.exports = async data => {
   console.timeEnd('writeDirectories');
 
   console.time('writeMedia');
-  await writeMedia(data);
+  await writeMedia(data, options.preview);
   console.timeEnd('writeMedia');
 
   console.time('writePages');

@@ -87,7 +87,7 @@ module.exports = async (data, plainPath) => {
       article.urbanize = validateEnum(document, 'Urbanize', URBANIZE_ENUM);
       article.abstract = validateMarkdown(document, 'Abstract');
       article.bibliography = validateMarkdown(document, 'Literaturverzeichnis');
-      article.text = validateMarkdown(document, 'Text', { process: false });
+      article.text = validateMarkdown(document, 'Text', { media: true });
     } catch(err) {
       data.cache.delete(plainPath);
 

@@ -43,7 +43,7 @@ module.exports = data => {
 
           ${latest.description ? `
             <div class="generic__margin-vertical">
-              ${latest.description}
+              ${latest.description.sourced}
             </div>
           `:''}
 

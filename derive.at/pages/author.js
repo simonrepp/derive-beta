@@ -10,10 +10,10 @@ module.exports = (data, author) => {
     <div>
       <h1>${author.name}</h1>
 
-      ${author.biography ? `<strong>${author.biography}</strong>` : ''}
+      ${author.biography ? `<strong>${author.biography.sourced}</strong>` : ''}
 
       ${author.text ? `
-        ${author.text}
+        ${author.text.sourced}
       `:''}
 
       ${author.website ? `

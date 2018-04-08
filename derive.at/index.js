@@ -7,7 +7,7 @@ const { writeFile } = require('../derive-common/util.js');
 const indexArticles = data => {
   const indexed = data.visibleArticles.map(article => {
     const boosted = `${article.title} ${article.subtitle || ''}`;
-    const regular = [article.abstract ? striptags(article.abstract) : '',
+    const regular = [article.abstract ? striptags(article.abstract.sourced) : '',
                      article.authors.connected.map(author => author.name).join(' '),
                      article.categories.connected.map(category => category.name).join(' '),
                      article.tags.connected.map(tag => tag.name).join(' '),
@@ -43,11 +43,11 @@ const indexArticles = data => {
 
 const indexAuthors = data => {
   const indexed = data.authors.map(author => {
-    const boosted = `${author.name} ${author.biography ? striptags(author.biography) : ''}`;
+    const boosted = `${author.name} ${author.biography ? striptags(author.biography.sourced) : ''}`;
     const regular = [author.city || '',
                      author.country || '',
                      author.tags.connected.map(tag => tag.name).join(' '),
-                     author.text ? striptags(author.text) : '',
+                     author.text ? striptags(author.text.sourced) : '',
                      author.website || ''].join(' ');
 
     return {
@@ -68,7 +68,7 @@ const indexBooks = data => {
   const indexed = Array.from(data.books.values()).map(book => {
     const boosted = `${book.title} ${book.isxn || ''}`;
     const regular = [book.authors.connected.map(author => author.name).join(' '),
-                     book.description ? striptags(book.description) : '',
+                     book.description ? striptags(book.description.sourced) : '',
                      book.publishers.connected.map(publisher => publisher.name).join(' '),
                      book.tags.connected.map(tag => tag.name).join(' '),
                      book.placeOfPublication || '',
@@ -113,7 +113,7 @@ const indexIssues = data => {
                      issue.title,
                      issue.features.join(' ')].join(' ');
     const regular = [issue.cooperation || '',
-                     issue.description ? striptags(issue.description) : '',
+                     issue.description ? striptags(issue.description.sourced) : '',
                      issue.tags.connected.map(tag => tag.name).join(' ')].join(' ');
 
     return {
@@ -137,7 +137,7 @@ const indexIssues = data => {
 const indexPrograms = data => {
   const indexed = Array.from(data.programs.values()).map(program => {
     const boosted = [program.title, program.subtitle].join(' ');
-    const regular = [program.abstract ? striptags(program.abstract) : '',
+    const regular = [program.abstract ? striptags(program.abstract.sourced) : '',
                      program.editors.connected.map(editor => editor.name).join(' '),
                      program.categories.connected.map(category => category.name).join(' '),
                      program.tags.connected.map(tag => tag.name).join(' '),

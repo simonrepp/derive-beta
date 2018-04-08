@@ -75,7 +75,7 @@ module.exports = async (data, plainPath) => {
       program.categories = { sourced: validateArray(document, 'Kategorien') };
       program.tags = { sourced: validateArray(document, 'Tags') };
       program.abstract = validateMarkdown(document, 'Abstract');
-      program.text = validateMarkdown(document, 'Text', { process: false });
+      program.text = validateMarkdown(document, 'Text', { media: true });
     } catch(err) {
       data.cache.delete(plainPath);
 

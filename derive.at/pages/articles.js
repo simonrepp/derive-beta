@@ -28,7 +28,7 @@ module.exports = (data, pagination) => {
 
         ${featured.issue ? fullIssueTitle(featured.issue) : ''}<br/>
 
-        ${featured.abstract ? featured.abstract.html : ''}
+        ${featured.abstract ? featured.abstract.sourced : ''}
 
         ${tags(featured.tags.connected)}
 
@@ -89,7 +89,7 @@ module.exports = (data, pagination) => {
             </strong>
           `:''}
 
-          ${article.abstract ? article.abstract : ''}
+          ${article.abstract ? article.abstract.sourced : ''}
         </div>
       `).join('')}
     </div>

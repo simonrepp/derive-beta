@@ -82,7 +82,7 @@ module.exports = async (data, plainPath) => {
       event.dates = validateArray(document, 'Termin');
       event.abstract = validateMarkdown(document, 'Abstract');
       event.additionalInfo = validateMarkdown(document, 'Zusatzinfo');
-      event.text = validateMarkdown(document, 'Text', { process: false });
+      event.text = validateMarkdown(document, 'Text', { media: true });
 
       event.dates = event.dates.map(date => {
         const validatedDate = {};

@@ -9,10 +9,10 @@ module.exports = (data, publisher) => {
     <div>
       <h1>${publisher.name}</h1>
 
-      ${publisher.biography ? `<strong>${publisher.biography}</strong>` : ''}
+      ${publisher.biography ? `<strong>${publisher.biography.sourced}</strong>` : ''}
 
       ${publisher.text ? `
-        ${publisher.text}
+        ${publisher.text.sourced}
       `:''}
 
       ${[publisher.country, publisher.city].filter(Boolean).join(', ')}<br/>

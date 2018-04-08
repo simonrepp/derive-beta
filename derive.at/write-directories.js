@@ -10,6 +10,7 @@ module.exports = async data => {
     'api',
     'autoren',
     'bücher',
+    'features',
     'festival',
     'radio',
     'seite-nicht-gefunden',

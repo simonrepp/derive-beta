@@ -19,7 +19,7 @@ module.exports = (data, pagination) => {
 
         <h1>${featured.title}</h1>
 
-        ${featured.description ? featured.description : ''}
+        ${featured.description ? featured.description.sourced : ''}
 
         <div class="generic__margin-vertical">
           ${[

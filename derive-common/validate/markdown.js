@@ -1,7 +1,16 @@
 const { renderMarkdown } = require('../util.js'),
       ValidationError = require('./error.js');
 
-module.exports = (document, field, options = { process: true }) => {
+const embeddableMediaExtensions = [
+  '.tif', '.TIF', '.tiff', '.TIFF', '.gif', '.GIF', '.jpg', '.JPG', '.jpeg', '.JPEG', '.png', '.PNG'
+];
+
+const htmlMediaRegex = /(src|href)\s*=\s*['"]\s*(?!https?:\/\/|\/\/)(\S(?:(?!src\s*=|href\s*=).)*\.(?:doc|DOC|gif|GIF|jpeg|JPEG|jpg|JPG|pdf|PDF|png|PNG|tif|TIF|tiff|TIFF))\s*['"]/g;
+const markdownMediaRegex = /(!|)\[(?:(?!\[.*\]).)*\]\((?!https?:\/\/|\/\/)(\S(?:(?!\[.*\]).)*\.(?:doc|DOC|gif|GIF|jpeg|JPEG|jpg|JPG|pdf|PDF|png|PNG|tif|TIF|tiff|TIFF))\s*(?:\s+"(?:(?!".*"\)).)*")?\)/g;
+// TODO: Pluggable, modulare regex components to build the md/html rules - also think more in terms of inception matching (no src="" inside src="", no ![]() inside ![]() ..)
+// match(/!\[((?!!\[.*\]\(.*\)).)*\]\(((?!!\[.*\]\(.*\)).)*\)/g); TODO possibly resuse to improve regexes later, missing ](https?: NEGATIVE LOOKAHEAD THINGY
+
+module.exports = (document, field, options = { media: false }) => {
   if(!document.hasOwnProperty(field)) {
     throw new ValidationError(`Fehlendes Feld "${field}" - Falls das Feld angegeben wurde eventuell nach Tippfehlern Ausschau halten und auch die Gross/Kleinschreibung beachten.`);
   }
@@ -11,15 +20,58 @@ module.exports = (document, field, options = { process: true }) => {
   if(markdown === null) {
     return null;
   } else if(typeof markdown === 'string') {
-    if(options.process) {
-      try {
-        return renderMarkdown(markdown);
-      } catch(err) {
-        throw new ValidationError(`Das Markdown im Feld "${field}" hat beim konvertieren einen Fehler ausgelöst: ${err}`);
+
+    const downloads = new Map();
+    const embeds = new Map();
+
+    let downloadNumber = 1;
+    let embedNumber = 1;
+
+    const validateEmbeddedMedia  = (fullMatch, typeMatch, urlMatch) => {
+      const fileExtension = path.extname(urlMatch);
+      const normalizedPath = urlMatch.replace(/^\//, '').normalize();
+
+      if(typeMatch === '!' || typeMatch === 'src') {
+        if(embeddableMediaExtensions.includes(fileExtension)) {
+          const replacedPath = `${normalizedPath.replace(' ', '%20')}?embed${embedNumber++}`;
+
+          embeds.set(normalizedPath, replacedPath);
+
+          return fullMatch.replace(urlMatch, replacedPath);
+        } else {
+          throw new ValidationError(`Das Markdown-Feld "${field}" enthält einen Embed der Datei "${urlMatch}", dessen Dateityp ist aber für Embeds nicht erlaubt.`);
+        }
+      } else if(typeMatch === '' || typeMatch === 'href') {
+        const replacedPath = `${normalizedPath.replace(' ', '%20')}?download{downloadNumber++}`;
+
+        downloads.set(normalizedPath, replacedPath);
+
+        return fullMatch.replace(urlMatch, replacedPath);
+      } else {
+        throw('Interner Fehler bei der RegExp-basierten Detektion von referenzierten Mediendateien.');
       }
+    };
+
+    markdown = markdown.replace(markdownMediaRegex, validateEmbeddedMedia);
+    markdown = markdown.replace(htmlMediaRegex, validateEmbeddedMedia);
+
+    if(!options.media && (downloads.length > 0 || embeds.length > 0)) {
+      throw new ValidationError(`Das Markdown im Feld "${field}" enhält Verweise auf Mediendateien, in diesem Feld ist das aber nicht erlaubt.`);
     }
 
-    return { sourced: markdown };
+    let html;
+    try {
+      html = renderMarkdown(markdown);
+    } catch(err) {
+      throw new ValidationError(`Das Markdown im Feld "${field}" hat beim konvertieren einen Fehler ausgelöst: ${err}`);
+    }
+
+    return {
+      downloads: downloads,
+      embeds: embeds,
+      sourced: html
+    };
+
   } else {
     throw new ValidationError(`Das Feld "${field}" muss ein Textfeld sein, enthält aber einen anderen Datentyp.`);
   }

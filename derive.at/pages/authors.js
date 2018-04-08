@@ -29,7 +29,7 @@ exports.authorsPage = (data, letter) => {
 
   const html = `
     <br/>
-    
+
     <div class="pagination">
       ${letters.map(iteratedLetter => `
         <a ${iteratedLetter === letter ? 'class="pagination--active"' : ''}
@@ -46,9 +46,9 @@ exports.authorsPage = (data, letter) => {
             </a>
           </h1>
 
-          ${author.biography ? `<strong>${author.biography}</strong>` : ''}
+          ${author.biography ? `<strong>${author.biography.sourced}</strong>` : ''}
 
-          ${author.text ? author.text : ''}
+          ${author.text ? author.text.sourced : ''}
         </div>
       `).join('')}
     </div>

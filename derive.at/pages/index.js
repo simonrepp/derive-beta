@@ -17,7 +17,7 @@ module.exports = data => {
             </a>
           </h1>
 
-          ${feature.text ? feature.text : ''}
+          ${feature.text ? feature.text.sourced : ''}
         </div>
       </div>
     `).join('')}

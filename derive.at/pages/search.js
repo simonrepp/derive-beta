@@ -63,7 +63,7 @@ module.exports = data => {
             html += '    <a href="/autoren/' + author.permalink + '/">' + author.name + '</a>';
             html += '  </h1>';
             if(author.biography) {
-              html += '<strong>' + author.biography + '</strong>';
+              html += '<strong>' + author.biography.sourced + '</strong>';
             }
             html += '</div>';
             ;

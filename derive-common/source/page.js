@@ -58,7 +58,7 @@ module.exports = async (data, plainPath) => {
       validateKeys(document, specifiedKeys);
 
       page.urbanize = validateEnum(document, 'Urbanize', URBANIZE_ENUM);
-      page.text = validateMarkdown(document, 'Text', { process: false });
+      page.text = validateMarkdown(document, 'Text', { media: true });
     } catch(err) {
       data.cache.delete(plainPath);
 
