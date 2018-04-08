@@ -46,5 +46,5 @@ module.exports = (data, pagination) => {
     </div>
   `;
 
-  return layout(html, { activeSection: 'Radio', title: 'Radio' });
+  return layout(data, html, { activeSection: 'Radio', title: 'Radio' });
 };

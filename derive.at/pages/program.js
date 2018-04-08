@@ -4,7 +4,7 @@ const editors = require('../widgets/editors.js'),
       share = require('../widgets/share.js'),
       tags = require('../widgets/tags.js');
 
-module.exports = program => {
+module.exports = (data, program) => {
   const html = `
     <div class="feature">
 
@@ -38,5 +38,5 @@ module.exports = program => {
     </div>
   `;
 
-  return layout(html, { activeSection: 'Radio', title: program.title });
+  return layout(data, html, { activeSection: 'Radio', title: program.title });
 };

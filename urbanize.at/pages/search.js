@@ -27,7 +27,7 @@ module.exports = urbanize => {
   //   resultRefs.includes(`/page/${node.permalink}/`)
   // );
 
-  // TODO TODO
+  // TODO
   const html = `
     <div>
       <div class="title">

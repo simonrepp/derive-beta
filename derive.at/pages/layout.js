@@ -1,10 +1,10 @@
 const footer = require('../widgets/footer.js'),
       header = require('../widgets/header.js'),
-      sidebar = require('../widgets/sidebar.js');
+      sidebar = require('../widgets/sidebar/sidebar.js');
 
 const DEFAULT_TITLE = 'dérive | Zeitschrift für Stadtforschung';
 
-module.exports = (content, options = {}) => `
+module.exports = (data, content, options = {}) => `
   <!DOCTYPE html>
   <html>
     <head>
@@ -47,7 +47,7 @@ module.exports = (content, options = {}) => `
         </div>
 
         <div class="layout__sidebar">
-          ${sidebar}
+          ${sidebar(data)}
         </div>
       </div>
     </body>

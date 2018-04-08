@@ -3,13 +3,12 @@ const moment = require('moment');
 const authors = require('../widgets/authors.js'),
       { fullIssueTitle } = require('../widgets/issue-labeling.js'),
       layout = require('./layout.js'),
-      { random } = require('../util.js'),
       tags = require('../widgets/tags.js');
 
 
 
 module.exports = (data, pagination) => {
-  const featured = random(pagination.articles);
+  const { articles, featured } = pagination;
 
   const html = `
     <div class="feature">
@@ -48,30 +47,54 @@ module.exports = (data, pagination) => {
       `).join(' / ')}
     </div>
 
+    TODO article special tilethingys on articles page
+
     <div class="tiles">
-      TODO article special tilethingys on articles page
-      ${pagination.articles.map(article => `
-        <div class="articletile">
+      ${articles.map(article => `
+        <div class="article-big-tile">
           <h1>
             <a href="/texte/${article.permalink}/">
               ${article.title}
             </a>
           </h1>
-          <strong>
-            <a href="/texte/${article.permalink}/">
-              ${article.subtitle}
+
+          ${article.subtitle ? `
+            <strong>
+              <a href="/texte/${article.permalink}/">
+                ${article.subtitle}
+              </a>
+            </strong>
+          `:''}
+
+          ${article.issue ? `
+            <img src="${article.issue.cover.written}"
+          `:''}
+
+          <strong>Autor*innen</strong><br/>
+          ${authors(article.authors.connected)}
+
+          ${article.issue ? `
+            <strong>Ausgabe</strong><br/>
+            <a href="/zeitschrift/${article.issue.number}">
+              N°${article.issue.number} (Seite ${article.inIssueOnPages})
             </a>
-          </strong>
+          `:''}
 
-          <a href="#">Jan Gehl</a>
+          ${tags(article.tags.connected)}
 
-          Freiburg: ça ira Verlag (2012)
+          ${article.issue ? `
+            <strong>
+              <a href="${article.issue.shopLink}">
+                Heft kaufen
+              </a>
+            </strong>
+          `:''}
 
-          <a href="#">Rezension lesen</a>
+          ${article.abstract ? article.abstract : ''}
         </div>
       `).join('')}
     </div>
   `;
 
-  return layout(html, { activeSection: 'Texte', title: 'Texte' });
+  return layout(data, html, { activeSection: 'Texte', title: 'Texte' });
 };

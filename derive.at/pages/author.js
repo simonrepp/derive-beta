@@ -5,7 +5,7 @@ const layout = require('./layout.js'),
       programTile = require('../widgets/program-tile.js'),
       tags = require('../widgets/tags.js');
 
-module.exports = (author) => {
+module.exports = (data, author) => {
   const html = `
     <div>
       <h1>${author.name}</h1>
@@ -57,5 +57,5 @@ module.exports = (author) => {
     `:''}
   `;
 
-  return layout(html, { activeSection: 'Autoren', title: author.name });
+  return layout(data, html, { activeSection: 'Autoren', title: author.name });
 };

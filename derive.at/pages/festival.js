@@ -2,21 +2,21 @@ const layout = require('./layout.js'),
       share = require('../widgets/share.js');
 
 const festivals = [
-  { image: '/images/urbanize.png', url: 'https://2011.urbanize.at' },
-  { image: '/images/urbanize.png', url: 'https://2012.urbanize.at' },
-  { image: '/images/urbanize.png', url: 'https://2013.urbanize.at' },
-  { image: '/images/urbanize.png', url: 'https://2014.urbanize.at' },
-  { image: '/images/urbanize.png', url: 'https://2015.urbanize.at' },
-  { image: '/images/urbanize.png', url: 'https://2016.urbanize.at' },
-  { image: '/images/urbanize.png', url: 'https://2017.urbanize.at' }
+  { image: '/images/urbanize-2011.jpg', url: 'https://2011.urbanize.at' },
+  { image: '/images/urbanize-2012.png', url: 'https://2012.urbanize.at' },
+  { image: '/images/urbanize-2013.jpg', url: 'https://2013.urbanize.at' },
+  { image: '/images/urbanize-2014.jpg', url: 'https://2014.urbanize.at' },
+  { image: '/images/urbanize-2015.jpg', url: 'https://2015.urbanize.at' },
+  { image: '/images/urbanize-2016.png', url: 'https://2016.urbanize.at' },
+  { image: '/images/urbanize-2017.jpg', url: 'https://2017.urbanize.at' }
 ];
 
-module.exports = () => {
+module.exports = data => {
   const html = `
     <div class="feature">
 
       <div class="feature__image">
-        <img src="/images/urbanize.png"/>
+        <img src="${festivals[festivals.length - 1].image}"/>
       </div>
 
       <div class="feature__text">
@@ -41,8 +41,7 @@ module.exports = () => {
 
     <div class="tiles">
       ${festivals.map(festival => `
-        <div class="tile">
-          <!-- TODO simon: tile types ? here we need generic tiles without padding -->
+        <div class="tile tile--festival">
           <a href="${festival.url}">
             <img src="${festival.image}" />
           </a>
@@ -51,5 +50,5 @@ module.exports = () => {
     </div>
   `;
 
-  return layout(html, { activeSection: 'Festival', title: 'urbanize! Festival' });
+  return layout(data, html, { activeSection: 'Festival', title: 'urbanize! Festival' });
 };

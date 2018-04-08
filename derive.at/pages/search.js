@@ -1,6 +1,6 @@
 const layout = require('./layout.js');
 
-module.exports = () => {
+module.exports = data => {
   const html = `
     <div>
       <h1>Suche</h1>
@@ -44,8 +44,6 @@ module.exports = () => {
             const program = result.program;
 
             html += '<div><a href="/radio/' + program.permalink + '/">' + program.title + '</a></div>';
-          } else {
-            html += '<div>TODO something else not yet handled</div>';
           }
         });
 
@@ -93,5 +91,5 @@ module.exports = () => {
     </script>
   `;
 
-  return layout(html, { title: 'Suche' });
+  return layout(data, html, { title: 'Suche' });
 };

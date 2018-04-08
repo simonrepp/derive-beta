@@ -32,6 +32,19 @@
   }
 }
 
+.tile--festival {
+  padding: 0;
+  transition: box-shadow 0.25s;
+
+  &:hover {
+    box-shadow: 0 0 2.66em rgba($color-shadow, 0.66);
+  }
+
+  img {
+    display: block;
+  }
+}
+
 .tile__magazine {
   background-color: $color-almost-white;
   display: inline-block;

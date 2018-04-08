@@ -143,7 +143,7 @@ exports.validateKeys = (document, specifiedKeys) => {
 
   Object.keys(document).forEach(key => {
     if(!pendingKeys.delete(key)) {
-      throw new ValidationError(`Nicht spezifiertes Feld "${Object.keys(document)}" gefunden - War eventuell ein anderes Feld gemeint und es handelt sich um einen Tippfehler? Die spezifierten Felder sind: ${specifiedKeys.map(key => `"${key}"`).join(', ')}.`);
+      throw new ValidationError(`Nicht spezifiertes Feld "${key}" gefunden - War eventuell ein anderes Feld gemeint und es handelt sich um einen Tippfehler? Die erlaubten Felder sind: ${specifiedKeys.map(key => `"${key}"`).join(', ')}.`);
     }
   });
 
@@ -166,7 +166,6 @@ exports.validateMarkdown = (document, field, options = { process: true }) => {
       try {
         return renderMarkdown(markdown);
       } catch(err) {
-        // TODO: Unclear if this could ever happen - quickly consult md-it documentation ?
         throw new ValidationError(`Das Markdown im Feld "${field}" hat beim konvertieren einen Fehler ausgelöst: ${err}`);
       }
     }

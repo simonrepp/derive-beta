@@ -4,7 +4,7 @@ const authors = require('../widgets/authors.js'),
       reviews = require('../widgets/reviews.js'),
       tags = require('../widgets/tags.js');
 
-module.exports = (book) => {
+module.exports = (data, book) => {
   const html = `
     <div class="feature">
 
@@ -48,5 +48,5 @@ module.exports = (book) => {
     <hr/>
   `;
 
-  return layout(html, { activeSection: 'Bücher', title: book.title });
+  return layout(data, html, { activeSection: 'Bücher', title: book.title });
 };

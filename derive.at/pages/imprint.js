@@ -1,6 +1,6 @@
 const layout = require('./layout.js');
 
-module.exports = () => {
+module.exports = data => {
   const html = `
     <div>
       FOTO
@@ -31,5 +31,5 @@ module.exports = () => {
     </div>
   `;
 
-  return layout(html, { title: 'Kontakt / Impressum' });
+  return layout(data, html, { title: 'Kontakt / Impressum' });
 };

@@ -100,6 +100,16 @@ module.exports = async data => {
     }
   }
 
+  // TODO: Features directory solution for storing images
+  // for(let feature of data.features.values()) {
+  //   if(feature.image) {
+  //     const finalPath = path.join('/feature', feature.number.toString(), `image${path.extname(feature.image.connected)}`);
+  //     feature.image.written = finalPath;
+  //
+  //     concurrentWrites.push( copyResized(feature.image.connected, finalPath) );
+  //   }
+  // }
+
   for(let issue of data.issues.values()) {
     if(issue.cover) {
       const finalPath = path.join('/zeitschrift', issue.number.toString(), `cover${path.extname(issue.cover.connected)}`);
@@ -109,33 +119,30 @@ module.exports = async data => {
     }
   }
 
-  // TODO: So far not yet clear how this ties in with the derive.at page
-  //       Weigh off usage of this vs. special .plain files
-  //       (but prefer pages when possible because they are generic!)
   // TODO: Also consider urls - maybe have this be unprefixed (no seiten/)
   //       but directly - dynamically - in root scope, the allowed permalinks
   //       are then enforced by a WHITELIST written by me, enforced on crossvalidate
-  // for(let page of data.pages.values()) {
-  //   if(page.urbanize === null && page.text) {
-  //     let written = page.text.connected;
-  //
-  //     for(let [originalFilePath, replacedFilePath] of page.text.downloads) {
-  //       const finalPath = path.join('/seiten', page.permalink, replacedFilePath);
-  //       written = written.replace(replacedFilePath, finalPath);
+  for(let page of data.pages.values()) {
+    if(page.urbanize === null && page.text) {
+      let written = page.text.connected;
 
-  //       concurrentWrites.push( copy(originalFilePath, finalPath) );
-  //     }
-  //
-  //     for(let [originalFilePath, replacedFilePath] of page.text.embeds) {
-  //       const finalPath = path.join('/seiten', page.permalink, replacedFilePath);
-  //       written = written.replace(replacedFilePath, finalPath);
+      for(let [originalFilePath, replacedFilePath] of page.text.downloads) {
+        const finalPath = path.join('/seiten', page.permalink, replacedFilePath);
+        written = written.replace(replacedFilePath, finalPath);
 
-  //       concurrentWrites.push( copyResized(originalFilePath, finalPath) );
-  //     }
-  //
-  //     page.text.written = written;
-  //   }
-  // }
+        concurrentWrites.push( copy(originalFilePath, finalPath) );
+      }
+
+      for(let [originalFilePath, replacedFilePath] of page.text.embeds) {
+        const finalPath = path.join('/seiten', page.permalink, replacedFilePath);
+        written = written.replace(replacedFilePath, finalPath);
+
+        concurrentWrites.push( copyResized(originalFilePath, finalPath) );
+      }
+
+      page.text.written = written;
+    }
+  }
 
   for(let program of data.programs.values()) {
     if(program.image) {

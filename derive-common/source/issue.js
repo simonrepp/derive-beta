@@ -13,14 +13,14 @@ const { loadPlain, statFile } = require('../util.js'),
 const specifiedKeys = [
   'Beschreibung',
   'Cover',
-  'Datum',
+  'Erscheinungsdatum',
+  'Jahr',
   'Kooperation',
+  'Link zum Shop',
   'Nummer',
-  'Partner',
   'Quartal',
   'Rubrik',
   'Schwerpunkte',
-  'Link zum Shop',
   'Tags',
   'Titel',
   'Vergriffen',
@@ -66,17 +66,17 @@ module.exports = async (data, plainPath) => {
     try {
       issue.number = validateInteger(document, 'Nummer', { required: true });
       issue.title = validateString(document, 'Titel', { required: true });
+      issue.year = validateInteger(document, 'Jahr', { required: true });
+      issue.quarter = validateInteger(document, 'Quartal', { required: true });
       issue.cover = validatePath(document, 'Cover', { required: true });
 
       validateKeys(document, specifiedKeys);
 
       issue.shopLink = validateString(document, 'Link zum Shop');
-      issue.quarter = validateInteger(document, 'Quartal');
       issue.cooperation = validateString(document, 'Kooperation');
-      issue.partners = { sourced: validateArray(document, 'Partner') };
       issue.features = validateArray(document, 'Schwerpunkte');
       issue.outOfPrint = validateBoolean(document, 'Vergriffen');
-      issue.date = validateDate(document, 'Datum');
+      issue.publicationDate = validateDate(document, 'Erscheinungsdatum');
       issue.tags = { sourced: validateArray(document, 'Tags') };
       issue.publish = validateBoolean(document, 'Veröffentlichen'); // TODO: Purpose of this? If "to test out things" we can maybe remove it because we now have staging, except long time process
       issue.description = validateMarkdown(document, 'Beschreibung');
@@ -116,9 +116,6 @@ module.exports = async (data, plainPath) => {
         throw err;
       }
     }
-
-    // TODO: Maybe have this already in the file itself (maybe this should supersede date, if that is equivalent with quarter/year anway, or we just want a custom "3 / 2016" thing that is *not required*)
-    issue.year = issue.date.getFullYear();
 
     data.cache.set(plainPath, { issue: issue, stats: stats });
     data.issues.set(plainPath, issue);

@@ -4,6 +4,7 @@ const { globFiles } = require('./util.js'),
       sourceArticle = require('./source/article.js'),
       sourceBook = require('./source/book.js'),
       sourceEvent = require('./source/event.js'),
+      sourceFeature = require('./source/feature.js'),
       sourceIssue = require('./source/issue.js'),
       sourcePage = require('./source/page.js'),
       sourcePlayer = require('./source/player.js'),
@@ -47,6 +48,10 @@ module.exports = async data => {
       } else if(filePath.match(/^Bücher\//)) {
 
         await sourceBook(data, filePath);
+
+      } else if(filePath.match(/^Features\//)) {
+
+        await sourceFeature(data, filePath);
 
       } else if(filePath.match(/^Radiosendungen\//)) {
 

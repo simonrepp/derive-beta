@@ -13,9 +13,9 @@ module.exports = async data => {
     'autoren',
     'bücher',
     'festival',
-    'kiosk',
     'radio',
     'seite-nicht-gefunden',
+    'seiten',
     'suche',
     'tags',
     'texte',
@@ -35,6 +35,7 @@ module.exports = async data => {
   data.booksPaginated.forEach(pagination => midDirectories.add(`bücher/${pagination.label}/`));
   data.events.forEach(event => midDirectories.add(`veranstaltungen/${event.permalink}`));
   data.issues.forEach(issue => midDirectories.add(`zeitschrift/${issue.number}`));
+  data.pages.forEach(page => midDirectories.add(`seiten/${page.permalink}`));
   data.programs.forEach(program => midDirectories.add(`radio/${program.permalink}`));
   data.programsPaginated.forEach(pagination => midDirectories.add(`radio/${pagination.label}/`));
   data.publishers.forEach(publisher => midDirectories.add(`verlage/${publisher.permalink}`));

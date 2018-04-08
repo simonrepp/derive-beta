@@ -3,7 +3,7 @@ const authors = require('../widgets/authors.js'),
       share = require('../widgets/share.js'),
       tags = require('../widgets/tags.js');
 
-module.exports = (article) => {
+module.exports = (data, article) => {
   const html = `
     <div class="article-single">
 
@@ -28,5 +28,5 @@ module.exports = (article) => {
     <hr/>
   `;
 
-  return layout(html, { activeSection: 'Texte', title: article.title });
+  return layout(data, html, { activeSection: 'Texte', title: article.title });
 };

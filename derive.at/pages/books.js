@@ -1,12 +1,11 @@
 const authors = require('../widgets/authors.js'),
       bookTile = require('../widgets/book-tile.js'),
       layout = require('./layout.js'),
-      { random } = require('../util.js'),
       reviews = require('../widgets/reviews.js'),
       share = require('../widgets/share.js');
 
 module.exports = (data, pagination) => {
-  const featured = random(pagination.books);
+  const { books, featured } = pagination;
 
   const html = `
     <div class="feature">
@@ -45,9 +44,9 @@ module.exports = (data, pagination) => {
     </div>
 
     <div class="tiles">
-      ${pagination.books.map(bookTile).join('')}
+      ${books.map(bookTile).join('')}
     </div>
   `;
 
-  return layout(html, { activeSection: 'Bücher', title: 'Bücher' });
+  return layout(data, html, { activeSection: 'Bücher', title: 'Bücher' });
 };

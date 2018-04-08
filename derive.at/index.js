@@ -114,7 +114,6 @@ const indexIssues = data => {
                      issue.features.join(' ')].join(' ');
     const regular = [issue.cooperation || '',
                      issue.description ? striptags(issue.description) : '',
-                     issue.partners.connected.map(partner => partner.name).join(' '), // TODO: Is this field really used enough to keep it?
                      issue.tags.connected.map(tag => tag.name).join(' ')].join(' ');
 
     return {

@@ -1,39 +1,27 @@
 const layout = require('./layout.js');
 
-module.exports = () => {
+module.exports = data => {
   const html = `
-    <div class="feature-large">
-      <img src=""/>
+    ${Array.from(data.features.values()).map(feature => `
+      <div class="feature-large">
+        ${feature.image ? `
+          <img src="${feature.image.written}"/>
+        `:''}
 
-      <div>
-        ABOGESCHENKSBUCH
+        <div>
+          ${feature.header ? feature.header : ''}
 
-        <h1>
-          <a href="#">
-            Title
-          </a>
-        </h1>
+          <h1>
+            <a href="${feature.url}">
+              ${feature.title}
+            </a>
+          </h1>
 
-        Text
-      </div>      IMAGE LEFT
-    </div>
-
-    <div class="feature-large">
-      <img src=""/>
-
-      <div>
-        ABOGESCHENKSBUCH
-
-        <h1>
-          <a href="#">
-            Title
-          </a>
-        </h1>
-
-        Text
-      </div>      IMAGE LEFT
-    </div>
+          ${feature.text ? feature.text : ''}
+        </div>
+      </div>
+    `).join('')}
   `;
 
-  return layout(html);
+  return layout(data, html);
 };

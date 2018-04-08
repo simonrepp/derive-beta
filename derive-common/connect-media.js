@@ -211,6 +211,24 @@ module.exports = data => {
     }
   });
 
+  data.features.forEach(feature => {
+    if(feature.image) {
+      if(connectMedia(data, feature.image.sourced)) {
+        feature.image.connected = feature.image.sourced;
+      } else {
+        data.warnings.push({
+          description: `Bis zur Lösung des Problems scheint das Bild nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${feature.sourceFile}`,
+          detail: `Das Feature "${feature.title}" referenziert im Dateifeld "Bild" die Datei "${feature.image.sourced}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`,
+          files: [{ path: feature.sourceFile }],
+          header: 'Problem gefunden beim prüfen der Verlinkung zu einem Bild'
+        });
+
+        feature.image.connected = null;
+        data.features.delete(feature.sourceFile);
+      }
+    }
+  });
+
   data.issues.forEach(issue => {
     if(issue.cover) {
       if(connectMedia(data, issue.cover.sourced)) {

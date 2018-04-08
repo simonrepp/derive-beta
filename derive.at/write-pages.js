@@ -10,7 +10,7 @@ const articlePage = require('./pages/article.js'),
       festivalPage = require('./pages/festival.js'),
       imprintPage = require('./pages/imprint.js'),
       indexPage = require('./pages/index.js'),
-      kioskPage = require('./pages/kiosk.js'),
+      issuePage = require('./pages/issue.js'),
       issuesPage = require('./pages/issues.js'),
       notFoundPage = require('./pages/404.js'),
       publisherPage = require('./pages/publisher.js'),
@@ -24,14 +24,13 @@ module.exports = async data => {
     writeFile(data.buildDir, 'texte/index.html', articlesPage(data, data.articlesPaginated[0])),
     writeFile(data.buildDir, 'autoren/index.html', authorsPage(data)),
     writeFile(data.buildDir, 'bücher/index.html', booksPage(data, data.booksPaginated[0])),
-    writeFile(data.buildDir, 'festival/index.html', festivalPage()),
-    writeFile(data.buildDir, 'imprint.html', imprintPage()),
-    writeFile(data.buildDir, 'index.html', indexPage()),
-    writeFile(data.buildDir, 'kiosk/index.html', kioskPage()),
+    writeFile(data.buildDir, 'festival/index.html', festivalPage(data)),
+    writeFile(data.buildDir, 'imprint.html', imprintPage(data)),
+    writeFile(data.buildDir, 'index.html', indexPage(data)),
     writeFile(data.buildDir, 'zeitschrift/index.html', issuesPage(data)),
-    writeFile(data.buildDir, 'seite-nicht-gefunden/index.html', notFoundPage()),
+    writeFile(data.buildDir, 'seite-nicht-gefunden/index.html', notFoundPage(data)),
     writeFile(data.buildDir, 'radio/index.html', programsPage(data, data.programsPaginated[0])),
-    writeFile(data.buildDir, 'suche/index.html', searchPage())
+    writeFile(data.buildDir, 'suche/index.html', searchPage(data))
   ]);
 
   for(let pagination of data.articlesPaginated) {
@@ -39,11 +38,11 @@ module.exports = async data => {
   }
 
   for(let article of data.visibleArticles) {
-    await writeFile(data.buildDir, `texte/${article.permalink}/index.html`, articlePage(article));
+    await writeFile(data.buildDir, `texte/${article.permalink}/index.html`, articlePage(data, article));
   }
 
   for(let article of data.visibleArticles) {
-    await writeFile(data.buildDir, `texte/${article.permalink}/druckversion/index.html`, articlePrintPage(article));
+    await writeFile(data.buildDir, `texte/${article.permalink}/druckversion/index.html`, articlePrintPage(data, article));
   }
 
   for(let letter of letters) {
@@ -51,7 +50,7 @@ module.exports = async data => {
   }
 
   for(let author of data.authors) {
-    await writeFile(data.buildDir, `autoren/${author.permalink}/index.html`, authorPage(author));
+    await writeFile(data.buildDir, `autoren/${author.permalink}/index.html`, authorPage(data, author));
   }
 
   for(let pagination of data.booksPaginated) {
@@ -59,15 +58,19 @@ module.exports = async data => {
   }
 
   for(let author of data.bookAuthors) {
-    await writeFile(data.buildDir, `autoren/${author.permalink}/index.html`, authorPage(author));
+    await writeFile(data.buildDir, `autoren/${author.permalink}/index.html`, authorPage(data, author));
+  }
+
+  for(let issue of data.issues.values()) {
+    await writeFile(data.buildDir, `zeitschrift/${issue.number}/index.html`, issuePage(data, issue));
   }
 
   for(let publisher of data.publishers) {
-    await writeFile(data.buildDir, `verlage/${publisher.permalink}/index.html`, publisherPage(publisher));
+    await writeFile(data.buildDir, `verlage/${publisher.permalink}/index.html`, publisherPage(data, publisher));
   }
 
   for(let book of data.books.values()) {
-    await writeFile(data.buildDir, `bücher/${book.permalink}/index.html`, bookPage(book));
+    await writeFile(data.buildDir, `bücher/${book.permalink}/index.html`, bookPage(data, book));
   }
 
   for(let pagination of data.programsPaginated) {
@@ -75,10 +78,10 @@ module.exports = async data => {
   }
 
   for(let program of data.programs.values()) {
-    await writeFile(data.buildDir, `radio/${program.permalink}/index.html`, programPage(program));
+    await writeFile(data.buildDir, `radio/${program.permalink}/index.html`, programPage(data, program));
   }
 
   for(let tag of data.tags.values()) {
-    await writeFile(data.buildDir, `tags/${tag.permalink}/index.html`, tagPage(tag));
+    await writeFile(data.buildDir, `tags/${tag.permalink}/index.html`, tagPage(data, tag));
   }
 };

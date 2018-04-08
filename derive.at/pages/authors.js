@@ -52,7 +52,7 @@ exports.authorsPage = (data, letter) => {
     </div>
   `;
 
-  return layout(html, { activeSection: 'Autoren', title: 'Autoren' });
+  return layout(data, html, { activeSection: 'Autoren', title: 'Autoren' });
 };
 
 exports.letters = letters;

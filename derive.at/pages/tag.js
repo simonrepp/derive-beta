@@ -4,7 +4,7 @@ const layout = require('./layout.js'),
       eventTile = require('../widgets/event-tile.js'),
       programTile = require('../widgets/program-tile.js');
 
-module.exports = tag => {
+module.exports = (data, tag) => {
   const html = `
     <div>
       Alle Inhalt zum Tag "${tag.name}"
@@ -44,5 +44,5 @@ module.exports = tag => {
     </div>
   `;
 
-  return layout(html, { title: tag.name });
+  return layout(data, html, { title: tag.name });
 };

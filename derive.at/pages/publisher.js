@@ -4,7 +4,7 @@ const bookTile = require('../widgets/book-tile.js'),
 
 // TODO: Centered reduced simple layout for Verlag and Autor Page
 
-module.exports = publisher => {
+module.exports = (data, publisher) => {
   const html = `
     <div>
       <h1>${publisher.name}</h1>
@@ -30,5 +30,5 @@ module.exports = publisher => {
     `:''}
   `;
 
-  return layout(html, { activeSection: 'Bücher', title: publisher.name });
+  return layout(data, html, { activeSection: 'Bücher', title: publisher.name });
 };

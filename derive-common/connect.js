@@ -54,7 +54,6 @@ const clearBackReferences = data => {
     player.publishedBooks = [];
     player.hostedEvents = [];
     player.eventParticipations = [];
-    player.partnerships = [];
     player.programs = [];
   });
 };
@@ -93,7 +92,6 @@ module.exports = data => {
   connectPlayers(data, 'books', 'publishers', 'publishedBooks');
   connectPlayers(data, 'events', 'hosts', 'hostedEvents');
   connectPlayers(data, 'events', 'participants', 'eventParticipations');
-  connectPlayers(data, 'issues', 'partners', 'partnerships');
   connectPlayers(data, 'programs', 'editors', 'programs');
 
   connectIssuesWithArticles(data);

@@ -1,6 +1,6 @@
 const printLayout = require('./layout-print.js');
 
-module.exports = (article) => {
+module.exports = (data, article) => {
   const html = `
     ${article.authors.connected.map(author => author.name).join(', ')}
 
@@ -10,5 +10,5 @@ module.exports = (article) => {
     ${article.text}
 `;
 
-  return printLayout(html, { activeSection: 'Texte', title: article.title });
+  return printLayout(data, html, { activeSection: 'Texte', title: article.title });
 };

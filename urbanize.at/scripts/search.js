@@ -1,7 +1,3 @@
-// // TODO: Automatically focus search field on visible searchwidget
-// // TODO: Only register handler for links that have a widget
-// // TODO: Repair sidebar js after turbolinks integration happened now
-
 // document.addEventListener('click', function(event) {
 //   console.log('any click :D');
 // });

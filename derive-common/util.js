@@ -31,6 +31,8 @@ exports.loadPlain = (directory, plainPath) => new Promise((resolve, reject) =>
   })
 );
 
+exports.random = array => array[Math.floor(Math.random() * array.length)];
+
 exports.renderMarkdown = markdown => {
   // TODO: Custom markdown processing ? (footnotes?)
   return markdownIt.render(markdown);

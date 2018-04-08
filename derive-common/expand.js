@@ -1,5 +1,7 @@
 const slug = require('speakingurl');
 
+const { random } = require('./util.js');
+
 const addToCategories = (data, collection) => {
   data[collection].forEach(document => {
     document.categories.connected = [];
@@ -78,6 +80,12 @@ const paginateArticles = data => {
       label: `${index + 1}-${index + 100 >= articlesSorted.length ? articlesSorted.length : index + 100}`
     };
 
+    if(index === 0) {
+      pagination.featured = pagination.articles[0];
+    } else {
+      pagination.featured = random(pagination.articles);
+    }
+
     data.articlesPaginated.push(pagination);
   }
 };
@@ -92,6 +100,12 @@ const paginateBooks = data => {
       label: `${index + 1}-${index + 100 >= booksSorted.length ? booksSorted.length : index + 100}`
     };
 
+    if(index === 0) {
+      pagination.featured = pagination.books[0];
+    } else {
+      pagination.featured = random(pagination.books);
+    }
+
     data.booksPaginated.push(pagination);
   }
 };
@@ -100,7 +114,7 @@ const paginatePrograms = data => {
   data.programsPaginated = [];
   const programsSorted = Array.from(data.programs.values()).sort((a, b) => b.firstBroadcast - a.firstBroadcast);
 
-  programsSorted.forEach(program => {
+  programsSorted.forEach((program, index) => {
     const label = program.firstBroadcast.getFullYear().toString();
     const existingPagination = data.programsPaginated.find(pagination => pagination.label === label);
 
@@ -111,6 +125,12 @@ const paginatePrograms = data => {
         label: label,
         programs: [program]
       };
+
+      if(index === 0) {
+        pagination.featured = pagination.programs[0];
+      } else {
+        pagination.featured = random(pagination.programs);
+      }
 
       data.programsPaginated.push(pagination);
     }
@@ -153,6 +173,8 @@ module.exports = data => {
   data.visibleArticles = Array.from(data.articles.values()).filter(article =>
     article.publish && article.visible
   );
+
+  data.issuesDescending = Array.from(data.issues.values()).sort((a, b) => b.number - a.number);
 
   paginateArticles(data);
   paginateBooks(data);

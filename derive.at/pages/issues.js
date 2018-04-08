@@ -5,11 +5,10 @@ const layout = require('./layout.js'),
       tags = require('../widgets/tags.js');
 
 module.exports = data => {
-  const sortedDescending = Array.from(data.issues.values()).sort((a, b) => b.number - a.number);
-  const latest = sortedDescending[0];
+  const latest = data.issuesDescending[0];
 
   const years = [];
-  sortedDescending.forEach(issue => {
+  data.issuesDescending.forEach(issue => {
     const year = issue.year;
 
     if(years[year]) {
@@ -20,7 +19,7 @@ module.exports = data => {
   });
 
   const latestAuthors = new Set();
-  sortedDescending[3].sections.forEach(section =>
+  latest.sections.forEach(section =>
     section.articles.forEach(article =>
       article.connected.authors.connected.forEach(author => latestAuthors.add(author))
     )
@@ -91,5 +90,5 @@ module.exports = data => {
     </div>
   `;
 
-  return layout(html, { activeSection: 'Zeitschrift', title: 'Zeitschrift' });
+  return layout(data, html, { activeSection: 'Zeitschrift', title: 'Zeitschrift' });
 };
