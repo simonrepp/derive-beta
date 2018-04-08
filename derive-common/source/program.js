@@ -1,13 +1,13 @@
 const { loadPlain, statFile } = require('../util.js'),
       { PlainDataParseError } = require('../../plaindata/plaindata.js'),
-      { validateArray,
-        validateDate,
-        validateKeys,
-        validateMarkdown,
-        validatePath,
-        validatePermalink,
-        validateString,
-        ValidationError } = require('../validate.js');
+      validateArray = require('../validate/array.js'),
+      validateDate = require('../validate/date.js'),
+      validateKeys = require('../validate/keys.js'),
+      validateMarkdown = require('../validate/markdown.js'),
+      validatePath = require('../validate/path.js'),
+      validatePermalink = require('../validate/permalink.js'),
+      validateString = require('../validate/string.js'),
+      ValidationError = require('../validate/error.js');
 
 const specifiedKeys = [
   'Abstract',

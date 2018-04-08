@@ -1,15 +1,14 @@
-const { loadPlain, statFile } = require('../util.js'),
+const { loadPlain, statFile, URBANIZE_ENUM } = require('../util.js'),
       { PlainDataParseError } = require('../../plaindata/plaindata.js'),
-      { URBANIZE_ENUM,
-        validateArray,
-        validateDate,
-        validateKeys,
-        validateEnum,
-        validateMarkdown,
-        validatePath,
-        validatePermalink,
-        validateString,
-        ValidationError } = require('../validate.js');
+      validateArray = require('../validate/array.js'),
+      validateDate = require('../validate/date.js'),
+      validateKeys = require('../validate/keys.js'),
+      validateEnum = require('../validate/enum.js'),
+      validateMarkdown = require('../validate/markdown.js'),
+      validatePath = require('../validate/path.js'),
+      validatePermalink = require('../validate/permalink.js'),
+      validateString = require('../validate/string.js'),
+      ValidationError = require('../validate/error.js');
 
 const specifiedKeys = [
   'Abstract',

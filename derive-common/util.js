@@ -5,6 +5,18 @@ const fs = require('fs'),
 
 const plaindata = require('../plaindata/plaindata.js');
 
+exports.URBANIZE_ENUM = [
+  '2012',
+  '2013',
+  '2014',
+  '2015',
+  'Hamburg 2016',
+  'Wien 2016',
+  '2017',
+  'Berlin 2018',
+  'Wien 2018'
+];
+
 exports.createDir = (base, directory) => new Promise((resolve, reject) =>
   fs.mkdir(path.join(base, directory), err => err ? reject(err) : resolve())
 );
