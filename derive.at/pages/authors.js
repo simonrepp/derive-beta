@@ -28,6 +28,8 @@ exports.authorsPage = (data, letter) => {
   }
 
   const html = `
+    <br/>
+    
     <div class="pagination">
       ${letters.map(iteratedLetter => `
         <a ${iteratedLetter === letter ? 'class="pagination--active"' : ''}

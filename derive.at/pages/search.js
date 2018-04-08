@@ -3,7 +3,39 @@ const layout = require('./layout.js');
 module.exports = data => {
   const html = `
     <div>
-      <h1>Suche</h1>
+      <div class="pagination TODO-dontusepaginationbutgenericthing">
+        <form action="/suche/" class="sidebar__searchform" method="GET">
+          <span class="icon-search"></span>
+
+          <input name="bereiche" type="hidden" value="" />
+
+          <input name="begriff" placeholder="Ihr Suchbegriff" type="search" />
+
+          <div>
+            Zeitschrift <span class="icon-checkbox-checked" data-include-section="zeitschrift"/>
+          </div>
+
+          <div>
+            Autoren <span class="icon-checkbox-checked" data-include-section="autoren"/>
+          </div>
+
+          <div>
+            Bücher <span class="icon-checkbox-checked" data-include-section="bücher"/>
+          </div>
+
+          <div>
+            Radio <span class="icon-checkbox-checked" data-include-section="radio"/>
+          </div>
+
+          <div>
+            Texte <span class="icon-checkbox-checked" data-include-section="texte"/>
+          </div>
+
+          <button>
+            Suche starten
+          </button>
+        </form>
+      </div>
 
       <div class="results tiles">
         Suche läuft ...
@@ -12,8 +44,11 @@ module.exports = data => {
 
     <script type="text/javascript">
 
-      const showResults = function(results) {
+      const showResults = function(query, results) {
         let html = '';
+
+        html += 'Suchergebnisse für:<br/>';
+        html += '<h2>' + query + '</h2>';
 
         results.forEach(function(result) {
           if(result.hasOwnProperty('article')) {
@@ -76,7 +111,7 @@ module.exports = data => {
             if(request.status == 200) {
               const results = JSON.parse(request.responseText);
 
-              showResults(results);
+              showResults('todo regex query from params', results);
             } else if(request.status == 400) {
               showError('Fehlercode 400 - Falsche Parameter in der Anfrage an die API');
             } else {

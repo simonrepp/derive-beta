@@ -1,7 +1,5 @@
 const fsExtra = require('fs-extra');
 
-// TODO: replace fs-extra with fs where possible!
-
 const { createDir } = require('../derive-common/util.js'),
       { letters } = require('./pages/authors.js');
 

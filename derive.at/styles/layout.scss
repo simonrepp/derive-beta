@@ -5,18 +5,14 @@
 }
 
 .layout__header {
-  pointer-events: none;
-  position: absolute;
+  position: sticky;
+  top: 0;
   width: 100%;
-  z-index: 2;
+  z-index: 1;
 }
 
 .layout__offset {
-  padding: 260px 1.33em 0 1.33em;
-}
-
-.layout__overlap {
-  max-width: 1312px !important;
+  padding: 0 1.33em;
 }
 
 .layout__restraint {

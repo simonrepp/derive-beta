@@ -2,10 +2,19 @@
   background-color: $color-almost-white;
   margin-bottom: 1.5em;
   padding: 1em;
+  position: sticky;
   text-align: center;
+  top: 100px;
+  transition: background-color 0.5s;
+  z-index: 1;
 }
 
 .pagination--active {
   font-family: 'FunctionPro-Medium';
   font-weight: 400;
+}
+
+.pagination--docked {
+  background-color: $color-beige;
+  padding: 0.5em;
 }

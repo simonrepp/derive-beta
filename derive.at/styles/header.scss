@@ -3,8 +3,52 @@
 .header {
   background-color: $color-beige;
   height: 205px;
-  pointer-events: all;
   transition: height 0.5s;
+
+  @media (max-width: 980px) {
+    height: 100px;
+
+    .header__elements {
+      transform: scale(0.7);
+    }
+
+    .header__logo-link {
+      margin-bottom: -1.5em;
+    }
+
+    .header__logo-stadtforschung {
+      margin-top: -1.5em;
+      opacity: 0;
+    }
+  }
+}
+
+.header.compact {
+  height: 100px;
+
+  .header__elements {
+    transform: scale(0.7);
+  }
+
+  .header__logo-link {
+    margin-bottom: -1.5em;
+  }
+
+  .header__logo-stadtforschung {
+    opacity: 0;
+  }
+}
+
+.header__compact-location {
+  max-width: 100%;
+  overflow-x: hidden;
+  padding: 0.5em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  @media (min-width: 981px) {
+    display: none;
+  }
 }
 
 .header__elements {
@@ -20,29 +64,9 @@
   transition: transform 0.5s;
 }
 
-.header.compact {
-  height: 145px;
-
-  .header__elements {
-    transform: scale(0.7);
-  }
-}
-
-.header__compact-location {
-  font-size: 0.7em;
-
-  @media (min-width: 981px) {
-    display: none;
-  }
-}
-
 .header__link {
   outline: none;
   text-decoration: none;
-
-  @media (max-width: 980px) {
-    display: none;
-  }
 }
 
 .header__link--active {
@@ -56,9 +80,22 @@
 .header__links {
   display: flex;
   justify-content: center;
+
+  @media (max-width: 980px) {
+    display: none;
+  }
 }
 
 .header__logo {
+  display: block;
   height: auto;
   width: 7.5em;
+}
+
+.header__logo-link {
+  transition: margin 0.5s;
+}
+
+.header__logo-stadtforschung {
+  transition: opacity 0.5s;
 }

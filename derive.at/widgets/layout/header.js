@@ -1,3 +1,5 @@
+const logo = require('./logo.js');
+
 const sections = [
   { name: 'Zeitschrift', route: '/zeitschrift/' },
   { name: 'Texte', route: '/texte/' },
@@ -11,8 +13,8 @@ const sections = [
 module.exports = options => `
   <header class="header">
     <div class="header__elements">
-      <a href="/">
-        <img class="header__logo" src="/images/logo.svg"/>
+      <a class="header__logo-link" href="/">
+        ${logo}
       </a>
 
       <nav class="header__links">
@@ -36,4 +38,3 @@ module.exports = options => `
     </div>
   </header>
 `;
-

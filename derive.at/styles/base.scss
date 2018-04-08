@@ -3,15 +3,10 @@
 body {
   background-color: $color-beige;
   color: $color-text;
-  margin: 0;
-  overflow: hidden;
-}
-
-body,
-button,
-input {
   font-family: 'FunctionPro-Book';
   font-size: 18px;
+  margin: 0;
+  overflow: hidden;
 }
 
 a {

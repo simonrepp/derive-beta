@@ -11,6 +11,10 @@
   padding: 2em;
   width: calc((100% - 2.66em) / 3);
 
+  &:hover {
+    box-shadow: 0 0 2.66em rgba($color-shadow, 0.66);
+  }
+
   &:nth-child(n+4) {
     margin-top: 1.33em;
   }

@@ -1,5 +1,5 @@
-const footer = require('../widgets/footer.js'),
-      header = require('../widgets/header.js'),
+const footer = require('../widgets/layout/footer.js'),
+      header = require('../widgets/layout/header.js'),
       sidebar = require('../widgets/sidebar/sidebar.js');
 
 const DEFAULT_TITLE = 'dérive | Zeitschrift für Stadtforschung';
@@ -31,18 +31,20 @@ module.exports = (data, content, options = {}) => `
     <body>
       <div class="layout__split">
         <div class="layout__content">
-          <div class="layout__header">
-            <div class="layout__overlap layout__restraint">
-              ${header(options)}
-            </div>
-          </div>
-
           <div class="layout__scroll">
+
+            <div class="layout__header">
+              <div class="layout__restraint">
+                ${header(options)}
+              </div>
+            </div>
+
             <div class="layout__offset layout__restraint">
               ${content}
 
               ${footer()}
             </div>
+
           </div>
         </div>
 

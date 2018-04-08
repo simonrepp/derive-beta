@@ -1,5 +1,5 @@
-const footer = require('../widgets/footer.js'),
-      header = require('../widgets/header.js'),
+const footer = require('../widgets/layout/footer.js'),
+      header = require('../widgets/layout/header.js'),
       sidebar = require('../widgets/sidebar/sidebar.js');
 
 const DEFAULT_TITLE = 'dérive | Zeitschrift für Stadtforschung';

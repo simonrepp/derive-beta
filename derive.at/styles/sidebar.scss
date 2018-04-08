@@ -3,6 +3,10 @@
   box-sizing: border-box;
   height: 100vh;
   padding-top: 2em;
+
+  @media (max-height: 450px) { font-size: .9em; }
+  @media (max-height: 400px) { font-size: .8em; }
+  @media (max-height: 350px) { font-size: .7em; }
 }
 
 .sidebar__item {
