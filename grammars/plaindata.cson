@@ -20,8 +20,19 @@ patterns: [
     ]
   }
   {
+    # Alternative string
+    'begin': '^(--)\\s*(\\S|\\S.*\\S)\\s*$'
+    'beginCaptures':
+      '1': 'name': 'constant.character.entity.plain'
+      '2': 'name': 'punctuation.definition.variable.plain'
+    'end': '^(--)\\s*(\\S|\\S.*\\S)\\s*$'
+    'endCaptures':
+      '1': 'name': 'constant.character.entity.plain'
+      '2': 'name': 'string.plain'
+  }
+  {
     # Comment line
-    'match': '^(>)\\s*(\\S|\\S.*\\S)?\\s*$'
+    'match': '^\\s*(>)\\s*(\\S|\\S.*\\S)?\\s*$'
     'captures':
       '1': 'name': 'TODO.operator.comment.plain'
       '2': 'name': 'punctuation.definition.comment.plain'
@@ -56,7 +67,7 @@ patterns: [
   }
   {
     # String
-    'match': '^\\s*([^:]+)\\s*(:)\\s*(\\S+|\\S.*\\S)?\\s*$'
+    'match': '^\\s*((?:(?!: ).)+)\\s*(:)\\s*(\\S+|\\S.*\\S)?\\s*$'
     'captures':
       '1': 'name': 'punctuation.definition.variable.plain'
       '2': 'name': 'keyword.operator.assignment.plain'
