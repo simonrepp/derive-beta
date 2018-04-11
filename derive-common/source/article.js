@@ -21,7 +21,7 @@ const specifiedKeys = [
   'Kategorien',
   'Literaturverzeichnis',
   'Permalink',
-  'Sichtbar',
+  'Lesbar',
   'Sprache',
   'Tags',
   'Text',
@@ -83,7 +83,7 @@ module.exports = async (data, plainPath) => {
       article.tags = { sourced: validateArray(document, 'Tags') };
       article.bookReviews = { sourced: validateArray(document, 'Buchbesprechungen') };
       article.publish = validateBoolean(document, 'Veröffentlichen');
-      article.visible = validateBoolean(document, 'Sichtbar');
+      article.readable = validateBoolean(document, 'Lesbar');
       article.urbanize = validateEnum(document, 'Urbanize', URBANIZE_ENUM);
       article.abstract = validateMarkdown(document, 'Abstract');
       article.bibliography = validateMarkdown(document, 'Literaturverzeichnis');

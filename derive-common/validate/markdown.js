@@ -8,7 +8,7 @@ const embeddableMediaExtensions = [
 const htmlMediaRegex = /(src|href)\s*=\s*['"]\s*(?!https?:\/\/|\/\/)(\S(?:(?!src\s*=|href\s*=).)*\.(?:doc|DOC|gif|GIF|jpeg|JPEG|jpg|JPG|pdf|PDF|png|PNG|tif|TIF|tiff|TIFF))\s*['"]/g;
 const markdownMediaRegex = /(!|)\[(?:(?!\[.*\]).)*\]\((?!https?:\/\/|\/\/)(\S(?:(?!\[.*\]).)*\.(?:doc|DOC|gif|GIF|jpeg|JPEG|jpg|JPG|pdf|PDF|png|PNG|tif|TIF|tiff|TIFF))\s*(?:\s+"(?:(?!".*"\)).)*")?\)/g;
 // TODO: Pluggable, modulare regex components to build the md/html rules - also think more in terms of inception matching (no src="" inside src="", no ![]() inside ![]() ..)
-// match(/!\[((?!!\[.*\]\(.*\)).)*\]\(((?!!\[.*\]\(.*\)).)*\)/g); TODO possibly resuse to improve regexes later, missing ](https?: NEGATIVE LOOKAHEAD THINGY
+// match(/!\[((?!!\[.*\]\(.*\)).)*\]\(((?!!\[.*\]\(.*\)).)*\)/g); (possibly resuse to improve regexes later, missing ](https?: NEGATIVE LOOKAHEAD THINGY)
 
 module.exports = (document, field, options = { media: false }) => {
   if(!document.hasOwnProperty(field)) {
@@ -21,8 +21,8 @@ module.exports = (document, field, options = { media: false }) => {
     return null;
   } else if(typeof markdown === 'string') {
 
-    const downloads = new Map();
-    const embeds = new Map();
+    const downloads = [];
+    const embeds = [];
 
     let downloadNumber = 1;
     let embedNumber = 1;
@@ -33,20 +33,32 @@ module.exports = (document, field, options = { media: false }) => {
 
       if(typeMatch === '!' || typeMatch === 'src') {
         if(embeddableMediaExtensions.includes(fileExtension)) {
-          const replacedPath = `${normalizedPath.replace(' ', '%20')}?embed${embedNumber++}`;
+          const embed = {
+            encodedURI: encodeURI(normalizedPath),
+            normalizedPath: normalizedPath,
+            placeholder: `EMBED_INTERMEDIATE_${embedNumber}`,
+            virtualFilename: `embed-${embedNumber}${fileExtension}`
+          };
 
-          embeds.set(normalizedPath, replacedPath);
+          embeds.push(embed);
+          embedNumber++;
 
-          return fullMatch.replace(urlMatch, replacedPath);
+          return fullMatch.replace(urlMatch, embed.placeholder);
         } else {
           throw new ValidationError(`Das Markdown-Feld "${field}" enthält einen Embed der Datei "${urlMatch}", dessen Dateityp ist aber für Embeds nicht erlaubt.`);
         }
       } else if(typeMatch === '' || typeMatch === 'href') {
-        const replacedPath = `${normalizedPath.replace(' ', '%20')}?download{downloadNumber++}`;
+        const download = {
+          encodedURI: encodeURI(normalizedPath),
+          normalizedPath: normalizedPath,
+          placeholder: `DOWNLOAD_INTERMEDIATE_${downloadNumber}`,
+          virtualFilename: `download-${downloadNumber}${fileExtension}`
+        };
 
-        downloads.set(normalizedPath, replacedPath);
+        downloads.push(download);
+        downloadNumber++;
 
-        return fullMatch.replace(urlMatch, replacedPath);
+        return fullMatch.replace(urlMatch, download.placeholder);
       } else {
         throw('Interner Fehler bei der RegExp-basierten Detektion von referenzierten Mediendateien.');
       }

@@ -24,10 +24,12 @@ module.exports = data => {
         data.urbanize[city].events.push(event);
 
         event.dates.forEach(date => {
-          if(data.urbanize[city].eventsByDate.has(date.date)) {
-            data.urbanize[city].eventsByDate.get(date.date).push(event);
+          const existingDate = data.urbanize[city].eventsByDate.get(date.date.toISOString());
+
+          if(existingDate) {
+            existingDate.push(event);
           } else {
-            data.urbanize[city].eventsByDate.set(date.date, [event]);
+            data.urbanize[city].eventsByDate.set(date.date.toISOString(), [event]);
           }
         });
 

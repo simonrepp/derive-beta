@@ -7,9 +7,7 @@ const addScrollListener = function() {
   const pagination = document.querySelector('.pagination');
   let paginationDocked = false;
 
-  // TODO: Check/set *docked state for scroll and pagination on addScrollListener (because might be in middle of page after turbolink render ?)
-
-  layoutScroll.addEventListener('scroll', function() {
+  const handleScroll = function() {
     if(layoutScroll.scrollTop === 0) {
       if(scrollActive) {
         header.classList.remove('compact');
@@ -33,7 +31,11 @@ const addScrollListener = function() {
         paginationDocked = false;
       }
     }
-  });
+  };
+
+  handleScroll();
+
+  layoutScroll.addEventListener('scroll', handleScroll);
 };
 
 addScrollListener();

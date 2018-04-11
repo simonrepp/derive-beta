@@ -10,9 +10,6 @@ const { globFiles } = require('./util.js'),
       sourcePlayer = require('./source/player.js'),
       sourceProgram = require('./source/program.js');
 
-// TODO: Gradually refactor warnings to simpler format?
-//       Place of occurrence -> Description and consequences -> Solution -> File/Line/Column Shortcut
-
 const forbiddenFilenameCharacters = /[\\?*:|"<>]/;
 
 module.exports = async data => {
@@ -76,8 +73,12 @@ module.exports = async data => {
       }
 
     } else if(!filePath.match(/^\.|^Dokumentation\//)) {
+      const media = {
+        localFilesystemPath: filePath,
+        used: false
+      };
 
-      data.media.set(filePath.normalize(), false); // initially mark as unused
+      data.media.set(filePath.normalize(), media);
 
     }
   }

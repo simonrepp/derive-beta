@@ -2,8 +2,7 @@ const fsExtra = require('fs-extra'),
       path = require('path'),
       sharp = require('sharp');
 
-// TODO: Only write published && visible dirs, pages, media!
-// TODO: Rewrite .tiff images to .png, etc.
+// TODO: Rewrite .tiff images to .png, etc. (correction: batch convert them and then ban them)
 
 module.exports = async (data, preview) => {
 
@@ -26,60 +25,56 @@ module.exports = async (data, preview) => {
 
   const concurrentWrites = [];
 
-  for(let article of data.visibleArticles) {
+  for(let article of data.readableArticles) {
     if(article.image) {
       if(preview) {
-        article.image.written = `${data.rootServerUrl}/${article.image.sourced}`;
+        article.image.written = `${data.rootServerUrl}/${article.image.localFilesystemPath}`;
       } else {
-        article.image.written = path.join('/texte', article.permalink, `bild${path.extname(article.image.sourced)}`);
-        concurrentWrites.push( copyResized(article.image.sourced, article.image.written) );
+        article.image.written = path.join('/texte', article.permalink, `bild${path.extname(article.image.normalizedPath)}`);
+        concurrentWrites.push( copyResized(article.image.localFilesystemPath, article.image.written) );
       }
     }
 
     if(article.text) {
+      let text = article.text.sourced;
+
       if(preview) {
-        let written = article.text.sourced;
-
-        for(let [originalFilePath, replacedFilePath] of article.text.downloads) {
-          const finalPath = `${data.rootServerUrl}/${replacedFilePath}`;
-          written = written.replace(replacedFilePath, finalPath);
+        for(let download of article.text.downloads) {
+          download.written = `${data.rootServerUrl}/${download.localFilesystemPath}`;
+          text = text.replace(download.placeholder, download.written);
         }
 
-        for(let [originalFilePath, replacedFilePath] of article.text.embeds) {
-          const finalPath = `${data.rootServerUrl}/${replacedFilePath}`;
-          written = written.replace(replacedFilePath, finalPath);
+        for(let embed of article.text.embeds) {
+          embed.written = `${data.rootServerUrl}/${embed.localFilesystemPath}`;
+          text = text.replace(embed.placeholder, embed.written);
         }
-
-        article.text.written = written;
       } else {
-        let written = article.text.sourced;
+        for(let download of article.text.downloads) {
+          download.written = path.join('/texte', article.permalink, `text-${download.virtualFilename}`);
+          concurrentWrites.push( copy(download.localFilesystemPath, download.written) );
 
-        for(let [originalFilePath, replacedFilePath] of article.text.downloads) {
-          const finalPath = path.join('/texte', article.permalink, replacedFilePath);
-          written = written.replace(replacedFilePath, finalPath);
-
-          concurrentWrites.push( copy(originalFilePath, finalPath) );
+          text = text.replace(download.placeholder, download.written);
         }
 
-        for(let [originalFilePath, replacedFilePath] of article.text.embeds) {
-          const finalPath = path.join('/texte', article.permalink, replacedFilePath);
-          written = written.replace(replacedFilePath, finalPath);
+        for(let embed of article.text.embeds) {
+          embed.written = path.join('/texte', article.permalink, `text-${embed.virtualFilename}`);
+          concurrentWrites.push( copyResized(embed.localFilesystemPath, embed.written) );
 
-          concurrentWrites.push( copyResized(originalFilePath, finalPath) );
+          text = text.replace(embed.placeholder, embed.written);
         }
-
-        article.text.written = written;
       }
+
+      article.text.written = text;
     }
   }
 
   for(let book of data.books.values()) {
     if(book.cover) {
       if(preview) {
-        book.cover.written = `${data.rootServerUrl}/${book.cover.sourced}`;
+        book.cover.written = `${data.rootServerUrl}/${book.cover.localFilesystemPath}`;
       } else {
-        book.cover.written = path.join('/bücher', book.permalink, `cover${path.extname(book.cover.sourced)}`);
-        concurrentWrites.push( copyResized(book.cover.sourced, book.cover.written) );
+        book.cover.written = path.join('/bücher', book.permalink, `cover${path.extname(book.cover.normalizedPath)}`);
+        concurrentWrites.push( copyResized(book.cover.localFilesystemPath, book.cover.written) );
       }
     }
   }
@@ -87,47 +82,43 @@ module.exports = async (data, preview) => {
   for(let event of data.events.values()) {
     if(event.image) {
       if(preview) {
-        event.image.written = `${data.rootServerUrl}/${event.image.sourced}`;
+        event.image.written = `${data.rootServerUrl}/${event.image.localFilesystemPath}`;
       } else {
-        event.image.written = path.join('/veranstaltungen', event.permalink, `bild${path.extname(event.image.sourced)}`);
-        concurrentWrites.push( copyResized(event.image.sourced, event.image.written) );
+        event.image.written = path.join('/veranstaltungen', event.permalink, `bild${path.extname(event.image.normalizedPath)}`);
+        concurrentWrites.push( copyResized(event.image.localFilesystemPath, event.image.written) );
       }
     }
 
     if(event.text) {
+      let text = event.text.sourced;
+
       if(preview) {
-        let written = event.text.sourced;
-
-        for(let [originalFilePath, replacedFilePath] of event.text.downloads) {
-          const finalPath = `${data.rootServerUrl}/${replacedFilePath}`;
-          written = written.replace(replacedFilePath, finalPath);
+        for(let download of event.text.downloads) {
+          download.written = `${data.rootServerUrl}/${download.localFilesystemPath}`;
+          text = text.replace(download.placeholder, download.written);
         }
 
-        for(let [originalFilePath, replacedFilePath] of event.text.embeds) {
-          const finalPath = `${data.rootServerUrl}/${replacedFilePath}`;
-          written = written.replace(replacedFilePath, finalPath);
+        for(let embed of event.text.embeds) {
+          embed.written = `${data.rootServerUrl}/${embed.localFilesystemPath}`;
+          text = text.replace(embed.placeholder, embed.written);
         }
-
-        event.text.written = written;
       } else {
-        let written = event.text.sourced;
+        for(let download of event.text.downloads) {
+          download.written = path.join('/veranstaltungen', event.permalink, `text-${download.virtualFilename}`);
+          concurrentWrites.push( copy(download.localFilesystemPath, download.written) );
 
-        for(let [originalFilePath, replacedFilePath] of event.text.downloads) {
-          const finalPath = path.join('/veranstaltungen', event.permalink, replacedFilePath);
-          written = written.replace(replacedFilePath, finalPath);
-
-          concurrentWrites.push( copy(originalFilePath, finalPath) );
+          text = text.replace(download.placeholder, download.written);
         }
 
-        for(let [originalFilePath, replacedFilePath] of event.text.embeds) {
-          const finalPath = path.join('/veranstaltungen', event.permalink, replacedFilePath);
-          written = written.replace(replacedFilePath, finalPath);
+        for(let embed of event.text.embeds) {
+          embed.written = path.join('/veranstaltungen', event.permalink, `text-${embed.virtualFilename}`);
+          concurrentWrites.push( copyResized(embed.localFilesystemPath, embed.written) );
 
-          concurrentWrites.push( copyResized(originalFilePath, finalPath) );
+          text = text.replace(embed.placeholder, embed.written);
         }
-
-        event.text.written = written;
       }
+
+      event.text.written = text;
     }
   }
 
@@ -135,10 +126,10 @@ module.exports = async (data, preview) => {
   for(let feature of data.features.values()) {
     if(feature.image) {
       if(preview) {
-        feature.image.written = `${data.rootServerUrl}/${feature.image.sourced}`;
+        feature.image.written = `${data.rootServerUrl}/${feature.image.localFilesystemPath}`;
       } else {
-        feature.image.written = path.join('/features', `bild-${imageNumber++}${path.extname(feature.image.sourced)}`);
-        concurrentWrites.push( copyResized(feature.image.sourced, feature.image.written) );
+        feature.image.written = path.join('/features', `bild-${imageNumber++}${path.extname(feature.image.normalizedPath)}`);
+        concurrentWrites.push( copyResized(feature.image.localFilesystemPath, feature.image.written) );
       }
     }
   }
@@ -146,10 +137,10 @@ module.exports = async (data, preview) => {
   for(let issue of data.issues.values()) {
     if(issue.cover) {
       if(preview) {
-        issue.cover.written = `${data.rootServerUrl}/${issue.cover.sourced}`;
+        issue.cover.written = `${data.rootServerUrl}/${issue.cover.localFilesystemPath}`;
       } else {
-        issue.cover.written = path.join('/zeitschrift', issue.number.toString(), `cover${path.extname(issue.cover.sourced)}`);
-        concurrentWrites.push( copyResized(issue.cover.sourced, issue.cover.written) );
+        issue.cover.written = path.join('/zeitschrift', issue.number.toString(), `cover${path.extname(issue.cover.normalizedPath)}`);
+        concurrentWrites.push( copyResized(issue.cover.localFilesystemPath, issue.cover.written) );
       }
     }
   }
@@ -159,95 +150,87 @@ module.exports = async (data, preview) => {
   //       are then enforced by a WHITELIST written by me, enforced on crossvalidate
   for(let page of data.pages.values()) {
     if(page.urbanize === null && page.text) {
+      let text = page.text.sourced;
+
       if(preview) {
-        let written = page.text.sourced;
-
-        for(let [originalFilePath, replacedFilePath] of page.text.downloads) {
-          const finalPath = `${data.rootServerUrl}/${replacedFilePath}`;
-          written = written.replace(replacedFilePath, finalPath);
+        for(let download of page.text.downloads) {
+          download.written = `${data.rootServerUrl}/${download.localFilesystemPath}`;
+          text = text.replace(download.placeholder, download.written);
         }
 
-        for(let [originalFilePath, replacedFilePath] of page.text.embeds) {
-          const finalPath = `${data.rootServerUrl}/${replacedFilePath}`;
-          written = written.replace(replacedFilePath, finalPath);
+        for(let embed of page.text.embeds) {
+          embed.written = `${data.rootServerUrl}/${embed.localFilesystemPath}`;
+          text = text.replace(embed.placeholder, embed.written);
         }
-
-        page.text.written = written;
       } else {
-        let written = page.text.sourced;
+        for(let download of page.text.downloads) {
+          download.written = path.join('/seiten', page.permalink, `text-${download.virtualFilename}`);
+          concurrentWrites.push( copy(download.localFilesystemPath, download.written) );
 
-        for(let [originalFilePath, replacedFilePath] of page.text.downloads) {
-          const finalPath = path.join('/seiten', page.permalink, replacedFilePath);
-          written = written.replace(replacedFilePath, finalPath);
-
-          concurrentWrites.push( copy(originalFilePath, finalPath) );
+          text = text.replace(download.placeholder, download.written);
         }
 
-        for(let [originalFilePath, replacedFilePath] of page.text.embeds) {
-          const finalPath = path.join('/seiten', page.permalink, replacedFilePath);
-          written = written.replace(replacedFilePath, finalPath);
+        for(let embed of page.text.embeds) {
+          embed.written = path.join('/seiten', page.permalink, `text-${embed.virtualFilename}`);
+          concurrentWrites.push( copyResized(embed.localFilesystemPath, embed.written) );
 
-          concurrentWrites.push( copyResized(originalFilePath, finalPath) );
+          text = text.replace(embed.placeholder, embed.written);
         }
-
-        page.text.written = written;
       }
+
+      page.text.written = text;
     }
   }
 
   for(let program of data.programs.values()) {
     if(program.image) {
       if(preview) {
-        program.image.written = `${data.rootServerUrl}/${program.image.sourced}`;
+        program.image.written = `${data.rootServerUrl}/${program.image.localFilesystemPath}`;
       } else {
-        program.image.written = path.join('/radio', program.permalink, `bild${path.extname(program.image.sourced)}`);
-        concurrentWrites.push( copyResized(program.image.sourced, program.image.written) );
+        program.image.written = path.join('/radio', program.permalink, `bild${path.extname(program.image.normalizedPath)}`);
+        concurrentWrites.push( copyResized(program.image.localFilesystemPath, program.image.written) );
       }
     }
 
     if(program.soundfile) {
       if(preview) {
-        program.soundfile.written = `${data.rootServerUrl}/${program.soundfile.sourced}`;
+        program.soundfile.written = `${data.rootServerUrl}/${program.soundfile.localFilesystemPath}`;
       } else {
-        program.soundfile.written = path.join('/radio', program.permalink, `aufnahme${path.extname(program.soundfile.sourced)}`);
-        concurrentWrites.push( copyResized(program.soundfile.sourced, program.soundfile.written) );
+        program.soundfile.written = path.join('/radio', program.permalink, `aufnahme${path.extname(program.soundfile.normalizedPath)}`);
+        concurrentWrites.push( copy(program.soundfile.localFilesystemPath, program.soundfile.written) );
       }
     }
 
     if(program.text) {
+      let text = program.text.sourced;
+
       if(preview) {
-        let written = program.text.sourced;
-
-        for(let [originalFilePath, replacedFilePath] of program.text.downloads) {
-          const finalPath = `${data.rootServerUrl}/${replacedFilePath}`;
-          written = written.replace(replacedFilePath, finalPath);
+        for(let download of program.text.downloads) {
+          download.written = `${data.rootServerUrl}/${download.localFilesystemPath}`;
+          text = text.replace(download.placeholder, download.written);
         }
 
-        for(let [originalFilePath, replacedFilePath] of program.text.embeds) {
-          const finalPath = `${data.rootServerUrl}/${replacedFilePath}`;
-          written = written.replace(replacedFilePath, finalPath);
+        for(let embed of program.text.embeds) {
+          embed.written = `${data.rootServerUrl}/${embed.localFilesystemPath}`;
+          text = text.replace(embed.placeholder, embed.written);
         }
-
-        program.text.written = written;
       } else {
-        let written = program.text.sourced;
+        for(let download of program.text.downloads) {
+          download.written = path.join('/radio', program.permalink, `text-${download.virtualFilename}`);
+          concurrentWrites.push( copy(download.localFilesystemPath, download.written) );
 
-        for(let [originalFilePath, replacedFilePath] of program.text.downloads) {
-          const finalPath = path.join('/radio', program.permalink, replacedFilePath);
-          written = written.replace(replacedFilePath, finalPath);
-
-          concurrentWrites.push( copy(originalFilePath, finalPath) );
+          text = text.replace(download.placeholder, download.written);
         }
 
-        for(let [originalFilePath, replacedFilePath] of program.text.embeds) {
-          const finalPath = path.join('/radio', program.permalink, replacedFilePath);
-          written = written.replace(replacedFilePath, finalPath);
+        for(let embed of program.text.embeds) {
+          embed.written = path.join('/radio', program.permalink, `text-${embed.virtualFilename}`);
+          concurrentWrites.push( copyResized(embed.localFilesystemPath, embed.written) );
 
-          concurrentWrites.push( copyResized(originalFilePath, finalPath) );
+          text = text.replace(embed.placeholder, embed.written);
         }
-
-        program.text.written = written;
       }
+
+      program.text.written = text;
     }
   }
 

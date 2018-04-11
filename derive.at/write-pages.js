@@ -4,7 +4,7 @@ const articlePage = require('./pages/article.js'),
       articlePrintPage = require('./pages/article-print.js'),
       articlesPage = require('./pages/articles.js'),
       authorPage = require('./pages/author.js'),
-      { authorsPage, letters } = require('./pages/authors.js'),
+      authorsPage = require('./pages/authors.js'),
       bookPage = require('./pages/book.js'),
       booksPage = require('./pages/books.js'),
       festivalPage = require('./pages/festival.js'),
@@ -37,20 +37,20 @@ module.exports = async data => {
     await writeFile(data.buildDir, `texte/${pagination.label}/index.html`, articlesPage(data, pagination));
   }
 
-  for(let article of data.visibleArticles) {
+  for(let article of data.articles.values()) {
     await writeFile(data.buildDir, `texte/${article.permalink}/index.html`, articlePage(data, article));
   }
 
-  for(let article of data.visibleArticles) {
+  for(let article of data.articles.values()) {
     await writeFile(data.buildDir, `texte/${article.permalink}/druckversion/index.html`, articlePrintPage(data, article));
-  }
-
-  for(let letter of letters) {
-    await writeFile(data.buildDir, `autoren/${letter}/index.html`, authorsPage(data, letter));
   }
 
   for(let author of data.authors) {
     await writeFile(data.buildDir, `autoren/${author.permalink}/index.html`, authorPage(data, author));
+  }
+
+  for(let pagination of data.authorsPaginated) {
+    await writeFile(data.buildDir, `autoren/${pagination.label}/index.html`, authorsPage(data, pagination));
   }
 
   for(let pagination of data.booksPaginated) {

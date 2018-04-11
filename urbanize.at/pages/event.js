@@ -22,9 +22,11 @@ module.exports = (urbanize, event) => {
         ${event.title}
       </div>
 
-      <div class="subtitle">
-        ${event.subtitle}
-      </div>
+      ${event.subtitle ? `
+        <div class="subtitle">
+          ${event.subtitle}
+        </div>
+      `:''}
 
       <div class="additional">
         ${timeframe(event)}
@@ -33,18 +35,23 @@ module.exports = (urbanize, event) => {
       </div>
 
       <div class="additional">
-        ${event.additionalInfo}
+        ${event.additionalInfo ? event.additionalInfo.sourced : ''}
       </div>
 
-      <p>
-        ${event.abstract}
-      </p>
+      ${event.abstract ? `
+        <p>
+          ${event.abstract.sourced}
+        </p>
+      `:''}
 
-      <hr/>
 
-      <div>
-        ${event.text ? event.text.written : ''}
-      </div>
+      ${event.text ? `
+        <hr/>
+
+        <div>
+           ${event.text.written}
+        </div>
+      `:''}
 
       <hr/>
 

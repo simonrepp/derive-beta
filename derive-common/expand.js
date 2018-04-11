@@ -72,7 +72,7 @@ const addToTags = (data, collection) => {
 
 const paginateArticles = data => {
   data.articlesPaginated = [];
-  const articlesSorted = data.visibleArticles.sort((a, b) => b.date - a.date);
+  const articlesSorted = data.readableArticles.sort((a, b) => b.date - a.date);
 
   for(let index = 0; index < articlesSorted.length; index += 100) {
     const pagination = {
@@ -88,6 +88,38 @@ const paginateArticles = data => {
 
     data.articlesPaginated.push(pagination);
   }
+};
+
+const paginateAuthors = data => {
+  const letters = [
+    '0', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+    'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+  ];
+
+  const paginations = new Map();
+  for(letter of letters) {
+    paginations.set(letter, {
+      authors: [],
+      label: letter
+    });
+  }
+
+  for(let author of data.authors) {
+    const firstLetter = author.name.charAt(0)
+                                   .normalize('NFD')
+                                   .replace(/[\u0300-\u036f]/g, '')
+                                   .toUpperCase()
+                                   .replace('Ł', 'L');
+
+    let pagination = paginations.get(firstLetter);
+    if(!pagination) {
+      pagination = paginations.get('0');
+    }
+
+    pagination.authors.push(author);
+  }
+
+  data.authorsPaginated = Array.from(paginations.values());
 };
 
 const paginateBooks = data => {
@@ -170,13 +202,14 @@ module.exports = data => {
     }
   });
 
-  data.visibleArticles = Array.from(data.articles.values()).filter(article =>
-    article.publish && article.visible
+  data.readableArticles = Array.from(data.articles.values()).filter(article =>
+    article.publish && article.readable
   );
 
   data.issuesDescending = Array.from(data.issues.values()).sort((a, b) => b.number - a.number);
 
   paginateArticles(data);
+  paginateAuthors(data);
   paginateBooks(data);
   paginatePrograms(data);
 };

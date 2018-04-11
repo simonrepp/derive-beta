@@ -16,6 +16,8 @@ module.exports = (data, author) => {
         ${author.text.sourced}
       `:''}
 
+      <!-- TODO: Protect against missing http:// in website and thus incorrectly interpreted relative link? (Maybe validate?) -->
+
       ${author.website ? `
         <a href="${author.website}">Zur Website von ${author.name}</a>
       `:''}

@@ -1,7 +1,10 @@
 const fs = require('fs'),
       glob = require('glob'),
-      path = require('path'),
-      markdownIt = require('markdown-it')({ html: true });
+      markdownIt = require('markdown-it')({ html: true }),
+      markdownItFootnote = require('markdown-it-footnote'),
+      path = require('path');
+
+markdownIt.use(markdownItFootnote);
 
 const plaindata = require('../plaindata/plaindata.js');
 
@@ -46,7 +49,6 @@ exports.loadPlain = (directory, plainPath) => new Promise((resolve, reject) =>
 exports.random = array => array[Math.floor(Math.random() * array.length)];
 
 exports.renderMarkdown = markdown => {
-  // TODO: Custom markdown processing ? (footnotes?)
   return markdownIt.render(markdown);
 };
 

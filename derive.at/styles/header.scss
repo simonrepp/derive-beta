@@ -30,6 +30,10 @@
     transform: scale(0.7);
   }
 
+  .header__link--active {
+    border-bottom-width: 2px;
+  }
+
   .header__logo-link {
     margin-bottom: -1.5em;
   }
@@ -71,6 +75,7 @@
 
 .header__link--active {
   border-bottom: 1px solid $color-text;
+  transition: border 0.5s;
 }
 
 .header__link__padding {

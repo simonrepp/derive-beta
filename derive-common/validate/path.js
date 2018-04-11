@@ -14,9 +14,7 @@ module.exports = (document, field, data, options = { required: false }) => {
       return null;
     }
   } else if(typeof value === 'string') {
-    const normalizedPath = value.replace(/^\//, '').normalize();
-
-    return { sourced: normalizedPath };
+    return { normalizedPath: value.replace(/^\//, '').normalize() };
   } else {
     throw new ValidationError(`Das Feld "${field}" muss ein Dateifeld sein, enthält aber einen anderen Datentyp.`);
   }

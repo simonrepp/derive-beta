@@ -17,7 +17,7 @@ const expected = {
   Permalink: 'tlatelolco-wohnblocks-ruinen-und-massaker',
   Buchbesprechungen: null,
   'Veröffentlichen': 'Ja',
-  Sichtbar: 'Ja',
+  Lesbar: 'Ja',
   Urbanize: null,
   Abstract: null,
   Text: 'Der Stadtteil Tlatelolco ist ein Ort, ...\n...Österreich, Mexiko, 75 min',

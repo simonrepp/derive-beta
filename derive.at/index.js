@@ -5,7 +5,7 @@ const fsExtra = require('fs-extra'),
 const { writeFile } = require('../derive-common/util.js');
 
 const indexArticles = data => {
-  const indexed = data.visibleArticles.map(article => {
+  const indexed = Array.from(data.articles.values()).map(article => {
     const boosted = `${article.title} ${article.subtitle || ''}`;
     const regular = [article.abstract ? striptags(article.abstract.sourced) : '',
                      article.authors.connected.map(author => author.name).join(' '),
@@ -165,9 +165,6 @@ const indexPrograms = data => {
 };
 
 module.exports = async data => {
-
-  // TODO: PHP serialize? :)
-
   await fsExtra.copy(path.join(__dirname, 'search/index.php'),
                      path.join(data.buildDir, 'api/search/index.php'));
 

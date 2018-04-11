@@ -1,5 +1,3 @@
-// TODO: Possibly encapsulate the error reporting here ... bit repetitive
-
 module.exports = data => {
   data.articlesByPermalink.clear();
   data.articlesByTitle.clear();

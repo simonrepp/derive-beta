@@ -5,13 +5,13 @@ const authors = require('./authors.js');
 module.exports = article => `
   <div class="tile">
     <h1>
-      <a href="/radio/${article.permalink}/">
+      <a href="/texte/${article.permalink}/">
         ${article.title}
       </a>
     </h1>
     ${article.subtitle ? `
       <h2>
-        <a href="/radio/${article.permalink}/">
+        <a href="/texte/${article.permalink}/">
           ${article.subtitle}
         </a>
       </h2>

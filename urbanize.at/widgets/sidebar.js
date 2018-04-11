@@ -5,9 +5,8 @@ module.exports = urbanize => `
 
     <p>SUCHE</p>
 
-    <form class="search"
-          onsubmit"event.preventDefault(); const query = event.target.search.value; navigateTo('/search/' + query);" >
-      <input type="search" name="search" />
+    <form action="/suche/" class="search">
+      <input name="begriff" type="text" />
       <button>Go</button>
     </form>
 
@@ -22,7 +21,7 @@ module.exports = urbanize => `
     </a>
 
     <div class="indented">
-      ${Array.from(urbanize.eventsByDate.keys()).map(date => `
+      ${Array.from(urbanize.eventsByDate.keys()).sort().map(date => `
         <div>
           <a href="/${moment(date).locale('de').format('D-MMMM-YYYY')}/">
             ${moment(date).locale('de').format('D. M. YYYY')}
@@ -33,10 +32,10 @@ module.exports = urbanize => `
 
     <p>KATEGORIEN</p>
 
-    ${Array.from(urbanize.categories.keys()).map(category => `
+    ${Array.from(urbanize.categories.values()).map(category => `
       <div>
-        <a href="/kategorien/${category}/">
-          ${category}
+        <a href="/kategorien/${category.permalink}/">
+          ${category.name}
         </a>
       </div>
     `).join('')}

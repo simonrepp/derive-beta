@@ -14,9 +14,7 @@ module.exports = (data, article) => {
       <h1>${article.title}</h1>
       ${article.subtitle ? `<strong>${article.subtitle}</strong>` : ''}
 
-      ${article.text ? article.text.written : 'Kein Text vorhanden'}
-
-      ${tags(article.tags.connected)}
+      ${article.abstract ? article.abstract.sourced : ''}
 
       ${article.issue && article.issue.shopLink ? `
         <a href="${article.issue.shopLink}">Heft kaufen</a>
@@ -26,6 +24,33 @@ module.exports = (data, article) => {
     </div>
 
     <hr/>
+
+    ${tags(article.tags.connected)}
+
+    TODO Autoren kurz bios?
+
+    <hr/>
+    
+    ${article.readable ? `
+      ${article.text ? article.text.written : 'Kein Text vorhanden'}
+    `:`
+      TODO: Only provide issue teaser and shop link for not readable articles
+    `}
+
+    <hr/>
+
+    ${article.issue && article.issue.shopLink ? `
+      <a href="${article.issue.shopLink}">Heft kaufen</a>
+    `:''}
+
+    ${share(article.title, `https://derive.at/texte/${article.permalink}/`)}
+
+    ${article.bibliography ? `
+      <hr/>
+
+      <strong>Literaturliste</strong><br/>
+      ${article.bibliography.sourced}
+    `:''}
   `;
 
   return layout(data, html, { activeSection: 'Texte', title: article.title });

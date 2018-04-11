@@ -23,7 +23,7 @@ document.addEventListener('click', function(event) {
       }
 
       if(toggleLink.classList.contains('sidebar__link__search')) {
-        const queryInput = document.querySelector('input[name="begriff"]');
+        const queryInput = document.querySelector('input[name="query"]');
         queryInput.focus();
       }
 
@@ -58,29 +58,86 @@ document.addEventListener('click', function(event) {
     return;
   }
 
-  const searchCheckboxes = document.querySelectorAll('span[data-include-section]');
-  for(let checkbox of searchCheckboxes) {
+  const sectionCheckboxes = document.querySelectorAll('span[data-section]');
+  for(let checkbox of sectionCheckboxes) {
     if(checkbox.contains(event.target)) {
-      checkbox.classList.toggle('icon-checkbox');
-      checkbox.classList.toggle('icon-checkbox-checked');
+      const section = checkbox.dataset.section;
+
+      if(checkbox.classList.contains('icon-checkbox')) {
+        search.sections[section] = true;
+
+        for(let checkboxReiterated of sectionCheckboxes) {
+          if(checkboxReiterated.dataset.section === section) {
+            checkboxReiterated.classList.remove('icon-checkbox');
+            checkboxReiterated.classList.add('icon-checkbox-checked');
+          }
+        }
+      } else {
+        search.sections[section] = false;
+
+        for(let checkboxReiterated of sectionCheckboxes) {
+          if(checkboxReiterated.dataset.section === section) {
+            checkboxReiterated.classList.remove('icon-checkbox-checked');
+            checkboxReiterated.classList.add('icon-checkbox');
+          }
+        }
+      }
 
       return;
     }
   }
+});
 
-  const searchformSubmit = document.querySelector('.sidebar__searchform button');
-  if(searchformSubmit.contains(event.target)) {
-    const checkboxes = document.querySelectorAll('span[data-include-section]');
-    const sections = [];
+document.addEventListener('submit', function(event) {
+  const sidebarSearchform = document.querySelector('.sidebar__searchform');
+  if(event.target === sidebarSearchform) {
+    event.preventDefault();
 
-    for(let checkbox of checkboxes) {
-      if(checkbox.classList.contains('icon-checkbox-checked')) {
-        sections.push(checkbox.dataset.includeSection);
-      }
+    search.error = null;
+    search.pending = false;
+    search.query = document.querySelector('input[name="query"]').value;
+    search.results = null;
+
+    if(!location.hostname.match(/derive\.at|urbanize\.at/)) {
+      search.error = 'Die Suche ist beim lokalen Testen nicht verfügbar da sie auf PHP angewiesen ist.';
+      renderSearch();
+    } else if(search.query.length < 1) {
+      search.error = 'Mindestens zwei Buchstaben erforderlich.';
+      renderSearch();
+    } else {
+
+      search.pending = true;
+
+      let request = new XMLHttpRequest();
+      request.onreadystatechange = function() {
+        if(request.readyState == XMLHttpRequest.DONE) {
+          if(request.status == 200) {
+            const results = JSON.parse(request.responseText);
+
+            console.log('yiha', results);
+            search.results = results;
+
+            renderSearch();
+          } else if(request.status == 400) {
+            search.error = 'Fehlercode 400 - Falsche Parameter in der Anfrage an die API';
+          } else {
+            search.error = 'Fehlercode ' + request.status;
+          }
+
+          search.pending = false;
+        }
+      };
+
+      const sections = Object.keys(search.sections).filter(section => search.sections[section]).join(',');
+
+      const url = '/api/search/?query=' + encodeURI(search.query) + '&sections=' + sections;
+
+      request.open('GET', url, true);
+
+      request.send();
     }
 
-    const includedSections = document.querySelector('.sidebar__searchform input[name="bereiche"]');
-    includedSections.value = sections.join(',');
+    Turbolinks.visit('/suche/');
 
     return;
   }

@@ -42,7 +42,7 @@ module.exports = data => {
     <div class="tiles">
       ${festivals.map(festival => `
         <div class="tile tile--festival">
-          <a href="${festival.url}">
+          <a href="${festival.url}" target="_blank">
             <img src="${festival.image}" />
           </a>
         </div>

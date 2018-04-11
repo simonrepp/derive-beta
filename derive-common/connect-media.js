@@ -7,31 +7,37 @@ class ConnectMediaError extends Error {
   }
 }
 
-const connectMedia = (data, normalizedPath) => {
-  if(data.media.has(normalizedPath)) {
-    data.media.set(normalizedPath, true);
+const connectMedia = (data, field) => {
+  const media = data.media.get(field.normalizedPath);
+
+  if(media) {
+    field.localFilesystemPath = media.localFilesystemPath;
+    media.used = true;
 
     return true;
   } else {
-    return false;
+    return null;
   }
 };
 
 const connectMarkdownMedia = (data, field, fieldName) => {
-  ['downloads', 'embeds'].forEach(mediaType => {
-    field[mediaType].forEach((replacedPath, normalizedPath) => {
-      if(data.media.has(normalizedPath)) {
-        data.media.set(normalizedPath, true);
+  for(let type of ['downloads', 'embeds']) {
+    for(let mediaReference of field[type]) {
+      const media = data.media.get(mediaReference.normalizedPath);
+
+      if(media) {
+        media.used = true;
+        mediaReference.localFilesystemPath = media.localFilesystemPath;
       } else {
         throw new ConnectMediaError(`Das Markdown-Feld "${fieldName}" enthält einen Verweis auf die Datei "${normalizedPath}", diese wurde aber nicht gefunden.`);
       }
-    });
-  });
+    }
+  }
 };
 
 module.exports = data => {
   data.articles.forEach(article => {
-    if(article.image && !connectMedia(data, article.image.sourced)) {
+    if(article.image && !connectMedia(data, article.image)) {
       data.warnings.push({
         description: `Bis zur Lösung des Problems scheint der Artikel nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${article.sourceFile}`,
         detail: `Der Artikel "${article.title}" referenziert im Dateifeld "Bild" die Datei "${article.image.sourced}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`,
@@ -63,7 +69,7 @@ module.exports = data => {
   });
 
   data.books.forEach(book => {
-    if(book.cover && !connectMedia(data, book.cover.sourced)) {
+    if(book.cover && !connectMedia(data, book.cover)) {
       data.warnings.push({
         description: `Bis zur Lösung des Problems scheint das Bild nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${book.sourceFile}`,
         detail: `Das Buch "${book.title}" referenziert im Dateifeld "Cover" die Datei "${book.cover.sourced}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`,
@@ -76,7 +82,7 @@ module.exports = data => {
   });
 
   data.events.forEach(event => {
-    if(event.image && !connectMedia(data, event.image.sourced)) {
+    if(event.image && !connectMedia(data, event.image)) {
       data.warnings.push({
         description: `Bis zur Lösung des Problems scheint das Bild nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${event.sourceFile}`,
         detail: `Die Veranstaltung "${event.title}" referenziert im Dateifeld "Bild" die Datei "${event.image.sourced}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`,
@@ -108,7 +114,7 @@ module.exports = data => {
   });
 
   data.features.forEach(feature => {
-    if(feature.image && !connectMedia(data, feature.image.sourced)) {
+    if(feature.image && !connectMedia(data, feature.image)) {
       data.warnings.push({
         description: `Bis zur Lösung des Problems scheint das Bild nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${feature.sourceFile}`,
         detail: `Das Feature "${feature.title}" referenziert im Dateifeld "Bild" die Datei "${feature.image.sourced}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`,
@@ -121,7 +127,7 @@ module.exports = data => {
   });
 
   data.issues.forEach(issue => {
-    if(issue.cover && !connectMedia(data, issue.cover.sourced)) {
+    if(issue.cover && !connectMedia(data, issue.cover)) {
       data.warnings.push({
         description: `Bis zur Lösung des Problems scheint das Bild nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${issue.sourceFile}`,
         detail: `Die Zeitschrift #${issue.number} referenziert im Dateifeld "Bild" die Datei "${issue.cover.sourced}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`,
@@ -155,7 +161,7 @@ module.exports = data => {
   });
 
   data.programs.forEach(program => {
-    if(program.image && !connectMedia(data, program.image.sourced)) {
+    if(program.image && !connectMedia(data, program.image)) {
       data.warnings.push({
         description: `Bis zur Lösung des Problems scheint das Bild nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${program.sourceFile}`,
         detail: `Die Radiosendung "${program.title}" referenziert im Dateifeld "Bild" die Datei "${program.image.sourced}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`,
@@ -167,7 +173,7 @@ module.exports = data => {
       return;
     }
 
-    if(program.soundfile && !connectMedia(data, program.soundfile.sourced)) {
+    if(program.soundfile && !connectMedia(data, program.soundfile)) {
       data.warnings.push({
         description: `Bis zur Lösung des Problems scheint das Soundfile nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${program.sourceFile}`,
         detail: `Die Radiosendung "${program.title}" referenziert im Dateifeld "Soundfile" die Datei "${program.soundfile.sourced}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`,

@@ -3,16 +3,19 @@ const fsExtra = require('fs-extra'),
       sass = require('sass'),
       uglifyEs = require('uglify-es');
 
-const { loadFile, writeFile } = require('../derive-common/util.js'),
+const index = require('./index.js'),
+      { loadFile, writeFile } = require('../derive-common/util.js'),
       writeDirectories = require('./write-directories.js'),
       writeMedia = require('./write-media.js'),
       writePages = require('./write-pages.js');
 
 const compileJs = async data => {
+  const fuse = await loadFile(path.join(__dirname, 'scripts/fuse.min.js'));
   const search = await loadFile(path.join(__dirname, 'scripts/search.js'));
   const turbolinks = await loadFile(path.join(__dirname, 'scripts/turbolinks.js'));
 
   const result = uglifyEs.minify({
+    'fuse.min.js': fuse,
     'search.js': search,
     'turbolinks.js': turbolinks
   });
@@ -39,17 +42,17 @@ const compileSass = data => {
   });
 };
 
-module.exports = async (data, city) => {
+module.exports = async (data, city, options = { preview: false }) => {
   console.time('build');
-  
+
   const urbanize = data.urbanize[city];
-  
+
   console.time('writeDirectories');
   await writeDirectories(data, urbanize);
   console.timeEnd('writeDirectories');
 
   console.time('writeMedia');
-  await writeMedia(data, urbanize);
+  await writeMedia(data, urbanize, options.preview);
   console.timeEnd('writeMedia');
 
   console.time('writePages');
@@ -62,8 +65,8 @@ module.exports = async (data, city) => {
   console.timeEnd('writePages');
 
   console.time('index');
-  // await index(data); // TODO: Needs to be javascript though
-  console.timeEnd('index');    
-  
+  await index(data, urbanize);
+  console.timeEnd('index');
+
   console.timeEnd('build');
 };

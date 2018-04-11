@@ -11,11 +11,13 @@ const { loadFile, writeFile } = require('../derive-common/util.js'),
 
 const compileJs = async data => {
   const scroll = await loadFile(path.join(__dirname, 'scripts/scroll.js'));
+  const search = await loadFile(path.join(__dirname, 'scripts/search.js'));
   const sidebar = await loadFile(path.join(__dirname, 'scripts/sidebar.js'));
   const turbolinks = await loadFile(path.join(__dirname, 'scripts/turbolinks.js'));
 
   const result = uglifyEs.minify({
     'scroll.js': scroll,
+    'search.js': search,
     'sidebar.js': sidebar,
     'turbolinks.js': turbolinks
   });

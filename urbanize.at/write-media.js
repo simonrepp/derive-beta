@@ -1,8 +1,8 @@
 const fsExtra = require('fs-extra'),
       path = require('path'),
       sharp = require('sharp');
-      
-module.exports = async (data, urbanize) => {
+
+module.exports = async (data, urbanize, preview) => {
 
   const copy = (fromRelative, toRelative) => {
     const fromAbsolute = path.join(data.root, fromRelative);
@@ -29,61 +29,87 @@ module.exports = async (data, urbanize) => {
                              .withoutEnlargement()
                              .toFile(toAbsolute);
   };
-  
+
   const concurrentWrites = [];
 
   for(let event of urbanize.events) {
     if(event.image) {
-      const finalPath = path.join('/veranstaltungen', event.permalink, `bild${path.extname(event.image.connected)}`);
-      event.image.written = finalPath;
-      
-      concurrentWrites.push( copyCropped(event.image.connected, finalPath) );
+      if(preview) {
+        event.image.written = `${data.rootServerUrl}/${event.image.localFilesystemPath}`;
+      } else {
+        event.image.written = path.join('/veranstaltungen', event.permalink, `bild${path.extname(event.image.normalizedPath)}`);
+        concurrentWrites.push( copyResized(event.image.localFilesystemPath, event.image.written) );
+      }
     }
 
     if(event.text) {
-      let written = event.text.connected;
+      let text = event.text.sourced;
 
-      for(let [originalFilePath, replacedFilePath] of event.text.downloads) {
-        const finalPath = path.join('/veranstaltungen', event.permalink, replacedFilePath);
-        written = written.replace(replacedFilePath, finalPath);
-        
-        concurrentWrites.push( copy(originalFilePath, finalPath) );
+      if(preview) {
+        for(let download of event.text.downloads) {
+          download.written = `${data.rootServerUrl}/${download.localFilesystemPath}`;
+          text = text.replace(download.placeholder, download.written);
+        }
+
+        for(let embed of event.text.embeds) {
+          embed.written = `${data.rootServerUrl}/${embed.localFilesystemPath}`;
+          text = text.replace(embed.placeholder, embed.written);
+        }
+      } else {
+        for(let download of event.text.downloads) {
+          download.written = path.join('/veranstaltungen', event.permalink, `text-${download.virtualFilename}`);
+          concurrentWrites.push( copy(download.localFilesystemPath, download.written) );
+
+          text = text.replace(download.placeholder, download.written);
+        }
+
+        for(let embed of event.text.embeds) {
+          embed.written = path.join('/veranstaltungen', event.permalink, `text-${embed.virtualFilename}`);
+          concurrentWrites.push( copyResized(embed.localFilesystemPath, embed.written) );
+
+          text = text.replace(embed.placeholder, embed.written);
+        }
       }
 
-      for(let [originalFilePath, replacedFilePath] of event.text.embeds) {
-        const finalPath = path.join('/veranstaltungen', event.permalink, replacedFilePath);
-        written = written.replace(replacedFilePath, finalPath);
-        
-        concurrentWrites.push( copyResized(originalFilePath, finalPath) );
-      }
-
-      event.text.written = written;
+      event.text.written = text;
     }
   }
 
   // TODO: Here and elsewhere - german permalinks for pages!
-  
+
   for(let page of urbanize.pages) {
     if(page.text) {
-      let written = page.text.connected;
-  
-      for(let [originalFilePath, replacedFilePath] of page.text.downloads) {
-        const finalPath = path.join('/seiten', page.permalink, replacedFilePath);
-        written = written.replace(replacedFilePath, finalPath);
-        
-        concurrentWrites.push( copy(originalFilePath, finalPath) );
+      let text = page.text.sourced;
+
+      if(preview) {
+        for(let download of page.text.downloads) {
+          download.written = `${data.rootServerUrl}/${download.localFilesystemPath}`;
+          text = text.replace(download.placeholder, download.written);
+        }
+
+        for(let embed of page.text.embeds) {
+          embed.written = `${data.rootServerUrl}/${embed.localFilesystemPath}`;
+          text = text.replace(embed.placeholder, embed.written);
+        }
+      } else {
+        for(let download of page.text.downloads) {
+          download.written = path.join('/seiten', page.permalink, `text-${download.virtualFilename}`);
+          concurrentWrites.push( copy(download.localFilesystemPath, download.written) );
+
+          text = text.replace(download.placeholder, download.written);
+        }
+
+        for(let embed of page.text.embeds) {
+          embed.written = path.join('/seiten', page.permalink, `text-${embed.virtualFilename}`);
+          concurrentWrites.push( copyResized(embed.localFilesystemPath, embed.written) );
+
+          text = text.replace(embed.placeholder, embed.written);
+        }
       }
-  
-      for(let [originalFilePath, replacedFilePath] of page.text.embeds) {
-        const finalPath = path.join('/seiten', page.permalink, replacedFilePath);
-        written = written.replace(replacedFilePath, finalPath);
-        
-        concurrentWrites.push( copyResized(originalFilePath, finalPath) );
-      }
-  
-      page.text.written = written;
+
+      page.text.written = text;
     }
   }
-  
+
   await Promise.all(concurrentWrites);
 };

@@ -10,8 +10,8 @@ module.exports = urbanize => {
       ${urbanize.events.length} Veranstaltungen<br/>
       ${urbanize.pages.length} Seiten<br/>
       ${urbanize.participants.size} Teilnehmer<br/>
-      ${Object.keys(urbanize.categories).length} Kategorien<br/>
-      ${Object.keys(urbanize.tags).length} Tags<br/>
+      ${urbanize.categories.size} Kategorien<br/>
+      ${urbanize.tags.size} Tags<br/>
     </div>
   `;
 

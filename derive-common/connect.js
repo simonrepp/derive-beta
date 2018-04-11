@@ -29,7 +29,6 @@ const connectPlayers = (data, collection, field, backReferenceField) => {
         document[field].connected.push(instance);
         instance[backReferenceField].push(document);
       } else {
-        // TODO: Better german error reporting (sorta maps the wrong way around)
         data.warnings.push({
           description: `Bis zur Lösung des Problems scheint die betroffene Verbindung zum verlinkten Akteur nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${document.sourceFile}`,
           detail: `Die AkteurIn "${name}", angegeben als ${field} in einem Dokument vom Typ ${collection} wurde nicht gefunden.`,
@@ -40,8 +39,6 @@ const connectPlayers = (data, collection, field, backReferenceField) => {
     });
   });
 };
-
-// TODO: Have it be .connected on backReferenceFields too, because consistency ... (even though they have no .sourced)
 
 const clearBackReferences = data => {
   data.books.forEach(book => {
