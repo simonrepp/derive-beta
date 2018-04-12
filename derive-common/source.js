@@ -25,60 +25,61 @@ module.exports = async data => {
 
   const globPaths = await globFiles(data.root, '**/*');
 
-  for(let filePath of globPaths) {
+  for(let localFilesystemPath of globPaths) {
+    const normalizedPath = localFilesystemPath.normalize();
 
-    if(filePath.match(forbiddenFilenameCharacters)) {
+    if(normalizedPath.match(forbiddenFilenameCharacters)) {
 
       data.warnings.push({
         description: 'Bis der Dateiname korrigiert wurde wird die Datei ignoriert, dies kann auch weitere Dateien betreffen wenn diese auf die Datei bzw. deren Inhalte referenzieren.',
         detail: 'Lösung: Die nicht erlaubten Zeichen sollten entfernt bzw. durch Leerzeichen oder alternative Zeichen wie "_" oder "-" ersetzt werden.',
-        files: [{ path: filePath }],
-        header: `**${filePath}**\n\nProblem: Im Namen der Datei bzw. des Ordners wurde eines der nicht erlaubten Zeichen  / \\ ? * : | " < > vorgefunden.`
+        files: [{ path: localFilesystemPath }],
+        header: `**${normalizedPath}**\n\nProblem: Im Namen der Datei bzw. des Ordners wurde eines der nicht erlaubten Zeichen  / \\ ? * : | " < > vorgefunden.`
       });
 
-    } else if(path.extname(filePath) === '.plain') {
+    } else if(path.extname(normalizedPath) === '.plain') {
 
-      if(filePath.match(/^Akteure\//)) {
+      if(normalizedPath.match(/^Akteure\//)) {
 
-        await sourcePlayer(data, filePath);
+        await sourcePlayer(data, localFilesystemPath);
 
-      } else if(filePath.match(/^Bücher\//)) {
+      } else if(normalizedPath.match(/^Bücher\//)) {
 
-        await sourceBook(data, filePath);
+        await sourceBook(data, localFilesystemPath);
 
-      } else if(filePath.match(/^Features\//)) {
+      } else if(normalizedPath.match(/^Features\//)) {
 
-        await sourceFeature(data, filePath);
+        await sourceFeature(data, localFilesystemPath);
 
-      } else if(filePath.match(/^Radiosendungen\//)) {
+      } else if(normalizedPath.match(/^Radiosendungen\//)) {
 
-        await sourceProgram(data, filePath);
+        await sourceProgram(data, localFilesystemPath);
 
-      } else if(filePath.match(/^Seiten\//)) {
+      } else if(normalizedPath.match(/^Seiten\//)) {
 
-        await sourcePage(data, filePath);
+        await sourcePage(data, localFilesystemPath);
 
-      } else if(filePath.match(/^Texte\//)) {
+      } else if(normalizedPath.match(/^Texte\//)) {
 
-        await sourceArticle(data, filePath);
+        await sourceArticle(data, localFilesystemPath);
 
-      } else if(filePath.match(/^Veranstaltungen\//)) {
+      } else if(normalizedPath.match(/^Veranstaltungen\//)) {
 
-        await sourceEvent(data, filePath);
+        await sourceEvent(data, localFilesystemPath);
 
-      } else if(filePath.match(/^Zeitschrift\//)) {
+      } else if(normalizedPath.match(/^Zeitschrift\//)) {
 
-        await sourceIssue(data, filePath);
+        await sourceIssue(data, localFilesystemPath);
 
       }
 
-    } else if(!filePath.match(/^\.|^Dokumentation\//)) {
+    } else if(!normalizedPath.match(/^\.|^Dokumentation\//)) {
       const media = {
-        localFilesystemPath: filePath,
+        localFilesystemPath: localFilesystemPath,
         used: false
       };
 
-      data.media.set(filePath.normalize(), media);
+      data.media.set(normalizedPath, media);
 
     }
   }
