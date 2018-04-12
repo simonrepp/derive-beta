@@ -50,7 +50,7 @@ const indexPages = urbanize => {
 };
 
 module.exports = (data, urbanize) => {
-  const index = [].concat(indexEvents(urbanize), indexPages(urbanize))
+  const index = [].concat(indexEvents(urbanize), indexPages(urbanize));
 
   return writeFile(data.buildDir, '/suche/index.json', JSON.stringify(index));
 };

@@ -1,3 +1,5 @@
+const path = require('path');
+
 const { renderMarkdown } = require('../util.js'),
       ValidationError = require('./error.js');
 

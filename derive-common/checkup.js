@@ -19,7 +19,7 @@ module.exports = data => {
     }
   });
 
-  data.media.forEach((media, normalizedPath) => {
+  data.media.forEach(media => {
     if(!media.used) {
       data.warnings.push({
         description: `Dies ist nur ein Hinweis, ansonsten bestehen keine Auswirkungen.\n\n**Betroffenes File:** ${media.localFilesystemPath}`,

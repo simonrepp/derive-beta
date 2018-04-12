@@ -97,7 +97,7 @@ const paginateAuthors = data => {
   ];
 
   const paginations = new Map();
-  for(letter of letters) {
+  for(let letter of letters) {
     paginations.set(letter, {
       authors: [],
       label: letter

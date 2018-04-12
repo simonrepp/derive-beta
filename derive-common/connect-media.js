@@ -1,5 +1,3 @@
-const path = require('path');
-
 class ConnectMediaError extends Error {
   constructor(...args) {
     super(...args);
@@ -29,7 +27,7 @@ const connectMarkdownMedia = (data, field, fieldName) => {
         media.used = true;
         mediaReference.localFilesystemPath = media.localFilesystemPath;
       } else {
-        throw new ConnectMediaError(`Das Markdown-Feld "${fieldName}" enthält einen Verweis auf die Datei "${normalizedPath}", diese wurde aber nicht gefunden.`);
+        throw new ConnectMediaError(`Das Markdown-Feld "${fieldName}" enthält einen Verweis auf die Datei "${mediaReference.normalizedPath}", diese wurde aber nicht gefunden.`);
       }
     }
   }

@@ -38,7 +38,7 @@ module.exports = async (data, urbanize, preview) => {
         event.image.written = `${data.rootServerUrl}/${event.image.localFilesystemPath}`;
       } else {
         event.image.written = path.join('/veranstaltungen', event.permalink, `bild${path.extname(event.image.normalizedPath)}`);
-        concurrentWrites.push( copyResized(event.image.localFilesystemPath, event.image.written) );
+        concurrentWrites.push( copyCropped(event.image.localFilesystemPath, event.image.written) );
       }
     }
 
