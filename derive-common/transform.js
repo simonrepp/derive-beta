@@ -6,8 +6,6 @@ const checkup = require('./checkup.js'),
       source = require('./source.js'),
       urbanize = require('./urbanize.js');
 
-// TODO: Consider a "wipe" step that resets all intelligent fields that have to be wiped always (=are only optionally overwritten by processing), eg. backreferences
-
 module.exports = async data => {
   console.time('transform');
   console.time('source');
@@ -47,7 +45,8 @@ module.exports = async data => {
   console.timeEnd('urbanize');
   console.time('checkup');
 
-  checkup(data); // Provide additional warnings for unused media
+  checkup(data); // Provide additional warnings for unused media, as well as
+                 // for categories and tags with multiple spelling variants
 
   console.timeEnd('checkup');
   console.timeEnd('transform');

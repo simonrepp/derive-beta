@@ -26,9 +26,6 @@ module.exports = (data, pagination) => {
         <!-- TODO: "Allgemeine" Redaktion sollten wohl als globale Konfiguration vorliegen -->
         ${editors(first.editors.connected)}
 
-        <!-- TODO "Allgemeine" Tags? Von allen Radiosendungen ist wohl zuviel ... Also globale Konfiguration, oder weg. -->
-        ${tags(first.tags.connected)}
-
         <hr class="hr__light" />
 
         ${share(first.title, `/radio/${first.permalink}/`)}

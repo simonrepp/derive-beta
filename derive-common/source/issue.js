@@ -87,9 +87,9 @@ module.exports = async (data, plainPath) => {
         const validatedSection = {};
 
         validatedSection.title = validateString(section, 'Titel', { required: true });
-        validatedSection.articles = validateArray(section, 'Artikel', { optional: true });
+        validatedSection.articles = { sourced: validateArray(section, 'Artikel', { optional: true }) };
 
-        validatedSection.articles = validatedSection.articles.map(article => {
+        validatedSection.articles.sourced = validatedSection.articles.sourced.map(article => {
           const validatedArticle = {};
 
           validatedArticle.title = validateString(article, 'Titel', { required: true });

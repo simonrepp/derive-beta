@@ -1,5 +1,6 @@
 const { loadPlain, statFile, URBANIZE_ENUM } = require('../util.js'),
       { PlainDataParseError } = require('../../plaindata/plaindata.js'),
+      validateAbsoluteUrl = require('../validate/absolute-url.js'),
       validateArray = require('../validate/array.js'),
       validateDate = require('../validate/date.js'),
       validateKeys = require('../validate/keys.js'),
@@ -71,7 +72,7 @@ module.exports = async (data, plainPath) => {
       validateKeys(document, specifiedKeys);
 
       event.subtitle = validateString(document, 'Untertitel');
-      event.url = validateString(document, 'URL');
+      event.url = validateAbsoluteUrl(document, 'URL');
       event.hosts = { sourced: validateArray(document, 'Veranstalter') };
       event.participants = { sourced: validateArray(document, 'Teilnehmer') };
       event.categories = { sourced: validateArray(document, 'Kategorien') };

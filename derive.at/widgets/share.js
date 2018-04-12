@@ -1,3 +1,6 @@
+// TODO: Revisit share.js data aquisition (what to pass, how to get url (dynamically?))
+// TODO: footer.js share icons are similiar to share.js icons -> clarify differences or non-differences and implement both finalized
+
 module.exports = (title, url) => `
   <a class="a__no-underline"
      id="share-on-facebook"

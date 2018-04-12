@@ -71,7 +71,7 @@ module.exports = async (data, plainPath) => {
       program.image = validatePath(document, 'Bild');
       program.soundfile = validatePath(document, 'Soundfile');
       program.editors = { sourced: validateArray(document, 'Redaktion') };
-      program.language = validateString(document, 'Sprache'); // TODO: What is the usecase of this actually? (same for articles)
+      program.language = validateString(document, 'Sprache');
       program.categories = { sourced: validateArray(document, 'Kategorien') };
       program.tags = { sourced: validateArray(document, 'Tags') };
       program.abstract = validateMarkdown(document, 'Abstract');

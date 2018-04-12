@@ -67,7 +67,7 @@ module.exports = async data => {
 
         await sourceEvent(data, localFilesystemPath);
 
-      } else if(normalizedPath.match(/^Zeitschrift\//)) {
+      } else if(normalizedPath.match(/^Zeitschriften\//)) {
 
         await sourceIssue(data, localFilesystemPath);
 

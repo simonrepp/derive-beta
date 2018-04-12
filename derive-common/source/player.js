@@ -1,5 +1,6 @@
 const { loadPlain, statFile } = require('../util.js'),
       { PlainDataParseError } = require('../../plaindata/plaindata.js'),
+      validateAbsoluteUrl = require('../validate/absolute-url.js'),
       validateArray = require('../validate/array.js'),
       validateKeys = require('../validate/keys.js'),
       validateMarkdown = require('../validate/markdown.js'),
@@ -63,7 +64,7 @@ module.exports = async (data, plainPath) => {
       player.country = validateString(document, 'Land');
       player.city = validateString(document, 'Stadt');
       player.tags = { sourced: validateArray(document, 'Tags') };
-      player.website = validateString(document, 'Website');
+      player.website = validateAbsoluteUrl(document, 'Website');
       player.biography = validateMarkdown(document, 'Biographie');
       player.text = validateMarkdown(document, 'Text');
     } catch(err) {

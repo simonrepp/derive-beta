@@ -27,10 +27,6 @@
           "command": "derive-beta:new-feature"
         },
         {
-          "label": "Neues Heft",
-          "command": "derive-beta:new-issue"
-        },
-        {
           "label": "Neue Radiosendung",
           "command": "derive-beta:new-program"
         },
@@ -41,6 +37,10 @@
         {
           "label": "Neue Veranstaltung",
           "command": "derive-beta:new-event"
+        },
+        {
+          "label": "Neue Zeitschrift",
+          "command": "derive-beta:new-issue"
         },
         {
           "type": "separator"
@@ -55,10 +55,6 @@
             {
               "label": "Artikel",
               "command": "derive-beta:list-articles"
-            },
-            {
-              "label": "Ausgaben",
-              "command": "derive-beta:list-issues"
             },
             {
               "label": "Bücher",
@@ -83,6 +79,10 @@
             {
               "label": "Veranstaltungen",
               "command": "derive-beta:list-events"
+            },
+            {
+              "label": "Zeitschriften",
+              "command": "derive-beta:list-issues"
             }
           ]
         },
@@ -109,10 +109,6 @@
               "command": "derive-beta:article-reference"
             },
             {
-              "label": "Ausgabe",
-              "command": "derive-beta:issue-reference"
-            },
-            {
               "label": "Buch",
               "command": "derive-beta:book-reference"
             },
@@ -127,6 +123,10 @@
             {
               "label": "Veranstaltung",
               "command": "derive-beta:event-reference"
+            },
+            {
+              "label": "Zeitschrift",
+              "command": "derive-beta:issue-reference"
             }
           ]
         },

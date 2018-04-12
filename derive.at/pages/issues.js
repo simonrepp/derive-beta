@@ -1,6 +1,7 @@
-const layout = require('./layout.js'),
-      authors = require('../widgets/authors.js'),
-      { formattedQuarter, fullIssueTitle } = require('../widgets/issue-labeling.js'),
+const authors = require('../widgets/authors.js'),
+      { fullIssueTitle } = require('../widgets/issues/labeling.js'),
+      issueTile = require('../widgets/issues/tile.js'),
+      layout = require('./layout.js'),
       share = require('../widgets/share.js'),
       tags = require('../widgets/tags.js');
 
@@ -20,8 +21,8 @@ module.exports = data => {
 
   const latestAuthors = new Set();
   latest.sections.forEach(section =>
-    section.articles.forEach(article =>
-      article.connected.authors.connected.forEach(author => latestAuthors.add(author))
+    section.articles.connected.forEach(article =>
+      article.authors.connected.forEach(author => latestAuthors.add(author))
     )
   );
 
@@ -59,31 +60,10 @@ module.exports = data => {
       ${Object.keys(years).sort((a, b) => b - a).map(year => `
         <hr/>
 
-        ${year}
+        <h2>${year}</h2>
 
         <div class="tiles__magazine">
-          ${years[year].map(issue => `
-            <div class="tile__magazine">
-              <div class="tile__magazine__cover">
-                <div class="desktop-overlay">
-                  <div class="number">dérive N<sup>o</sup> ${issue.number}</div>
-                  <div class="quarter">${formattedQuarter[issue.quarter]}</div>
-                  <div class="title">${issue.title}</div>
-                  <a class="view" href="/zeitschrift/${issue.number}/">Ansehen</a>
-                  ${issue.shopLink ? `
-                    <a class="buy" href="${issue.shopLink}">Kaufen</a>
-                  `:''}
-                </div>
-
-                <img src="${issue.cover.written}"/>
-              </div>
-
-              <div class="tile__magazine__label">
-                <strong>N<sup>o</sup> ${issue.number}</strong><br/>
-                ${issue.title}
-              </div>
-            </div>
-          `.trim()).join('')}
+          ${years[year].map(issueTile).join('')}
         </div>
       `).join('')}
 

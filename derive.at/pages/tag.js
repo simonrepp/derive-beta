@@ -1,5 +1,5 @@
 const layout = require('./layout.js'),
-      articleTile = require('../widgets/article-tile.js'),
+      articleTile = require('../widgets/articles/tile.js'),
       bookTile = require('../widgets/book-tile.js'),
       eventTile = require('../widgets/event-tile.js'),
       programTile = require('../widgets/program-tile.js');

@@ -38,7 +38,7 @@ module.exports = data => `
 
     <div class="sidebar__item">
       <a class="sidebar__link sidebar__link__edition sidebar__widget-toggle">
-        <span>N<sup>o</sup></span><br/>
+        N°<br/>
         ${data.issuesDescending[0].number}
       </a>
 

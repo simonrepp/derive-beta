@@ -1,5 +1,6 @@
 const { loadPlain, statFile } = require('../util.js'),
       { PlainDataParseError } = require('../../plaindata/plaindata.js'),
+      validateAbsoluteUrl = require('../validate/absolute-url.js'),
       validateArray = require('../validate/array.js'),
       validateKeys = require('../validate/keys.js'),
       validateInteger = require('../validate/integer.js'),
@@ -64,13 +65,13 @@ module.exports = async (data, plainPath) => {
     try {
       book.title = validateString(document, 'Titel', { required: true });
       book.permalink = validatePermalink(document, 'Permalink', { required: true });
+      book.yearOfPublication = validateInteger(document, 'Erscheinungsjahr', { required: true });
 
       validateKeys(document, specifiedKeys);
 
       book.isxn = validateString(document, 'ISBN/ISSN');
-      book.url = validateString(document, 'URL');
+      book.url = validateAbsoluteUrl(document, 'URL');
       book.placeOfPublication = validateString(document, 'Erscheinungsort');
-      book.yearOfPublication = validateInteger(document, 'Erscheinungsjahr');
       book.numberOfPages = validateInteger(document, 'Seitenanzahl');
       book.price = validateString(document, 'Preis');
       book.authors = { sourced: validateArray(document, 'Autoren/Herausgeber') };

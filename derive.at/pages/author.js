@@ -1,5 +1,5 @@
 const layout = require('./layout.js'),
-      articleTile = require('../widgets/article-tile.js'),
+      articleTile = require('../widgets/articles/tile.js'),
       bookTile = require('../widgets/book-tile.js'),
       eventTile = require('../widgets/event-tile.js'),
       programTile = require('../widgets/program-tile.js'),
@@ -15,8 +15,6 @@ module.exports = (data, author) => {
       ${author.text ? `
         ${author.text.sourced}
       `:''}
-
-      <!-- TODO: Protect against missing http:// in website and thus incorrectly interpreted relative link? (Maybe validate?) -->
 
       ${author.website ? `
         <a href="${author.website}">Zur Website von ${author.name}</a>

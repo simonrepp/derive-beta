@@ -27,14 +27,19 @@ module.exports = (data, article) => {
 
     ${tags(article.tags.connected)}
 
-    TODO Autoren kurz bios?
+    ${article.authors.connected.map(author => `
+      <strong>${author.name}</strong><br/>
+      ${author.biography ? `
+        ${author.biography.sourced}
+      `:''}<br/><br/>
+    `).join('')}
 
-    <hr/>
-    
     ${article.readable ? `
+      <hr/>
+
       ${article.text ? article.text.written : 'Kein Text vorhanden'}
     `:`
-      TODO: Only provide issue teaser and shop link for not readable articles
+      Die Zeitschrift mit dem gesamten Artikel kann online im Shop erworben werden!
     `}
 
     <hr/>

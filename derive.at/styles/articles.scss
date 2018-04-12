@@ -1,0 +1,21 @@
+@import './colors.scss';
+
+.article-panel {
+  background-color: $color-almost-white;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2em;
+  padding: 2em;
+}
+
+.article-panel__info {
+  width: calc(50% - 2em);
+}
+
+.article-panel__abstract {
+  width: 50%;
+}
+
+.article-panel__info-split {
+  display: flex;
+}

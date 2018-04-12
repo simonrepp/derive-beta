@@ -1,14 +1,15 @@
-const layout = require('./layout.js'),
-      authors = require('../widgets/authors.js'),
-      { formattedQuarter, fullIssueTitle } = require('../widgets/issue-labeling.js'),
+const authors = require('../widgets/authors.js'),
+      { fullIssueTitle } = require('../widgets/issues/labeling.js'),
+      layout = require('./layout.js'),
+      section = require('../widgets/issues/section.js'),
       share = require('../widgets/share.js'),
       tags = require('../widgets/tags.js');
 
 module.exports = (data, issue) => {
   const issueAuthors = new Set();
   issue.sections.forEach(section =>
-    section.articles.forEach(article =>
-      article.connected.authors.connected.forEach(author => issueAuthors.add(author))
+    section.articles.connected.forEach(article =>
+      article.authors.connected.forEach(author => issueAuthors.add(author))
     )
   );
 
@@ -43,29 +44,7 @@ module.exports = (data, issue) => {
         </div>
       </div>
 
-      ${issue.sections.map(section => `
-        <hr class="hr__light" />
-
-        <h1>${section.title}</h1>
-
-        ${section.articles.map(article => `
-          ${authors(article.connected.authors.connected)}<br/>
-          Seite: ${article.pages}<br/>
-          <a href="/texte/${article.connected.permalink}/">Artikel lesen</a>
-          <h2>
-            <a href="/texte/${article.connected.permalink}/">
-              ${article.connected.title}
-            </a>
-          </h2>
-          ${article.connected.subtitle ? `
-            <h3>
-              <a href="/texte/${article.connected.permalink}/">
-                ${article.connected.subtitle}
-              </a>
-            </h3>
-          `:''}
-        `).join('')}
-      `).join('')}
+      ${issue.sections.map(section).join('')}
     </div>
   `;
 

@@ -1,6 +1,4 @@
-const moment = require('moment');
-
-const authors = require('./authors.js');
+const authors = require('../authors.js');
 
 module.exports = article => `
   <div class="tile">

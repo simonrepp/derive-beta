@@ -58,11 +58,13 @@ const clearBackReferences = data => {
 const connectIssuesWithArticles = data => {
   data.issues.forEach(issue => {
     issue.sections.forEach(section => {
-      section.articles.forEach(article => {
+      section.articles.connected = [];
+
+      section.articles.sourced.forEach(article => {
         const articleInstance = data.articlesByTitle.get(article.title);
 
         if(articleInstance) {
-          article.connected = articleInstance;
+          section.articles.connected.push(articleInstance);
 
           articleInstance.issue = issue;
           articleInstance.inIssueOnPages = article.pages;
@@ -71,7 +73,7 @@ const connectIssuesWithArticles = data => {
             description: `Bis zur Lösung des Problems scheint die betroffene Verbindung zum referenzierten Artikel nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${issue.sourceFile}`,
             detail: '',
             files: [{ path: issue.sourceFile }],
-            header: `**${issue.sourceFile}**\n\nIn Ausgabe No ${issue.number} wird in der Rubrik "${section.title}" der Artikel "${article.title}" referenziert, es wurde aber kein Artikel mit diesem Titel gefunden.`
+            header: `**${issue.sourceFile}**\n\nIn Zeitschrift N° ${issue.number} wird in der Rubrik "${section.title}" der Artikel "${article.title}" referenziert, es wurde aber kein Artikel mit diesem Titel gefunden.`
           });
         }
       });

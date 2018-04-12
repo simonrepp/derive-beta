@@ -97,13 +97,13 @@ module.exports = data => {
   data.issues.forEach(issue => {
     if(data.issuesByNumber.has(issue.number)) {
       data.warnings.push({
-        description: `Bis zur Lösung des Problems scheint eine der Ausgaben auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${data.issuesByNumber.get(issue.number).sourceFile}\n\n**B (wird verworfen)** - ${issue.sourceFile}`,
-        detail: `Es existieren zwei Ausgaben mit der Nummer ${issue.number}`,
+        description: `Bis zur Lösung des Problems scheint eine der Zeitschriften auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${data.issuesByNumber.get(issue.number).sourceFile}\n\n**B (wird verworfen)** - ${issue.sourceFile}`,
+        detail: `Es existieren zwei Zeitschriften mit der Nummer ${issue.number}`,
         files: [
           { path: data.issuesByNumber.get(issue.number).sourceFile, label: 'A' },
           { path: issue.sourceFile, label: 'B' }
         ],
-        header: 'Problem beim gegenseitigem prüfen der Nummern aller Ausgaben'
+        header: 'Problem beim gegenseitigem prüfen der Nummern aller Zeitschriften'
       });
 
       data.issues.delete(issue.sourceFile);

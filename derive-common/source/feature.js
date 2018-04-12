@@ -1,5 +1,6 @@
 const { loadPlain, statFile } = require('../util.js'),
       { PlainDataParseError } = require('../../plaindata/plaindata.js'),
+      validateAbsoluteUrl = require('../validate/absolute-url.js'),
       validateBoolean = require('../validate/boolean.js'),
       validateInteger = require('../validate/integer.js'),
       validateKeys = require('../validate/keys.js'),
@@ -63,7 +64,7 @@ module.exports = async (data, plainPath) => {
       feature.image = validatePath(document, 'Bild');
       feature.position = validateInteger(document, 'Position');
       feature.biggerBox = validateBoolean(document, 'Größere Box');
-      feature.url = validateString(document, 'URL');
+      feature.url = validateAbsoluteUrl(document, 'URL');
       feature.text = validateMarkdown(document, 'Text');
     } catch(err) {
       data.cache.delete(plainPath);
