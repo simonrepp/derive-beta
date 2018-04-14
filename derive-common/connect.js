@@ -81,6 +81,25 @@ const connectIssuesWithArticles = data => {
   });
 };
 
+const connectRadioEditors = data => {
+  if(data.radio) {
+    data.radio.editors.connected = [];
+    data.radio.editors.sourced.forEach(name => {
+      const instance = data.playersByName.get(name);
+
+      if(instance) {
+        data.radio.editors.connected.push(instance);
+      } else {
+        data.errors.push({
+          description: `Bis zur Lösung des Problems scheint die betroffene Verbindung zum verlinkten Akteur nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${data.radio.sourceFile}`,
+          files: [{ path: data.radio.sourceFile }],
+          header: `**Radio**\n\nDie AkteurIn "${name}", angegeben als Teil der allgemeinen Radio Redaktion, wurde nicht gefunden.`
+        });
+      }
+    });
+  }
+};
+
 module.exports = data => {
   clearBackReferences(data);
 
@@ -94,6 +113,8 @@ module.exports = data => {
   connectPlayers(data, 'programs', 'editors', 'programs');
 
   connectIssuesWithArticles(data);
+
+  connectRadioEditors(data);
 
   return;
 };

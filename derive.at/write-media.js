@@ -122,15 +122,25 @@ module.exports = async (data, preview) => {
     }
   }
 
-  let imageNumber = 0;
+  let featureNumber = 0;
   for(let feature of data.features.values()) {
     if(feature.image) {
       if(preview) {
         feature.image.written = `${data.rootServerUrl}/${feature.image.localFilesystemPath}`;
       } else {
-        feature.image.written = path.join('/features', `bild-${imageNumber++}${path.extname(feature.image.normalizedPath)}`);
+        feature.image.written = path.join('/features', `bild-${featureNumber++}${path.extname(feature.image.normalizedPath)}`);
         concurrentWrites.push( copyResized(feature.image.localFilesystemPath, feature.image.written) );
       }
+    }
+  }
+
+  let festivalNumber = 0;
+  for(let edition of data.festival.editions) {
+    if(preview) {
+      edition.image.written = `${data.rootServerUrl}/${edition.image.localFilesystemPath}`;
+    } else {
+      edition.image.written = path.join('/festival', `bild-${festivalNumber++}${path.extname(edition.image.normalizedPath)}`);
+      concurrentWrites.push( copyResized(edition.image.localFilesystemPath, edition.image.written) );
     }
   }
 

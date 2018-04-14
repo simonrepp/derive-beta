@@ -5,16 +5,19 @@ const { globFiles } = require('./util.js'),
       sourceBook = require('./source/book.js'),
       sourceEvent = require('./source/event.js'),
       sourceFeature = require('./source/feature.js'),
+      sourceFestival = require('./source/festival.js'),
       sourceIssue = require('./source/issue.js'),
       sourcePage = require('./source/page.js'),
       sourcePlayer = require('./source/player.js'),
       sourceProgram = require('./source/program.js');
+      sourceRadio = require('./source/radio.js');
 
 const forbiddenFilenameCharacters = /[\\?*:|"<>]/;
 
 module.exports = async data => {
   data.articles.clear();
   data.books.clear();
+  data.errors = [];
   data.events.clear();
   data.issues.clear();
   data.media.clear();
@@ -39,7 +42,15 @@ module.exports = async data => {
 
     } else if(path.extname(normalizedPath) === '.plain') {
 
-      if(normalizedPath.match(/^Akteure\//)) {
+      if(normalizedPath === 'Festival/Festival.plain') {
+
+        await sourceFestival(data, localFilesystemPath);
+
+      } else if(normalizedPath === 'Radio/Radio.plain') {
+
+        await sourceRadio(data, localFilesystemPath);
+
+      } else if(normalizedPath.match(/^Akteure\//)) {
 
         await sourcePlayer(data, localFilesystemPath);
 
@@ -51,7 +62,7 @@ module.exports = async data => {
 
         await sourceFeature(data, localFilesystemPath);
 
-      } else if(normalizedPath.match(/^Radiosendungen\//)) {
+      } else if(normalizedPath.match(/^Radio\//)) {
 
         await sourceProgram(data, localFilesystemPath);
 

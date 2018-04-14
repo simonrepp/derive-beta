@@ -38,7 +38,7 @@ module.exports = data => {
     if(article.image && !connectMedia(data, article.image)) {
       data.warnings.push({
         description: `Bis zur Lösung des Problems scheint der Artikel nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${article.sourceFile}`,
-        detail: `Der Artikel "${article.title}" referenziert im Dateifeld "Bild" die Datei "${article.image.sourced}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`,
+        detail: `Der Artikel "${article.title}" referenziert im Dateifeld "Bild" die Datei "${article.image.normalizedPath}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`,
         files: [{ path: article.sourceFile }],
         header: 'Problem gefunden beim prüfen der Verlinkung zu einer Mediendatei'
       });
@@ -70,7 +70,7 @@ module.exports = data => {
     if(book.cover && !connectMedia(data, book.cover)) {
       data.warnings.push({
         description: `Bis zur Lösung des Problems scheint das Bild nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${book.sourceFile}`,
-        detail: `Das Buch "${book.title}" referenziert im Dateifeld "Cover" die Datei "${book.cover.sourced}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`,
+        detail: `Das Buch "${book.title}" referenziert im Dateifeld "Cover" die Datei "${book.cover.normalizedPath}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`,
         files: [{ path: book.sourceFile }],
         header: 'Problem gefunden beim prüfen der Verlinkung zu einem Coverbild'
       });
@@ -83,7 +83,7 @@ module.exports = data => {
     if(event.image && !connectMedia(data, event.image)) {
       data.warnings.push({
         description: `Bis zur Lösung des Problems scheint das Bild nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${event.sourceFile}`,
-        detail: `Die Veranstaltung "${event.title}" referenziert im Dateifeld "Bild" die Datei "${event.image.sourced}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`,
+        detail: `Die Veranstaltung "${event.title}" referenziert im Dateifeld "Bild" die Datei "${event.image.normalizedPath}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`,
         files: [{ path: event.sourceFile }],
         header: 'Problem gefunden beim prüfen der Verlinkung zu einem Bild'
       });
@@ -115,7 +115,7 @@ module.exports = data => {
     if(feature.image && !connectMedia(data, feature.image)) {
       data.warnings.push({
         description: `Bis zur Lösung des Problems scheint das Bild nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${feature.sourceFile}`,
-        detail: `Das Feature "${feature.title}" referenziert im Dateifeld "Bild" die Datei "${feature.image.sourced}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`,
+        detail: `Das Feature "${feature.title}" referenziert im Dateifeld "Bild" die Datei "${feature.image.normalizedPath}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`,
         files: [{ path: feature.sourceFile }],
         header: 'Problem gefunden beim prüfen der Verlinkung zu einem Bild'
       });
@@ -124,11 +124,25 @@ module.exports = data => {
     }
   });
 
+  if(data.festival) {
+    data.festival.editions.forEach(edition => {
+      if(!connectMedia(data, edition.image)) {
+        data.errors.push({
+          description: `Da es sich bei diesen Daten um essentielle Basisdaten der Website handelt, muss dieses Problem gelöst werden bevor wieder an der Website gearbeitet werden kann.\n\n**Betroffenes File:** ${festival.sourceFile}`,
+          files: [{ path: festival.sourceFile }],
+          header: `**Festival**\n\nDas Bild "${edition.image.normalizedPath}", dass unter einer der vergangengen Editionen auf der Festivalseite referenziert wird, wurde nicht gefunden.`
+        });
+
+        data.festival = null;
+      }
+    });
+  }
+
   data.issues.forEach(issue => {
     if(issue.cover && !connectMedia(data, issue.cover)) {
       data.warnings.push({
         description: `Bis zur Lösung des Problems scheint das Bild nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${issue.sourceFile}`,
-        detail: `Die Zeitschrift #${issue.number} referenziert im Dateifeld "Bild" die Datei "${issue.cover.sourced}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`,
+        detail: `Die Zeitschrift #${issue.number} referenziert im Dateifeld "Bild" die Datei "${issue.cover.normalizedPath}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`,
         files: [{ path: issue.sourceFile }],
         header: 'Problem gefunden beim prüfen der Verlinkung zu einem Coverbild'
       });
@@ -162,7 +176,7 @@ module.exports = data => {
     if(program.image && !connectMedia(data, program.image)) {
       data.warnings.push({
         description: `Bis zur Lösung des Problems scheint das Bild nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${program.sourceFile}`,
-        detail: `Die Radiosendung "${program.title}" referenziert im Dateifeld "Bild" die Datei "${program.image.sourced}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`,
+        detail: `Die Radiosendung "${program.title}" referenziert im Dateifeld "Bild" die Datei "${program.image.normalizedPath}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`,
         files: [{ path: program.sourceFile }],
         header: 'Problem gefunden beim prüfen der Verlinkung zu einem Bild'
       });
@@ -174,7 +188,7 @@ module.exports = data => {
     if(program.soundfile && !connectMedia(data, program.soundfile)) {
       data.warnings.push({
         description: `Bis zur Lösung des Problems scheint das Soundfile nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${program.sourceFile}`,
-        detail: `Die Radiosendung "${program.title}" referenziert im Dateifeld "Soundfile" die Datei "${program.soundfile.sourced}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`,
+        detail: `Die Radiosendung "${program.title}" referenziert im Dateifeld "Soundfile" die Datei "${program.soundfile.normalizedPath}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`,
         files: [{ path: program.sourceFile }],
         header: 'Problem beim prüfen der Verlinkung zu einem Soundfile'
       });

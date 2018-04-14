@@ -7,28 +7,27 @@ const editors = require('../widgets/editors.js'),
       tags = require('../widgets/tags.js');
 
 module.exports = (data, pagination) => {
-  const first = pagination.programs[0];
+  const firstWithImage = pagination.programs.find(program => program.image);
 
   const html = `
     <div class="feature">
 
       <div class="feature__image">
-        ${first.image ? `<img src="${first.image.written}" />` : ''}
+        ${firstWithImage ? `<img src="${firstWithImage.image.written}" />` : ''}
       </div>
 
       <div class="feature__text">
-        <h1>dérive–Radio für Stadtforschung</h1>
+        <h1>${data.radio.title}</h1>
 
-        Jeden 1. Dienstag im Monat um 17.30 Uhr auf Radio Orange FM 94.0 oder Livestream <a href="http://o94.at">http://o94.at</a><br/><br/>
+        <div class="generic__margin-vertical">
+          ${data.radio.info.sourced}
+        </div>
 
-        Sendungsarchiv zum Nachhören: <a href="http://cba.fro.at/series/1235">http://cba.fro.at/series/1235</a><br/><br/>
-
-        <!-- TODO: "Allgemeine" Redaktion sollten wohl als globale Konfiguration vorliegen -->
-        ${editors(first.editors.connected)}
+        ${editors(data.radio.editors.connected)}
 
         <hr class="hr__light" />
 
-        ${share(first.title, `/radio/${first.permalink}/`)}
+        ${share(data.radio.title, '/radio/')}
       </div>
     </div>
 
@@ -43,5 +42,5 @@ module.exports = (data, pagination) => {
     </div>
   `;
 
-  return layout(data, html, { activeSection: 'Radio', title: 'Radio' });
+  return layout(data, html, { activeSection: 'Radio', title: data.radio.title });
 };
