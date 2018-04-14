@@ -14,7 +14,6 @@ leer:
 
 nichts:
 -- nada
---
 
 # nothing
 ## none
@@ -32,7 +31,6 @@ absence:
 
 
 -- non
---
 end:
 `;
 

@@ -5,7 +5,7 @@ fileTypes: [
 ]
 patterns: [
   {
-    # Multiline string
+    # Multiline value
     'begin': '^(-{3,})\\s*(.+?)\\s*$'
     'beginCaptures':
       '1': 'name': 'constant.character.entity.plain'
@@ -20,25 +20,21 @@ patterns: [
     ]
   }
   {
-    # Alternative string
-    'begin': '^\\s*(--)(?!-)\\s*(.+?)\\s*$'
-    'beginCaptures':
-      '1': 'name': 'constant.character.entity.plain'
-      '2': 'name': 'punctuation.definition.variable.plain'
-    'end': '^\\s*(--)(?!-)\\s*(.+?)?\\s*$'
-    'endCaptures':
-      '1': 'name': 'constant.character.entity.plain'
-      '2': 'name': 'string.plain'
-  }
-  {
-    # Comment line
+    # Comment
     'match': '^\\s*(>)\\s*(.+?)?\\s*$'
     'captures':
       '1': 'name': 'TODO.operator.comment.plain'
       '2': 'name': 'punctuation.definition.comment.plain'
   }
   {
-    # Array entry
+    # Alternative key
+    'match': '^\\s*(--)(?!-)\\s*(\\S.*?)\\s*$'
+    'captures':
+      '1': 'name': 'constant.character.entity.plain'
+      '2': 'name': 'punctuation.definition.variable.plain'
+  }
+  {
+    # Value
     'match': '^\\s*(-)(?!-)\\s*(.+?)?\\s*$'
     'captures':
       '1': 'name': 'punctuation.definition.variable.plain'
@@ -46,31 +42,43 @@ patterns: [
   }
   {
     # Subsection 1st level
-    'match': '^\\s*(#)\\s*([^#\\s]|[^#\\s].*\\S)\\s*$'
+    'match': '^\\s*(#)(?!#)\\s*(\\S.*?)\\s*$'
     'captures':
       '1': 'name': 'entity.name.type.instance.plain'
       '2': 'name': 'entity.name.type.instance.plain'
   }
   {
     # Subsection 2nd level
-    'match': '^\\s*(##)\\s*([^#\\s]|[^#\\s].*\\S)\\s*$'
+    'match': '^\\s*(##)(?!#)\\s*(\\S.*?)\\s*$'
     'captures':
       '1': 'name': 'support.function.plain'
       '2': 'name': 'support.function.plain'
   }
   {
     # Subsection 3rd to 5th level
-    'match': '^\\s*(#{3,5})\\s*([^#\\s]|[^#\\s].*\\S)\\s*$'
+    'match': '^\\s*(#{3,5})(?!#)\\s*(\\S.*?)\\s*$'
     'captures':
       '1': 'name': 'constant.character.entity.plain'
       '2': 'name': 'constant.character.entity.plain'
   }
   {
-    # String
-    'match': '^\\s*((?:(?!: ).)+)\\s*(:)\\s*(\\S+|\\S.*\\S)?\\s*$'
+    # Key value pair
+    'match': '^\\s*([^:]+?)\\s*(:)\\s*(\\S.*?)\\s*$'
     'captures':
       '1': 'name': 'punctuation.definition.variable.plain'
       '2': 'name': 'keyword.operator.assignment.plain'
       '3': 'name': 'string.plain'
+  }
+  {
+    # Key
+    'match': '^\\s*([^:]+?)\\s*(:)\\s*$'
+    'captures':
+      '1': 'name': 'punctuation.definition.variable.plain'
+      '2': 'name': 'keyword.operator.assignment.plain'
+  }
+  {
+    # Invalid (TODO: find a generic error syntax highlighting or provide styles)
+    'match': '^.*$'
+    'name': 'invalid.entity.name.function.plain'
   }
 ]

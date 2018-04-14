@@ -4,7 +4,7 @@ const { parse } = require('../plaindata.js');
 
 const sample = `
 -- key1
--- value
+- value
 -- list1
 - value
 - value
@@ -12,7 +12,7 @@ const sample = `
 
 -- key2
 
--- value
+- value
 
 -- list2
 

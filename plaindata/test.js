@@ -1,24 +1,9 @@
-const fs = require('fs');
+const fs = require('fs'),
+      path = require('path');
 
 const { parse, PlainDataParseError } = require('./plaindata.js');
 
-// const input = fs.readFileSync('samples/', 'utf-8');
-
-const input =
-`  key:key:key:key: value:value:value: value     \n` +
-`  key :key :key :key: value:value:value: value     \n` +
-`  key :key :key :key    : value: value: value  : value     \n` +
-`   a     : a    \n` +
-` b  :b     \n` +
-`    c:    c     \n` +
-`  d:d     \n` +
-`  e:     \n` +
-`  f   :     \n` +
-`  list   :     \n` +
-`  -       \n` +
-`-       \n` +
-`    -\n`
-;
+const input = fs.readFileSync(path.join(__dirname, 'samples/spec.plain'), 'utf-8');
 
 let result;
 
