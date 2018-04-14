@@ -1,4 +1,5 @@
-const dashes = require('./specs/dashes.js'),
+const alternative = require('./specs/alternative.js'),
+      dashes = require('./specs/dashes.js'),
       empty = require('./specs/empty.js'),
       tlateloco = require('./specs/tlateloco.js'),
       whitespace = require('./specs/whitespace.js');
@@ -7,6 +8,7 @@ const dashes = require('./specs/dashes.js'),
 
 console.time('specs');
 
+alternative();
 dashes();
 empty();
 tlateloco();

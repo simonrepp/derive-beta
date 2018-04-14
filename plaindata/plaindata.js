@@ -1,8 +1,18 @@
 // TODO: Parser error coverage!
-// TODO: separate buffers for each type (subdocumentBuffer exists, now add arrayBuffer, etc. instead of generic buffer?)
+// TODO: separate buffers for each type (subdocumentBuffer exists, now add listBuffer, etc. instead of generic buffer?)
 // TODO: Clarify internally to devs as well as externally to users, whether line and beginLine in PlainDataParseError metadata refers to array index (0+ -indexed) or human line reference (1+ -indexed)
 //       And possibly have specs that ensure this is actually correctly reflected in the parser implementation for all possible errors
+
+
+
+
 // TODO: i18n of errors
+
+// DO IT. :)
+
+
+
+
 
 // TODO: Error implementation refinements ? regarding output
 class PlainDataParseError extends Error {
@@ -18,22 +28,22 @@ class PlainDataParseError extends Error {
 }
 
 const STATE_RESET = 0;
-const STATE_READ_MULTILINE_STRING = 1;
-const STATE_READ_ALTERNATIVE_STRING = 2;
-const STATE_READ_EMPTY_OR_ARRAY = 3;
-const STATE_READ_ARRAY = 4;
+const STATE_READ_MULTILINE_VALUE = 1;
+const STATE_READ_ALTERNATIVE_VALUE_OR_LIST = 2;
+const STATE_READ_EMPTY_OR_LIST = 3;
+const STATE_READ_LIST = 4;
 
-const ALTERNATIVE_STRING_KEY = /^\s*--(?!-)\s*(.+?)\s*$/;
-const ALTERNATIVE_STRING_VALUE = /^\s*--(?!-)\s*(.+?)?\s*$/;
-const ARRAY_ITEM = /^\s*-(?!-)\s*(.+?)?\s*$/;
-const EMPTY_OR_ARRAY = /^\s*(\S|\S.*\S)\s*:\s*$/; // TODO: this should also support http:frufru: keys !
-const MULTILINE_STRING_BEGIN = /^(-{3,})\s*(\S|\S.*\S)\s*$/; // TODO: support initial whitespace just everywhere?
-const NOOP = /^\s*>|^\s*$/;
-const STRING = /^\s*((?:(?!: ).)+)\s*:\s*(\S|\S.*\S)\s*$/;
-const SUBDOCUMENT = /^(#{1,3})\s*(\S|\S.*\S)\s*$/; // TODO: should also support support initial whitespace ?
+const ALTERNATIVE_KEY = /^\s*--(?!-)\s*(\S.*?)\s*$/;
+const ALTERNATIVE_VALUE = /^\s*--(?!-)\s*(.+?)?\s*$/;
+const LIST_VALUE = /^\s*-(?!-)\s*(.+?)?\s*$/;
+const KEY = /^\s*(.+?)\s*:\s*$/;
+const MULTILINE_VALUE_BEGIN = /^\s*(-{3,})\s*(\S.*?)\s*$/;
+const NOOP = /^\s*(>|$)/;
+const KEY_VALUE_PAIR = /^\s*([^:]+?)\s*:\s*(\S.*?)\s*$/;
+const SUBDOCUMENT = /^\s*(#+)\s*(\S.*?)\s*$/;
 
-// the whole idea with ignoring whitespace at the begin, end and between relevant tokens is:
-// when you write on paper you don't care if something is "a little to the right, left, or whatever"
+// the whole idea with ignoring whitespace at the begin, end, between different connected lines and between relevant tokens is:
+// when you write on paper you don't care if something is "a little to the right, left, further down or whatever"
 // as long as "words" or whatever you write on paper are clearly separated and graspable by their intent,
 // everything is fine! So this is how plain data should behave as well because everything else is programmerthink
 
@@ -55,37 +65,17 @@ const parse = input => {
   for(let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
     const lineContent = lines[lineIndex];
 
-    if(state === STATE_READ_MULTILINE_STRING) {
-      if(lineContent.match(buffer.endMultilineString)) {
-        // console.log('[multiline string end]', lineContent);
+    if(state === STATE_READ_MULTILINE_VALUE) {
+      if(lineContent.match(buffer.multiLineValueEnd)) {
+        // console.log('[multiline value end]', lineContent);
         documentLevel[buffer.key] = buffer.value.length > 0 ? buffer.value.join('\n') : null;
         state = STATE_RESET;
       } else {
-        // console.log('[multiline string line]', lineContent);
+        // console.log('[multiline value line]', lineContent);
         buffer.value.push(lineContent);
       }
 
       continue;
-    }
-
-    if(state === STATE_READ_ALTERNATIVE_STRING) {
-      if(match = ALTERNATIVE_STRING_VALUE.exec(lineContent)) {
-        // console.log('[alternative string value]', lineContent);
-        documentLevel[buffer.key] = match[1] || null;
-        state = STATE_RESET;
-
-        continue;
-      } else {
-        const message = `In Zeile ${lineIndex + 1} müsste der Wert des in der vorherigen Zeile begonnenen Schlüssel-Wert-Paares folgen (z.b. "-- Wert"), es wurde aber etwas anderes vorgefunden.`;
-        const metadata = {
-          beginColumn: 0,
-          beginLine: lineIndex - 1,
-          column: 0,
-          line: lineIndex
-        };
-
-        throw new PlainDataParseError(message, metadata);
-      }
     }
 
     if(lineContent.match(NOOP)) {
@@ -94,12 +84,40 @@ const parse = input => {
       continue;
     }
 
-    if(state === STATE_READ_EMPTY_OR_ARRAY) {
-      if(match = ARRAY_ITEM.exec(lineContent)) {
-        // Array item
-        // console.log('[array item]', lineContent);
+    if(state === STATE_READ_ALTERNATIVE_VALUE_OR_LIST) {
+      if(match = ALTERNATIVE_VALUE.exec(lineContent)) {
+        // console.log('[alternative value]', lineContent);
+        documentLevel[buffer.key] = match[1] || null;
+        state = STATE_RESET;
+
+        continue;
+      }
+
+      if(match = LIST_VALUE.exec(lineContent)) {
+        // console.log('[list value]', lineContent);
         buffer.value = [ match[1] || null ];
-        state = STATE_READ_ARRAY;
+        state = STATE_READ_LIST;
+
+        continue;
+      }
+
+      const message = `In Zeile ${lineIndex + 1} müsste auf den zuvor in Zeile ${buffer.beginLineIndex + 1} genannten Schlüssel "${buffer.key}" ein einzelner Wert (z.b. "-- blau") oder ein Listeneintrag (z.b. "- Apfel") folgen, es wurde aber etwas anderes vorgefunden.`;
+      const metadata = {
+        beginColumn: 0,
+        beginLine: lineIndex - 1,
+        column: 0,
+        line: lineIndex
+      };
+
+      throw new PlainDataParseError(message, metadata);
+    }
+
+    if(state === STATE_READ_EMPTY_OR_LIST) {
+      if(match = LIST_VALUE.exec(lineContent)) {
+        // List item
+        // console.log('[list item]', lineContent);
+        buffer.value = [ match[1] || null ];
+        state = STATE_READ_LIST;
 
         continue;
       } else {
@@ -110,38 +128,41 @@ const parse = input => {
       }
     }
 
-    if(state === STATE_READ_ARRAY) {
-      if(match = ARRAY_ITEM.exec(lineContent)) {
-        // Array item
-        // console.log('[array item]', lineContent);
+    if(state === STATE_READ_LIST) {
+      if(match = LIST_VALUE.exec(lineContent)) {
+        // List item
+        // console.log('[list item]', lineContent);
         buffer.value.push( match[1] || null );
 
         continue;
       } else {
-        // End of array
-        // console.log('[end of array]', lineContent);
+        // End of list
+        // console.log('[end of list]', lineContent);
         documentLevel[buffer.key] = buffer.value;
         state = STATE_RESET;
       }
     }
 
-    if(match = MULTILINE_STRING_BEGIN.exec(lineContent)) {
-      // console.log('[multiline string begin]', lineContent);
+    if(match = MULTILINE_VALUE_BEGIN.exec(lineContent)) {
+      // console.log('[multiline value begin]', lineContent);
       buffer = {
         beginLineIndex: lineIndex,
-        endMultilineString: new RegExp(`^-{${match[1].length}}\\s*${match[2]}\\s*$`), // TODO: Escape key for regex + space at start possibility
+        multiLineValueEnd: new RegExp(`^\\s*-{${match[1].length}}\\s*${match[2]}\\s*$`), // TODO: Escape key for regex
         key: match[2],
         value: []
       };
-      state = STATE_READ_MULTILINE_STRING;
+      state = STATE_READ_MULTILINE_VALUE;
 
       continue;
     }
 
-    if(match = ALTERNATIVE_STRING_KEY.exec(lineContent)) {
-      // console.log('[alternative string key]', lineContent);
-      buffer = { key: match[1] };
-      state = STATE_READ_ALTERNATIVE_STRING;
+    if(match = ALTERNATIVE_KEY.exec(lineContent)) {
+      // console.log('[alternative value key]', lineContent);
+      buffer = {
+        beginLineIndex: lineIndex,
+        key: match[1]
+      };
+      state = STATE_READ_ALTERNATIVE_VALUE_OR_LIST;
 
       continue;
     }
@@ -206,9 +227,9 @@ const parse = input => {
     }
 
 
-    // TODO: This mechanism (turn into array if twice encountered) should be replicated for other types too, eg. alternative string, array (= with array item value) :D
-    if(match = STRING.exec(lineContent)) {
-      // console.log('[string]', lineContent);
+    // TODO: This mechanism (turn into list if twice encountered) should be replicated for other types too, eg. alternative value, list (= with list item value) :D
+    if(match = KEY_VALUE_PAIR.exec(lineContent)) {
+      // console.log('[key value pair]', lineContent);
 
       if(documentLevel.hasOwnProperty(match[1])) {
         if(!Array.isArray(documentLevel[match[1]])) {
@@ -223,16 +244,16 @@ const parse = input => {
       continue;
     }
 
-    if(match = EMPTY_OR_ARRAY.exec(lineContent)) {
-      // console.log('[empty or array]', lineContent);
+    if(match = KEY.exec(lineContent)) {
+      // console.log('[empty or list]', lineContent);
       buffer = { key: match[1] };
-      state = STATE_READ_EMPTY_OR_ARRAY;
+      state = STATE_READ_EMPTY_OR_LIST;
 
       continue;
     }
 
-    if(lineContent.match(ARRAY_ITEM)) {
-      // console.log('[invalid array item]', lineContent);
+    if(lineContent.match(LIST_VALUE)) {
+      // console.log('[invalid list item]', lineContent);
 
       const message = `Die Zeile ${lineIndex + 1} enthält einen Listeneintrag, ohne dass in einer der Zeilen davor eine Liste begonnen wurde.`;
       const metadata = {
@@ -256,19 +277,19 @@ const parse = input => {
     throw new PlainDataParseError(message, metadata);
   }
 
-  if(state === STATE_READ_EMPTY_OR_ARRAY) {
+  if(state === STATE_READ_EMPTY_OR_LIST) {
     // console.log('[empty]', '(end of document)');
     documentLevel[buffer.key] = null;
     state = STATE_RESET;
   }
 
-  if(state === STATE_READ_ARRAY) {
-    // console.log('[end of array]', '(end of document)');
+  if(state === STATE_READ_LIST) {
+    // console.log('[end of list]', '(end of document)');
     documentLevel[buffer.key] = buffer.value;
     state = STATE_RESET;
   }
 
-  if(state === STATE_READ_MULTILINE_STRING) {
+  if(state === STATE_READ_MULTILINE_VALUE) {
     const message = `Der mehrzeilige Textblock der in Zeile ${buffer.beginLineIndex + 1} beginnt, wird bis zum Ende des Dokuments nicht beendet. (Die abschliessende Zeile "${lines[buffer.beginLineIndex]}" nach dem Textblock fehlt)`;
     const metadata = {
       beginColumn: 0,
@@ -280,8 +301,8 @@ const parse = input => {
     throw new PlainDataParseError(message, metadata);
   }
 
-  if(state === STATE_READ_ALTERNATIVE_STRING) {
-    const message = `Das Schlüssel-Wert-Paar dass in der letzten Zeile (#${lineIndex + 1}) begonnen wird, wird nicht beendet; Eine letzte zusätzliche Zeile wie z.b. "-- Wert" würde dies tun.`;
+  if(state === STATE_READ_ALTERNATIVE_VALUE_OR_LIST) {
+    const message = `Das Schlüssel-Wert-Paar dass in der letzten Zeile (#${lineIndex + 1}) begonnen wird, wird nicht beendet; Eine letzte zusätzliche Zeile wie z.b. "-- Wert" oder ein Listeneintrag wie "- Wert" würde dies tun.`;
     const metadata = {
       beginColumn: 0,
       beginLine: lines.length - 2,
