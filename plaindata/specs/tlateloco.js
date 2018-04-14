@@ -1,3 +1,9 @@
+const assert = require('assert').strict,
+      fs = require('fs'),
+      path = require('path');
+
+const { parse } = require('../plaindata.js');
+
 const expected = {
   Titel: 'Tlatelolco: Wohnblocks, Ruinen und Massaker',
   Untertitel: '»Tlatelolco«, ein Film von Lotte Schreiber',
@@ -24,14 +30,9 @@ const expected = {
   Literaturverzeichnis: null
 };
 
-const assert = require('assert').strict,
-      fs = require('fs');
+module.exports = () => {
+  const tlateloco = fs.readFileSync(path.join(__dirname, '../samples/tlateloco.plain'), 'utf-8');
+  const result = parse(tlateloco);
 
-const { parse } = require('../plaindata.js');
-
-const tlateloco = fs.readFileSync('../samples/tlateloco.plain', 'utf-8');
-const result = parse(tlateloco);
-
-assert.deepStrictEqual(result, expected);
-
-console.log('Everything checks out.');
+  assert.deepStrictEqual(result, expected);
+};
