@@ -1,10 +1,13 @@
-// TODO: Parser error coverage!
 // TODO: separate buffers for each type (subdocumentBuffer exists, now add listBuffer, etc. instead of generic buffer?)
 // TODO: Clarify internally to devs as well as externally to users, whether line and beginLine in PlainDataParseError metadata refers to array index (0+ -indexed) or human line reference (1+ -indexed)
 //       And possibly have specs that ensure this is actually correctly reflected in the parser implementation for all possible errors
 
-// TODO: Expose i18n of error messages through API
-const messages = require('./messages/de.js');
+class PlainDataOptionError extends Error {
+  constructor(message) {
+    super(message);
+    Error.captureStackTrace(this, PlainDataOptionError);
+  }
+}
 
 // TODO: Error implementation refinements ? regarding output
 class PlainDataParseError extends Error {
@@ -19,6 +22,8 @@ class PlainDataParseError extends Error {
   }
 }
 
+const SUPPORTED_LOCALES = ['de', 'en'];
+
 const STATE_RESET = null;
 const STATE_READ_MULTILINE_VALUE = 1;
 const STATE_READ_VALUES = 2;
@@ -26,20 +31,27 @@ const STATE_READ_VALUES = 2;
 const ALTERNATIVE_KEY = /^\s*--(?!-)\s*(\S.*?)\s*$/;
 const COMMENT_OR_EMPTY = /^\s*(>|$)/;
 const KEY = /^\s*([^:]+?)\s*:\s*$/;
-const KEY_VALUE_PAIR = /^\s*([^:]+?)\s*:\s*(\S.*?)\s*$/;
+const KEY_VALUE = /^\s*(?![>\-#])([^:]+?)\s*:\s*(\S.*?)\s*$/;
 const MULTILINE_VALUE_BEGIN = /^\s*(-{3,})\s*(\S.*?)\s*$/;
 const SUBDOCUMENT = /^\s*(#+)\s*(\S.*?)\s*$/;
 const VALUE = /^\s*-(?!-)\s*(.+?)?\s*$/;
-
-// TODO: Harden e.g. KEY_VALUE regex to be robust for any matching order (?!#>) ...
 
 // the whole idea with ignoring whitespace at the begin, end, between different connected lines and between relevant tokens is:
 // when you write on paper you don't care if something is "a little to the right, left, further down or whatever"
 // as long as "words" or whatever you write on paper are clearly separated and graspable by their intent,
 // everything is fine! So this is how plain data should behave as well because everything else is programmerthink
 
-const parse = input => {
-  const lines = input.split('\n'); // TODO: Robust split for all platforms' newline signature
+const parse = (input, options = { locale: 'en' }) => {
+  if(!SUPPORTED_LOCALES.includes(options.locale)) {
+    throw new PlainDataOptionError(
+      'The provided message locale requested through the parser options is ' +
+      'not supported. Translation contributions are very welcome and an easy ' +
+      'thing to do - less than 10 messages need to be translated!'
+    );
+  }
+
+  const messages = require(`./messages/${options.locale}.js`);
+  const lines = input.split(/\r?\n/);
   const documentRoot = {};
 
   let documentLevel = documentRoot;
@@ -115,6 +127,38 @@ const parse = input => {
         state = STATE_RESET;
 
       }
+    }
+
+    if(match = KEY_VALUE.exec(lineContent)) {
+
+      // console.log('[key value pair]', lineContent);
+      const key = match[1];
+      const value = match[2];
+      const previousValues = documentLevel[key];
+
+      if(previousValues === undefined) {
+        documentLevel[key] = value;
+      } else {
+        if(Array.isArray(previousValues)) {
+          previousValues.push(value);
+        } else {
+          documentLevel[key] = [previousValues, value];
+        }
+      }
+
+      continue;
+    }
+
+    if(match = KEY.exec(lineContent)) {
+
+      // console.log('[key]', lineContent);
+      buffer = {
+        beginLineIndex: lineIndex,
+        key: match[1]
+      };
+      state = STATE_READ_VALUES;
+
+      continue;
     }
 
     if(match = MULTILINE_VALUE_BEGIN.exec(lineContent)) {
@@ -206,38 +250,6 @@ const parse = input => {
       continue;
     }
 
-    if(match = KEY_VALUE_PAIR.exec(lineContent)) {
-
-      // console.log('[key value pair]', lineContent);
-      const key = match[1];
-      const value = match[2];
-      const previousValues = documentLevel[key];
-
-      if(previousValues === undefined) {
-        documentLevel[key] = value;
-      } else {
-        if(Array.isArray(previousValues)) {
-          previousValues.push(value);
-        } else {
-          documentLevel[key] = [previousValues, value];
-        }
-      }
-
-      continue;
-    }
-
-    if(match = KEY.exec(lineContent)) {
-
-      // console.log('[key]', lineContent);
-      buffer = {
-        beginLineIndex: lineIndex,
-        key: match[1]
-      };
-      state = STATE_READ_VALUES;
-
-      continue;
-    }
-
     if(lineContent.match(VALUE)) {
 
       // console.log('[unexpected value]', lineContent);
@@ -256,7 +268,6 @@ const parse = input => {
       throw new PlainDataParseError(message, metadata);
     }
 
-    // TODO: This could actually be not an error state, but just plain and really cool: If it's nothing else, then it's a value! (dangerous though because restrictions - >#- (begin) / : (in between)) nah think again
     const message = messages.invalidLine({
       errorLine: lineIndex + 1,
       errorLineContent: lineContent
@@ -300,5 +311,6 @@ const parse = input => {
 
 module.exports = {
   parse: parse,
-  PlainDataParseError: PlainDataParseError
+  PlainDataParseError: PlainDataParseError,
+  PlainDataOptionError: PlainDataOptionError
 };
