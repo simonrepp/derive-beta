@@ -1,6 +1,6 @@
-// TODO: separate buffers for each type (subdocumentBuffer exists, now add listBuffer, etc. instead of generic buffer?)
 // TODO: Clarify internally to devs as well as externally to users, whether line and beginLine in PlainDataParseError metadata refers to array index (0+ -indexed) or human line reference (1+ -indexed)
 //       And possibly have specs that ensure this is actually correctly reflected in the parser implementation for all possible errors
+// TODO: Error implementation refinements ? regarding output
 
 class PlainDataOptionError extends Error {
   constructor(message) {
@@ -9,7 +9,6 @@ class PlainDataOptionError extends Error {
   }
 }
 
-// TODO: Error implementation refinements ? regarding output
 class PlainDataParseError extends Error {
   constructor(message, metadata) {
     super(message);
@@ -56,11 +55,11 @@ const parse = (input, options = { locale: 'en' }) => {
 
   let documentLevel = documentRoot;
   let state = STATE_RESET;
-  let buffer;
+  let keyValueBuffer;
   let match;
 
   let parentDocuments = [];
-  let subdocumentBuffer = {
+  let hierarchyBuffer = {
     beginLineIndex: 0,
     depth: 0
   };
@@ -69,25 +68,25 @@ const parse = (input, options = { locale: 'en' }) => {
     const lineContent = lines[lineIndex];
 
     if(state === STATE_READ_MULTILINE_VALUE) {
-      if(lineContent.match(buffer.multiLineValueEnd)) {
+      if(lineContent.match(keyValueBuffer.multiLineValueEnd)) {
         // console.log('[multiline value end]', lineContent);
-        const value = buffer.value.length > 0 ? buffer.value.join('\n') : null;
-        const previousValues = documentLevel[buffer.key];
+        const value = keyValueBuffer.value.length > 0 ? keyValueBuffer.value.join('\n') : null;
+        const previousValues = documentLevel[keyValueBuffer.key];
 
         if(previousValues === undefined) {
-          documentLevel[buffer.key] = value;
+          documentLevel[keyValueBuffer.key] = value;
         } else {
           if(Array.isArray(previousValues)) {
             previousValues.push(value);
           } else {
-            documentLevel[buffer.key] = [previousValues, value];
+            documentLevel[keyValueBuffer.key] = [previousValues, value];
           }
         }
 
         state = STATE_RESET;
       } else {
         // console.log('[multiline value line]', lineContent);
-        buffer.value.push(lineContent);
+        keyValueBuffer.value.push(lineContent);
       }
 
       continue;
@@ -104,15 +103,15 @@ const parse = (input, options = { locale: 'en' }) => {
 
         // console.log('[value]', lineContent);
         const value = match[1] || null;
-        const previousValues = documentLevel[buffer.key];
+        const previousValues = documentLevel[keyValueBuffer.key];
 
         if(previousValues === undefined) {
-          documentLevel[buffer.key] = value;
+          documentLevel[keyValueBuffer.key] = value;
         } else {
           if(Array.isArray(previousValues)) {
             previousValues.push(value);
           } else {
-            documentLevel[buffer.key] = [previousValues, value];
+            documentLevel[keyValueBuffer.key] = [previousValues, value];
           }
         }
 
@@ -120,8 +119,8 @@ const parse = (input, options = { locale: 'en' }) => {
 
       } else {
 
-        if(documentLevel[buffer.key] === undefined) {
-          documentLevel[buffer.key] = null;
+        if(documentLevel[keyValueBuffer.key] === undefined) {
+          documentLevel[keyValueBuffer.key] = null;
         }
 
         state = STATE_RESET;
@@ -152,7 +151,7 @@ const parse = (input, options = { locale: 'en' }) => {
     if(match = KEY.exec(lineContent)) {
 
       // console.log('[key]', lineContent);
-      buffer = {
+      keyValueBuffer = {
         beginLineIndex: lineIndex,
         key: match[1]
       };
@@ -163,12 +162,18 @@ const parse = (input, options = { locale: 'en' }) => {
 
     if(match = MULTILINE_VALUE_BEGIN.exec(lineContent)) {
       // console.log('[multiline value begin]', lineContent);
-      buffer = {
+
+      const dashes = match[1];
+      const key = match[2];
+      const keyEscaped = key.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+
+      keyValueBuffer = {
         beginLineIndex: lineIndex,
-        multiLineValueEnd: new RegExp(`^\\s*-{${match[1].length}}\\s*${match[2]}\\s*$`), // TODO: Escape key for regex
-        key: match[2],
+        multiLineValueEnd: new RegExp(`^\\s*${dashes}\\s*${keyEscaped}\\s*$`),
+        key: key,
         value: []
       };
+
       state = STATE_READ_MULTILINE_VALUE;
 
       continue;
@@ -176,7 +181,7 @@ const parse = (input, options = { locale: 'en' }) => {
 
     if(match = ALTERNATIVE_KEY.exec(lineContent)) {
       // console.log('[alternative key]', lineContent);
-      buffer = {
+      keyValueBuffer = {
         beginLineIndex: lineIndex,
         key: match[1]
       };
@@ -193,9 +198,9 @@ const parse = (input, options = { locale: 'en' }) => {
 
       if(hashesCount - parentDocuments.length > 1) {
         const message = messages.hierarchyLayerSkip({
-          currentDepth: subdocumentBuffer.depth,
-          currentDepthBeginLine: subdocumentBuffer.beginLineIndex + 1,
-          currentDepthBeginLineContent: lines[subdocumentBuffer.beginLineIndex],
+          currentDepth: hierarchyBuffer.depth,
+          currentDepthBeginLine: hierarchyBuffer.beginLineIndex + 1,
+          currentDepthBeginLineContent: lines[hierarchyBuffer.beginLineIndex],
           errorLine: lineIndex + 1,
           errorLineContent: lineContent,
           targetDepth: hashesCount
@@ -203,7 +208,7 @@ const parse = (input, options = { locale: 'en' }) => {
 
         const metadata = {
           beginColumn: 0,
-          beginLine: subdocumentBuffer.beginLineIndex,
+          beginLine: hierarchyBuffer.beginLineIndex,
           column: 0,
           line: lineIndex
         };
@@ -242,7 +247,7 @@ const parse = (input, options = { locale: 'en' }) => {
         }
       }
 
-      subdocumentBuffer = {
+      hierarchyBuffer = {
         beginLineIndex: lineIndex,
         depth: hashesCount
       };
@@ -285,20 +290,20 @@ const parse = (input, options = { locale: 'en' }) => {
 
   if(state === STATE_READ_VALUES) {
     // console.log('[end of document while reading values]');
-    if(documentLevel[buffer.key] === undefined) {
-      documentLevel[buffer.key] = null;
+    if(documentLevel[keyValueBuffer.key] === undefined) {
+      documentLevel[keyValueBuffer.key] = null;
     }
   }
 
   if(state === STATE_READ_MULTILINE_VALUE) {
     const message = messages.unterminatedMultilineValue({
-      multiLineValueBeginLine: buffer.beginLineIndex + 1,
-      multiLineValueBeginLineContent: lines[buffer.beginLineIndex]
+      multiLineValueBeginLine: keyValueBuffer.beginLineIndex + 1,
+      multiLineValueBeginLineContent: lines[keyValueBuffer.beginLineIndex]
     });
 
     const metadata = {
       beginColumn: 0,
-      beginLine: buffer.beginLineIndex,
+      beginLine: keyValueBuffer.beginLineIndex,
       column: lines[lines.length - 1].length,
       line: lines.length - 1
     };
