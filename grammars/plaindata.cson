@@ -4,7 +4,6 @@ fileTypes: [
   'plain'
 ]
 
-# TODO: HEREDOC solution for multiline value backrefernce ?
 # TODO: expand key: and -- alternative key matching onto next key line,
 #       so we can in between have correct invalid detection and highlighting
 
@@ -13,13 +12,13 @@ patterns: [
     # --- multiline value
     # ...
     # --- multiline value
-    'begin': '^(-{3,})\\s*(.+?)\\s*$'
+    'begin': '^\\s*(-{3,})\\s*(.+?)\\s*$'
     'beginCaptures':
-      '1': 'name': 'punctuation.definition.block.multiline-value.plain'
+      '1': 'name': 'punctuation.definition.block.multiline-value.begin.plain'
       '2': 'name': 'variable.other.key.plain'
-    'end': '^(-{3,})\\s*(.+?)\\s*$'
+    'end': '^\\s*(\\1)\\s*(\\2)\\s*$'
     'endCaptures':
-      '1': 'name': 'punctuation.definition.block.multiline-value.plain'
+      '1': 'name': 'punctuation.definition.block.multiline-value.end.plain'
       '2': 'name': 'variable.other.key.plain'
     'patterns': [
       {
