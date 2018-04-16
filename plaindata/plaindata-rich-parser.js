@@ -61,6 +61,7 @@ const parse = (input, options = { locale: 'en' }) => {
         const value = readBuffer.value.length > 0 ? readBuffer.value.join('\n') : null;
 
         const newValue = {
+          key: readBuffer.key,
           keyRange: {
             beginColumn: readBuffer.keyRange.beginColumn,
             beginLine: readBuffer.keyRange.beginLine,
@@ -109,6 +110,7 @@ const parse = (input, options = { locale: 'en' }) => {
                                              lineContent.length);
 
         const newValue = {
+          key: readBuffer.key,
           keyRange: readBuffer.keyRange,
           value: value,
           valueRange: {
@@ -127,27 +129,32 @@ const parse = (input, options = { locale: 'en' }) => {
           hierarchy.current.set(readBuffer.key, [newValue]);
         }
 
+        readBuffer.empty = false;
+
         continue;
 
       } else {
 
-        const newValue = {
-          keyRange: readBuffer.keyRange,
-          value: null,
-          valueRange: {
-            beginColumn: 0,
-            beginLine: readBuffer.keyRange.beginLine + 1,
-            endColumn: 0,
-            endLine: readBuffer.keyRange.beginLine + 1
+        if(readBuffer.empty) {
+          const newValue = {
+            key: readBuffer.key,
+            keyRange: readBuffer.keyRange,
+            value: null,
+            valueRange: {
+              beginColumn: 0,
+              beginLine: readBuffer.keyRange.beginLine + 1,
+              endColumn: 0,
+              endLine: readBuffer.keyRange.beginLine + 1
+            }
+          };
+
+          const existingValues = hierarchy.current.get(readBuffer.key);
+
+          if(existingValues) {
+            existingValues.push(newValue);
+          } else {
+            hierarchy.current.set(readBuffer.key, [newValue]);
           }
-        };
-
-        const existingValues = hierarchy.current.get(readBuffer.key);
-
-        if(existingValues) {
-          existingValues.push(newValue);
-        } else {
-          hierarchy.current.set(readBuffer.key, [newValue]);
         }
 
         state = STATE_RESET;
@@ -165,6 +172,7 @@ const parse = (input, options = { locale: 'en' }) => {
       const valueColumn = lineContent.lastIndexOf(value);
 
       const newValue = {
+        key: key,
         keyRange: {
           beginColumn: keyColumn,
           beginLine: lineNumber,
@@ -199,6 +207,7 @@ const parse = (input, options = { locale: 'en' }) => {
       const column = lineContent.indexOf(key);
 
       readBuffer = {
+        empty: true,
         key: key,
         keyRange: {
           beginColumn: column,
@@ -242,6 +251,7 @@ const parse = (input, options = { locale: 'en' }) => {
       const column = lineContent.lastIndexOf(key);
 
       readBuffer = {
+        empty: true,
         key: key,
         keyRange: {
           beginColumn: column,
@@ -284,13 +294,14 @@ const parse = (input, options = { locale: 'en' }) => {
       }
 
       const newValue = {
+        key: key,
         keyRange: {
           beginColumn: keyColumn,
           beginLine: lineNumber,
           endColumn: keyColumn + key.length,
           endLine: lineNumber
         },
-        value: new PlainMap()
+        value: new PlainMap(options.locale)
 
         // TODO: Consider if/how to handle valueRange for sections
         // valueRange: {
@@ -358,9 +369,26 @@ const parse = (input, options = { locale: 'en' }) => {
   if(state === STATE_READ_VALUES) {
     // console.log('[end of document while reading values]');
 
-    // TODO: Only add null to values if for this readBuffer we have not written anything yet (may need extra field to remember that)
-    if(documentLevel[readBuffer.key] === undefined) {
-      documentLevel[readBuffer.key] = null;
+    if(readBuffer.empty) {
+      const newValue = {
+        key: readBuffer.key,
+        keyRange: readBuffer.keyRange,
+        value: null,
+        valueRange: {
+          beginColumn: 0,
+          beginLine: readBuffer.keyRange.beginLine + 1,
+          endColumn: 0,
+          endLine: readBuffer.keyRange.beginLine + 1
+        }
+      };
+
+      const existingValues = hierarchy.current.get(readBuffer.key);
+
+      if(existingValues) {
+        existingValues.push(newValue);
+      } else {
+        hierarchy.current.set(readBuffer.key, [newValue]);
+      }
     }
   }
 

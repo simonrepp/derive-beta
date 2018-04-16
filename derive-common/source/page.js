@@ -1,12 +1,8 @@
-const { loadPlain, statFile, URBANIZE_ENUM } = require('../util.js'),
-      { PlainDataParseError } = require('../../plaindata/plaindata.js'),
-      validateArray = require('../validate/array.js'),
-      validateKeys = require('../validate/keys.js'),
+const { loadPlainRich, statFile, URBANIZE_ENUM } = require('../util.js'),
+      { PlainDataError, PlainDataParseError } = require('../../plaindata/errors.js'),
       validateEnum = require('../validate/enum.js'),
-      validateMarkdown = require('../validate/markdown.js'),
-      validatePermalink = require('../validate/permalink.js'),
-      validateString = require('../validate/string.js'),
-      ValidationError = require('../validate/error.js');
+      { validateMarkdownWithMedia } = require('../validate/markdown.js'),
+      validatePermalink = require('../validate/permalink.js');
 
 const specifiedKeys = [
   'Permalink',
@@ -25,7 +21,7 @@ module.exports = async (data, plainPath) => {
     let document;
 
     try {
-      document = await loadPlain(data.root, plainPath);
+      document = await loadPlainRich(data.root, plainPath);
     } catch(err) {
       data.cache.delete(plainPath);
 
@@ -52,17 +48,17 @@ module.exports = async (data, plainPath) => {
     const page = { sourceFile: plainPath };
 
     try {
-      page.title = validateString(document, 'Titel', { required: true });
-      page.permalink = validatePermalink(document, 'Permalink', { required: true });
+      page.title = document.value('Titel', { required: true });
+      page.permalink = document.value('Permalink', { process: validatePermalink, required: true });
 
-      validateKeys(document, specifiedKeys);
+      // validateKeys(document, specifiedKeys);
 
-      page.urbanize = validateEnum(document, 'Urbanize', URBANIZE_ENUM);
-      page.text = validateMarkdown(document, 'Text', { media: true });
+      page.urbanize = document.value('Urbanize', { process: validateEnum(URBANIZE_ENUM) });
+      page.text = document.value('Text', { process: validateMarkdownWithMedia });
     } catch(err) {
       data.cache.delete(plainPath);
 
-      if(err instanceof ValidationError) {
+      if(err instanceof PlainDataError) {
         data.warnings.push({
           description: `Bis zur Lösung des Problems scheint die betroffene Seite nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${plainPath}`,
           detail: err.message,

@@ -1,14 +1,10 @@
-const { loadPlain, statFile } = require('../util.js'),
-      { PlainDataParseError } = require('../../plaindata/plaindata.js'),
+const { loadPlainRich, statFile } = require('../util.js'),
+      { PlainDataError, PlainDataParseError } = require('../../plaindata/errors.js'),
       validateAbsoluteUrl = require('../validate/absolute-url.js'),
-      validateArray = require('../validate/array.js'),
-      validateKeys = require('../validate/keys.js'),
       validateInteger = require('../validate/integer.js'),
-      validateMarkdown = require('../validate/markdown.js'),
+      { validateMarkdown } = require('../validate/markdown.js'),
       validatePath = require('../validate/path.js'),
-      validatePermalink = require('../validate/permalink.js'),
-      validateString = require('../validate/string.js'),
-      ValidationError = require('../validate/error.js');
+      validatePermalink = require('../validate/permalink.js');
 
 const specifiedKeys = [
   'Autoren/Herausgeber',
@@ -36,7 +32,7 @@ module.exports = async (data, plainPath) => {
     let document;
 
     try {
-      document = await loadPlain(data.root, plainPath);
+      document = await loadPlainRich(data.root, plainPath);
     } catch(err) {
       data.cache.delete(plainPath);
 
@@ -63,26 +59,26 @@ module.exports = async (data, plainPath) => {
     const book = { sourceFile: plainPath };
 
     try {
-      book.title = validateString(document, 'Titel', { required: true });
-      book.permalink = validatePermalink(document, 'Permalink', { required: true });
-      book.yearOfPublication = validateInteger(document, 'Erscheinungsjahr', { required: true });
+      book.title = document.value('Titel', { required: true });
+      book.permalink = document.value('Permalink', { process: validatePermalink, required: true });
+      book.yearOfPublication = document.value('Erscheinungsjahr', { process: validateInteger, required: true });
 
-      validateKeys(document, specifiedKeys);
+      // validateKeys(document.value(specifiedKeys);
 
-      book.isxn = validateString(document, 'ISBN/ISSN');
-      book.url = validateAbsoluteUrl(document, 'URL');
-      book.placeOfPublication = validateString(document, 'Erscheinungsort');
-      book.numberOfPages = validateInteger(document, 'Seitenanzahl');
-      book.price = validateString(document, 'Preis');
-      book.authors = { sourced: validateArray(document, 'Autoren/Herausgeber') };
-      book.publishers = { sourced: validateArray(document, 'Verleger') };
-      book.tags = { sourced: validateArray(document, 'Tags') };
-      book.cover = validatePath(document, 'Cover');
-      book.description = validateMarkdown(document, 'Verlagstext');
+      book.isxn = document.value('ISBN/ISSN');
+      book.url = document.value('URL', { process: validateAbsoluteUrl });
+      book.placeOfPublication = document.value('Erscheinungsort');
+      book.numberOfPages = document.value('Seitenanzahl', { process: validateInteger });
+      book.price = document.value('Preis');
+      book.authors = { sourced: document.values('Autoren/Herausgeber') };
+      book.publishers = { sourced: document.values('Verleger') };
+      book.tags = { sourced: document.values('Tags') };
+      book.cover = document.value('Cover', { process: validatePath });
+      book.description = document.value('Verlagstext', { process: validateMarkdown });
     } catch(err) {
       data.cache.delete(plainPath);
 
-      if(err instanceof ValidationError) {
+      if(err instanceof PlainDataError) {
         data.warnings.push({
           description: `Bis zur Lösung des Problems scheint das betroffene Buch nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${plainPath}`,
           detail: err.message,

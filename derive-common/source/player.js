@@ -1,12 +1,8 @@
-const { loadPlain, statFile } = require('../util.js'),
-      { PlainDataParseError } = require('../../plaindata/plaindata.js'),
+const { loadPlainRich, statFile } = require('../util.js'),
+      { PlainDataError, PlainDataParseError } = require('../../plaindata/errors.js'),
       validateAbsoluteUrl = require('../validate/absolute-url.js'),
-      validateArray = require('../validate/array.js'),
-      validateKeys = require('../validate/keys.js'),
-      validateMarkdown = require('../validate/markdown.js'),
-      validatePermalink = require('../validate/permalink.js'),
-      validateString = require('../validate/string.js'),
-      ValidationError = require('../validate/error.js');
+      { validateMarkdown } = require('../validate/markdown.js'),
+      validatePermalink = require('../validate/permalink.js');
 
 const specifiedKeys = [
   'Biographie',
@@ -29,7 +25,7 @@ module.exports = async (data, plainPath) => {
     let document;
 
     try {
-      document = await loadPlain(data.root, plainPath);
+      document = await loadPlainRich(data.root, plainPath);
     } catch(err) {
       data.cache.delete(plainPath);
 
@@ -56,21 +52,21 @@ module.exports = async (data, plainPath) => {
     const player = { sourceFile: plainPath };
 
     try {
-      player.name = validateString(document, 'Name', { required: true });
-      player.permalink = validatePermalink(document, 'Permalink', { required: true });
+      player.name = document.value('Name', { required: true });
+      player.permalink = document.value('Permalink', { process: validatePermalink, required: true });
 
-      validateKeys(document, specifiedKeys);
+      // validateKeys(document, specifiedKeys);
 
-      player.country = validateString(document, 'Land');
-      player.city = validateString(document, 'Stadt');
-      player.tags = { sourced: validateArray(document, 'Tags') };
-      player.website = validateAbsoluteUrl(document, 'Website');
-      player.biography = validateMarkdown(document, 'Biographie');
-      player.text = validateMarkdown(document, 'Text');
+      player.country = document.value('Land');
+      player.city = document.value('Stadt');
+      player.tags = { sourced: document.values('Tags') };
+      player.website = document.value('Website', { process: validateAbsoluteUrl });
+      player.biography = document.value('Biographie', { process: validateMarkdown });
+      player.text = document.value('Text', { process: validateMarkdown });
     } catch(err) {
       data.cache.delete(plainPath);
 
-      if(err instanceof ValidationError) {
+      if(err instanceof PlainDataError) {
         data.warnings.push({
           description: `Bis zur Lösung des Problems scheint der betroffene Akteur nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${plainPath}`,
           detail: err.message,

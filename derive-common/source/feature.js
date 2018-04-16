@@ -1,13 +1,10 @@
-const { loadPlain, statFile } = require('../util.js'),
-      { PlainDataParseError } = require('../../plaindata/plaindata.js'),
+const { loadPlainRich, statFile } = require('../util.js'),
+      { PlainDataError, PlainDataParseError } = require('../../plaindata/errors.js'),
       validateAbsoluteUrl = require('../validate/absolute-url.js'),
       validateBoolean = require('../validate/boolean.js'),
       validateInteger = require('../validate/integer.js'),
-      validateKeys = require('../validate/keys.js'),
-      validateMarkdown = require('../validate/markdown.js'),
-      validatePath = require('../validate/path.js'),
-      validateString = require('../validate/string.js'),
-      ValidationError = require('../validate/error.js');
+      { validateMarkdown } = require('../validate/markdown.js'),
+      validatePath = require('../validate/path.js');
 
 const specifiedKeys = [
   'Bild',
@@ -29,7 +26,7 @@ module.exports = async (data, plainPath) => {
     let document;
 
     try {
-      document = await loadPlain(data.root, plainPath);
+      document = await loadPlainRich(data.root, plainPath);
     } catch(err) {
       data.cache.delete(plainPath);
 
@@ -56,20 +53,20 @@ module.exports = async (data, plainPath) => {
     const feature = { sourceFile: plainPath };
 
     try {
-      feature.title = validateString(document, 'Titel', { required: true });
+      feature.title = document.value('Titel', { required: true });
 
-      validateKeys(document, specifiedKeys);
+      // validateKeys(document.value(specifiedKeys);
 
-      feature.header = validateString(document, 'Header');
-      feature.image = validatePath(document, 'Bild');
-      feature.position = validateInteger(document, 'Position');
-      feature.biggerBox = validateBoolean(document, 'Größere Box');
-      feature.url = validateAbsoluteUrl(document, 'URL');
-      feature.text = validateMarkdown(document, 'Text');
+      feature.header = document.value('Header');
+      feature.image = document.value('Bild', { process: validatePath });
+      feature.position = document.value('Position', { process: validateInteger });
+      feature.biggerBox = document.value('Größere Box', { process: validateBoolean });
+      feature.url = document.value('URL', { process: validateAbsoluteUrl });
+      feature.text = document.value('Text', { process: validateMarkdown });
     } catch(err) {
       data.cache.delete(plainPath);
 
-      if(err instanceof ValidationError) {
+      if(err instanceof PlainDataError) {
         data.warnings.push({
           description: `Bis zur Lösung des Problems scheint das betroffene Feature nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${plainPath}`,
           detail: err.message,

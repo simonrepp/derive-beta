@@ -1,13 +1,9 @@
-const { loadPlain, statFile } = require('../util.js'),
-      { PlainDataParseError } = require('../../plaindata/plaindata.js'),
-      validateArray = require('../validate/array.js'),
+const { loadPlainRich, statFile } = require('../util.js'),
+      { PlainDataError, PlainDataParseError } = require('../../plaindata/errors.js'),
       validateDate = require('../validate/date.js'),
-      validateKeys = require('../validate/keys.js'),
-      validateMarkdown = require('../validate/markdown.js'),
+      { validateMarkdown, validateMarkdownWithMedia } = require('../validate/markdown.js'),
       validatePath = require('../validate/path.js'),
-      validatePermalink = require('../validate/permalink.js'),
-      validateString = require('../validate/string.js'),
-      ValidationError = require('../validate/error.js');
+      validatePermalink = require('../validate/permalink.js');
 
 const specifiedKeys = [
   'Abstract',
@@ -34,7 +30,7 @@ module.exports = async (data, plainPath) => {
     let document;
 
     try {
-      document = await loadPlain(data.root, plainPath);
+      document = await loadPlainRich(data.root, plainPath);
     } catch(err) {
       data.cache.delete(plainPath);
 
@@ -61,25 +57,25 @@ module.exports = async (data, plainPath) => {
     const program = { sourceFile: plainPath };
 
     try {
-      program.title = validateString(document, 'Titel', { required: true });
-      program.permalink = validatePermalink(document, 'Permalink', { required: true });
-      program.firstBroadcast = validateDate(document, 'Erstausstrahlung', { required: true });
+      program.title = document.value('Titel', { required: true });
+      program.permalink = document.value('Permalink', { process: validatePermalink, required: true });
+      program.firstBroadcast = document.value('Erstausstrahlung', { process: validateDate, required: true });
 
-      validateKeys(document, specifiedKeys);
+      // validateKeys(document, specifiedKeys);
 
-      program.subtitle = validateString(document, 'Untertitel');
-      program.image = validatePath(document, 'Bild');
-      program.soundfile = validatePath(document, 'Soundfile');
-      program.editors = { sourced: validateArray(document, 'Redaktion') };
-      program.language = validateString(document, 'Sprache');
-      program.categories = { sourced: validateArray(document, 'Kategorien') };
-      program.tags = { sourced: validateArray(document, 'Tags') };
-      program.abstract = validateMarkdown(document, 'Abstract');
-      program.text = validateMarkdown(document, 'Text', { media: true });
+      program.subtitle = document.value('Untertitel');
+      program.image = document.value('Bild', { process: validatePath });
+      program.soundfile = document.value('Soundfile', { process: validatePath });
+      program.editors = { sourced: document.values('Redaktion') };
+      program.language = document.value('Sprache');
+      program.categories = { sourced: document.values('Kategorien') };
+      program.tags = { sourced: document.values('Tags') };
+      program.abstract = document.value('Abstract', { process: validateMarkdown });
+      program.text = document.value('Text', { process: validateMarkdownWithMedia });
     } catch(err) {
       data.cache.delete(plainPath);
 
-      if(err instanceof ValidationError) {
+      if(err instanceof PlainDataError) {
         data.warnings.push({
           description: 'Bis der Fehler korrigiert wurde wird die Datei ignoriert, dies kann auch weitere Dateien betreffen wenn diese auf die Datei bzw. deren Inhalte referenzieren.',
           detail: err.message,

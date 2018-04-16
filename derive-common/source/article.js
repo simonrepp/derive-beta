@@ -1,16 +1,12 @@
-const { loadPlain, statFile, URBANIZE_ENUM } = require('../util.js'),
-      { PlainDataParseError } = require('../../plaindata/plaindata.js'),
-      validateArray = require('../validate/array.js'),
+const { loadPlainRich, statFile, URBANIZE_ENUM } = require('../util.js'),
+      { PlainDataError, PlainDataParseError } = require('../../plaindata/errors.js'),
       validateBoolean = require('../validate/boolean.js'),
       validateDate = require('../validate/date.js'),
-      validateKeys = require('../validate/keys.js'),
       validateEnum = require('../validate/enum.js'),
       validateInteger = require('../validate/integer.js'),
-      validateMarkdown = require('../validate/markdown.js'),
+      { validateMarkdown, validateMarkdownWithMedia } = require('../validate/markdown.js'),
       validatePath = require('../validate/path.js'),
-      validatePermalink = require('../validate/permalink.js'),
-      validateString = require('../validate/string.js'),
-      ValidationError = require('../validate/error.js');
+      validatePermalink = require('../validate/permalink.js');
 
 const specifiedKeys = [
   'Abstract',
@@ -41,7 +37,7 @@ module.exports = async (data, plainPath) => {
     let document;
 
     try {
-      document = await loadPlain(data.root, plainPath);
+      document = await loadPlainRich(data.root, plainPath);
     } catch(err) {
       data.cache.delete(plainPath);
 
@@ -69,29 +65,29 @@ module.exports = async (data, plainPath) => {
 
     try {
 
-      article.title = validateString(document, 'Titel', { required: true });
-      article.permalink = validatePermalink(document, 'Permalink', { required: true });
+      article.title = document.value('Titel', { required: true });
+      article.permalink = document.value('Permalink', { process: validatePermalink, required: true });
 
-      validateKeys(document, specifiedKeys);
+      // validateKeys(document.value(specifiedKeys);
 
-      article.subtitle = validateString(document, 'Untertitel');
-      article.image = validatePath(document, 'Bild');
-      article.authors = { sourced: validateArray(document, 'Autoren') };
-      article.date = validateString(document, 'Datum');
-      article.language = validateString(document, 'Sprache');
-      article.categories = { sourced: validateArray(document, 'Kategorien') };
-      article.tags = { sourced: validateArray(document, 'Tags') };
-      article.bookReviews = { sourced: validateArray(document, 'Buchbesprechungen') };
-      article.publish = validateBoolean(document, 'Veröffentlichen');
-      article.readable = validateBoolean(document, 'Lesbar');
-      article.urbanize = validateEnum(document, 'Urbanize', URBANIZE_ENUM);
-      article.abstract = validateMarkdown(document, 'Abstract');
-      article.bibliography = validateMarkdown(document, 'Literaturverzeichnis');
-      article.text = validateMarkdown(document, 'Text', { media: true });
+      article.subtitle = document.value('Untertitel');
+      article.image = document.value('Bild', { process: validatePath });
+      article.authors = { sourced: document.values('Autoren') };
+      article.date = document.value('Datum');
+      article.language = document.value('Sprache');
+      article.categories = { sourced: document.values('Kategorien') };
+      article.tags = { sourced: document.values('Tags') };
+      article.bookReviews = { sourced: document.values('Buchbesprechungen') };
+      article.publish = document.value('Veröffentlichen', { process: validateBoolean });
+      article.readable = document.value('Lesbar', { process: validateBoolean });
+      article.urbanize = document.value('Urbanize', { process: validateEnum(URBANIZE_ENUM) });
+      article.abstract = document.value('Abstract', { process: validateMarkdown });
+      article.bibliography = document.value('Literaturverzeichnis', { process: validateMarkdown });
+      article.text = document.value('Text', { process: validateMarkdownWithMedia });
     } catch(err) {
       data.cache.delete(plainPath);
 
-      if(err instanceof ValidationError) {
+      if(err instanceof PlainDataError) {
         data.warnings.push({
           description: `Bis zur Lösung des Problems scheint der betroffene Artikel nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${plainPath}`,
           detail: err.message,

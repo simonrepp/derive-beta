@@ -48,11 +48,17 @@ module.exports = {
     expectedSectionGotList: key => {
       return `Das Feld "${key}" enthält eine Liste, muss aber eine Sektion enthalten.`;
     },
+    expectedSectionsGotValue: key => {
+      return `Die Liste "${key}" darf nur Sektionen enthalten, enhält aber einen einfachen Wert.`;
+    },
     expectedValueGotList: key => {
       return `Das Feld "${key}" enthält eine Liste, muss aber einen einzelnen Wert enthalten.`;
     },
     expectedValueGotSection: key => {
       return `Das Feld "${key}" enthält eine Sektion, muss aber einen einzelnen Wert enthalten.`;
+    },
+    expectedValuesGotSection: key => {
+      return `Die Liste "${key}" darf nur einfache Werte enthalten, enhält aber eine Sektion.`;
     },
     missingKey: key => {
       return `Fehlendes Feld "${key}" - Falls das Feld angegeben wurde ` +

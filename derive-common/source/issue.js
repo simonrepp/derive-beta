@@ -1,14 +1,10 @@
-const { loadPlain, statFile } = require('../util.js'),
-      { PlainDataParseError } = require('../../plaindata/plaindata.js'),
-      validateArray = require('../validate/array.js'),
+const { loadPlainRich, statFile } = require('../util.js'),
+      { PlainDataError, PlainDataParseError } = require('../../plaindata/errors.js'),
       validateBoolean = require('../validate/boolean.js'),
       validateDate = require('../validate/date.js'),
-      validateKeys = require('../validate/keys.js'),
       validateInteger = require('../validate/integer.js'),
-      validateMarkdown = require('../validate/markdown.js'),
-      validatePath = require('../validate/path.js'),
-      validateString = require('../validate/string.js'),
-      ValidationError = require('../validate/error.js');
+      { validateMarkdown } = require('../validate/markdown.js'),
+      validatePath = require('../validate/path.js');
 
 const specifiedKeys = [
   'Beschreibung',
@@ -37,7 +33,7 @@ module.exports = async (data, plainPath) => {
     let document;
 
     try {
-      document = await loadPlain(data.root, plainPath);
+      document = await loadPlainRich(data.root, plainPath);
     } catch(err) {
       data.cache.delete(plainPath);
 
@@ -64,46 +60,36 @@ module.exports = async (data, plainPath) => {
     const issue = { sourceFile: plainPath };
 
     try {
-      issue.number = validateInteger(document, 'Nummer', { required: true });
-      issue.title = validateString(document, 'Titel', { required: true });
-      issue.year = validateInteger(document, 'Jahr', { required: true });
-      issue.quarter = validateInteger(document, 'Quartal', { required: true });
-      issue.cover = validatePath(document, 'Cover', { required: true });
+      issue.number = document.value('Nummer', { process: validateInteger, required: true });
+      issue.title = document.value('Titel', { required: true });
+      issue.year = document.value('Jahr', { process: validateInteger, required: true });
+      issue.quarter = document.value('Quartal', { process: validateInteger, required: true });
+      issue.cover = document.value('Cover', { process: validatePath, required: true });
 
-      validateKeys(document, specifiedKeys);
+      // validateKeys(document, specifiedKeys);
 
-      issue.shopLink = validateString(document, 'Link zum Shop');
-      issue.cooperation = validateString(document, 'Kooperation');
-      issue.features = validateArray(document, 'Schwerpunkte');
-      issue.outOfPrint = validateBoolean(document, 'Vergriffen');
-      issue.publicationDate = validateDate(document, 'Erscheinungsdatum');
-      issue.tags = { sourced: validateArray(document, 'Tags') };
-      issue.publish = validateBoolean(document, 'Veröffentlichen'); // TODO: Purpose of this? If "to test out things" we can maybe remove it because we now have staging, except long time process
-      issue.description = validateMarkdown(document, 'Beschreibung');
+      issue.shopLink = document.value('Link zum Shop');
+      issue.cooperation = document.value('Kooperation');
+      issue.features = document.values('Schwerpunkte');
+      issue.outOfPrint = document.value('Vergriffen', { process: validateBoolean });
+      issue.publicationDate = document.value('Erscheinungsdatum', { process: validateDate });
+      issue.tags = { sourced: document.values('Tags') };
+      issue.publish = document.value('Veröffentlichen', { process: validateBoolean }); // TODO: Purpose of this? If "to test out things" we can maybe remove it because we now have staging, except long time process
+      issue.description = document.value('Beschreibung', { process: validateMarkdown });
 
-      issue.sections = validateArray(document, 'Rubrik');
-
-      issue.sections = issue.sections.map(section => {
-        const validatedSection = {};
-
-        validatedSection.title = validateString(section, 'Titel', { required: true });
-        validatedSection.articles = { sourced: validateArray(section, 'Artikel', { optional: true }) };
-
-        validatedSection.articles.sourced = validatedSection.articles.sourced.map(article => {
-          const validatedArticle = {};
-
-          validatedArticle.title = validateString(article, 'Titel', { required: true });
-          validatedArticle.pages = validateString(article, 'Seite(n)', { required: true });
-
-          return validatedArticle;
-        });
-
-        return validatedSection;
-      });
+      issue.sections = document.sections('Rubrik').map(section => ({
+        title: section.value('Titel', { required: true }),
+        articles: {
+          sourced: section.sections('Artikel', { keyRequired: false }).map(article => ({
+            title: article.value('Titel', { required: true }),
+            pages: article.value('Seite(n)', { required: true })
+          }))
+        }
+      }));
     } catch(err) {
       data.cache.delete(plainPath);
 
-      if(err instanceof ValidationError) {
+      if(err instanceof PlainDataError) {
         data.warnings.push({
           description: `Bis zur Lösung des Problems scheint die betroffene Zeitschrift nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${plainPath}`,
           detail: err.message,

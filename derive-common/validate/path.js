@@ -1,21 +1,3 @@
-const ValidationError = require('./error.js');
-
-module.exports = (document, field, data, options = { required: false }) => {
-  if(!document.hasOwnProperty(field)) {
-    throw new ValidationError(`Fehlendes Feld "${field}" - Falls das Feld angegeben wurde eventuell nach Tippfehlern Ausschau halten und auch die Gross/Kleinschreibung beachten.`);
-  }
-
-  const value = document[field];
-
-  if(value === null) {
-    if(options.required) {
-      throw new ValidationError(`Das Dateifeld "${field}" muss ausgefüllt sein.`);
-    } else {
-      return null;
-    }
-  } else if(typeof value === 'string') {
-    return { normalizedPath: value.replace(/^\//, '').normalize() };
-  } else {
-    throw new ValidationError(`Das Feld "${field}" muss ein Dateifeld sein, enthält aber einen anderen Datentyp.`);
-  }
-};
+module.exports = ({ value }) => ({
+  normalizedPath: value.replace(/^\//, '').normalize()
+});

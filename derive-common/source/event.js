@@ -1,15 +1,11 @@
-const { loadPlain, statFile, URBANIZE_ENUM } = require('../util.js'),
-      { PlainDataParseError } = require('../../plaindata/plaindata.js'),
+const { loadPlainRich, statFile, URBANIZE_ENUM } = require('../util.js'),
+      { PlainDataError, PlainDataParseError } = require('../../plaindata/errors.js'),
       validateAbsoluteUrl = require('../validate/absolute-url.js'),
-      validateArray = require('../validate/array.js'),
       validateDate = require('../validate/date.js'),
-      validateKeys = require('../validate/keys.js'),
       validateEnum = require('../validate/enum.js'),
-      validateMarkdown = require('../validate/markdown.js'),
+      { validateMarkdown, validateMarkdownWithMedia } = require('../validate/markdown.js'),
       validatePath = require('../validate/path.js'),
-      validatePermalink = require('../validate/permalink.js'),
-      validateString = require('../validate/string.js'),
-      ValidationError = require('../validate/error.js');
+      validatePermalink = require('../validate/permalink.js');
 
 const specifiedKeys = [
   'Abstract',
@@ -39,7 +35,7 @@ module.exports = async (data, plainPath) => {
     let document;
 
     try {
-      document = await loadPlain(data.root, plainPath);
+      document = await loadPlainRich(data.root, plainPath);
     } catch(err) {
       data.cache.delete(plainPath);
 
@@ -66,37 +62,32 @@ module.exports = async (data, plainPath) => {
     const event = { sourceFile: plainPath };
 
     try {
-      event.title = validateString(document, 'Titel', { required: true });
-      event.permalink = validatePermalink(document, 'Permalink', { required: true });
+      event.title = document.value('Titel', { required: true });
+      event.permalink = document.value('Permalink', { process: validatePermalink, required: true });
 
-      validateKeys(document, specifiedKeys);
+      // validateKeys(document.value(specifiedKeys);
 
-      event.subtitle = validateString(document, 'Untertitel');
-      event.url = validateAbsoluteUrl(document, 'URL');
-      event.hosts = { sourced: validateArray(document, 'Veranstalter') };
-      event.participants = { sourced: validateArray(document, 'Teilnehmer') };
-      event.categories = { sourced: validateArray(document, 'Kategorien') };
-      event.tags = { sourced: validateArray(document, 'Tags') };
-      event.image = validatePath(document, 'Bild');
-      event.urbanize = validateEnum(document, 'Urbanize', URBANIZE_ENUM);
-      event.address = validateString(document, 'Adresse');
-      event.dates = validateArray(document, 'Termin');
-      event.abstract = validateMarkdown(document, 'Abstract');
-      event.additionalInfo = validateMarkdown(document, 'Zusatzinfo');
-      event.text = validateMarkdown(document, 'Text', { media: true });
+      event.subtitle = document.value('Untertitel');
+      event.url = document.value('URL', { process: validateAbsoluteUrl });
+      event.hosts = { sourced: document.values('Veranstalter') };
+      event.participants = { sourced: document.values('Teilnehmer') };
+      event.categories = { sourced: document.values('Kategorien') };
+      event.tags = { sourced: document.values('Tags') };
+      event.image = document.value('Bild', { process: validatePath });
+      event.urbanize = document.value('Urbanize', { process: validateEnum(URBANIZE_ENUM) });
+      event.address = document.value('Adresse');
+      event.abstract = document.value('Abstract', { process: validateMarkdown });
+      event.additionalInfo = document.value('Zusatzinfo', { process: validateMarkdown });
+      event.text = document.value('Text', { process: validateMarkdownWithMedia });
 
-      event.dates = event.dates.map(date => {
-        const validatedDate = {};
-
-        validatedDate.date = validateDate(date, 'Datum');
-        validatedDate.time = validateString(date, 'Zeit');
-
-        return validatedDate;
-      });
+      event.dates = document.sections('Termin').map(date => ({
+        date: date.value('Datum', { process: validateDate }),
+        time: date.value('Zeit')
+      }));
     } catch(err) {
       data.cache.delete(plainPath);
 
-      if(err instanceof ValidationError) {
+      if(err instanceof PlainDataError) {
         data.warnings.push({
           description: `Bis zur Lösung des Problems scheint die betroffene Veranstaltung nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${plainPath}`,
           detail: err.message,

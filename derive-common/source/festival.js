@@ -1,12 +1,8 @@
-const { loadPlain, statFile } = require('../util.js'),
-      { PlainDataParseError } = require('../../plaindata/plaindata.js'),
+const { loadPlainRich, statFile } = require('../util.js'),
+      { PlainDataError, PlainDataParseError } = require('../../plaindata/errors.js'),
       validateAbsoluteUrl = require('../validate/absolute-url.js'),
-      validateArray = require('../validate/array.js'),
-      validateKeys = require('../validate/keys.js'),
-      validateMarkdown = require('../validate/markdown.js'),
-      validatePath = require('../validate/path.js'),
-      validateString = require('../validate/string.js'),
-      ValidationError = require('../validate/error.js');
+      { validateMarkdown } = require('../validate/markdown.js'),
+      validatePath = require('../validate/path.js');
 
 module.exports = async (data, plainPath) => {
   const cached = data.cache.get(plainPath);
@@ -18,7 +14,7 @@ module.exports = async (data, plainPath) => {
     let document;
 
     try {
-      document = await loadPlain(data.root, plainPath);
+      document = await loadPlainRich(data.root, plainPath);
     } catch(err) {
       data.cache.delete(plainPath);
 
@@ -45,25 +41,20 @@ module.exports = async (data, plainPath) => {
     const festival = { sourceFile: plainPath };
 
     try {
-      festival.title = validateString(document, 'Titel', { required: true });
-      festival.subtitle = validateString(document, 'Untertitel', { required: true });
-      festival.description = validateMarkdown(document, 'Beschreibung', { required: true });
+      festival.title = document.value('Titel', { required: true });
+      festival.subtitle = document.value('Untertitel', { required: true });
+      festival.description = document.value('Beschreibung', { process: validateMarkdown, required: true });
 
-      validateKeys(document, ['Beschreibung', 'Edition', 'Titel', 'Untertitel']);
+      // validateKeys(document, ['Beschreibung', 'Edition', 'Titel', 'Untertitel']);
 
-      festival.editions = validateArray(document, 'Edition');
-      festival.editions = festival.editions.map(edition => {
-        const validatedEdition = {};
-
-        validatedEdition.image = validatePath(edition, 'Bild', { required: true });
-        validatedEdition.url = validateAbsoluteUrl(edition, 'URL', { required: true });
-
-        return validatedEdition;
-      });
+      festival.editions = document.sections('Edition').map(edition => ({
+        image: edition.value('Bild', { process: validatePath, required: true }),
+        url: edition.value('URL', { process: validateAbsoluteUrl, required: true })
+      }));
     } catch(err) {
       data.cache.delete(plainPath);
 
-      if(err instanceof ValidationError) {
+      if(err instanceof PlainDataError) {
         data.errors.push({
           description: `Da es sich bei diesen Daten um essentielle Basisdaten der Website handelt, muss dieses Problem gelöst werden bevor wieder an der Website gearbeitet werden kann.\n\n**Betroffenes File:** ${plainPath}`,
           detail: err.message,

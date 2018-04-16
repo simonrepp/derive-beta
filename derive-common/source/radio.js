@@ -1,10 +1,6 @@
 const { loadPlainRich, statFile } = require('../util.js'),
       { PlainDataError, PlainDataParseError } = require('../../plaindata/errors.js'),
-      validateArray = require('../validate/array.js'),
-      validateKeys = require('../validate/keys.js'),
-      validateMarkdown = require('../validate/markdown.js'),
-      validateString = require('../validate/string.js'),
-      ValidationError = require('../validate/error.js');
+      { validateMarkdown } = require('../validate/markdown.js');
 
 module.exports = async (data, plainPath) => {
   const cached = data.cache.get(plainPath);
@@ -13,10 +9,10 @@ module.exports = async (data, plainPath) => {
   if(cached && stats.size === cached.stats.size && stats.mTimeMs === cached.stats.mTimeMs) {
     data.radio = cached.radio;
   } else {
-    let parsed;
+    let document;
 
     try {
-      parsed = await loadPlainRich(data.root, plainPath);
+      document = await loadPlainRich(data.root, plainPath);
     } catch(err) {
       data.cache.delete(plainPath);
 
@@ -43,12 +39,9 @@ module.exports = async (data, plainPath) => {
     const radio = { sourceFile: plainPath };
 
     try {
-      radio.title = parsed.getValue('Titel', { required: true });
-      const info = parsed.getValue('Allgemeine Info', { required: true });
-      radio.info = validateMarkdown({'Allgemeine Info': info}, 'Allgemeine Info', { required: true });
-      radio.editors = { sourced: parsed.getList('Redaktion') };
-
-      console.log(radio.editors);
+      radio.title = document.value('Titel', { required: true });
+      radio.info = document.value('Allgemeine Info', { process: validateMarkdown, required: true });
+      radio.editors = { sourced: document.values('Redaktion') };
 
       // TODO: Write validator for this for the rich re-implementation
       // validateKeys(document, ['Allgemeine Info', 'Redaktion', 'Titel']);

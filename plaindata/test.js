@@ -3,7 +3,8 @@ const fs = require('fs'),
 
 const { parse, PlainDataParseError } = require('./plaindata-rich-parser.js');
 
-const input = fs.readFileSync(path.join(__dirname, 'samples/simple.plain'), 'utf-8');
+// const input = fs.readFileSync(path.join(__dirname, '/home/simon/derive/publish.derive.at/public/export/full_database/Radio/Radio.plain'), 'utf-8');
+const input = fs.readFileSync('/home/simon/derive/publish.derive.at/public/export/full_database/Zeitschriften/10.plain', 'utf-8');
 
 let result;
 
@@ -17,14 +18,16 @@ try {
   }
 }
 
-try {
-  const gotten = result.getList('Titel');
-  const gotten2 = result.getSection('Titel');
+console.log(result.get('Rubrik')[0].value.get('Artikel')[0]);
 
-  console.log(gotten);
-} catch(err) {
-  console.log(err);
-}
+// try {
+//   const gotten = result.getList('Titel');
+//   const gotten2 = result.getSection('Titel');
+//
+//   console.log(gotten);
+// } catch(err) {
+//   console.log(err);
+// }
 
 // radio.title = validateString(document, 'Titel', { required: true });
 // radio.info = validateMarkdown(document, 'Allgemeine Info', { required: true });
