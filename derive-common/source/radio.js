@@ -1,5 +1,5 @@
-const { loadPlain, statFile } = require('../util.js'),
-      { PlainDataParseError } = require('../../plaindata/plaindata.js'),
+const { loadPlainRich, statFile } = require('../util.js'),
+      { PlainDataError, PlainDataParseError } = require('../../plaindata/errors.js'),
       validateArray = require('../validate/array.js'),
       validateKeys = require('../validate/keys.js'),
       validateMarkdown = require('../validate/markdown.js'),
@@ -13,10 +13,10 @@ module.exports = async (data, plainPath) => {
   if(cached && stats.size === cached.stats.size && stats.mTimeMs === cached.stats.mTimeMs) {
     data.radio = cached.radio;
   } else {
-    let document;
+    let parsed;
 
     try {
-      document = await loadPlain(data.root, plainPath);
+      parsed = await loadPlainRich(data.root, plainPath);
     } catch(err) {
       data.cache.delete(plainPath);
 
@@ -43,15 +43,19 @@ module.exports = async (data, plainPath) => {
     const radio = { sourceFile: plainPath };
 
     try {
-      radio.title = validateString(document, 'Titel', { required: true });
-      radio.info = validateMarkdown(document, 'Allgemeine Info', { required: true });
-      radio.editors = { sourced: validateArray(document, 'Redaktion') };
+      radio.title = parsed.getValue('Titel', { required: true });
+      const info = parsed.getValue('Allgemeine Info', { required: true });
+      radio.info = validateMarkdown({'Allgemeine Info': info}, 'Allgemeine Info', { required: true });
+      radio.editors = { sourced: parsed.getList('Redaktion') };
 
-      validateKeys(document, ['Allgemeine Info', 'Redaktion', 'Titel']);
+      console.log(radio.editors);
+
+      // TODO: Write validator for this for the rich re-implementation
+      // validateKeys(document, ['Allgemeine Info', 'Redaktion', 'Titel']);
     } catch(err) {
       data.cache.delete(plainPath);
 
-      if(err instanceof ValidationError) {
+      if(err instanceof PlainDataError) {
         data.errors.push({
           description: `Da es sich bei diesen Daten um essentielle Basisdaten der Website handelt, muss dieses Problem gelöst werden bevor wieder an der Website gearbeitet werden kann.\n\n**Betroffenes File:** ${plainPath}`,
           detail: err.message,

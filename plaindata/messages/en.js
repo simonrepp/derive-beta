@@ -40,5 +40,14 @@ module.exports = {
            `with "${multiLineValueBeginLineContent}" is not terminated ` +
            `until the end of the document. (The terminating line ` +
            `"${multiLineValueBeginLineContent}" after the textblock is missing)`;
+  },
+  validation: {
+    missingKey: key => {
+      return `Missing key "${key}" - If the key was provided look out for ` +
+             `potential typos and also observe correct case in your spelling.`;
+    },
+    missingValue: key => {
+      return `There needs to be a value provided for key "${key}".`;
+    }
   }
 };

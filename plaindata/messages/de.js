@@ -40,5 +40,27 @@ module.exports = {
            `mit "${multiLineValueBeginLineContent}" beginnt, wird bis zum ` +
            `Ende des Dokuments nicht beendet. (Die abschliessende Zeile ` +
            `"${multiLineValueBeginLineContent}" nach dem Textblock fehlt)`;
+  },
+  validation: {
+    expectedSectionGotValue: key => {
+      return `Das Feld "${key}" enthält einen Wert, muss aber eine Sektion enthalten.`;
+    },
+    expectedSectionGotList: key => {
+      return `Das Feld "${key}" enthält eine Liste, muss aber eine Sektion enthalten.`;
+    },
+    expectedValueGotList: key => {
+      return `Das Feld "${key}" enthält eine Liste, muss aber einen einzelnen Wert enthalten.`;
+    },
+    expectedValueGotSection: key => {
+      return `Das Feld "${key}" enthält eine Sektion, muss aber einen einzelnen Wert enthalten.`;
+    },
+    missingKey: key => {
+      return `Fehlendes Feld "${key}" - Falls das Feld angegeben wurde ` +
+             `eventuell nach Tippfehlern Ausschau halten und auch die ` +
+             `Gross/Kleinschreibung beachten.`;
+    },
+    missingValue: key => {
+      return `Das Feld "${key}" muss ausgefüllt sein.`;
+    }
   }
 };
