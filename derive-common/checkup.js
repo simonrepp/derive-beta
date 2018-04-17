@@ -3,8 +3,7 @@ module.exports = data => {
     if(category.spellings.size > 1) {
       data.warnings.push({
         description: 'Dies ist nur ein Hinweis, ansonsten bestehen keine Auswirkungen.',
-        detail: `Für eine Kategorie wurden mehrere Schreibweisen gefunden: ${[...category.spellings].map(spelling => `"${spelling}"`).join(', ')}. Dies sollte manuell (mit Hilfe der Volltextsuche) korrigiert werden.`,
-        header: '**Verschiedene Schreibweisen einer Kategorie**'
+        message: `**Verschiedene Schreibweisen einer Kategorie**\n\nFür eine Kategorie wurden mehrere Schreibweisen gefunden: ${[...category.spellings].map(spelling => `"${spelling}"`).join(', ')}. Dies sollte manuell (mit Hilfe der Volltextsuche) korrigiert werden.`
       });
     }
   });
@@ -13,8 +12,7 @@ module.exports = data => {
     if(tag.spellings.size > 1) {
       data.warnings.push({
         description: 'Dies ist nur ein Hinweis, ansonsten bestehen keine Auswirkungen.',
-        detail: `Für einen Tag wurden mehrere Schreibweisen gefunden: ${[...tag.spellings].map(spelling => `"${spelling}"`).join(', ')}. Dies sollte manuell (mit Hilfe der Volltextsuche) korrigiert werden.`,
-        header: '**Verschiedene Schreibweisen eines Tags**'
+        message: `**Verschiedene Schreibweisen eines Tags**\n\nFür einen Tag wurden mehrere Schreibweisen gefunden: ${[...tag.spellings].map(spelling => `"${spelling}"`).join(', ')}. Dies sollte manuell (mit Hilfe der Volltextsuche) korrigiert werden.`
       });
     }
   });
@@ -22,10 +20,9 @@ module.exports = data => {
   data.media.forEach(media => {
     if(!media.used) {
       data.warnings.push({
-        description: `Dies ist nur ein Hinweis, ansonsten bestehen keine Auswirkungen.\n\n**Betroffenes File:** ${media.localFilesystemPath}`,
-        detail: `Die Mediendatei ${media.localFilesystemPath} wird in keinerlei Texten oder Dateifeldern genutzt - dies kann ein Hinweis darauf sein, dass der Pfad zu der Datei in einem Markdown-Feld inkorrekt ist. Falls ein Plain Data Dokument dass in einem seiner Datenfelder die Mediendatei referenziert einen Fehler enhält, erscheint die Mediendatei für das System allerdings auch (und in diesem Fall fälschlich) als ungenutzt.`,
+        description: 'Dies ist nur ein Hinweis, ansonsten bestehen keine Auswirkungen.',
         files: [{ path: media.localFilesystemPath }],
-        header: '**Ungenützte Mediendatei**'
+        message: `**Ungenützte Mediendatei**\n\nDie Mediendatei ${media.localFilesystemPath} wird in keinerlei Texten oder Dateifeldern genutzt - dies kann ein Hinweis darauf sein, dass der Pfad zu der Datei in einem Markdown oder Dateifeld inkorrekt ist. Falls ein Plain Data Dokument dass in einem seiner Datenfelder die Mediendatei referenziert einen Fehler enhält, erscheint die Mediendatei für das System allerdings auch (und in diesem Fall fälschlich) als ungenutzt.`
       });
     }
   });

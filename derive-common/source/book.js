@@ -1,4 +1,4 @@
-const { loadPlainRich, statFile } = require('../util.js'),
+const { loadPlain, statFile } = require('../util.js'),
       { PlainDataError, PlainDataParseError } = require('../../plaindata/errors.js'),
       validateAbsoluteUrl = require('../validate/absolute-url.js'),
       validateInteger = require('../validate/integer.js'),
@@ -32,22 +32,16 @@ module.exports = async (data, plainPath) => {
     let document;
 
     try {
-      document = await loadPlainRich(data.root, plainPath);
+      document = await loadPlain(data.root, plainPath);
     } catch(err) {
       data.cache.delete(plainPath);
 
       if(err instanceof PlainDataParseError) {
         data.warnings.push({
-          description: `Bis zur Lösung des Problems scheint das betroffene Buch nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${plainPath}`,
-          detail: err.message,
-          files: [{
-            beginColumn: err.beginColumn,
-            beginLine: err.beginLine,
-            column: err.column,
-            line: err.line,
-            path: plainPath
-          }],
-          header: `Problem gefunden beim einlesen der plaindata Daten eines Buchs`
+          description: 'Bis zur Lösung des Problems scheint das betroffene Buch nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.',
+          files: [{ path: plainPath, ranges: err.ranges }],
+          message: `**${plainPath}**\n\n${err.message}`,
+          snippet: err.snippet
         });
 
         return;
@@ -80,10 +74,11 @@ module.exports = async (data, plainPath) => {
 
       if(err instanceof PlainDataError) {
         data.warnings.push({
-          description: `Bis zur Lösung des Problems scheint das betroffene Buch nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${plainPath}`,
+          description: 'Bis zur Lösung des Problems scheint das betroffene Buch nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.',
           detail: err.message,
-          files: [{ path: plainPath }],
-          header: `Problem gefunden beim prüfen der Daten ${book.title ? `des Buchs "${book.title}"` : 'eines Buchs'}`
+          files: [{ path: plainPath, ranges: err.ranges }],
+          message: `**${plainPath}**\n\n${err.message}`,
+          snippet: err.snippet
         });
 
         return;

@@ -1,10 +1,11 @@
 const { PlainDataError } = require('./errors.js');
 
 class PlainMap extends Map {
-  constructor(locale) {
+  constructor(parserContext) {
     super();
 
-    this.messages = require(`./messages/${locale}.js`);
+    this.parserContext = parserContext;
+    this.messages = parserContext.messages.validation;
   }
 
   getList(key, options = { keyRequired: true }) {
@@ -12,7 +13,7 @@ class PlainMap extends Map {
 
     if(values === undefined) {
       if(options.keyRequired) {
-        throw new Error(this.messages.validation.missingKey(key));
+        throw new PlainDataError(this.messages.missingKey(key));
       } else {
         return [];
       }
@@ -26,7 +27,7 @@ class PlainMap extends Map {
 
     if(values === undefined) {
       if(options.keyRequired) {
-        throw new Error(this.messages.validation.missingKey(key));
+        throw new PlainDataError(this.messages.missingKey(key));
       } else {
         return {};
       }
@@ -39,7 +40,8 @@ class PlainMap extends Map {
         return value.value;
       } else {
         throw new PlainDataError(
-          this.messages.validation.expectedSectionGotValue(key),
+          this.messages.expectedSectionGotValue(key),
+          this.snippet(value.valueRange),
           [value.keyRange, value.valueRange]
         );
       }
@@ -48,7 +50,7 @@ class PlainMap extends Map {
     if(values.length === 0) {
       // TODO: Does this apply?
       if(options.valueRequired) {
-        throw new Error(this.messages.validation.missingValue(key));
+        throw new PlainDataError(this.messages.missingValue(key));
       } else {
         return null;
       }
@@ -61,7 +63,7 @@ class PlainMap extends Map {
     });
 
     throw new PlainDataError(
-      this.messages.validation.expectedSectionGotList(key),
+      this.messages.expectedSectionGotList(key),
       [...ranges]
     );
   }
@@ -71,7 +73,7 @@ class PlainMap extends Map {
 
     if(values === undefined) {
       if(options.keyRequired) {
-        throw new Error(this.messages.validation.missingKey(key));
+        throw new PlainDataError(this.messages.missingKey(key));
       } else {
         return [];
       }
@@ -82,11 +84,25 @@ class PlainMap extends Map {
         return value.value;
       } else {
         throw new PlainDataError(
-          this.messages.validation.expectedSectionsGotValue(key),
+          this.messages.expectedSectionsGotValue(key),
           [value.keyRange]
         );
       }
     });
+  }
+
+  snippet(range) {
+    let snippet = '  Zeile | Inhalt\n';
+    snippet +=    '   ...\n';
+    let line = Math.max(1, range.beginLine - 2);
+
+    while(line <= Math.min(this.parserContext.lines.length, range.endLine + 2)) {
+      const pad = line >= range.beginLine && line <= range.endLine ? ' >     ' : ' ';
+      snippet += `${line.toString().padStart(7, pad)} | ${this.parserContext.lines[line - 1]}\n`;
+      line++;
+    }
+
+    return snippet;
   }
 
   value(key, options = { keyRequired: true, process: false, required: false }) {
@@ -94,8 +110,7 @@ class PlainMap extends Map {
 
     if(values === undefined) {
       if(options.keyRequired) {
-        // TODO: Always throw PlainDataError here and elsewhere
-        throw new Error(this.messages.validation.missingKey(key));
+        throw new PlainDataError(this.messages.missingKey(key));
       } else {
         return null;
       }
@@ -107,8 +122,9 @@ class PlainMap extends Map {
       if(value.value === null) {
         if(options.required) {
           throw new PlainDataError(
-            this.messages.validation.missingValue(key),
-            [value.keyRange, value.valueRange]
+            this.messages.missingValue(key),
+            this.snippet(value.keyRange),
+            [value.valueRange]
           );
         } else {
           return null;
@@ -120,7 +136,9 @@ class PlainMap extends Map {
           try {
             return options.process(value);
           } catch(message) {
-            throw new PlainDataError(message, [value.keyRange]);
+            throw new PlainDataError(message,
+                                     this.snippet(value.valueRange),
+                                     [value.valueRange]);
           }
         } else {
           return value.value;
@@ -128,7 +146,7 @@ class PlainMap extends Map {
       }
 
       throw new PlainDataError(
-        this.messages.validation.expectedValueGotSection(key),
+        this.messages.expectedValueGotSection(key),
         [value.keyRange]
       );
     }
@@ -137,7 +155,8 @@ class PlainMap extends Map {
     if(values.length === 0) {
       if(options.required) {
         throw new PlainDataError(
-          this.messages.validation.missingValue(key),
+          this.messages.missingValue(key),
+          lineContext(value.keyRange.beginLine)
           [value.keyRange, value.valueRange]
         );
       } else {
@@ -146,7 +165,7 @@ class PlainMap extends Map {
     }
 
     throw new PlainDataError(
-      this.messages.validation.expectedValueGotList(key),
+      this.messages.expectedValueGotList(key),
       values.map(value => value.valueRange)
     );
   }
@@ -156,7 +175,7 @@ class PlainMap extends Map {
 
     if(values === undefined) {
       if(options.keyRequired) {
-        throw new Error(this.messages.validation.missingKey(key));
+        throw new PlainDataError(this.messages.missingKey(key));
       } else {
         return [];
       }
@@ -172,7 +191,7 @@ class PlainMap extends Map {
         return value.value;
       } else {
         throw new PlainDataError(
-          this.messages.validation.expectedValuesGotSection(key),
+          this.messages.expectedValuesGotSection(key),
           [value.keyRange]
         );
       }

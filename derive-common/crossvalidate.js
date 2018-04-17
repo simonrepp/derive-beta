@@ -5,12 +5,11 @@ module.exports = data => {
     if(data.articlesByTitle.has(article.title)) {
       data.warnings.push({
         description: `Bis zur Lösung des Problems scheint einer der Artikel auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${data.articlesByTitle.get(article.title).sourceFile}\n\n**B (wird verworfen)** - ${article.sourceFile}`,
-        detail: `Es existieren zwei Artikel mit dem Titel "${article.title}"`,
         files: [
           { path: data.articlesByTitle.get(article.title).sourceFile, label: 'A' },
           { path: article.sourceFile, label: 'B' }
         ],
-        header: 'Problem beim gegenseitigem prüfen der Titel aller Artikel'
+        message: `Es existieren zwei Artikel mit dem Titel "${article.title}"`
       });
 
 
@@ -21,12 +20,11 @@ module.exports = data => {
     if(data.articlesByPermalink.has(article.permalink)) {
       data.warnings.push({
         description: `Bis zur Lösung des Problems scheint einer der Artikel auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${data.articlesByPermalink.get(article.permalink).sourceFile}\n\n**B (wird verworfen)** - ${article.sourceFile}`,
-        detail: `Es existieren zwei Artikel mit dem Permalink "${article.permalink}"`,
         files: [
           { path: data.articlesByPermalink.get(article.permalink).sourceFile, label: 'A' },
           { path: article.sourceFile, label: 'B' }
         ],
-        header: 'Problem beim gegenseitigem prüfen der Permalinks aller Artikel'
+        message: `Es existieren zwei Artikel mit dem Permalink "${article.permalink}"`
       });
 
       data.articles.delete(article.sourceFile);
@@ -43,12 +41,11 @@ module.exports = data => {
     if(data.booksByTitle.has(book.title)) {
       data.warnings.push({
         description: `Bis zur Lösung des Problems scheint eines der Bücher auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${data.booksByTitle.get(book.title).sourceFile}\n\n**B (wird verworfen)** - ${book.sourceFile}`,
-        detail: `Es existieren zwei Bücher mit dem Titel "${book.title}"`,
         files: [
           { path: data.booksByTitle.get(book.title).sourceFile, label: 'A' },
           { path: book.sourceFile, label: 'B' }
         ],
-        header: 'Problem beim gegenseitigem prüfen der Titel aller Bücher'
+        message: `Es existieren zwei Bücher mit dem Titel "${book.title}"`
       });
 
       data.books.delete(book.sourceFile);
@@ -58,12 +55,11 @@ module.exports = data => {
     if(data.booksByPermalink.has(book.permalink)) {
       data.warnings.push({
         description: `Bis zur Lösung des Problems scheint eines der Bücher auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${data.booksByPermalink.get(book.permalink).sourceFile}\n\n**B (wird verworfen)** - ${book.sourceFile}`,
-        detail: `Es existieren zwei Bücher mit dem Permalink "${book.permalink}"`,
         files: [
           { path: data.booksByPermalink.get(book.permalink).sourceFile, label: 'A' },
           { path: book.sourceFile, label: 'B' }
         ],
-        header: 'Problem beim gegenseitigem prüfen der Permalinks aller Bücher'
+        message: `Es existieren zwei Bücher mit dem Permalink "${book.permalink}"`
       });
 
       data.books.delete(book.sourceFile);
@@ -79,12 +75,11 @@ module.exports = data => {
     if(data.eventsByPermalink.has(event.permalink)) {
       data.warnings.push({
         description: `Bis zur Lösung des Problems scheint eine der Veranstaltungen auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${data.eventsByPermalink.get(event.permalink).sourceFile}\n\n**B (wird verworfen)** - ${event.sourceFile}`,
-        detail: `Es existieren zwei Veranstaltungen mit dem Permalink "${event.permalink}"`,
         files: [
           { path: data.eventsByPermalink.get(event.permalink).sourceFile, label: 'A' },
           { path: event.sourceFile, label: 'B' }
         ],
-        header: 'Problem beim gegenseitigem prüfen der Permalinks aller Veranstaltungen'
+        message: `Es existieren zwei Veranstaltungen mit dem Permalink "${event.permalink}"`
       });
 
       data.events.delete(event.sourceFile);
@@ -98,12 +93,11 @@ module.exports = data => {
     if(data.issuesByNumber.has(issue.number)) {
       data.warnings.push({
         description: `Bis zur Lösung des Problems scheint eine der Zeitschriften auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${data.issuesByNumber.get(issue.number).sourceFile}\n\n**B (wird verworfen)** - ${issue.sourceFile}`,
-        detail: `Es existieren zwei Zeitschriften mit der Nummer ${issue.number}`,
         files: [
           { path: data.issuesByNumber.get(issue.number).sourceFile, label: 'A' },
           { path: issue.sourceFile, label: 'B' }
         ],
-        header: 'Problem beim gegenseitigem prüfen der Nummern aller Zeitschriften'
+        message: `Es existieren zwei Zeitschriften mit der Nummer ${issue.number}`
       });
 
       data.issues.delete(issue.sourceFile);
@@ -118,12 +112,11 @@ module.exports = data => {
     if(data.playersByName.has(player.name)) {
       data.warnings.push({
         description: `Bis zur Lösung des Problems scheint eine der AkteurInnen auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${data.playersByName.get(player.name).sourceFile}\n\n**B (wird verworfen)** - ${player.sourceFile}`,
-        detail: `Es existieren zwei Akteure mit dem Namen "${player.name}"`,
         files: [
           { path: data.playersByName.get(player.name).sourceFile, label: 'A' },
           { path: player.sourceFile, label: 'B' }
         ],
-        header: 'Problem beim gegenseitigem prüfen der Namen aller Akteure'
+        message: `Es existieren zwei Akteure mit dem Namen "${player.name}"`
       });
 
       data.players.delete(player.sourceFile);
@@ -133,12 +126,11 @@ module.exports = data => {
     if(data.playersByPermalink.has(player.permalink)) {
       data.warnings.push({
         description: `Bis zur Lösung des Problems scheint eine der AkteurInnen auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${data.playersByPermalink.get(player.permalink).sourceFile}\n\n**B (wird verworfen)** - ${player.sourceFile}`,
-        detail: `Es existieren zwei Akteure mit dem Permalink "${player.permalink}"`,
         files: [
           { path: data.playersByPermalink.get(player.permalink).sourceFile, label: 'A' },
           { path: player.sourceFile, label: 'B' }
         ],
-        header: 'Problem beim gegenseitigem prüfen der Permalinks aller Akteure'
+        message: `Es existieren zwei Akteure mit dem Permalink "${player.permalink}"`
       });
 
       data.players.delete(player.sourceFile);
@@ -156,12 +148,11 @@ module.exports = data => {
     if(data.pagesByPermalink.has(permalinkInContext)) {
       data.warnings.push({
         description: `Bis zur Lösung des Problems scheint eine der Seiten auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${data.pagesByPermalink.get(page.permalink).sourceFile}\n\n**B (wird verworfen)** - ${page.sourceFile}`,
-        detail: `Es existieren zwei Seiten mit dem Permalink "${page.permalink}" im selben Kontext (z.b. Urbanize Festival)`,
         files: [
           { path: data.pagesByPermalink.get(page.permalink).sourceFile, label: 'A' },
           { path: page.sourceFile, label: 'B' }
         ],
-        header: 'Problem beim gegenseitigem prüfen der Permalinks aller Seiten'
+        message: `Es existieren zwei Seiten mit dem Permalink "${page.permalink}" im selben Kontext (z.b. Urbanize Festival)`
       });
 
       data.pages.delete(page.sourceFile);
@@ -175,12 +166,11 @@ module.exports = data => {
     if(data.programsByPermalink.has(program.permalink)) {
       data.warnings.push({
         description: `Bis zur Lösung des Problems scheint eine der Radiosendungen auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${data.programsByPermalink.get(program.permalink).sourceFile}\n\n**B (wird verworfen)** - ${program.sourceFile}`,
-        detail: `Es existieren zwei Radiosendungen mit dem Permalink "${program.permalink}"`,
         files: [
           { path: data.programsByPermalink.get(program.permalink).sourceFile, label: 'A' },
           { path: program.sourceFile, label: 'B' }
         ],
-        header: 'Problem beim gegenseitigem prüfen der Permalinks aller Radiosendungen'
+        message: `Es existieren zwei Radiosendungen mit dem Permalink "${program.permalink}"`
       });
 
       data.programs.delete(program.sourceFile);

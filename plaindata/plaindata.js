@@ -1,25 +1,9 @@
 // TODO: Clarify internally to devs as well as externally to users, whether line and beginLine in PlainDataParseError metadata refers to array index (0+ -indexed) or human line reference (1+ -indexed)
 //       And possibly have specs that ensure this is actually correctly reflected in the parser implementation for all possible errors
-// TODO: Error implementation refinements ? regarding output
 
-class PlainDataOptionError extends Error {
-  constructor(message) {
-    super(message);
-    Error.captureStackTrace(this, PlainDataOptionError);
-  }
-}
-
-class PlainDataParseError extends Error {
-  constructor(message, metadata) {
-    super(message);
-
-    Object.keys(metadata).forEach(key => {
-      this[key] = metadata[key];
-    });
-
-    Error.captureStackTrace(this, PlainDataParseError);
-  }
-}
+const { PlainDataParseError } = require('./errors.js');
+const { PlainMap } = require('./structures.js');
+const snippet = require('./snippet.js');
 
 const SUPPORTED_LOCALES = ['de', 'en'];
 
@@ -32,8 +16,15 @@ const COMMENT_OR_EMPTY = /^\s*(>|$)/;
 const KEY = /^\s*([^:]+?)\s*:\s*$/;
 const KEY_VALUE = /^\s*(?![>\-#])([^:]+?)\s*:\s*(\S.*?)\s*$/;
 const MULTILINE_VALUE_BEGIN = /^\s*(-{3,})\s*(\S.*?)\s*$/;
-const SUBDOCUMENT = /^\s*(#+)\s*(\S.*?)\s*$/;
+const SECTION = /^\s*(#+)\s*(\S.*?)\s*$/;
 const VALUE = /^\s*-(?!-)\s*(.+?)?\s*$/;
+
+const lineContext = (lines, lineNumber) => {
+  const beginIndex = Math.max(0, lineNumber - 3);
+  const endIndex = beginIndex + 4;
+
+  return lines.slice(beginIndex, endIndex).join('\n');
+};
 
 // the whole idea with ignoring whitespace at the begin, end, between different connected lines and between relevant tokens is:
 // when you write on paper you don't care if something is "a little to the right, left, further down or whatever"
@@ -42,51 +33,80 @@ const VALUE = /^\s*-(?!-)\s*(.+?)?\s*$/;
 
 const parse = (input, options = { locale: 'en' }) => {
   if(!SUPPORTED_LOCALES.includes(options.locale)) {
-    throw new PlainDataOptionError(
+    throw new RangeError(
       'The provided message locale requested through the parser options is ' +
       'not supported. Translation contributions are very welcome and an easy ' +
       'thing to do - less than 10 messages need to be translated!'
     );
   }
 
-  const messages = require(`./messages/${options.locale}.js`);
-  const lines = input.split(/\r?\n/);
-  const documentRoot = {};
+  const messageDictionary = require(`./messages/${options.locale}.js`);
+  const messages = messageDictionary.parser;
 
-  let documentLevel = documentRoot;
+  const lines = input.split(/\r?\n/);
+
   let state = STATE_RESET;
-  let keyValueBuffer;
+  let readBuffer;
   let match;
 
-  let parentDocuments = [];
-  let hierarchyBuffer = {
-    beginLineIndex: 0,
-    depth: 0
+  const parserContext = {
+    messages: messageDictionary,
+    lines: lines
   };
 
-  for(let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
-    const lineContent = lines[lineIndex];
+  const document = new PlainMap(parserContext);
+
+  const currentSection = {
+    depth: 0,
+    keyRange: {
+      beginColumn: 0,
+      beginLine: 1,
+      endColumn: 0,
+      endLine: 1
+    },
+    parents: [],
+    reference: document
+  };
+
+  // TODO: Maps instead of objects because order stability as a bonus
+
+  for(let lineNumber = 1; lineNumber <= lines.length; lineNumber++) {
+    const lineContent = lines[lineNumber - 1];
 
     if(state === STATE_READ_MULTILINE_VALUE) {
-      if(lineContent.match(keyValueBuffer.multiLineValueEnd)) {
+      if(lineContent.match(readBuffer.multiLineValueEnd)) {
         // console.log('[multiline value end]', lineContent);
-        const value = keyValueBuffer.value.length > 0 ? keyValueBuffer.value.join('\n') : null;
-        const previousValues = documentLevel[keyValueBuffer.key];
+        const value = readBuffer.value.length > 0 ? readBuffer.value.join('\n') : null;
 
-        if(previousValues === undefined) {
-          documentLevel[keyValueBuffer.key] = value;
-        } else {
-          if(Array.isArray(previousValues)) {
-            previousValues.push(value);
-          } else {
-            documentLevel[keyValueBuffer.key] = [previousValues, value];
+        const newValue = {
+          key: readBuffer.key,
+          keyRange: {
+            beginColumn: readBuffer.keyRange.beginColumn,
+            beginLine: readBuffer.keyRange.beginLine,
+            endColumn: lineContent.length,
+            endLine: lineNumber
+          },
+          value: value,
+          valueRange: {
+            beginColumn: 0,
+            beginLine: readBuffer.keyRange.beginLine + 1,
+            endColumn: value ? readBuffer.value[readBuffer.value.length - 1].length : 0,
+            endLine: value ? lineNumber - 1 : lineNumber
           }
+        };
+
+        const existingValues = currentSection.reference.get(readBuffer.key);
+
+        if(existingValues) {
+          existingValues.push(newValue);
+        } else {
+          currentSection.reference.set(readBuffer.key, [newValue]);
         }
 
         state = STATE_RESET;
       } else {
         // console.log('[multiline value line]', lineContent);
-        keyValueBuffer.value.push(lineContent);
+        readBuffer.value.push(lineContent);
       }
 
       continue;
@@ -103,24 +123,56 @@ const parse = (input, options = { locale: 'en' }) => {
 
         // console.log('[value]', lineContent);
         const value = match[1] || null;
-        const previousValues = documentLevel[keyValueBuffer.key];
+        const valueColumn = value ? lineContent.lastIndexOf(value) :
+                                    Math.min(lineContent.indexOf('-') + 1,
+                                             lineContent.length);
 
-        if(previousValues === undefined) {
-          documentLevel[keyValueBuffer.key] = value;
-        } else {
-          if(Array.isArray(previousValues)) {
-            previousValues.push(value);
-          } else {
-            documentLevel[keyValueBuffer.key] = [previousValues, value];
+        const newValue = {
+          key: readBuffer.key,
+          keyRange: readBuffer.keyRange,
+          value: value,
+          valueRange: {
+            beginColumn: valueColumn,
+            beginLine: lineNumber,
+            endColumn: value ? valueColumn + value.length : valueColumn,
+            endLine: lineNumber
           }
+        };
+
+        const existingValues = currentSection.reference.get(readBuffer.key);
+
+        if(existingValues) {
+          existingValues.push(newValue);
+        } else {
+          currentSection.reference.set(readBuffer.key, [newValue]);
         }
+
+        readBuffer.empty = false;
 
         continue;
 
       } else {
 
-        if(documentLevel[keyValueBuffer.key] === undefined) {
-          documentLevel[keyValueBuffer.key] = null;
+        if(readBuffer.empty) {
+          const newValue = {
+            key: readBuffer.key,
+            keyRange: readBuffer.keyRange,
+            value: null,
+            valueRange: {
+              beginColumn: lines[readBuffer.keyRange.beginLine - 1].length,
+              beginLine: readBuffer.keyRange.beginLine,
+              endColumn: lines[readBuffer.keyRange.beginLine - 1].length,
+              endLine: readBuffer.keyRange.beginLine
+            }
+          };
+
+          const existingValues = currentSection.reference.get(readBuffer.key);
+
+          if(existingValues) {
+            existingValues.push(newValue);
+          } else {
+            currentSection.reference.set(readBuffer.key, [newValue]);
+          }
         }
 
         state = STATE_RESET;
@@ -131,18 +183,35 @@ const parse = (input, options = { locale: 'en' }) => {
     if(match = KEY_VALUE.exec(lineContent)) {
 
       // console.log('[key value pair]', lineContent);
-      const key = match[1];
-      const value = match[2];
-      const previousValues = documentLevel[key];
 
-      if(previousValues === undefined) {
-        documentLevel[key] = value;
-      } else {
-        if(Array.isArray(previousValues)) {
-          previousValues.push(value);
-        } else {
-          documentLevel[key] = [previousValues, value];
+      const key = match[1];
+      const keyColumn = lineContent.indexOf(key);
+      const value = match[2];
+      const valueColumn = lineContent.lastIndexOf(value);
+
+      const newValue = {
+        key: key,
+        keyRange: {
+          beginColumn: keyColumn,
+          beginLine: lineNumber,
+          endColumn: keyColumn + key.length,
+          endLine: lineNumber
+        },
+        value: value,
+        valueRange: {
+          beginColumn: valueColumn,
+          beginLine: lineNumber,
+          endColumn: valueColumn + value.length,
+          endLine: lineNumber
         }
+      };
+
+      const existingValues = currentSection.reference.get(key);
+
+      if(existingValues) {
+        existingValues.push(newValue);
+      } else {
+        currentSection.reference.set(key, [newValue]);
       }
 
       continue;
@@ -151,10 +220,21 @@ const parse = (input, options = { locale: 'en' }) => {
     if(match = KEY.exec(lineContent)) {
 
       // console.log('[key]', lineContent);
-      keyValueBuffer = {
-        beginLineIndex: lineIndex,
-        key: match[1]
+
+      const key = match[1];
+      const column = lineContent.indexOf(key);
+
+      readBuffer = {
+        empty: true,
+        key: key,
+        keyRange: {
+          beginColumn: column,
+          beginLine: lineNumber,
+          endColumn: column + key.length,
+          endLine: lineNumber
+        }
       };
+
       state = STATE_READ_VALUES;
 
       continue;
@@ -167,10 +247,17 @@ const parse = (input, options = { locale: 'en' }) => {
       const key = match[2];
       const keyEscaped = key.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
 
-      keyValueBuffer = {
-        beginLineIndex: lineIndex,
-        multiLineValueEnd: new RegExp(`^\\s*${dashes}\\s*${keyEscaped}\\s*$`),
+      // TODO: Instead of copying line by line to multilineValue readBuffer,
+      //       just remember first content line index and then slice it out
+      //       from lines[] when we encounter the terminating line?
+
+      readBuffer = {
         key: key,
+        keyRange: {
+          beginColumn: 0,
+          beginLine: lineNumber
+        },
+        multiLineValueEnd: new RegExp(`^\\s*${dashes}\\s*${keyEscaped}\\s*$`),
         value: []
       };
 
@@ -181,141 +268,167 @@ const parse = (input, options = { locale: 'en' }) => {
 
     if(match = ALTERNATIVE_KEY.exec(lineContent)) {
       // console.log('[alternative key]', lineContent);
-      keyValueBuffer = {
-        beginLineIndex: lineIndex,
-        key: match[1]
+
+      const key = match[1];
+      const column = lineContent.lastIndexOf(key);
+
+      readBuffer = {
+        empty: true,
+        key: key,
+        keyRange: {
+          beginColumn: column,
+          beginLine: lineNumber,
+          endColumn: column + key.length,
+          endLine: lineNumber
+        }
       };
+
       state = STATE_READ_VALUES;
 
       continue;
     }
 
-    if(match = SUBDOCUMENT.exec(lineContent)) {
+    if(match = SECTION.exec(lineContent)) {
       // console.log('[subdocument]', lineContent);
 
-      const hashesCount = match[1].length;
+      const targetDepth = match[1].length;
       const key = match[2];
+      const keyColumn = lineContent.lastIndexOf(key);
 
-      if(hashesCount - parentDocuments.length > 1) {
-        const message = messages.hierarchyLayerSkip({
-          currentDepth: hierarchyBuffer.depth,
-          currentDepthBeginLine: hierarchyBuffer.beginLineIndex + 1,
-          currentDepthBeginLineContent: lines[hierarchyBuffer.beginLineIndex],
-          errorLine: lineIndex + 1,
-          errorLineContent: lineContent,
-          targetDepth: hashesCount
-        });
-
-        const metadata = {
+      if(targetDepth - currentSection.depth > 1) {
+        const errorRange = {
           beginColumn: 0,
-          beginLine: hierarchyBuffer.beginLineIndex,
-          column: 0,
-          line: lineIndex
+          beginLine: lineNumber,
+          endColumn: lineContent.length,
+          endLine: lineNumber
         };
 
-        throw new PlainDataParseError(message, metadata);
+        throw new PlainDataParseError(
+          messages.hierarchyLayerSkip(lineNumber, currentSection.keyRange.beginLine),
+          snippet(lines, currentSection.keyRange.beginLine, lineNumber),
+          errorRange
+        );
       }
 
-      if(parentDocuments.length < hashesCount) {
-        // Go one level deeper in the hierarchy
-        documentLevel[key] = {};
-        parentDocuments.push(documentLevel);
-        documentLevel = documentLevel[key];
-      } else {
-        // Go higher or stay on same level in the hierarchy
-        while(parentDocuments.length > hashesCount) {
-          parentDocuments.pop();
+      const newValue = {
+        key: key,
+        keyRange: {
+          beginColumn: keyColumn,
+          beginLine: lineNumber,
+          endColumn: keyColumn + key.length,
+          endLine: lineNumber
+        },
+        value: new PlainMap(parserContext)
 
-        }
-
-        documentLevel = parentDocuments.pop();
-
-        if(documentLevel.hasOwnProperty(key)) {
-          const appendedDocument = {};
-
-          if(!Array.isArray(documentLevel[key])) {
-            documentLevel[key] = [documentLevel[key]];
-          }
-
-          documentLevel[key].push(appendedDocument);
-          parentDocuments.push(documentLevel);
-          documentLevel = appendedDocument;
-        } else {
-          documentLevel[key] = {};
-          parentDocuments.push(documentLevel);
-          documentLevel = documentLevel[key];
-        }
-      }
-
-      hierarchyBuffer = {
-        beginLineIndex: lineIndex,
-        depth: hashesCount
+        // TODO: Consider if/how to handle valueRange for sections
+        // valueRange: {
+        //   beginColumn: valueColumn,
+        //   beginLine: lineNumber,
+        //   endColumn: valueColumn + value.length,
+        //   endLine: lineNumber
+        // }
       };
+
+      while(currentSection.depth >= targetDepth) {
+        currentSection.reference = currentSection.parents.pop();
+        currentSection.depth--;
+      }
+
+      const existingValues = currentSection.reference.get(key);
+
+      if(existingValues) {
+        existingValues.push(newValue);
+      } else {
+        currentSection.reference.set(key, [newValue]);
+      }
+
+      currentSection.parents.push(currentSection.reference);
+      currentSection.reference = newValue.value;
+      currentSection.keyRange = {
+        beginColumn: keyColumn,
+        beginLine: lineNumber,
+        endColumn: keyColumn + key.length,
+        endLine: lineNumber
+      };
+      currentSection.depth = targetDepth;
 
       continue;
     }
 
     if(lineContent.match(VALUE)) {
-
-      // console.log('[unexpected value]', lineContent);
-      const message = messages.unexpectedValue({
-        errorLine: lineIndex + 1,
-        errorLineContent: lineContent
-      });
-
-      const metadata = {
+      const errorRange = {
         beginColumn: 0,
-        beginLine: lineIndex,
-        column: lineContent.length,
-        line: lineIndex
+        beginLine: lineNumber,
+        endColumn: lineContent.length,
+        endLine: lineNumber
       };
 
-      throw new PlainDataParseError(message, metadata);
+      throw new PlainDataParseError(
+        messages.unexpectedValue(lineNumber),
+        snippet(lines, lineNumber),
+        errorRange
+      );
     }
 
-    const message = messages.invalidLine({
-      errorLine: lineIndex + 1,
-      errorLineContent: lineContent
-    });
-
-    const metadata = {
+    const errorRange = {
       beginColumn: 0,
-      beginLine: lineIndex,
-      column: lineContent.length,
-      line: lineIndex
+      beginLine: lineNumber,
+      endColumn: lineContent.length,
+      endLine: lineNumber
     };
 
-    throw new PlainDataParseError(message, metadata);
+    throw new PlainDataParseError(
+      messages.invalidLine(lineNumber),
+      snippet(lines, lineNumber),
+      errorRange
+    );
   }
 
   if(state === STATE_READ_VALUES) {
     // console.log('[end of document while reading values]');
-    if(documentLevel[keyValueBuffer.key] === undefined) {
-      documentLevel[keyValueBuffer.key] = null;
+
+    if(readBuffer.empty) {
+      const newValue = {
+        key: readBuffer.key,
+        keyRange: readBuffer.keyRange,
+        value: null,
+        valueRange: {
+          beginColumn: 0,
+          beginLine: readBuffer.keyRange.beginLine + 1,
+          endColumn: 0,
+          endLine: readBuffer.keyRange.beginLine + 1
+        }
+      };
+
+      const existingValues = currentSection.reference.get(readBuffer.key);
+
+      if(existingValues) {
+        existingValues.push(newValue);
+      } else {
+        currentSection.reference.set(readBuffer.key, [newValue]);
+      }
     }
   }
 
   if(state === STATE_READ_MULTILINE_VALUE) {
-    const message = messages.unterminatedMultilineValue({
-      multiLineValueBeginLine: keyValueBuffer.beginLineIndex + 1,
-      multiLineValueBeginLineContent: lines[keyValueBuffer.beginLineIndex]
-    });
-
-    const metadata = {
-      beginColumn: 0,
-      beginLine: keyValueBuffer.beginLineIndex,
-      column: lines[lines.length - 1].length,
-      line: lines.length - 1
+    const errorRange = {
+      beginColumn: readBuffer.keyRange.beginColumn,
+      beginLine: readBuffer.keyRange.beginLine,
+      endColumn: lines[lines.length - 1].length,
+      endLine: lines.length
     };
 
-    throw new PlainDataParseError(message, metadata);
+    throw new PlainDataParseError(
+      messages.unterminatedMultilineValue(readBuffer.keyRange.beginLine),
+      snippet(lines, errorRange.beginLine, errorRange.endLine),
+      errorRange
+    );
   }
 
-  return documentRoot;
+  return document;
 };
 
 module.exports = {
   parse: parse,
-  PlainDataParseError: PlainDataParseError,
-  PlainDataOptionError: PlainDataOptionError
+  PlainDataParseError: PlainDataParseError
 };

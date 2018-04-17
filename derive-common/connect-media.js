@@ -37,10 +37,9 @@ module.exports = data => {
   data.articles.forEach(article => {
     if(article.image && !connectMedia(data, article.image)) {
       data.warnings.push({
-        description: `Bis zur Lösung des Problems scheint der Artikel nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${article.sourceFile}`,
-        detail: `Der Artikel "${article.title}" referenziert im Dateifeld "Bild" die Datei "${article.image.normalizedPath}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`,
+        description: 'Bis zur Lösung des Problems scheint der Artikel nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.',
         files: [{ path: article.sourceFile }],
-        header: 'Problem gefunden beim prüfen der Verlinkung zu einer Mediendatei'
+        message: `**${article.sourceFile}**\n\nDer Artikel "${article.title}" referenziert im Dateifeld "Bild" die Datei "${article.image.normalizedPath}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`
       });
 
       data.articles.delete(article.sourceFile);
@@ -52,10 +51,9 @@ module.exports = data => {
       } catch(err) {
         if(err instanceof ConnectMediaError) {
           data.warnings.push({
-            description: `Bis zur Lösung des Problems scheint der Artikel nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${article.sourceFile}`,
-            detail: err.message,
+            description: 'Bis zur Lösung des Problems scheint der Artikel nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.',
             files: [{ path: article.sourceFile }],
-            header: `Problem beim prüfen der eingebetteten Mediendateien im Artikel "${article.title}"`
+            message: `**${article.sourceFile}**\n\nProblem beim prüfen der eingebetteten Mediendateien im Artikel "${article.title}": ${err.message}`
           });
 
           data.articles.delete(article.sourceFile);
@@ -69,10 +67,9 @@ module.exports = data => {
   data.books.forEach(book => {
     if(book.cover && !connectMedia(data, book.cover)) {
       data.warnings.push({
-        description: `Bis zur Lösung des Problems scheint das Bild nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${book.sourceFile}`,
-        detail: `Das Buch "${book.title}" referenziert im Dateifeld "Cover" die Datei "${book.cover.normalizedPath}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`,
+        description: 'Bis zur Lösung des Problems scheint das Bild nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.',
         files: [{ path: book.sourceFile }],
-        header: 'Problem gefunden beim prüfen der Verlinkung zu einem Coverbild'
+        message: `**${book.sourceFile}**\n\nDas Buch "${book.title}" referenziert im Dateifeld "Cover" die Datei "${book.cover.normalizedPath}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`
       });
 
       data.books.delete(book.sourceFile);
@@ -82,10 +79,9 @@ module.exports = data => {
   data.events.forEach(event => {
     if(event.image && !connectMedia(data, event.image)) {
       data.warnings.push({
-        description: `Bis zur Lösung des Problems scheint das Bild nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${event.sourceFile}`,
-        detail: `Die Veranstaltung "${event.title}" referenziert im Dateifeld "Bild" die Datei "${event.image.normalizedPath}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`,
+        description: 'Bis zur Lösung des Problems scheint das Bild nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.',
         files: [{ path: event.sourceFile }],
-        header: 'Problem gefunden beim prüfen der Verlinkung zu einem Bild'
+        message: `**${event.sourceFile}**\n\nDie Veranstaltung "${event.title}" referenziert im Dateifeld "Bild" die Datei "${event.image.normalizedPath}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`
       });
 
       data.events.delete(event.sourceFile);
@@ -97,10 +93,10 @@ module.exports = data => {
       } catch(err) {
         if(err instanceof ConnectMediaError) {
           data.warnings.push({
-            description: `Bis zur Lösung des Problems scheint die Veranstaltung nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${event.sourceFile}`,
+            description: 'Bis zur Lösung des Problems scheint die Veranstaltung nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.',
             detail: err.message,
             files: [{ path: event.sourceFile }],
-            header: `Problem beim prüfen der eingebetteten Mediendateien in der Veranstaltung "${event.title}"`
+            message: `**${event.sourceFile}**\n\nProblem beim prüfen der eingebetteten Mediendateien in der Veranstaltung "${event.title}": ${err.message}`
           });
 
           data.events.delete(event.sourceFile);
@@ -114,10 +110,9 @@ module.exports = data => {
   data.features.forEach(feature => {
     if(feature.image && !connectMedia(data, feature.image)) {
       data.warnings.push({
-        description: `Bis zur Lösung des Problems scheint das Bild nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${feature.sourceFile}`,
-        detail: `Das Feature "${feature.title}" referenziert im Dateifeld "Bild" die Datei "${feature.image.normalizedPath}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`,
+        description: 'Bis zur Lösung des Problems scheint das Bild nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.',
         files: [{ path: feature.sourceFile }],
-        header: 'Problem gefunden beim prüfen der Verlinkung zu einem Bild'
+        message: `**${feature.sourceFile}**\n\nDas Feature "${feature.title}" referenziert im Dateifeld "Bild" die Datei "${feature.image.normalizedPath}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`
       });
 
       data.features.delete(feature.sourceFile);
@@ -128,9 +123,9 @@ module.exports = data => {
     data.festival.editions.forEach(edition => {
       if(!connectMedia(data, edition.image)) {
         data.errors.push({
-          description: `Da es sich bei diesen Daten um essentielle Basisdaten der Website handelt, muss dieses Problem gelöst werden bevor wieder an der Website gearbeitet werden kann.\n\n**Betroffenes File:** ${festival.sourceFile}`,
+          description: 'Da es sich bei diesen Daten um essentielle Basisdaten der Website handelt, muss dieses Problem gelöst werden bevor wieder an der Website gearbeitet werden kann.',
           files: [{ path: festival.sourceFile }],
-          header: `**Festival**\n\nDas Bild "${edition.image.normalizedPath}", dass unter einer der vergangengen Editionen auf der Festivalseite referenziert wird, wurde nicht gefunden.`
+          message: `**${festival.sourceFile}**\n\nDas Bild "${edition.image.normalizedPath}", dass unter einer der vergangengen Editionen auf der Festivalseite referenziert wird, wurde nicht gefunden.`
         });
 
         data.festival = null;
@@ -141,10 +136,9 @@ module.exports = data => {
   data.issues.forEach(issue => {
     if(issue.cover && !connectMedia(data, issue.cover)) {
       data.warnings.push({
-        description: `Bis zur Lösung des Problems scheint das Bild nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${issue.sourceFile}`,
-        detail: `Die Zeitschrift #${issue.number} referenziert im Dateifeld "Bild" die Datei "${issue.cover.normalizedPath}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`,
+        description: 'Bis zur Lösung des Problems scheint das Bild nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.',
         files: [{ path: issue.sourceFile }],
-        header: 'Problem gefunden beim prüfen der Verlinkung zu einem Coverbild'
+        message: `**${issue.sourceFile}**\n\nDie Zeitschrift #${issue.number} referenziert im Dateifeld "Bild" die Datei "${issue.cover.normalizedPath}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`
       });
 
       data.issues.delete(issue.sourceFile);
@@ -158,10 +152,9 @@ module.exports = data => {
       } catch(err) {
         if(err instanceof ConnectMediaError) {
           data.warnings.push({
-            description: `Bis zur Lösung des Problems scheint die Seite nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${page.sourceFile}`,
-            detail: err.message,
+            description: `Bis zur Lösung des Problems scheint die Seite nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.`,
             files: [{ path: page.sourceFile }],
-            header: `Problem beim prüfen der eingebetteten Mediendateien auf der Seite "${page.title}"`
+            message: `**${page.sourceFile}**\n\nProblem beim prüfen der eingebetteten Mediendateien auf der Seite "${page.title}": ${err.message}`
           });
 
           data.pages.delete(page.sourceFile);
@@ -175,10 +168,9 @@ module.exports = data => {
   data.programs.forEach(program => {
     if(program.image && !connectMedia(data, program.image)) {
       data.warnings.push({
-        description: `Bis zur Lösung des Problems scheint das Bild nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${program.sourceFile}`,
-        detail: `Die Radiosendung "${program.title}" referenziert im Dateifeld "Bild" die Datei "${program.image.normalizedPath}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`,
+        description: `Bis zur Lösung des Problems scheint das Bild nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.`,
         files: [{ path: program.sourceFile }],
-        header: 'Problem gefunden beim prüfen der Verlinkung zu einem Bild'
+        message: `**${program.sourceFile}**\n\nDie Radiosendung "${program.title}" referenziert im Dateifeld "Bild" die Datei "${program.image.normalizedPath}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`
       });
 
       data.programs.delete(program.sourceFile);
@@ -187,10 +179,9 @@ module.exports = data => {
 
     if(program.soundfile && !connectMedia(data, program.soundfile)) {
       data.warnings.push({
-        description: `Bis zur Lösung des Problems scheint das Soundfile nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${program.sourceFile}`,
-        detail: `Die Radiosendung "${program.title}" referenziert im Dateifeld "Soundfile" die Datei "${program.soundfile.normalizedPath}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`,
+        description: `Bis zur Lösung des Problems scheint das Soundfile nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.`,
         files: [{ path: program.sourceFile }],
-        header: 'Problem beim prüfen der Verlinkung zu einem Soundfile'
+        message: `**${program.sourceFile}**\n\nDie Radiosendung "${program.title}" referenziert im Dateifeld "Soundfile" die Datei "${program.soundfile.normalizedPath}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`
       });
 
       data.programs.delete(program.sourceFile);
@@ -203,10 +194,9 @@ module.exports = data => {
       } catch(err) {
         if(err instanceof ConnectMediaError) {
           data.warnings.push({
-            description: `Bis zur Lösung des Problems scheint die Radiosendung nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${program.sourceFile}`,
-            detail: err.message,
+            description: `Bis zur Lösung des Problems scheint die Radiosendung nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.`,
             files: [{ path: program.sourceFile }],
-            header: `Problem beim prüfen der eingebetteten Mediendateien in der Radiosendung "${program.title}"`
+            message: `**${program.sourceFile}**\n\nProblem beim prüfen der eingebetteten Mediendateien in der Radiosendung "${program.title}": ${err.message}`
           });
 
           data.programs.delete(program.sourceFile);

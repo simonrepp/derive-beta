@@ -1,24 +1,27 @@
 // TODO: Error implementation refinements ? regarding output
 
 class PlainDataError extends Error {
-  constructor(message, metadata) {
+  constructor(message, snippet, ranges) {
     super(message);
 
-    Object.keys(metadata).forEach(key => {
-      this[key] = metadata[key];
-    });
+    if(ranges) {
+      this.snippet = snippet;
+      this.ranges = ranges;
+    } else {
+      this.ranges = snippet;
+    }
 
     Error.captureStackTrace(this, PlainDataError);
   }
 }
 
 class PlainDataParseError extends Error {
-  constructor(message, metadata) {
+  constructor(message, snippet, range) {
     super(message);
 
-    Object.keys(metadata).forEach(key => {
-      this[key] = metadata[key];
-    });
+    this.snippet = snippet;
+
+    this.ranges = [range];
 
     Error.captureStackTrace(this, PlainDataParseError);
   }

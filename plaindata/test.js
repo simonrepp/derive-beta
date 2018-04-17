@@ -1,7 +1,7 @@
 const fs = require('fs'),
       path = require('path');
 
-const { parse, PlainDataParseError } = require('./plaindata-rich-parser.js');
+const { parse, PlainDataParseError } = require('./plaindata.js');
 
 // const input = fs.readFileSync(path.join(__dirname, '/home/simon/derive/publish.derive.at/public/export/full_database/Radio/Radio.plain'), 'utf-8');
 const input = fs.readFileSync('/home/simon/derive/publish.derive.at/public/export/full_database/Zeitschriften/10.plain', 'utf-8');

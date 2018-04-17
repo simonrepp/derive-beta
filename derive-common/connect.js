@@ -12,7 +12,7 @@ const connectBooks = (data, collection, field, backReferenceField) => {
           description: `Bis zur Lösung des Problems scheint die betroffene Verbindung zwischen Buchbesprechung und Buch nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${document.sourceFile}`,
           detail: `Im Artikel "${document.title}" wird das Buch "${title}" besprochen, allerdings wurde in der Datenbank kein Buch mit diesem Titel gefunden.`,
           files: [{ path: document.sourceFile }],
-          header: 'Problem gefunden beim prüfen der Verlinkung einer Buchbesprechung mit einem besprochenen Buch'
+          message: 'Problem gefunden beim prüfen der Verlinkung einer Buchbesprechung mit einem besprochenen Buch'
         });
       }
     });
@@ -33,7 +33,7 @@ const connectPlayers = (data, collection, field, backReferenceField) => {
           description: `Bis zur Lösung des Problems scheint die betroffene Verbindung zum verlinkten Akteur nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${document.sourceFile}`,
           detail: `Die AkteurIn "${name}", angegeben als ${field} in einem Dokument vom Typ ${collection} wurde nicht gefunden.`,
           files: [{ path: document.sourceFile }],
-          header: 'Problem gefunden beim prüfen der Verlinkung zu einem Akteur'
+          message: 'Problem gefunden beim prüfen der Verlinkung zu einem Akteur'
         });
       }
     });
@@ -73,7 +73,7 @@ const connectIssuesWithArticles = data => {
             description: `Bis zur Lösung des Problems scheint die betroffene Verbindung zum referenzierten Artikel nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${issue.sourceFile}`,
             detail: '',
             files: [{ path: issue.sourceFile }],
-            header: `**${issue.sourceFile}**\n\nIn Zeitschrift N° ${issue.number} wird in der Rubrik "${section.title}" der Artikel "${article.title}" referenziert, es wurde aber kein Artikel mit diesem Titel gefunden.`
+            message: `**${issue.sourceFile}**\n\nIn Zeitschrift N° ${issue.number} wird in der Rubrik "${section.title}" der Artikel "${article.title}" referenziert, es wurde aber kein Artikel mit diesem Titel gefunden.`
           });
         }
       });
@@ -93,7 +93,7 @@ const connectRadioEditors = data => {
         data.errors.push({
           description: `Bis zur Lösung des Problems scheint die betroffene Verbindung zum verlinkten Akteur nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${data.radio.sourceFile}`,
           files: [{ path: data.radio.sourceFile }],
-          header: `**Radio**\n\nDie AkteurIn "${name}", angegeben als Teil der allgemeinen Radio Redaktion, wurde nicht gefunden.`
+          message: `**Radio**\n\nDie AkteurIn "${name}", angegeben als Teil der allgemeinen Radio Redaktion, wurde nicht gefunden.`
         });
       }
     });

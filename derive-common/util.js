@@ -7,7 +7,6 @@ const fs = require('fs'),
 markdownIt.use(markdownItFootnote);
 
 const plaindata = require('../plaindata/plaindata.js');
-const plaindataRich = require('../plaindata/plaindata-rich-parser.js');
 
 exports.URBANIZE_ENUM = [
   '2012',
@@ -39,21 +38,7 @@ exports.loadPlain = (directory, plainPath) => new Promise((resolve, reject) =>
       reject(err);
     } else {
       try {
-        resolve( plaindata.parse(content) );
-      } catch(err) {
-        reject(err);
-      }
-    }
-  })
-);
-
-exports.loadPlainRich = (directory, plainPath) => new Promise((resolve, reject) =>
-  fs.readFile(path.join(directory, plainPath), 'utf-8', (err, content) => {
-    if(err) {
-      reject(err);
-    } else {
-      try {
-        resolve( plaindataRich.parse(content, { locale: 'de' }) );
+        resolve( plaindata.parse(content, { locale: 'de' }) );
       } catch(err) {
         reject(err);
       }
