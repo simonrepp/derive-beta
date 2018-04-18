@@ -20,13 +20,6 @@ const MULTILINE_VALUE_BEGIN = /^\s*(-{3,})\s*(\S.*?)\s*$/;
 const SECTION = /^\s*(#+)\s*(\S.*?)\s*$/;
 const VALUE = /^\s*-(?!-)\s*(.+?)?\s*$/;
 
-const lineContext = (lines, lineNumber) => {
-  const beginIndex = Math.max(0, lineNumber - 3);
-  const endIndex = beginIndex + 4;
-
-  return lines.slice(beginIndex, endIndex).join('\n');
-};
-
 // the whole idea with ignoring whitespace at the begin, end, between different connected lines and between relevant tokens is:
 // when you write on paper you don't care if something is "a little to the right, left, further down or whatever"
 // as long as "words" or whatever you write on paper are clearly separated and graspable by their intent,
@@ -58,7 +51,7 @@ const parse = (input, options = { locale: 'en' }) => {
   const document = new PlainSection({
     context: parserContext,
     depth: 0,
-    key: 'ROOT',
+    key: ' R O O T ',
     keyRange: {
       beginColumn: 0,
       beginLine: 1,
@@ -66,7 +59,7 @@ const parse = (input, options = { locale: 'en' }) => {
       endLine: 1
     },
     parent: null,
-    valueRange: {
+    range: {
       beginColumn: 0,
       beginLine: 1,
       endColumn: 0,
@@ -83,10 +76,10 @@ const parse = (input, options = { locale: 'en' }) => {
       if(lineContent.match(readBuffer.multiLineValueEnd)) {
         // console.log('[multiline value end]', lineContent);
 
-        let value, valueRange;
+        let value, range;
         if(readBuffer.value.length > 0) {
           value = readBuffer.value.join('\n');
-          valueRange = {
+          range = {
             beginColumn: 0,
             beginLine: readBuffer.keyRange.beginLine + 1,
             endColumn: readBuffer.value[readBuffer.value.length - 1].length,
@@ -94,7 +87,7 @@ const parse = (input, options = { locale: 'en' }) => {
           };
         } else {
           value = null;
-          valueRange = {
+          range = {
             beginColumn: lines[readBuffer.keyRange.beginLine - 1].length,
             beginLine: readBuffer.keyRange.beginLine,
             endColumn: lines[readBuffer.keyRange.beginLine - 1].length,
@@ -111,8 +104,8 @@ const parse = (input, options = { locale: 'en' }) => {
             endColumn: lineContent.length,
             endLine: lineNumber
           },
-          value: value,
-          valueRange: valueRange
+          range: range,
+          value: value
         });
 
         currentSection.add(newValue);
@@ -145,13 +138,13 @@ const parse = (input, options = { locale: 'en' }) => {
           context: parserContext,
           key: readBuffer.key,
           keyRange: readBuffer.keyRange,
-          value: value,
-          valueRange: {
+          range: {
             beginColumn: valueColumn,
             beginLine: lineNumber,
             endColumn: value ? valueColumn + value.length : valueColumn,
             endLine: lineNumber
-          }
+          },
+          value: value
         });
 
         currentSection.add(newValue);
@@ -167,13 +160,13 @@ const parse = (input, options = { locale: 'en' }) => {
             context: parserContext,
             key: readBuffer.key,
             keyRange: readBuffer.keyRange,
-            value: null,
-            valueRange: {
+            range: {
               beginColumn: lines[readBuffer.keyRange.beginLine - 1].length,
               beginLine: readBuffer.keyRange.beginLine,
               endColumn: lines[readBuffer.keyRange.beginLine - 1].length,
               endLine: readBuffer.keyRange.beginLine
-            }
+            },
+            value: null
           });
 
           currentSection.add(newValue);
@@ -202,13 +195,13 @@ const parse = (input, options = { locale: 'en' }) => {
           endColumn: keyColumn + key.length,
           endLine: lineNumber
         },
-        value: value,
-        valueRange: {
+        range: {
           beginColumn: valueColumn,
           beginLine: lineNumber,
           endColumn: valueColumn + value.length,
           endLine: lineNumber
-        }
+        },
+        value: value
       });
 
       currentSection.add(newValue);
@@ -244,7 +237,7 @@ const parse = (input, options = { locale: 'en' }) => {
 
       const dashes = match[1];
       const key = match[2];
-      const keyEscaped = key.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+      const keyEscaped = key.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
 
       // TODO: Instead of copying line by line to multilineValue readBuffer,
       //       just remember first content line index and then slice it out
@@ -324,7 +317,7 @@ const parse = (input, options = { locale: 'en' }) => {
           endLine: lineNumber
         },
         parent: currentSection,
-        valueRange: {
+        range: {
           beginColumn: keyColumn + key.length,
           beginLine: lineNumber,
           endColumn: keyColumn + key.length,
@@ -375,13 +368,13 @@ const parse = (input, options = { locale: 'en' }) => {
         context: parserContext,
         key: readBuffer.key,
         keyRange: readBuffer.keyRange,
-        value: null,
-        valueRange: {
+        range: {
           beginColumn: 0,
           beginLine: readBuffer.keyRange.beginLine + 1,
           endColumn: 0,
           endLine: readBuffer.keyRange.beginLine + 1
-        }
+        },
+        value: null
       });
 
       currentSection.add(newValue);

@@ -9,10 +9,9 @@ const connectBooks = (data, collection, field, backReferenceField) => {
         instance[backReferenceField].push(document);
       } else {
         data.warnings.push({
-          description: `Bis zur Lösung des Problems scheint die betroffene Verbindung zwischen Buchbesprechung und Buch nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${document.sourceFile}`,
-          detail: `Im Artikel "${document.title}" wird das Buch "${title}" besprochen, allerdings wurde in der Datenbank kein Buch mit diesem Titel gefunden.`,
           files: [{ path: document.sourceFile }],
-          message: 'Problem gefunden beim prüfen der Verlinkung einer Buchbesprechung mit einem besprochenen Buch'
+          message: `Im Artikel "${document.title}" wird das Buch "${title}" besprochen, allerdings wurde in der Datenbank kein Buch mit diesem Titel gefunden.`,
+          snippet: 'TODO'
         });
       }
     });
@@ -30,10 +29,9 @@ const connectPlayers = (data, collection, field, backReferenceField) => {
         instance[backReferenceField].push(document);
       } else {
         data.warnings.push({
-          description: `Bis zur Lösung des Problems scheint die betroffene Verbindung zum verlinkten Akteur nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${document.sourceFile}`,
-          detail: `Die AkteurIn "${name}", angegeben als ${field} in einem Dokument vom Typ ${collection} wurde nicht gefunden.`,
           files: [{ path: document.sourceFile }],
-          message: 'Problem gefunden beim prüfen der Verlinkung zu einem Akteur'
+          message: `Die AkteurIn "${name}", angegeben als ${field} in einem Dokument vom Typ ${collection} wurde nicht gefunden.`,
+          snippet: 'TODO'
         });
       }
     });
@@ -58,22 +56,22 @@ const clearBackReferences = data => {
 const connectIssuesWithArticles = data => {
   data.issues.forEach(issue => {
     issue.sections.forEach(section => {
-      section.articles.connected = [];
-
-      section.articles.sourced.forEach(article => {
-        const articleInstance = data.articlesByTitle.get(article.title);
+      section.articles = [];
+      section.articlesUnconnected.forEach(article => {
+        const articleInstance = data.articlesByTitle.get(article.titleLazy.value);
 
         if(articleInstance) {
-          section.articles.connected.push(articleInstance);
+          section.articles.push(articleInstance);
 
           articleInstance.issue = issue;
           articleInstance.inIssueOnPages = article.pages;
         } else {
+          const error = article.titleLazy.error(`In Zeitschrift N° ${issue.number} wird in der Rubrik "${section.title}" der Artikel "${article.title}" referenziert, es wurde aber kein Artikel mit diesem Titel gefunden.`);
+
           data.warnings.push({
-            description: `Bis zur Lösung des Problems scheint die betroffene Verbindung zum referenzierten Artikel nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${issue.sourceFile}`,
-            detail: '',
-            files: [{ path: issue.sourceFile }],
-            message: `**${issue.sourceFile}**\n\nIn Zeitschrift N° ${issue.number} wird in der Rubrik "${section.title}" der Artikel "${article.title}" referenziert, es wurde aber kein Artikel mit diesem Titel gefunden.`
+            files: [{ path: issue.sourceFile, ranges: error.ranges }],
+            message: error.message,
+            snippet: error.snippet
           });
         }
       });
@@ -83,17 +81,19 @@ const connectIssuesWithArticles = data => {
 
 const connectRadioEditors = data => {
   if(data.radio) {
-    data.radio.editors.connected = [];
-    data.radio.editors.sourced.forEach(name => {
-      const instance = data.playersByName.get(name);
+    data.radio.editors = [];
+    data.radio.editorsLazy.forEach(name => {
+      const instance = data.playersByName.get(name.value);
 
       if(instance) {
-        data.radio.editors.connected.push(instance);
+        data.radio.editors.push(instance);
       } else {
+        const error = name.error(`Die AkteurIn "${name.value}", angegeben als Teil der allgemeinen Radio Redaktion, wurde nicht gefunden.`);
+
         data.errors.push({
-          description: `Bis zur Lösung des Problems scheint die betroffene Verbindung zum verlinkten Akteur nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**Betroffenes File:** ${data.radio.sourceFile}`,
-          files: [{ path: data.radio.sourceFile }],
-          message: `**Radio**\n\nDie AkteurIn "${name}", angegeben als Teil der allgemeinen Radio Redaktion, wurde nicht gefunden.`
+          files: [{ path: data.radio.sourceFile, ranges: error.ranges }],
+          message: error.message,
+          snippet: error.snippet
         });
       }
     });

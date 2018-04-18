@@ -20,10 +20,8 @@ module.exports = async (data, plainPath) => {
 
       if(err instanceof PlainDataParseError) {
         data.errors.push({
-          description: 'Da es sich bei diesen Daten um essentielle Basisdaten der Website handelt, muss dieses Problem gelöst werden bevor wieder an der Website gearbeitet werden kann.',
-          detail: err.message,
           files: [{ path: plainPath, ranges: err.ranges }],
-          message: `**${plainPath}**\n\n${err.message}`,
+          message: err.message,
           snippet: err.snippet
         });
 
@@ -39,22 +37,19 @@ module.exports = async (data, plainPath) => {
       festival.title = document.value('Titel', { required: true });
       festival.subtitle = document.value('Untertitel', { required: true });
       festival.description = document.value('Beschreibung', { process: validateMarkdown, required: true });
-
-      // validateKeys(document, ['Beschreibung', 'Edition', 'Titel', 'Untertitel']);
-
       festival.editions = document.sections('Edition').map(edition => ({
         image: edition.value('Bild', { process: validatePath, required: true }),
         url: edition.value('URL', { process: validateAbsoluteUrl, required: true })
       }));
+
+      document.assertAllTouched();
     } catch(err) {
       data.cache.delete(plainPath);
 
       if(err instanceof PlainDataError) {
         data.errors.push({
-          description: 'Da es sich bei diesen Daten um essentielle Basisdaten der Website handelt, muss dieses Problem gelöst werden bevor wieder an der Website gearbeitet werden kann.',
-          detail: err.message,
           files: [{ path: plainPath, ranges: err.ranges }],
-          message: `**${plainPath}**\n\n${err.message}`,
+          message: err.message,
           snippet: err.snippet
         });
 

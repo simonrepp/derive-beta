@@ -18,7 +18,9 @@ try {
   }
 }
 
-console.log(result.sequential);
+const value = result.value('Beschreibung', { process: (opt) => console.log(opt) });
+
+// console.log(value);
 
 // try {
 //   const gotten = result.getList('Titel');

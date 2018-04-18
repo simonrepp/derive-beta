@@ -4,12 +4,8 @@ class PlainDataError extends Error {
   constructor(message, snippet, ranges) {
     super(message);
 
-    if(ranges) {
-      this.snippet = snippet;
-      this.ranges = ranges;
-    } else {
-      this.ranges = snippet;
-    }
+    this.snippet = snippet;
+    this.ranges = ranges || [];
 
     Error.captureStackTrace(this, PlainDataError);
   }

@@ -18,10 +18,8 @@ module.exports = async (data, plainPath) => {
 
       if(err instanceof PlainDataParseError) {
         data.errors.push({
-          description: 'Da es sich bei diesen Daten um essentielle Basisdaten der Website handelt, muss dieses Problem gelöst werden bevor wieder an der Website gearbeitet werden kann.',
-          detail: err.message,
           files: [{ path: plainPath, ranges: err.ranges }],
-          message: `**${plainPath}**\n\n${err.message}`,
+          message: err.message,
           snippet: err.snippet
         });
 
@@ -36,19 +34,16 @@ module.exports = async (data, plainPath) => {
     try {
       radio.title = document.value('Titel', { required: true });
       radio.info = document.value('Allgemeine Info', { process: validateMarkdown, required: true });
-      radio.editors = { sourced: document.values('Redaktion') };
+      radio.editorsLazy = document.values('Redaktion', { lazy: true });
 
-      // TODO: Write validator for this for the rich re-implementation
-      // validateKeys(document, ['Allgemeine Info', 'Redaktion', 'Titel']);
+      document.assertAllTouched();
     } catch(err) {
       data.cache.delete(plainPath);
 
       if(err instanceof PlainDataError) {
         data.errors.push({
-          description: 'Da es sich bei diesen Daten um essentielle Basisdaten der Website handelt, muss dieses Problem gelöst werden bevor wieder an der Website gearbeitet werden kann.',
-          detail: err.message,
           files: [{ path: plainPath, ranges: err.ranges }],
-          message: `**${plainPath}**\n\n${err.message}`,
+          message: err.message,
           snippet: err.snippet
         });
 

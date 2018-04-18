@@ -7,24 +7,6 @@ const { loadPlain, statFile, URBANIZE_ENUM } = require('../util.js'),
       validatePath = require('../validate/path.js'),
       validatePermalink = require('../validate/permalink.js');
 
-const specifiedKeys = [
-  'Abstract',
-  'Adresse',
-  'Bild',
-  'Kategorien',
-  'Permalink',
-  'Tags',
-  'Teilnehmer',
-  'Termin',
-  'Text',
-  'Titel',
-  'Untertitel',
-  'Urbanize',
-  'URL',
-  'Veranstalter',
-  'Zusatzinfo'
-];
-
 module.exports = async (data, plainPath) => {
   const cached = data.cache.get(plainPath);
   const stats = await statFile(data.root, plainPath);
@@ -41,10 +23,9 @@ module.exports = async (data, plainPath) => {
 
       if(err instanceof PlainDataParseError) {
         data.warnings.push({
-          description: 'Bis zur Lösung des Problems scheint die betroffene Veranstaltung nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.',
           detail: err.message,
           files: [{ path: plainPath, ranges: err.ranges }],
-          message: `**${plainPath}**\n\n${err.message}`,
+          message: err.message,
           snippet: err.snippet
         });
 
@@ -60,9 +41,6 @@ module.exports = async (data, plainPath) => {
       event.title = document.value('Titel', { required: true });
       event.permalink = document.value('Permalink', { process: validatePermalink, required: true });
       event.permalinkMeta = document.meta('Permalink');
-
-      // validateKeys(document.value(specifiedKeys);
-
       event.subtitle = document.value('Untertitel');
       event.url = document.value('URL', { process: validateAbsoluteUrl });
       event.hosts = { sourced: document.values('Veranstalter') };
@@ -80,15 +58,16 @@ module.exports = async (data, plainPath) => {
         date: date.value('Datum', { process: validateDate }),
         time: date.value('Zeit')
       }));
+
+      document.assertAllTouched();
     } catch(err) {
       data.cache.delete(plainPath);
 
       if(err instanceof PlainDataError) {
         data.warnings.push({
-          description: 'Bis zur Lösung des Problems scheint die betroffene Veranstaltung nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.',
           detail: err.message,
           files: [{ path: plainPath, ranges: err.ranges }],
-          message: `**${plainPath}**\n\n${err.message}`,
+          message: err.message,
           snippet: err.snippet
         });
 

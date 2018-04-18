@@ -9,7 +9,7 @@ const { globFiles } = require('./util.js'),
       sourceIssue = require('./source/issue.js'),
       sourcePage = require('./source/page.js'),
       sourcePlayer = require('./source/player.js'),
-      sourceProgram = require('./source/program.js');
+      sourceProgram = require('./source/program.js'),
       sourceRadio = require('./source/radio.js');
 
 const forbiddenFilenameCharacters = /[\\?*:|"<>]/;
@@ -34,10 +34,8 @@ module.exports = async data => {
     if(normalizedPath.match(forbiddenFilenameCharacters)) {
 
       data.warnings.push({
-        description: 'Bis der Dateiname korrigiert wurde wird die Datei ignoriert, dies kann auch weitere Dateien betreffen wenn diese auf die Datei bzw. deren Inhalte referenzieren.',
-        detail: 'Lösung: Die nicht erlaubten Zeichen sollten entfernt bzw. durch Leerzeichen oder alternative Zeichen wie "_" oder "-" ersetzt werden.',
         files: [{ path: localFilesystemPath }],
-        message: `**${normalizedPath}**\n\nProblem: Im Namen der Datei bzw. des Ordners wurde eines der nicht erlaubten Zeichen  / \\ ? * : | " < > vorgefunden.`
+        message: 'Im Namen der Datei bzw. des Ordners wurde eines der nicht erlaubten Zeichen  / \\ ? * : | " < > vorgefunden; Die nicht erlaubten Zeichen sollten entfernt bzw. durch Leerzeichen oder alternative Zeichen wie "_" oder "-" ersetzt werden.',
       });
 
     } else if(path.extname(normalizedPath) === '.plain') {

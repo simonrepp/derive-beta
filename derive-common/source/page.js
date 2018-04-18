@@ -4,13 +4,6 @@ const { loadPlain, statFile, URBANIZE_ENUM } = require('../util.js'),
       { validateMarkdownWithMedia } = require('../validate/markdown.js'),
       validatePermalink = require('../validate/permalink.js');
 
-const specifiedKeys = [
-  'Permalink',
-  'Text',
-  'Titel',
-  'Urbanize'
-];
-
 module.exports = async (data, plainPath) => {
   const cached = data.cache.get(plainPath);
   const stats = await statFile(data.root, plainPath);
@@ -27,10 +20,9 @@ module.exports = async (data, plainPath) => {
 
       if(err instanceof PlainDataParseError) {
         data.warnings.push({
-          description: 'Bis zur Lösung des Problems scheint die betroffene Seite nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.',
           detail: err.message,
           files: [{ path: plainPath, ranges: err.ranges }],
-          message: `**${plainPath}**\n\n${err.message}`,
+          message: err.message,
           snippet: err.snippet
         });
 
@@ -46,20 +38,18 @@ module.exports = async (data, plainPath) => {
       page.title = document.value('Titel', { required: true });
       page.permalink = document.value('Permalink', { process: validatePermalink, required: true });
       page.permalinkMeta = document.meta('Permalink');
-
-      // validateKeys(document, specifiedKeys);
-
       page.urbanize = document.value('Urbanize', { process: validateEnum(URBANIZE_ENUM) });
       page.text = document.value('Text', { process: validateMarkdownWithMedia });
+
+      document.assertAllTouched();
     } catch(err) {
       data.cache.delete(plainPath);
 
       if(err instanceof PlainDataError) {
         data.warnings.push({
-          description: 'Bis zur Lösung des Problems scheint die betroffene Seite nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.',
           detail: err.message,
           files: [{ path: plainPath, ranges: err.ranges }],
-          message: `**${plainPath}**\n\n${err.message}`,
+          message: err.message,
           snippet: err.snippet
         });
 

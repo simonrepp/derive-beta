@@ -8,25 +8,6 @@ const { loadPlain, statFile, URBANIZE_ENUM } = require('../util.js'),
       validatePath = require('../validate/path.js'),
       validatePermalink = require('../validate/permalink.js');
 
-const specifiedKeys = [
-  'Abstract',
-  'Autoren',
-  'Bild',
-  'Buchbesprechungen',
-  'Datum',
-  'Kategorien',
-  'Literaturverzeichnis',
-  'Permalink',
-  'Lesbar',
-  'Sprache',
-  'Tags',
-  'Text',
-  'Titel',
-  'Untertitel',
-  'Urbanize',
-  'Veröffentlichen'
-];
-
 module.exports = async (data, plainPath) => {
   const cached = data.cache.get(plainPath);
   const stats = await statFile(data.root, plainPath);
@@ -43,10 +24,9 @@ module.exports = async (data, plainPath) => {
 
       if(err instanceof PlainDataParseError) {
         data.warnings.push({
-          description: 'Bis zur Lösung des Problems scheint der betroffene Artikel nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.',
           detail: err.message,
           files: [{ path: plainPath, ranges: err.ranges }],
-          message: `**${plainPath}**\n\n${err.message}`,
+          message: err.message,
           snippet: err.snippet
         });
 
@@ -64,9 +44,6 @@ module.exports = async (data, plainPath) => {
       article.titleMeta = document.meta('Titel');
       article.permalink = document.value('Permalink', { process: validatePermalink, required: true });
       article.permalinkMeta = document.meta('Permalink');
-
-      // validateKeys(document.value(specifiedKeys);
-
       article.subtitle = document.value('Untertitel');
       article.image = document.value('Bild', { process: validatePath });
       article.authors = { sourced: document.values('Autoren') };
@@ -81,15 +58,16 @@ module.exports = async (data, plainPath) => {
       article.abstract = document.value('Abstract', { process: validateMarkdown });
       article.bibliography = document.value('Literaturverzeichnis', { process: validateMarkdown });
       article.text = document.value('Text', { process: validateMarkdownWithMedia });
+
+      document.assertAllTouched();
     } catch(err) {
       data.cache.delete(plainPath);
 
       if(err instanceof PlainDataError) {
         data.warnings.push({
-          description: 'Bis zur Lösung des Problems scheint der betroffene Artikel nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.',
           detail: err.message,
           files: [{ path: plainPath, ranges: err.ranges }],
-          message: `**${plainPath}**\n\n${err.message}`,
+          message: err.message,
           snippet: err.snippet
         });
 

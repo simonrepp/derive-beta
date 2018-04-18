@@ -15,6 +15,7 @@ module.exports = {
       `Zeile ident zu Zeile ${beginLine} nach dem Textblock fehlt)`
   },
   validation: {
+    excessKey: key => `Das Feld "${key}" ist nicht vorgesehen, handelt es sich eventuell um einen Tippfehler?`,
     expectedSectionGotValue: key => `Das Feld "${key}" enthält einen Wert, muss aber eine Sektion enthalten.`,
     expectedSectionGotList: key => `Das Feld "${key}" enthält eine Liste, muss aber eine Sektion enthalten.`,
     expectedSectionsGotValue: key => `Die Liste "${key}" darf nur Sektionen enthalten, enhält aber einen einfachen Wert.`,

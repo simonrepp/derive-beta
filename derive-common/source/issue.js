@@ -6,23 +6,6 @@ const { loadPlain, statFile } = require('../util.js'),
       { validateMarkdown } = require('../validate/markdown.js'),
       validatePath = require('../validate/path.js');
 
-const specifiedKeys = [
-  'Beschreibung',
-  'Cover',
-  'Erscheinungsdatum',
-  'Jahr',
-  'Kooperation',
-  'Link zum Shop',
-  'Nummer',
-  'Quartal',
-  'Rubrik',
-  'Schwerpunkte',
-  'Tags',
-  'Titel',
-  'Vergriffen',
-  'Veröffentlichen'
-];
-
 module.exports = async (data, plainPath) => {
   const cached = data.cache.get(plainPath);
   const stats = await statFile(data.root, plainPath);
@@ -39,10 +22,9 @@ module.exports = async (data, plainPath) => {
 
       if(err instanceof PlainDataParseError) {
         data.warnings.push({
-          description: 'Bis zur Lösung des Problems scheint die betroffene Zeitschrift nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.',
           detail: err.message,
           files: [{ path: plainPath, ranges: err.ranges }],
-          message: `**${plainPath}**\n\n${err.message}`,
+          message: err.message,
           snippet: err.snippet
         });
 
@@ -61,9 +43,6 @@ module.exports = async (data, plainPath) => {
       issue.year = document.value('Jahr', { process: validateInteger, required: true });
       issue.quarter = document.value('Quartal', { process: validateInteger, required: true });
       issue.cover = document.value('Cover', { process: validatePath, required: true });
-
-      // validateKeys(document, specifiedKeys);
-
       issue.shopLink = document.value('Link zum Shop');
       issue.cooperation = document.value('Kooperation');
       issue.features = document.values('Schwerpunkte');
@@ -75,22 +54,21 @@ module.exports = async (data, plainPath) => {
 
       issue.sections = document.sections('Rubrik').map(section => ({
         title: section.value('Titel', { required: true }),
-        articles: {
-          sourced: section.sections('Artikel', { keyRequired: false }).map(article => ({
-            title: article.value('Titel', { required: true }),
-            pages: article.value('Seite(n)', { required: true })
-          }))
-        }
+        articlesUnconnected: section.sections('Artikel', { keyRequired: false }).map(article => ({
+          titleLazy: article.value('Titel', { lazy: true, required: true }),
+          pages: article.value('Seite(n)', { required: true })
+        }))
       }));
+
+      document.assertAllTouched();
     } catch(err) {
       data.cache.delete(plainPath);
 
       if(err instanceof PlainDataError) {
         data.warnings.push({
-          description: 'Bis zur Lösung des Problems scheint die betroffene Zeitschrift nicht auf der Website auf, davon abgesehen hat dieser Fehler keine Auswirkungen.',
           detail: err.message,
           files: [{ path: plainPath, ranges: err.ranges }],
-          message: `**${plainPath}**\n\n${err.message}`,
+          message: err.message,
           snippet: err.snippet
         });
 
