@@ -18,7 +18,7 @@ try {
   }
 }
 
-console.log(result.get('Rubrik')[0].value.get('Artikel')[0]);
+console.log(result.sequential);
 
 // try {
 //   const gotten = result.getList('Titel');

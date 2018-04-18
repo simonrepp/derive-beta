@@ -1,15 +1,42 @@
 const { PlainDataError } = require('./errors.js');
 
-class PlainMap extends Map {
-  constructor(parserContext) {
-    super();
-
+class PlainSection {
+  constructor(parserContext, section) {
     this.parserContext = parserContext;
     this.messages = parserContext.messages.validation;
+
+    this.associative = {};
+    this.sequential = [];
+
+    this.depth = section.depth;
+    this.key = section.key;
+    this.keyRange = section.keyRange;
+    this.parent = section.parent;
+    this.valueRange = section.valueRange;
   }
 
-  getList(key, options = { keyRequired: true }) {
-    const values = super.get(key);
+  add(value) {
+    const existingAssociative = this.associative[value.key];
+
+    if(existingAssociative === undefined) {
+      this.associative[value.key] = [value];
+    } else {
+      existingAssociative.push(value);
+    }
+
+    if(this.valueRange.beginLine === this.keyRange.beginLine) {
+      this.valueRange.beginColumn = 0;
+      this.valueRange.beginLine = value.keyRange.beginLine;
+    }
+
+    this.valueRange.endColumn = value.valueRange.endColumn;
+    this.valueRange.endLine = value.valueRange.endLine;
+
+    this.sequential.push(value);
+  }
+
+  list(key, options = { keyRequired: true }) {
+    const values = this.associative[key];
 
     if(values === undefined) {
       if(options.keyRequired) {
@@ -23,7 +50,7 @@ class PlainMap extends Map {
   }
 
   section(key, options = { keyRequired: true }) {
-    const values = super.get(key);
+    const values = this.associative[key];
 
     if(values === undefined) {
       if(options.keyRequired) {
@@ -69,7 +96,7 @@ class PlainMap extends Map {
   }
 
   sections(key, options = { keyRequired: true }) {
-    const values = super.get(key);
+    const values = this.associative[key];
 
     if(values === undefined) {
       if(options.keyRequired) {
@@ -91,6 +118,10 @@ class PlainMap extends Map {
     });
   }
 
+  sequential() {
+    return this.sequential;
+  }
+
   snippet(range) {
     let snippet = '  Zeile | Inhalt\n';
     snippet +=    '   ...\n';
@@ -106,7 +137,7 @@ class PlainMap extends Map {
   }
 
   value(key, options = { keyRequired: true, process: false, required: false }) {
-    const values = super.get(key);
+    const values = this.associative[key];
 
     if(values === undefined) {
       if(options.keyRequired) {
@@ -171,7 +202,7 @@ class PlainMap extends Map {
   }
 
   values(key, options = { keyRequired: true }) {
-    const values = super.get(key);
+    const values = this.associative[key];
 
     if(values === undefined) {
       if(options.keyRequired) {
@@ -199,4 +230,4 @@ class PlainMap extends Map {
   }
 }
 
-exports.PlainMap = PlainMap;
+exports.PlainSection = PlainSection;

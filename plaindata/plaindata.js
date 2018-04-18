@@ -2,7 +2,7 @@
 //       And possibly have specs that ensure this is actually correctly reflected in the parser implementation for all possible errors
 
 const { PlainDataParseError } = require('./errors.js');
-const { PlainMap } = require('./structures.js');
+const { PlainSection } = require('./structures.js');
 const snippet = require('./snippet.js');
 
 const SUPPORTED_LOCALES = ['de', 'en'];
@@ -54,21 +54,25 @@ const parse = (input, options = { locale: 'en' }) => {
     lines: lines
   };
 
-  const document = new PlainMap(parserContext);
-
-  const currentSection = {
+  const document = new PlainSection(parserContext, {
     depth: 0,
+    key: 'ROOT',
     keyRange: {
       beginColumn: 0,
       beginLine: 1,
       endColumn: 0,
       endLine: 1
     },
-    parents: [],
-    reference: document
-  };
+    parent: null,
+    valueRange: {
+      beginColumn: 0,
+      beginLine: 1,
+      endColumn: 0,
+      endLine: 1
+    }
+  });
 
-  // TODO: Maps instead of objects because order stability as a bonus
+  let currentSection = document;
 
   for(let lineNumber = 1; lineNumber <= lines.length; lineNumber++) {
     const lineContent = lines[lineNumber - 1];
@@ -76,7 +80,25 @@ const parse = (input, options = { locale: 'en' }) => {
     if(state === STATE_READ_MULTILINE_VALUE) {
       if(lineContent.match(readBuffer.multiLineValueEnd)) {
         // console.log('[multiline value end]', lineContent);
-        const value = readBuffer.value.length > 0 ? readBuffer.value.join('\n') : null;
+
+        let value, valueRange;
+        if(readBuffer.value.length > 0) {
+          value = readBuffer.value.join('\n');
+          valueRange = {
+            beginColumn: 0,
+            beginLine: readBuffer.keyRange.beginLine + 1,
+            endColumn: readBuffer.value[readBuffer.value.length - 1].length,
+            endLine: lineNumber - 1
+          };
+        } else {
+          value = null;
+          valueRange = {
+            beginColumn: lines[readBuffer.keyRange.beginLine - 1].length,
+            beginLine: readBuffer.keyRange.beginLine,
+            endColumn: lines[readBuffer.keyRange.beginLine - 1].length,
+            endLine: readBuffer.keyRange.beginLine
+          };
+        }
 
         const newValue = {
           key: readBuffer.key,
@@ -87,21 +109,10 @@ const parse = (input, options = { locale: 'en' }) => {
             endLine: lineNumber
           },
           value: value,
-          valueRange: {
-            beginColumn: 0,
-            beginLine: readBuffer.keyRange.beginLine + 1,
-            endColumn: value ? readBuffer.value[readBuffer.value.length - 1].length : 0,
-            endLine: value ? lineNumber - 1 : lineNumber
-          }
+          valueRange: valueRange
         };
 
-        const existingValues = currentSection.reference.get(readBuffer.key);
-
-        if(existingValues) {
-          existingValues.push(newValue);
-        } else {
-          currentSection.reference.set(readBuffer.key, [newValue]);
-        }
+        currentSection.add(newValue);
 
         state = STATE_RESET;
       } else {
@@ -139,13 +150,7 @@ const parse = (input, options = { locale: 'en' }) => {
           }
         };
 
-        const existingValues = currentSection.reference.get(readBuffer.key);
-
-        if(existingValues) {
-          existingValues.push(newValue);
-        } else {
-          currentSection.reference.set(readBuffer.key, [newValue]);
-        }
+        currentSection.add(newValue);
 
         readBuffer.empty = false;
 
@@ -166,13 +171,7 @@ const parse = (input, options = { locale: 'en' }) => {
             }
           };
 
-          const existingValues = currentSection.reference.get(readBuffer.key);
-
-          if(existingValues) {
-            existingValues.push(newValue);
-          } else {
-            currentSection.reference.set(readBuffer.key, [newValue]);
-          }
+          currentSection.add(newValue);
         }
 
         state = STATE_RESET;
@@ -206,13 +205,7 @@ const parse = (input, options = { locale: 'en' }) => {
         }
       };
 
-      const existingValues = currentSection.reference.get(key);
-
-      if(existingValues) {
-        existingValues.push(newValue);
-      } else {
-        currentSection.reference.set(key, [newValue]);
-      }
+      currentSection.add(newValue);
 
       continue;
     }
@@ -310,7 +303,12 @@ const parse = (input, options = { locale: 'en' }) => {
         );
       }
 
-      const newValue = {
+      while(currentSection.depth >= targetDepth) {
+        currentSection = currentSection.parent;
+      }
+
+      const newSection = new PlainSection(parserContext, {
+        depth: currentSection.depth + 1,
         key: key,
         keyRange: {
           beginColumn: keyColumn,
@@ -318,39 +316,17 @@ const parse = (input, options = { locale: 'en' }) => {
           endColumn: keyColumn + key.length,
           endLine: lineNumber
         },
-        value: new PlainMap(parserContext)
+        parent: currentSection,
+        valueRange: {
+          beginColumn: keyColumn + key.length,
+          beginLine: lineNumber,
+          endColumn: keyColumn + key.length,
+          endLine: lineNumber
+        }
+      });
 
-        // TODO: Consider if/how to handle valueRange for sections
-        // valueRange: {
-        //   beginColumn: valueColumn,
-        //   beginLine: lineNumber,
-        //   endColumn: valueColumn + value.length,
-        //   endLine: lineNumber
-        // }
-      };
-
-      while(currentSection.depth >= targetDepth) {
-        currentSection.reference = currentSection.parents.pop();
-        currentSection.depth--;
-      }
-
-      const existingValues = currentSection.reference.get(key);
-
-      if(existingValues) {
-        existingValues.push(newValue);
-      } else {
-        currentSection.reference.set(key, [newValue]);
-      }
-
-      currentSection.parents.push(currentSection.reference);
-      currentSection.reference = newValue.value;
-      currentSection.keyRange = {
-        beginColumn: keyColumn,
-        beginLine: lineNumber,
-        endColumn: keyColumn + key.length,
-        endLine: lineNumber
-      };
-      currentSection.depth = targetDepth;
+      currentSection.add(newSection);
+      currentSection = newSection;
 
       continue;
     }
@@ -400,13 +376,7 @@ const parse = (input, options = { locale: 'en' }) => {
         }
       };
 
-      const existingValues = currentSection.reference.get(readBuffer.key);
-
-      if(existingValues) {
-        existingValues.push(newValue);
-      } else {
-        currentSection.reference.set(readBuffer.key, [newValue]);
-      }
+      currentSection.instance.add(newValue);
     }
   }
 
