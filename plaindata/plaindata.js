@@ -2,7 +2,8 @@
 //       And possibly have specs that ensure this is actually correctly reflected in the parser implementation for all possible errors
 
 const { PlainDataParseError } = require('./errors.js');
-const { PlainSection } = require('./structures.js');
+const PlainSection = require('./section.js');
+const PlainValue = require('./value.js');
 const snippet = require('./snippet.js');
 
 const SUPPORTED_LOCALES = ['de', 'en'];
@@ -54,7 +55,8 @@ const parse = (input, options = { locale: 'en' }) => {
     lines: lines
   };
 
-  const document = new PlainSection(parserContext, {
+  const document = new PlainSection({
+    context: parserContext,
     depth: 0,
     key: 'ROOT',
     keyRange: {
@@ -100,7 +102,8 @@ const parse = (input, options = { locale: 'en' }) => {
           };
         }
 
-        const newValue = {
+        const newValue = new PlainValue({
+          context: parserContext,
           key: readBuffer.key,
           keyRange: {
             beginColumn: readBuffer.keyRange.beginColumn,
@@ -110,7 +113,7 @@ const parse = (input, options = { locale: 'en' }) => {
           },
           value: value,
           valueRange: valueRange
-        };
+        });
 
         currentSection.add(newValue);
 
@@ -138,7 +141,8 @@ const parse = (input, options = { locale: 'en' }) => {
                                     Math.min(lineContent.indexOf('-') + 1,
                                              lineContent.length);
 
-        const newValue = {
+        const newValue = new PlainValue({
+          context: parserContext,
           key: readBuffer.key,
           keyRange: readBuffer.keyRange,
           value: value,
@@ -148,7 +152,7 @@ const parse = (input, options = { locale: 'en' }) => {
             endColumn: value ? valueColumn + value.length : valueColumn,
             endLine: lineNumber
           }
-        };
+        });
 
         currentSection.add(newValue);
 
@@ -159,7 +163,8 @@ const parse = (input, options = { locale: 'en' }) => {
       } else {
 
         if(readBuffer.empty) {
-          const newValue = {
+          const newValue = new PlainValue({
+            context: parserContext,
             key: readBuffer.key,
             keyRange: readBuffer.keyRange,
             value: null,
@@ -169,7 +174,7 @@ const parse = (input, options = { locale: 'en' }) => {
               endColumn: lines[readBuffer.keyRange.beginLine - 1].length,
               endLine: readBuffer.keyRange.beginLine
             }
-          };
+          });
 
           currentSection.add(newValue);
         }
@@ -188,7 +193,8 @@ const parse = (input, options = { locale: 'en' }) => {
       const value = match[2];
       const valueColumn = lineContent.lastIndexOf(value);
 
-      const newValue = {
+      const newValue = new PlainValue({
+        context: parserContext,
         key: key,
         keyRange: {
           beginColumn: keyColumn,
@@ -203,7 +209,7 @@ const parse = (input, options = { locale: 'en' }) => {
           endColumn: valueColumn + value.length,
           endLine: lineNumber
         }
-      };
+      });
 
       currentSection.add(newValue);
 
@@ -307,7 +313,8 @@ const parse = (input, options = { locale: 'en' }) => {
         currentSection = currentSection.parent;
       }
 
-      const newSection = new PlainSection(parserContext, {
+      const newSection = new PlainSection({
+        context: parserContext,
         depth: currentSection.depth + 1,
         key: key,
         keyRange: {
@@ -364,7 +371,8 @@ const parse = (input, options = { locale: 'en' }) => {
     // console.log('[end of document while reading values]');
 
     if(readBuffer.empty) {
-      const newValue = {
+      const newValue = new PlainValue({
+        context: parserContext,
         key: readBuffer.key,
         keyRange: readBuffer.keyRange,
         value: null,
@@ -374,9 +382,9 @@ const parse = (input, options = { locale: 'en' }) => {
           endColumn: 0,
           endLine: readBuffer.keyRange.beginLine + 1
         }
-      };
+      });
 
-      currentSection.instance.add(newValue);
+      currentSection.add(newValue);
     }
   }
 

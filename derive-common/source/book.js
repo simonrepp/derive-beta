@@ -54,7 +54,9 @@ module.exports = async (data, plainPath) => {
 
     try {
       book.title = document.value('Titel', { required: true });
+      book.title = document.meta('Titel');
       book.permalink = document.value('Permalink', { process: validatePermalink, required: true });
+      book.permalink = document.meta('Permalink');
       book.yearOfPublication = document.value('Erscheinungsjahr', { process: validateInteger, required: true });
 
       // validateKeys(document.value(specifiedKeys);

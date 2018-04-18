@@ -48,7 +48,9 @@ module.exports = async (data, plainPath) => {
 
     try {
       player.name = document.value('Name', { required: true });
+      player.nameMeta = document.meta('Name');
       player.permalink = document.value('Permalink', { process: validatePermalink, required: true });
+      player.permalinkMeta = document.meta('Permalink');
 
       // validateKeys(document, specifiedKeys);
 

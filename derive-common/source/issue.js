@@ -56,6 +56,7 @@ module.exports = async (data, plainPath) => {
 
     try {
       issue.number = document.value('Nummer', { process: validateInteger, required: true });
+      issue.numberMeta = document.meta('Nummer');
       issue.title = document.value('Titel', { required: true });
       issue.year = document.value('Jahr', { process: validateInteger, required: true });
       issue.quarter = document.value('Quartal', { process: validateInteger, required: true });

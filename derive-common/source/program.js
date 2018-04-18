@@ -54,6 +54,7 @@ module.exports = async (data, plainPath) => {
     try {
       program.title = document.value('Titel', { required: true });
       program.permalink = document.value('Permalink', { process: validatePermalink, required: true });
+      program.permalinkMeta = document.meta('Permalink');
       program.firstBroadcast = document.value('Erstausstrahlung', { process: validateDate, required: true });
 
       // validateKeys(document, specifiedKeys);

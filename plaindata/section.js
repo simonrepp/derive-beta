@@ -1,25 +1,23 @@
 const { PlainDataError } = require('./errors.js');
 
 class PlainSection {
-  constructor(parserContext, section) {
-    this.parserContext = parserContext;
-    this.messages = parserContext.messages.validation;
-
-    this.associative = {};
-    this.sequential = [];
-
+  constructor(section) {
+    this.context = section.context;
     this.depth = section.depth;
     this.key = section.key;
     this.keyRange = section.keyRange;
     this.parent = section.parent;
     this.valueRange = section.valueRange;
+
+    this.valuesAssociative = {};
+    this.valuesSequential = [];
   }
 
   add(value) {
-    const existingAssociative = this.associative[value.key];
+    const existingAssociative = this.valuesAssociative[value.key];
 
     if(existingAssociative === undefined) {
-      this.associative[value.key] = [value];
+      this.valuesAssociative[value.key] = [value];
     } else {
       existingAssociative.push(value);
     }
@@ -32,15 +30,17 @@ class PlainSection {
     this.valueRange.endColumn = value.valueRange.endColumn;
     this.valueRange.endLine = value.valueRange.endLine;
 
-    this.sequential.push(value);
+    this.valuesSequential.push(value);
   }
 
   list(key, options = { keyRequired: true }) {
-    const values = this.associative[key];
+    const values = this.valuesAssociative[key];
 
     if(values === undefined) {
       if(options.keyRequired) {
-        throw new PlainDataError(this.messages.missingKey(key));
+        throw new PlainDataError(
+          this.context.messages.validation.missingKey(key)
+        );
       } else {
         return [];
       }
@@ -49,12 +49,18 @@ class PlainSection {
     return values;
   }
 
+  meta(key) {
+    return this.valuesAssociative[key][0];
+  }
+
   section(key, options = { keyRequired: true }) {
-    const values = this.associative[key];
+    const values = this.valuesAssociative[key];
 
     if(values === undefined) {
       if(options.keyRequired) {
-        throw new PlainDataError(this.messages.missingKey(key));
+        throw new PlainDataError(
+          this.context.messages.validation.missingKey(key)
+        );
       } else {
         return {};
       }
@@ -63,11 +69,11 @@ class PlainSection {
     if(values.length === 1) {
       const value = values[0];
 
-      if(typeof value.value !== 'string') {
-        return value.value;
+      if(value instanceof PlainSection) {
+        return value;
       } else {
         throw new PlainDataError(
-          this.messages.expectedSectionGotValue(key),
+          this.context.messages.validation.expectedSectionGotValue(key),
           this.snippet(value.valueRange),
           [value.keyRange, value.valueRange]
         );
@@ -77,7 +83,9 @@ class PlainSection {
     if(values.length === 0) {
       // TODO: Does this apply?
       if(options.valueRequired) {
-        throw new PlainDataError(this.messages.missingValue(key));
+        throw new PlainDataError(
+          this.context.messages.validation.missingValue(key)
+        );
       } else {
         return null;
       }
@@ -90,28 +98,30 @@ class PlainSection {
     });
 
     throw new PlainDataError(
-      this.messages.expectedSectionGotList(key),
+      this.context.messages.validation.expectedSectionGotList(key),
       [...ranges]
     );
   }
 
   sections(key, options = { keyRequired: true }) {
-    const values = this.associative[key];
+    const values = this.valuesAssociative[key];
 
     if(values === undefined) {
       if(options.keyRequired) {
-        throw new PlainDataError(this.messages.missingKey(key));
+        throw new PlainDataError(
+          this.context.messages.validation.missingKey(key)
+        );
       } else {
         return [];
       }
     }
 
     return values.map(value => {
-      if(typeof value.value !== 'string') {
-        return value.value;
+      if(value instanceof PlainSection) {
+        return value;
       } else {
         throw new PlainDataError(
-          this.messages.expectedSectionsGotValue(key),
+          this.context.messages.validation.expectedSectionsGotValue(key),
           [value.keyRange]
         );
       }
@@ -119,7 +129,7 @@ class PlainSection {
   }
 
   sequential() {
-    return this.sequential;
+    return this.valuesSequential;
   }
 
   snippet(range) {
@@ -127,9 +137,9 @@ class PlainSection {
     snippet +=    '   ...\n';
     let line = Math.max(1, range.beginLine - 2);
 
-    while(line <= Math.min(this.parserContext.lines.length, range.endLine + 2)) {
+    while(line <= Math.min(this.context.lines.length, range.endLine + 2)) {
       const pad = line >= range.beginLine && line <= range.endLine ? ' >     ' : ' ';
-      snippet += `${line.toString().padStart(7, pad)} | ${this.parserContext.lines[line - 1]}\n`;
+      snippet += `${line.toString().padStart(7, pad)} | ${this.context.lines[line - 1]}\n`;
       line++;
     }
 
@@ -137,11 +147,13 @@ class PlainSection {
   }
 
   value(key, options = { keyRequired: true, process: false, required: false }) {
-    const values = this.associative[key];
+    const values = this.valuesAssociative[key];
 
     if(values === undefined) {
       if(options.keyRequired) {
-        throw new PlainDataError(this.messages.missingKey(key));
+        throw new PlainDataError(
+          this.context.messages.validation.missingKey(key)
+        );
       } else {
         return null;
       }
@@ -153,7 +165,7 @@ class PlainSection {
       if(value.value === null) {
         if(options.required) {
           throw new PlainDataError(
-            this.messages.missingValue(key),
+            this.context.messages.validation.missingValue(key),
             this.snippet(value.keyRange),
             [value.valueRange]
           );
@@ -167,9 +179,11 @@ class PlainSection {
           try {
             return options.process(value);
           } catch(message) {
-            throw new PlainDataError(message,
-                                     this.snippet(value.valueRange),
-                                     [value.valueRange]);
+            throw new PlainDataError(
+              message,
+              this.snippet(value.valueRange),
+              [value.valueRange]
+            );
           }
         } else {
           return value.value;
@@ -177,7 +191,7 @@ class PlainSection {
       }
 
       throw new PlainDataError(
-        this.messages.expectedValueGotSection(key),
+        this.context.messages.validation.expectedValueGotSection(key),
         [value.keyRange]
       );
     }
@@ -186,7 +200,7 @@ class PlainSection {
     if(values.length === 0) {
       if(options.required) {
         throw new PlainDataError(
-          this.messages.missingValue(key),
+          this.context.messages.validation.missingValue(key),
           lineContext(value.keyRange.beginLine)
           [value.keyRange, value.valueRange]
         );
@@ -196,17 +210,19 @@ class PlainSection {
     }
 
     throw new PlainDataError(
-      this.messages.expectedValueGotList(key),
+      this.context.messages.validation.expectedValueGotList(key),
       values.map(value => value.valueRange)
     );
   }
 
   values(key, options = { keyRequired: true }) {
-    const values = this.associative[key];
+    const values = this.valuesAssociative[key];
 
     if(values === undefined) {
       if(options.keyRequired) {
-        throw new PlainDataError(this.messages.missingKey(key));
+        throw new PlainDataError(
+          this.context.messages.validation.missingKey(key)
+        );
       } else {
         return [];
       }
@@ -222,7 +238,7 @@ class PlainSection {
         return value.value;
       } else {
         throw new PlainDataError(
-          this.messages.expectedValuesGotSection(key),
+          this.context.messages.validation.expectedValuesGotSection(key),
           [value.keyRange]
         );
       }
@@ -230,4 +246,4 @@ class PlainSection {
   }
 }
 
-exports.PlainSection = PlainSection;
+module.exports = PlainSection;

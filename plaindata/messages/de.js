@@ -21,6 +21,7 @@ module.exports = {
     expectedValueGotList: key => `Das Feld "${key}" enthält eine Liste, muss aber einen einzelnen Wert enthalten.`,
     expectedValueGotSection: key => `Das Feld "${key}" enthält eine Sektion, muss aber einen einzelnen Wert enthalten.`,
     expectedValuesGotSection: key => `Die Liste "${key}" darf nur einfache Werte enthalten, enhält aber eine Sektion.`,
+    genericError: key => `Es besteht ein Problem mit dem Feld "${key}".`,
     missingKey: key =>
       `Fehlendes Feld "${key}" - Falls das Feld angegeben wurde eventuell ` +
       `nach Tippfehlern Ausschau halten und auch die Gross/Kleinschreibung beachten.`,

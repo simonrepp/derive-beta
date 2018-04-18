@@ -45,6 +45,7 @@ module.exports = async (data, plainPath) => {
     try {
       page.title = document.value('Titel', { required: true });
       page.permalink = document.value('Permalink', { process: validatePermalink, required: true });
+      page.permalinkMeta = document.meta('Permalink');
 
       // validateKeys(document, specifiedKeys);
 

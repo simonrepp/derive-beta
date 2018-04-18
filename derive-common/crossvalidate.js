@@ -2,14 +2,20 @@ module.exports = data => {
   data.articlesByPermalink.clear();
   data.articlesByTitle.clear();
   data.articles.forEach(article => {
-    if(data.articlesByTitle.has(article.title)) {
+    let existingArticle = data.articlesByTitle.get(article.title);
+
+    if(existingArticle) {
+      const existingError = existingArticle.titleMeta.error();
+      const discardedError = article.titleMeta.error();
+
       data.warnings.push({
-        description: `Bis zur Lösung des Problems scheint einer der Artikel auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${data.articlesByTitle.get(article.title).sourceFile}\n\n**B (wird verworfen)** - ${article.sourceFile}`,
+        description: `Bis zur Lösung des Problems scheint einer der Artikel auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${existingArticle.sourceFile}\n\n**B (wird verworfen)** - ${article.sourceFile}`,
         files: [
-          { path: data.articlesByTitle.get(article.title).sourceFile, label: 'A' },
-          { path: article.sourceFile, label: 'B' }
+          { label: 'A', path: existingArticle.sourceFile, ranges: existingError.ranges },
+          { label: 'B', path: article.sourceFile, ranges: discardedError.ranges }
         ],
-        message: `Es existieren zwei Artikel mit dem Titel "${article.title}"`
+        message: `Es existieren zwei Artikel mit dem Titel "${article.title}"`,
+        snippet: discardedError.snippet
       });
 
 
@@ -17,14 +23,20 @@ module.exports = data => {
       return;
     }
 
-    if(data.articlesByPermalink.has(article.permalink)) {
+    existingArticle = data.articlesByPermalink.get(article.permalink);
+
+    if(existingArticle) {
+      const existingError = existingArticle.permalinkMeta.error();
+      const discardedError = article.permalinkMeta.error();
+
       data.warnings.push({
-        description: `Bis zur Lösung des Problems scheint einer der Artikel auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${data.articlesByPermalink.get(article.permalink).sourceFile}\n\n**B (wird verworfen)** - ${article.sourceFile}`,
+        description: `Bis zur Lösung des Problems scheint einer der Artikel auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${existingArticle.sourceFile}\n\n**B (wird verworfen)** - ${article.sourceFile}`,
         files: [
-          { path: data.articlesByPermalink.get(article.permalink).sourceFile, label: 'A' },
-          { path: article.sourceFile, label: 'B' }
+          { label: 'A', path: existingArticle.sourceFile, ranges: existingError.ranges },
+          { label: 'B', path: article.sourceFile, ranges: discardedError.ranges }
         ],
-        message: `Es existieren zwei Artikel mit dem Permalink "${article.permalink}"`
+        message: `Es existieren zwei Artikel mit dem Permalink "${article.permalink}"`,
+        snippet: discardedError.snippet
       });
 
       data.articles.delete(article.sourceFile);
@@ -38,28 +50,40 @@ module.exports = data => {
   data.booksByPermalink.clear();
   data.booksByTitle.clear();
   data.books.forEach(book => {
-    if(data.booksByTitle.has(book.title)) {
+    let existingBook = data.booksByTitle.get(book.title);
+
+    if(existingBook) {
+      const existingError = existingBook.titleMeta.error();
+      const discardedError = book.titleMeta.error();
+
       data.warnings.push({
-        description: `Bis zur Lösung des Problems scheint eines der Bücher auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${data.booksByTitle.get(book.title).sourceFile}\n\n**B (wird verworfen)** - ${book.sourceFile}`,
+        description: `Bis zur Lösung des Problems scheint eines der Bücher auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${existingBook.sourceFile}\n\n**B (wird verworfen)** - ${book.sourceFile}`,
         files: [
-          { path: data.booksByTitle.get(book.title).sourceFile, label: 'A' },
-          { path: book.sourceFile, label: 'B' }
+          { label: 'A', path: existingBook.sourceFile, ranges: existingError.ranges },
+          { label: 'B', path: book.sourceFile, ranges: discardedError.ranges }
         ],
-        message: `Es existieren zwei Bücher mit dem Titel "${book.title}"`
+        message: `Es existieren zwei Bücher mit dem Titel "${book.title}"`,
+        snippet: discardedError.snippet
       });
 
       data.books.delete(book.sourceFile);
       return;
     }
 
-    if(data.booksByPermalink.has(book.permalink)) {
+    existingBook = data.booksByPermalink.get(book.permalink);
+
+    if(existingBook) {
+      const existingError = existingBook.permalinkMeta.error();
+      const discardedError = book.permalinkMeta.error();
+
       data.warnings.push({
-        description: `Bis zur Lösung des Problems scheint eines der Bücher auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${data.booksByPermalink.get(book.permalink).sourceFile}\n\n**B (wird verworfen)** - ${book.sourceFile}`,
+        description: `Bis zur Lösung des Problems scheint eines der Bücher auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${existingBook.sourceFile}\n\n**B (wird verworfen)** - ${book.sourceFile}`,
         files: [
-          { path: data.booksByPermalink.get(book.permalink).sourceFile, label: 'A' },
-          { path: book.sourceFile, label: 'B' }
+          { label: 'A', path: existingBook.sourceFile, ranges: existingError.ranges },
+          { label: 'B', path: book.sourceFile, ranges: discardedError.ranges }
         ],
-        message: `Es existieren zwei Bücher mit dem Permalink "${book.permalink}"`
+        message: `Es existieren zwei Bücher mit dem Permalink "${book.permalink}"`,
+        snippet: discardedError.snippet
       });
 
       data.books.delete(book.sourceFile);
@@ -72,14 +96,20 @@ module.exports = data => {
 
   data.eventsByPermalink.clear();
   data.events.forEach(event => {
-    if(data.eventsByPermalink.has(event.permalink)) {
+    const existingEvent = data.eventsByPermalink.get(event.permalink);
+
+    if(existingEvent) {
+      const existingError = existingEvent.permalinkMeta.error();
+      const discardedError = event.permalinkMeta.error();
+
       data.warnings.push({
-        description: `Bis zur Lösung des Problems scheint eine der Veranstaltungen auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${data.eventsByPermalink.get(event.permalink).sourceFile}\n\n**B (wird verworfen)** - ${event.sourceFile}`,
+        description: `Bis zur Lösung des Problems scheint eine der Veranstaltungen auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${existingEvent.sourceFile}\n\n**B (wird verworfen)** - ${event.sourceFile}`,
         files: [
-          { path: data.eventsByPermalink.get(event.permalink).sourceFile, label: 'A' },
-          { path: event.sourceFile, label: 'B' }
+          { label: 'A', path: existingEvent.sourceFile, ranges: existingError.ranges },
+          { label: 'B', path: event.sourceFile, ranges: discardedError.ranges }
         ],
-        message: `Es existieren zwei Veranstaltungen mit dem Permalink "${event.permalink}"`
+        message: `Es existieren zwei Veranstaltungen mit dem Permalink "${event.permalink}"`,
+        snippet: discardedError.snippet
       });
 
       data.events.delete(event.sourceFile);
@@ -90,14 +120,20 @@ module.exports = data => {
 
   data.issuesByNumber.clear();
   data.issues.forEach(issue => {
-    if(data.issuesByNumber.has(issue.number)) {
+    const existingIssue = data.issuesByNumber.get(issue.number);
+
+    if(existingIssue) {
+      const existingError = existingIssue.numberMeta.error();
+      const discardedError = issue.numberMeta.error();
+
       data.warnings.push({
-        description: `Bis zur Lösung des Problems scheint eine der Zeitschriften auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${data.issuesByNumber.get(issue.number).sourceFile}\n\n**B (wird verworfen)** - ${issue.sourceFile}`,
+        description: `Bis zur Lösung des Problems scheint eine der Zeitschriften auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${existingIssue.sourceFile}\n\n**B (wird verworfen)** - ${issue.sourceFile}`,
         files: [
-          { path: data.issuesByNumber.get(issue.number).sourceFile, label: 'A' },
-          { path: issue.sourceFile, label: 'B' }
+          { label: 'A', path: existingIssue.sourceFile, ranges: existingError.ranges },
+          { label: 'B', path: issue.sourceFile, ranges: discardedError.ranges }
         ],
-        message: `Es existieren zwei Zeitschriften mit der Nummer ${issue.number}`
+        message: `Es existieren zwei Zeitschriften mit der Nummer ${issue.number}`,
+        snippet: discardedError.snippet
       });
 
       data.issues.delete(issue.sourceFile);
@@ -109,28 +145,40 @@ module.exports = data => {
   data.playersByName.clear();
   data.playersByPermalink.clear();
   data.players.forEach(player => {
-    if(data.playersByName.has(player.name)) {
+    let existingPlayer = data.playersByName.get(player.name);
+
+    if(existingPlayer) {
+      const existingError = existingPlayer.nameMeta.error();
+      const discardedError = player.nameMeta.error();
+
       data.warnings.push({
-        description: `Bis zur Lösung des Problems scheint eine der AkteurInnen auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${data.playersByName.get(player.name).sourceFile}\n\n**B (wird verworfen)** - ${player.sourceFile}`,
+        description: `Bis zur Lösung des Problems scheint eine der AkteurInnen auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${existingPlayer.sourceFile}\n\n**B (wird verworfen)** - ${player.sourceFile}`,
         files: [
-          { path: data.playersByName.get(player.name).sourceFile, label: 'A' },
-          { path: player.sourceFile, label: 'B' }
+          { label: 'A', path: existingPlayer.sourceFile, ranges: existingError.ranges },
+          { label: 'B', path: player.sourceFile, ranges: discardedError.ranges }
         ],
-        message: `Es existieren zwei Akteure mit dem Namen "${player.name}"`
+        message: `Es existieren zwei Akteure mit dem Namen "${player.name}"`,
+        snippet: discardedError.snippet
       });
 
       data.players.delete(player.sourceFile);
       return;
     }
 
-    if(data.playersByPermalink.has(player.permalink)) {
+    existingPlayer = data.playersByPermalink.get(player.permalink);
+
+    if(existingPlayer) {
+      const existingError = existingPlayer.permalinkMeta.error();
+      const discardedError = player.permalinkMeta.error();
+
       data.warnings.push({
-        description: `Bis zur Lösung des Problems scheint eine der AkteurInnen auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${data.playersByPermalink.get(player.permalink).sourceFile}\n\n**B (wird verworfen)** - ${player.sourceFile}`,
+        description: `Bis zur Lösung des Problems scheint eine der AkteurInnen auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${existingPlayer.sourceFile}\n\n**B (wird verworfen)** - ${player.sourceFile}`,
         files: [
-          { path: data.playersByPermalink.get(player.permalink).sourceFile, label: 'A' },
-          { path: player.sourceFile, label: 'B' }
+          { label: 'A', path: existingPlayer.sourceFile, ranges: existingError.ranges },
+          { label: 'B', path: player.sourceFile, ranges: discardedError.ranges }
         ],
-        message: `Es existieren zwei Akteure mit dem Permalink "${player.permalink}"`
+        message: `Es existieren zwei Akteure mit dem Permalink "${player.permalink}"`,
+        snippet: discardedError.snippet
       });
 
       data.players.delete(player.sourceFile);
@@ -144,15 +192,20 @@ module.exports = data => {
   data.pagesByPermalink.clear();
   data.pages.forEach(page => {
     const permalinkInContext = [page.permalink, page.urbanize].filter(Boolean).join('-');
+    const existingPage = data.pagesByPermalink.get(permalinkInContext); // TODO: We check for permalink In Context but set permalink without context? Check again
 
-    if(data.pagesByPermalink.has(permalinkInContext)) {
+    if(existingPage) {
+      const existingError = existingPage.permalinkMeta.error();
+      const discardedError = page.permalinkMeta.error();
+
       data.warnings.push({
-        description: `Bis zur Lösung des Problems scheint eine der Seiten auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${data.pagesByPermalink.get(page.permalink).sourceFile}\n\n**B (wird verworfen)** - ${page.sourceFile}`,
+        description: `Bis zur Lösung des Problems scheint eine der Seiten auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${existingPage.sourceFile}\n\n**B (wird verworfen)** - ${page.sourceFile}`,
         files: [
-          { path: data.pagesByPermalink.get(page.permalink).sourceFile, label: 'A' },
-          { path: page.sourceFile, label: 'B' }
+          { label: 'A', path: existingPage.sourceFile, ranges: existingError.ranges },
+          { label: 'B', path: page.sourceFile, ranges: discardedError.ranges }
         ],
-        message: `Es existieren zwei Seiten mit dem Permalink "${page.permalink}" im selben Kontext (z.b. Urbanize Festival)`
+        message: `Es existieren zwei Seiten mit dem Permalink "${page.permalink}" im selben Kontext (z.b. Urbanize Festival)`,
+        snippet: discardedError.snippet
       });
 
       data.pages.delete(page.sourceFile);
@@ -163,14 +216,20 @@ module.exports = data => {
 
   data.programsByPermalink.clear();
   data.programs.forEach(program => {
-    if(data.programsByPermalink.has(program.permalink)) {
+    existingProgram = data.programsByPermalink.get(program.permalink);
+
+    if(existingProgram) {
+      const existingError = existingProgram.permalinkMeta.error();
+      const discardedError = program.permalinkMeta.error();
+
       data.warnings.push({
-        description: `Bis zur Lösung des Problems scheint eine der Radiosendungen auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${data.programsByPermalink.get(program.permalink).sourceFile}\n\n**B (wird verworfen)** - ${program.sourceFile}`,
+        description: `Bis zur Lösung des Problems scheint eine der Radiosendungen auf der Website nicht auf, davon abgesehen hat dieser Fehler keine Auswirkungen.\n\n**In Konflikt stehende Dateien:**\n\n**A (scheint online auf)** - ${existingProgram.sourceFile}\n\n**B (wird verworfen)** - ${program.sourceFile}`,
         files: [
-          { path: data.programsByPermalink.get(program.permalink).sourceFile, label: 'A' },
-          { path: program.sourceFile, label: 'B' }
+          { label: 'A', path: existingProgram.sourceFile, ranges: existingError.ranges },
+          { label: 'B', path: program.sourceFile, ranges: discardedError.ranges }
         ],
-        message: `Es existieren zwei Radiosendungen mit dem Permalink "${program.permalink}"`
+        message: `Es existieren zwei Radiosendungen mit dem Permalink "${program.permalink}"`,
+        snippet: discardedError.snippet
       });
 
       data.programs.delete(program.sourceFile);
