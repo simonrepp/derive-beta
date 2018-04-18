@@ -11,7 +11,11 @@ class PlainSection {
     this.parent = section.parent;
     this.range = section.range;
 
-    this.touched = this.key === ' R O O T ' ? true : false;
+    if(section.lookupIndex) {
+      this.lookupIndex = section.lookupIndex;
+    }
+
+    this.touched = this.key ? false : true;
 
     this.valuesAssociative = {};
     this.valuesSequential = [];
@@ -41,15 +45,15 @@ class PlainSection {
   // TODO: Implement additional options flags
   assertAllTouched(options = { except: [], only: [] }) {
     for(let value of this.valuesSequential) {
-      if(value instanceof PlainValue) {
-        if(!value.touched) {
-          throw new PlainDataError(
-            this.context.messages.validation.excessKey(value.key),
-            snippet(this.context.lines, value.keyRange.beginLine, value.keyRange.endLine),
-            [value.keyRange]
-          );
-        }
-      } else {
+      if(!value.touched) {
+        throw new PlainDataError(
+          this.context.messages.validation.excessKey(value.key),
+          snippet(this.context.lines, value.keyRange.beginLine, value.keyRange.endLine),
+          [value.keyRange]
+        );
+      }
+
+      if(value instanceof PlainSection) {
         value.assertAllTouched();
       }
     }

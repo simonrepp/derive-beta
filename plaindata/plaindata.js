@@ -48,16 +48,19 @@ const parse = (input, options = { locale: 'en' }) => {
     lines: lines
   };
 
+  const lookupIndex = {};
+
   const document = new PlainSection({
     context: parserContext,
     depth: 0,
-    key: ' R O O T ',
+    key: null,
     keyRange: {
       beginColumn: 0,
       beginLine: 1,
       endColumn: 0,
       endLine: 1
     },
+    lookupIndex: lookupIndex,
     parent: null,
     range: {
       beginColumn: 0,
@@ -108,6 +111,7 @@ const parse = (input, options = { locale: 'en' }) => {
           value: value
         });
 
+        lookupIndex[lineNumber] = newValue;
         currentSection.add(newValue);
 
         state = STATE_RESET;
@@ -147,6 +151,7 @@ const parse = (input, options = { locale: 'en' }) => {
           value: value
         });
 
+        lookupIndex[lineNumber] = newValue;
         currentSection.add(newValue);
 
         readBuffer.empty = false;
@@ -169,6 +174,7 @@ const parse = (input, options = { locale: 'en' }) => {
             value: null
           });
 
+          lookupIndex[readBuffer.keyRange.beginLine] = newValue;
           currentSection.add(newValue);
         }
 
@@ -204,6 +210,7 @@ const parse = (input, options = { locale: 'en' }) => {
         value: value
       });
 
+      lookupIndex[lineNumber] = newValue;
       currentSection.add(newValue);
 
       continue;
@@ -325,6 +332,7 @@ const parse = (input, options = { locale: 'en' }) => {
         }
       });
 
+      lookupIndex[lineNumber] = newSection;
       currentSection.add(newSection);
       currentSection = newSection;
 
@@ -369,14 +377,15 @@ const parse = (input, options = { locale: 'en' }) => {
         key: readBuffer.key,
         keyRange: readBuffer.keyRange,
         range: {
-          beginColumn: 0,
-          beginLine: readBuffer.keyRange.beginLine + 1,
-          endColumn: 0,
-          endLine: readBuffer.keyRange.beginLine + 1
+          beginColumn: lines[readBuffer.keyRange.beginLine - 1].length,
+          beginLine: readBuffer.keyRange.beginLine,
+          endColumn: lines[readBuffer.keyRange.beginLine - 1].length,
+          endLine: readBuffer.keyRange.beginLine
         },
         value: null
       });
 
+      lookupIndex[readBuffer.keyRange.beginLine] = newValue;
       currentSection.add(newValue);
     }
   }
