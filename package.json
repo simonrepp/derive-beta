@@ -1,7 +1,7 @@
 {
   "name": "derive-beta",
   "main": "./lib/main",
-  "version": "0.22.6",
+  "version": "0.23.0",
   "description": "Derive Publishing Plugin Prototyp",
   "repository": "https://github.com/simonrepp/derive-beta",
   "author": "Simon Repp <simon@fdpl.io> (https://simonrepp.com)",
