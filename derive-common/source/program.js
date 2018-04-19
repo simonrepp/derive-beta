@@ -33,7 +33,10 @@ module.exports = async (data, plainPath) => {
       }
     }
 
-    const program = { sourceFile: plainPath };
+    const program = {
+      draft: plainPath.match(/\.entwurf\.plain$/),
+      sourceFile: plainPath
+    };
 
     try {
       program.title = document.value('Titel', { required: true });

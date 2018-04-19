@@ -20,7 +20,7 @@ try {
 
 const value = result.value('Beschreibung', { process: (opt) => console.log(opt) });
 
-// console.log(value);
+console.log(result);
 
 // try {
 //   const gotten = result.getList('Titel');

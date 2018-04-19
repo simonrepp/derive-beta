@@ -5,8 +5,10 @@ const connectBookReviews = data => {
       const book = data.booksByTitle.get(value);
 
       if(book) {
-        article.reviewedBooks.push(book);
-        book.reviews.push(document);
+        if(!article.draft && !book.draft) {
+          article.reviewedBooks.push(book);
+          book.reviews.push(document);
+        }
       } else {
         const error = trace.error(`Im Artikel "${article.title}" wird das Buch "${value}" besprochen, allerdings wurde kein Buch mit diesem Titel gefunden.`);
 
@@ -27,8 +29,10 @@ const connectPlayers = (data, collection, referencesField, instancesField, backR
       const instance = data.playersByName.get(value);
 
       if(instance) {
-        document[instancesField].push(instance);
-        instance[backReferenceField].push(document);
+        if(!document.draft && !instance.draft) {
+          document[instancesField].push(instance);
+          instance[backReferenceField].push(document);
+        }
       } else {
         const error = trace.error(`Im Feld "${trace.key}" wird die AkteurIn "${value}" angegeben, es wurde aber keine AkteurIn mit diesem Namen gefunden.`);
 
@@ -43,6 +47,11 @@ const connectPlayers = (data, collection, referencesField, instancesField, backR
 };
 
 const clearBackReferences = data => {
+  data.articles.forEach(article => {
+    article.issue = null;
+    article.inIssueOnPages = null;
+  });
+
   data.books.forEach(book => {
     book.reviews = [];
   });
@@ -57,8 +66,7 @@ const clearBackReferences = data => {
   });
 };
 
-// TODO: article .issue and .issueOnPages need to be cleared as a wipe step before reconnecting everything
-// TODO: Strictly speaking there *could* be an article in multiple issues in which case the current model is incorrect
+// TODO: Strictly speaking there *could* be an article in multiple issues in which case the current model is incorrect, maybe bring this up with derive just to get an impression
 
 const connectIssuesWithArticles = data => {
   data.issues.forEach(issue => {
@@ -68,10 +76,12 @@ const connectIssuesWithArticles = data => {
         const article = data.articlesByTitle.get(reference.title);
 
         if(article) {
-          section.articles.push(article);
+          if(!issue.draft && !article.draft) {
+            section.articles.push(article);
 
-          article.issue = issue;
-          article.inIssueOnPages = article.pages;
+            article.issue = issue;
+            article.inIssueOnPages = article.pages;
+          }
         } else {
           const error = reference.titleTrace.error(`In Zeitschrift N° ${issue.number} wird in der Rubrik "${section.title}" der Artikel "${reference.title}" referenziert, es wurde aber kein Artikel mit diesem Titel gefunden.`);
 
@@ -93,7 +103,9 @@ const connectRadioEditors = data => {
       const player = data.playersByName.get(value);
 
       if(player) {
-        data.radio.editors.push(player);
+        if(!player.draft) {
+          data.radio.editors.push(player);
+        }
       } else {
         const error = trace.error(({ value }) => `Die AkteurIn "${value}", angegeben als Teil der allgemeinen Radio Redaktion, wurde nicht gefunden.`);
 

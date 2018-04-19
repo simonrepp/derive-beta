@@ -34,7 +34,10 @@ module.exports = async (data, plainPath) => {
       }
     }
 
-    const feature = { sourceFile: plainPath };
+    const feature = {
+      draft: plainPath.match(/\.entwurf\.plain$/),
+      sourceFile: plainPath
+    };
 
     try {
       feature.title = document.value('Titel', { required: true });

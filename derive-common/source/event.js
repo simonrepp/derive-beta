@@ -35,7 +35,10 @@ module.exports = async (data, plainPath) => {
       }
     }
 
-    const event = { sourceFile: plainPath };
+    const event = {
+      draft: plainPath.match(/\.entwurf\.plain$/),
+      sourceFile: plainPath
+    };
 
     try {
       event.title = document.value('Titel', { required: true });

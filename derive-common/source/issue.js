@@ -34,7 +34,10 @@ module.exports = async (data, plainPath) => {
       }
     }
 
-    const issue = { sourceFile: plainPath };
+    const issue = {
+      draft: plainPath.match(/\.entwurf\.plain$/),
+      sourceFile: plainPath
+    };
 
     try {
       const number = document.value('Nummer', validateInteger, { required: true, withTrace: true });
@@ -51,7 +54,6 @@ module.exports = async (data, plainPath) => {
       issue.outOfPrint = document.value('Vergriffen', validateBoolean);
       issue.publicationDate = document.value('Erscheinungsdatum', validateDate);
       issue.tags = { sourced: document.values('Tags') };
-      issue.publish = document.value('Veröffentlichen', validateBoolean); // TODO: Purpose of this? If "to test out things" we can maybe remove it because we now have staging, except long time process
       issue.description = document.value('Beschreibung', validateMarkdown);
 
       issue.sections = document.sections('Rubrik').map(section => ({

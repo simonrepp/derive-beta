@@ -32,7 +32,10 @@ module.exports = async (data, plainPath) => {
       }
     }
 
-    const page = { sourceFile: plainPath };
+    const page = {
+      draft: plainPath.match(/\.entwurf\.plain$/),
+      sourceFile: plainPath
+    };
 
     try {
       page.title = document.value('Titel', { required: true });

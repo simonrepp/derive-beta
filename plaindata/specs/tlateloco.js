@@ -22,7 +22,6 @@ const expected = {
   ],
   Permalink: 'tlatelolco-wohnblocks-ruinen-und-massaker',
   Buchbesprechungen: null,
-  'Veröffentlichen': 'Ja',
   Lesbar: 'Ja',
   Urbanize: null,
   Abstract: null,

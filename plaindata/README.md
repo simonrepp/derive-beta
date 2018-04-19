@@ -2,7 +2,15 @@
 
 > plaindata is the new plaintext
 
-File extension `.plain` / alternative `.pd` taken by PD (open source media framework) ?
+File extension brainstorming:
+- `.plain`
+- Alternative `.pd` taken by PD (open source media framework) ?
+- `.dt` as in (plain) data, analog to `.txt` as in (plain) text
+
+> the whole idea with ignoring whitespace at the begin, end, between different connected lines and between relevant tokens is:
+> when you write on paper you don't care if something is "a little to the right, left, further down or whatever"
+> as long as "words" or whatever you write on paper are clearly separated and graspable by their intent,
+> everything is fine! So this is how plain data should behave as well because everything else is programmerthink
 
 ```js
 const plaindata = require('plaindata');
@@ -50,31 +58,31 @@ background, because, well, it's been diligently thought out. But just in case
 you do run into something or were wondering about how some ambiguous cases are
 dealt with behind the scenes, I'll gladly explain.
 
-1. Repeated empty keys do not accumulate into a list
+1. Empty keys and values are ignored
 
   ```plain
-  Shopping List:
-  Shopping List:
-  -- Shopping List
+  --- Shopping list
+  --- Shopping list
+  Shopping list:
+  Shopping list:
+  -
+  -
+  -- Shopping list
+  -
   ```
   ```js
-  document.values('Shopping List')
+  document.value('Shopping list')
     => null
+
+  document.values('Shopping list')
+    => []
   ```
 
-2. Explictly specified empty values do accumulate into a list
+  You can explicitly request them though
 
-  ```plain
-  Shopping List:
-  -
-  -
-  Shopping List:
-  -- Shopping List
-  -
-  ```
   ```js
-  document.values('Shopping List')
-    => [ null, null, null ]
+  document.values('Shopping List', { includeEmpty: true })
+    => [ null, null, null, null, null ]
   ```
 
 3. Ambiguity is resolved through usage in code

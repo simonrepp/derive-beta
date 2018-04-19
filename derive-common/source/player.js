@@ -32,14 +32,16 @@ module.exports = async (data, plainPath) => {
       }
     }
 
-    const player = { sourceFile: plainPath };
+    const player = {
+      draft: plainPath.match(/\.entwurf\.plain$/),
+      sourceFile: plainPath
+    };
 
     try {
       const name = document.value('Name', { required: true, withTrace: true });
       player.name = name.value;
       player.nameTrace = name.trace;
 
-      // TODO: Consider processing function as a 2nd positional argument instead of verbose option
       const permalink = document.value('Permalink', validatePermalink, { required: true, withTrace: true });
       player.permalink = permalink.value;
       player.permalinkTrace = permalink.trace;

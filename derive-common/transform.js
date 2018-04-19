@@ -3,6 +3,7 @@ const checkup = require('./checkup.js'),
       connectMedia = require('./connect-media.js'),
       crossvalidate = require('./crossvalidate.js'),
       expand = require('./expand.js'),
+      removeDrafts = require('./remove-drafts.js'),
       source = require('./source.js'),
       urbanize = require('./urbanize.js');
 
@@ -28,14 +29,14 @@ module.exports = async data => {
   console.timeEnd('crossvalidate');
   console.time('connect');
 
-  connect(data); // Create relational references between all objects
+  connect(data); // Create relational references between all objects (except drafts)
 
   console.timeEnd('connect');
-  // console.time('removeDrafts'); TODO
-  //
-  // removeDrafts(data); // Take out drafts before connecting everything
-  //
-  // console.timeEnd('removeDrafts');
+  console.time('removeDrafts');
+
+  removeDrafts(data); // Take out drafts before buiding the final dataset
+
+  console.timeEnd('removeDrafts');
   console.time('expand');
 
   expand(data); // Create categories and tags, connected to their referenced objects

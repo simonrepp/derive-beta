@@ -20,11 +20,6 @@ const MULTILINE_VALUE_BEGIN = /^\s*(-{3,})\s*(\S.*?)\s*$/;
 const SECTION = /^\s*(#+)\s*(\S.*?)\s*$/;
 const VALUE = /^\s*-(?!-)\s*(.+?)?\s*$/;
 
-// the whole idea with ignoring whitespace at the begin, end, between different connected lines and between relevant tokens is:
-// when you write on paper you don't care if something is "a little to the right, left, further down or whatever"
-// as long as "words" or whatever you write on paper are clearly separated and graspable by their intent,
-// everything is fine! So this is how plain data should behave as well because everything else is programmerthink
-
 const parse = (input, options = { locale: 'en' }) => {
   if(!SUPPORTED_LOCALES.includes(options.locale)) {
     throw new RangeError(
@@ -80,12 +75,12 @@ const parse = (input, options = { locale: 'en' }) => {
         // console.log('[multiline value end]', lineContent);
 
         let value, range;
-        if(readBuffer.value.length > 0) {
-          value = readBuffer.value.join('\n');
+        if(lineNumber > readBuffer.keyRange.beginLine + 1) {
+          value = lines.slice(readBuffer.keyRange.beginLine, lineNumber).join('\n');
           range = {
             beginColumn: 0,
             beginLine: readBuffer.keyRange.beginLine + 1,
-            endColumn: readBuffer.value[readBuffer.value.length - 1].length,
+            endColumn: lines[lineNumber - 1].length,
             endLine: lineNumber - 1
           };
         } else {
@@ -117,7 +112,6 @@ const parse = (input, options = { locale: 'en' }) => {
         state = STATE_RESET;
       } else {
         // console.log('[multiline value line]', lineContent);
-        readBuffer.value.push(lineContent);
       }
 
       continue;
@@ -161,14 +155,17 @@ const parse = (input, options = { locale: 'en' }) => {
       } else {
 
         if(readBuffer.empty) {
+          const keyBeginLine = lines[readBuffer.keyRange.beginLine - 1];
+          const valueColumn = Math.min(keyBeginLine.length, keyBeginLine.replace(/\s*$/, '').length + 1);
+
           const newValue = new PlainValue({
             context: parserContext,
             key: readBuffer.key,
             keyRange: readBuffer.keyRange,
             range: {
-              beginColumn: lines[readBuffer.keyRange.beginLine - 1].length,
+              beginColumn: valueColumn,
               beginLine: readBuffer.keyRange.beginLine,
-              endColumn: lines[readBuffer.keyRange.beginLine - 1].length,
+              endColumn: valueColumn,
               endLine: readBuffer.keyRange.beginLine
             },
             value: null
@@ -179,7 +176,6 @@ const parse = (input, options = { locale: 'en' }) => {
         }
 
         state = STATE_RESET;
-
       }
     }
 
@@ -246,18 +242,13 @@ const parse = (input, options = { locale: 'en' }) => {
       const key = match[2];
       const keyEscaped = key.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
 
-      // TODO: Instead of copying line by line to multilineValue readBuffer,
-      //       just remember first content line index and then slice it out
-      //       from lines[] when we encounter the terminating line?
-
       readBuffer = {
         key: key,
         keyRange: {
           beginColumn: 0,
           beginLine: lineNumber
         },
-        multiLineValueEnd: new RegExp(`^\\s*${dashes}\\s*${keyEscaped}\\s*$`),
-        value: []
+        multiLineValueEnd: new RegExp(`^\\s*${dashes}\\s*${keyEscaped}\\s*$`)
       };
 
       state = STATE_READ_MULTILINE_VALUE;
@@ -332,7 +323,7 @@ const parse = (input, options = { locale: 'en' }) => {
         }
       });
 
-      lookupIndex[lineNumber] = newSection;
+      lookupIndex[lineNumber] = newSection; // TODO: Clean up/expand lookupIndex implementation and concept (e.g. better ranges for null values)
       currentSection.add(newSection);
       currentSection = newSection;
 

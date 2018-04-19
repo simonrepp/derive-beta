@@ -36,7 +36,10 @@ module.exports = async (data, plainPath) => {
       }
     }
 
-    const article = { sourceFile: plainPath };
+    const article = {
+      draft: plainPath.match(/\.entwurf\.plain$/),
+      sourceFile: plainPath
+    };
 
     try {
       const title = document.value('Titel', { required: true, withTrace: true });
@@ -55,7 +58,6 @@ module.exports = async (data, plainPath) => {
       article.categories = { sourced: document.values('Kategorien') };
       article.tags = { sourced: document.values('Tags') };
       article.reviewedBookReferences = document.values('Buchbesprechungen', { withTrace: true });
-      article.publish = document.value('Veröffentlichen', validateBoolean);
       article.readable = document.value('Lesbar', validateBoolean);
       article.urbanize = document.value('Urbanize', validateEnum(URBANIZE_ENUM));
       article.abstract = document.value('Abstract', validateMarkdown);

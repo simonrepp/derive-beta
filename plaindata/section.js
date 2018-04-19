@@ -204,19 +204,18 @@ class PlainSection {
       }
     }
 
-    // TODO: Esp. for this usecase below, consider snippet() accepting multiple line ranges too
-    if(values.length > 1) {
-      throw new PlainDataError(
-        this.context.messages.validation.expectedValueGotList(key),
-        snippet(this.context.lines, values[0].range.beginLine, values[values.length - 1].range.endLine),
-        values.map(value => value.range)
-      );
+    const nonEmptyValues = [];
+
+    for(let value of values) {
+      value.touch();
+
+      if(value.value !== null) {
+        nonEmptyValues.push(value);
+      }
     }
 
-    if(values.length === 1) {
-      const value = values[0];
-
-      value.touch();
+    if(nonEmptyValues.length === 1) {
+      const value = nonEmptyValues[0];
 
       if(!(value instanceof PlainValue)) {
         throw new PlainDataError(
@@ -224,22 +223,6 @@ class PlainSection {
           snippet(this.context.lines, value.range.beginLine, value.range.endLine),
           [value.keyRange]
         );
-      }
-
-      if(value.value === null) {
-        if(options.required) {
-          throw new PlainDataError(
-            this.context.messages.validation.missingValue(key),
-            snippet(this.context.lines, value.range.beginLine),
-            [value.range]
-          );
-        }
-
-        if(options.withTrace) {
-          return { trace: null, value: null };
-        } else {
-          return null;
-        }
       }
 
       if(process) {
@@ -260,7 +243,7 @@ class PlainSection {
         }
       }
 
-      // TODO: Resolve ambiguity between value and value.value ? valueNode vs value ? node vs value ?
+      // TODO: Resolve ambiguity between value and value.value ? valueNode vs value ? node vs value ? pairs ? assignments ? association ?
 
       if(options.withTrace) {
         return { trace: value, value: value.get() };
@@ -268,10 +251,46 @@ class PlainSection {
         return value.get();
       }
     }
+
+    if(nonEmptyValues.length > 1) {
+      // TODO: Esp. for this usecase, consider snippet() accepting multiple line ranges too
+      throw new PlainDataError(
+        this.context.messages.validation.expectedValueGotValues(key),
+        snippet(this.context.lines, nonEmptyValues[0].range.beginLine, nonEmptyValues[nonEmptyValues.length - 1].range.endLine),
+        nonEmptyValues.map(value => value.range)
+      );
+    }
+
+    if(options.required) {
+      // TODO: Also for this usecase, consider snippet() accepting multiple line ranges too
+      throw new PlainDataError(
+        this.context.messages.validation.missingValue(key),
+        snippet(this.context.lines, values[0].range.beginLine, values[values.length - 1].range.endLine),
+        values.map(value => value.range)
+      );
+    }
+
+    if(options.withTrace) {
+      return { trace: null, value: null };
+    } else {
+      return null;
+    }
   }
 
+  // TODO: Quantity validation: atLeast / exactly / atMost
   // TODO: Extend with valueRequired option ?  process option ?
-  values(key, options = { keyRequired: true, withTrace: false }) {
+  values(key, ...optional) {
+    let options = { keyRequired: true, includeEmpty: false, withTrace: false };
+    let process = null;
+
+    for(let argument of optional) {
+      if(typeof argument === 'function') {
+        process = argument;
+      } else if(typeof argument === 'object') {
+        Object.assign(options, argument);
+      }
+    }
+
     const values = this.valuesAssociative[key];
 
     if(values === undefined) {
@@ -285,16 +304,9 @@ class PlainSection {
       return [];
     }
 
-    // TODO: Go to the bottom of this, possibly adapt the data structure cause this looks hacky :)
-    //       Consider that the differentiation between empty list and explicit empty and so on might
-    //       look different for sequential than for associative storage
-    if(values.length === 1 && values[0].value === null) {
-      values[0].touch();
+    const results = [];
 
-      return [];
-    }
-
-    return values.map(value => {
+    values.forEach(value => {
       value.touch();
 
       if(!(value instanceof PlainValue)) {
@@ -305,12 +317,34 @@ class PlainSection {
         );
       }
 
-      if(options.withTrace) {
-        return { trace: value, value: value.get() };
-      } else {
-        return value.get();
+      if(options.includeEmpty || value.value !== null) {
+        if(process) {
+          try {
+            const processed = process(value);
+
+            if(options.withTrace) {
+              return { trace: value, value: processed };
+            } else {
+              return processed;
+            }
+          } catch(message) {
+            throw new PlainDataError(
+              message,
+              snippet(this.context.lines, value.range.beginLine, value.range.endLine), // TODO: Consider split between .parser and .messages ?
+              [value.range]
+            );
+          }
+        }
+
+        if(options.withTrace) {
+          results.push({ trace: value, value: value.get() });
+        } else {
+          results.push(value.get());
+        }
       }
     });
+
+    return results;
   }
 }
 
