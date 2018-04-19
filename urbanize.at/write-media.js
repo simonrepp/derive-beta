@@ -43,7 +43,7 @@ module.exports = async (data, urbanize, preview) => {
     }
 
     if(event.text) {
-      let text = event.text.sourced;
+      let text = event.text.converted;
 
       if(preview) {
         for(let download of event.text.downloads) {
@@ -79,7 +79,7 @@ module.exports = async (data, urbanize, preview) => {
 
   for(let page of urbanize.pages) {
     if(page.text) {
-      let text = page.text.sourced;
+      let text = page.text.converted;
 
       if(preview) {
         for(let download of page.text.downloads) {

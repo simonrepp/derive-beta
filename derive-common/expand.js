@@ -4,8 +4,8 @@ const { random } = require('./util.js');
 
 const addToCategories = (data, collection) => {
   data[collection].forEach(document => {
-    document.categories.connected = [];
-    document.categories.sourced.forEach(category => {
+    document.categories = [];
+    document.categoriesDisconnected.forEach(category => {
       const categoryPermalink = slug(category);
       const existingCategory = data.categories.get(categoryPermalink);
 
@@ -18,7 +18,7 @@ const addToCategories = (data, collection) => {
 
         existingCategory.referenceCount += 1;
         existingCategory.spellings.add(category);
-        document.categories.connected.push(existingCategory);
+        document.categories.push(existingCategory);
       } else {
         const categoryData = {
           name: category,
@@ -30,7 +30,7 @@ const addToCategories = (data, collection) => {
         categoryData[collection] = [document];
 
         data.categories.set(categoryPermalink, categoryData);
-        document.categories.connected.push(categoryData);
+        document.categories.push(categoryData);
       }
     });
   });
@@ -38,8 +38,8 @@ const addToCategories = (data, collection) => {
 
 const addToTags = (data, collection) => {
   data[collection].forEach(document => {
-    document.tags.connected = [];
-    document.tags.sourced.forEach(tag => {
+    document.tags = [];
+    document.tagsDisconnected.forEach(tag => {
       const tagPermalink = slug(tag);
       const existingTag = data.tags.get(tagPermalink);
 
@@ -52,7 +52,7 @@ const addToTags = (data, collection) => {
 
         existingTag.referenceCount += 1;
         existingTag.spellings.add(tag);
-        document.tags.connected.push(existingTag);
+        document.tags.push(existingTag);
       } else {
         const tagData = {
           name: tag,
@@ -64,7 +64,7 @@ const addToTags = (data, collection) => {
         tagData[collection] = [document];
 
         data.tags.set(tagPermalink, tagData);
-        document.tags.connected.push(tagData);
+        document.tags.push(tagData);
       }
     });
   });
@@ -202,9 +202,7 @@ module.exports = data => {
     }
   });
 
-  data.readableArticles = Array.from(data.articles.values()).filter(article =>
-    article.publish && article.readable
-  );
+  data.readableArticles = Array.from(data.articles.values()).filter(article => article.readable);
 
   data.issuesDescending = Array.from(data.issues.values()).sort((a, b) => b.number - a.number);
 

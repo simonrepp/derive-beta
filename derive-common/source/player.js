@@ -48,7 +48,7 @@ module.exports = async (data, plainPath) => {
 
       player.country = document.value('Land');
       player.city = document.value('Stadt');
-      player.tags = { sourced: document.values('Tags') };
+      player.tagsDisconnected = document.values('Tags');
       player.website = document.value('Website', validateAbsoluteUrl);
       player.biography = document.value('Biographie', validateMarkdown);
       player.text = document.value('Text', validateMarkdown);

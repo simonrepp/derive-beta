@@ -72,7 +72,7 @@ const validate = ({ key, value }, mediaAllowed) => {
   return {
     downloads: downloads,
     embeds: embeds,
-    sourced: html
+    converted: html
   };
 };
 

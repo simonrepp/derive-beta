@@ -55,8 +55,8 @@ module.exports = async (data, plainPath) => {
       article.authorReferences = document.values('Autoren', { withTrace: true });
       article.date = document.value('Datum');
       article.language = document.value('Sprache');
-      article.categories = { sourced: document.values('Kategorien') };
-      article.tags = { sourced: document.values('Tags') };
+      article.categoriesDisconnected = document.values('Kategorien');
+      article.tagsDisconnected = document.values('Tags');
       article.reviewedBookReferences = document.values('Buchbesprechungen', { withTrace: true });
       article.readable = document.value('Lesbar', validateBoolean);
       article.urbanize = document.value('Urbanize', validateEnum(URBANIZE_ENUM));

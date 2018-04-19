@@ -31,7 +31,7 @@ const authorResult = function(author) {
   html += '    <a href="/autoren/' + author.permalink + '/">' + author.name + '</a>';
   html += '  </h1>';
   if(author.biography) {
-    html += '<strong>' + author.biography.sourced + '</strong>';
+    html += '<strong>' + author.biography.converted + '</strong>';
   }
   html += '</div>';
 

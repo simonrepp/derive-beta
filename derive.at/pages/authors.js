@@ -29,9 +29,9 @@ module.exports = (data, pagination) => {
             </a>
           </h1>
 
-          ${author.biography ? `<strong>${author.biography.sourced}</strong>` : ''}
+          ${author.biography ? `<strong>${author.biography.converted}</strong>` : ''}
 
-          ${author.text ? author.text.sourced : ''}
+          ${author.text ? author.text.converted : ''}
         </div>
       `).join('')}
     </div>

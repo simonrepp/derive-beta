@@ -35,12 +35,12 @@ module.exports = (urbanize, event) => {
       </div>
 
       <div class="additional">
-        ${event.additionalInfo ? event.additionalInfo.sourced : ''}
+        ${event.additionalInfo ? event.additionalInfo.converted : ''}
       </div>
 
       ${event.abstract ? `
         <p>
-          ${event.abstract.sourced}
+          ${event.abstract.converted}
         </p>
       `:''}
 
@@ -55,8 +55,8 @@ module.exports = (urbanize, event) => {
 
       <hr/>
 
-      ${categories(event.categories.connected)}
-      ${tags(event.tags.connected)}
+      ${categories(event.categories)}
+      ${tags(event.tags)}
 
       ${addThis(`/veranstaltungen/${event.permalink}/`)}
     </div>

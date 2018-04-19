@@ -22,7 +22,7 @@ module.exports = event => `
     ${authors(event.participants)}
 
     <div class="generic__margin-vertical">
-      ${event.abstract ? event.abstract.sourced : ''}
+      ${event.abstract ? event.abstract.converted : ''}
     </div>
   </div>
 `;

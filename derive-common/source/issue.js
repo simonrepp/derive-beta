@@ -53,7 +53,7 @@ module.exports = async (data, plainPath) => {
       issue.features = document.values('Schwerpunkte');
       issue.outOfPrint = document.value('Vergriffen', validateBoolean);
       issue.publicationDate = document.value('Erscheinungsdatum', validateDate);
-      issue.tags = { sourced: document.values('Tags') };
+      issue.tagsDisconnected = document.values('Tags');
       issue.description = document.value('Beschreibung', validateMarkdown);
 
       issue.sections = document.sections('Rubrik').map(section => ({

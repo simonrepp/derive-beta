@@ -6,17 +6,17 @@ const indexEvents = urbanize => {
   const indexed = urbanize.events.map(event => {
     const boosted = `${event.title} ${event.subtitle || ''}`;
     const regular = [event.address || '',
-                     event.abstract ? striptags(event.abstract.sourced) : '',
-                     event.additionalInfo ? striptags(event.additionalInfo.sourced) : '',
-                     event.categories.connected.map(category => category.name).join(' '),
-                     event.hosts.connected.map(host => host.name).join(' '),
-                     event.participants.connected.map(participant => participant.name).join(' '),
-                     event.tags.connected.map(tag => tag.name).join(' '),
+                     event.abstract ? striptags(event.abstract.converted) : '',
+                     event.additionalInfo ? striptags(event.additionalInfo.converted) : '',
+                     event.categories.map(category => category.name).join(' '),
+                     event.hosts.map(host => host.name).join(' '),
+                     event.participants.map(participant => participant.name).join(' '),
+                     event.tags.map(tag => tag.name).join(' '),
                      event.text ? striptags(event.text.written) : ''].join(' ');
 
     return {
       event: {
-        abstract: event.abstract ? { sourced: event.abstract.sourced } : null,
+        abstract: event.abstract ? { converted: event.abstract.converted } : null,
         address: event.address,
         dates: event.dates,
         image: event.image ? { written: event.image.written } : null,

@@ -7,7 +7,7 @@ module.exports = participants => `
         </strong>
 
         <div>
-          ${participant.text ? participant.text.sourced : ''}
+          ${participant.text ? participant.text.converted : ''}
         </div>
 
         <a href="${participant.website}">

@@ -33,9 +33,9 @@ module.exports = (data, pagination) => {
 
         ${featured.issue ? fullIssueTitle(featured.issue) : ''}<br/><br/>
 
-        ${featured.abstract ? featured.abstract.sourced : ''}
+        ${featured.abstract ? featured.abstract.converted : ''}
 
-        ${tags(featured.tags.connected)}
+        ${tags(featured.tags)}
 
         ${featured.issue && featured.issue.shopLink ? `
           <strong>

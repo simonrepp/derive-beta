@@ -8,8 +8,8 @@ const authors = require('../widgets/authors.js'),
 module.exports = (data, issue) => {
   const issueAuthors = new Set();
   issue.sections.forEach(section =>
-    section.articles.connected.forEach(article =>
-      article.authors.connected.forEach(author => issueAuthors.add(author))
+    section.articles.forEach(article =>
+      article.authors.forEach(author => issueAuthors.add(author))
     )
   );
 
@@ -31,14 +31,14 @@ module.exports = (data, issue) => {
 
           ${issue.description ? `
             <div class="generic__margin-vertical">
-              ${issue.description.sourced}
+              ${issue.description.converted}
             </div>
           `:''}
 
           Mit Beiträgen von:<br/>
           ${authors([...issueAuthors])}<br/><br/>
 
-          ${tags(issue.tags.connected)}
+          ${tags(issue.tags)}
 
           ${share(issue.title, `https://derive.at/zeitschrift/${issue.number}/`)}
         </div>

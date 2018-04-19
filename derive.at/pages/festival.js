@@ -14,7 +14,7 @@ module.exports = data => {
         <h2>${data.festival.subtitle}</h2>
 
         <span>
-          ${data.festival.description.sourced}
+          ${data.festival.description.converted}
         </span>
 
         <div class="generic__margin-vertical">

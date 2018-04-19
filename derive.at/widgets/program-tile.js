@@ -17,7 +17,7 @@ module.exports = program => `
       </h2>
     `:''}
 
-    ${editors(program.editors.connected)}
+    ${editors(program.editors)}
 
     ${firstBroadcast(program.firstBroadcast)}
   </div>

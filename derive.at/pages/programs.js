@@ -20,10 +20,10 @@ module.exports = (data, pagination) => {
         <h1>${data.radio.title}</h1>
 
         <div class="generic__margin-vertical">
-          ${data.radio.info.sourced}
+          ${data.radio.info.converted}
         </div>
 
-        ${editors(data.radio.editors.connected)}
+        ${editors(data.radio.editors)}
 
         <hr class="hr__light" />
 

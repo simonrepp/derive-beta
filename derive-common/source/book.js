@@ -55,7 +55,7 @@ module.exports = async (data, plainPath) => {
       book.price = document.value('Preis');
       book.authorReferences = document.values('Autoren/Herausgeber', { withTrace: true });
       book.publisherReferences = document.values('Verleger', { withTrace: true });
-      book.tags = { sourced: document.values('Tags') };
+      book.tagsDisconnected = document.values('Tags');
       book.cover = document.value('Cover', validatePath);
       book.description = document.value('Verlagstext', validateMarkdown);
 

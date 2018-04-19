@@ -3,7 +3,7 @@ const authors = require('../authors.js'),
 
 const infoDetails = article => `
   <strong>Autor*innen</strong><br/>
-  ${authors(article.authors.connected)}
+  ${authors(article.authors)}
 
   <br/><br/>
 
@@ -16,7 +16,7 @@ const infoDetails = article => `
     <br/><br/>
   `:''}
 
-  ${tags(article.tags.connected)}
+  ${tags(article.tags)}
 
   ${article.issue ? `
     <strong>
@@ -63,7 +63,7 @@ module.exports = article => `
     </div>
 
     <div class="article-panel__abstract">
-      ${article.abstract ? article.abstract.sourced : ''}
+      ${article.abstract ? article.abstract.converted : ''}
     </div>
   </div>
 `;

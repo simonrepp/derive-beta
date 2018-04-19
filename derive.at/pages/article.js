@@ -14,7 +14,7 @@ module.exports = (data, article) => {
       <h1>${article.title}</h1>
       ${article.subtitle ? `<strong>${article.subtitle}</strong>` : ''}
 
-      ${article.abstract ? article.abstract.sourced : ''}
+      ${article.abstract ? article.abstract.converted : ''}
 
       ${article.issue && article.issue.shopLink ? `
         <a href="${article.issue.shopLink}">Heft kaufen</a>
@@ -25,12 +25,12 @@ module.exports = (data, article) => {
 
     <hr/>
 
-    ${tags(article.tags.connected)}
+    ${tags(article.tags)}
 
-    ${article.authors.connected.map(author => `
+    ${article.authors.map(author => `
       <strong>${author.name}</strong><br/>
       ${author.biography ? `
-        ${author.biography.sourced}
+        ${author.biography.converted}
       `:''}<br/><br/>
     `).join('')}
 
@@ -54,7 +54,7 @@ module.exports = (data, article) => {
       <hr/>
 
       <strong>Literaturliste</strong><br/>
-      ${article.bibliography.sourced}
+      ${article.bibliography.converted}
     `:''}
   `;
 

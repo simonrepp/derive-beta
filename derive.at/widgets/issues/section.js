@@ -3,7 +3,7 @@ const authors = require('../authors.js');
 const article = article => `
   <div class="section-article__split">
     <div class="section-article__info">
-      ${authors(article.authors.connected)}<br/>
+      ${authors(article.authors)}<br/>
       Seite: ${article.inIssueOnPages}<br/>
       <a href="/texte/${article.permalink}/">
         ${article.readable ? 'Artikel lesen' : 'Abstract lesen'}
@@ -32,5 +32,5 @@ module.exports = section => `
 
   <h1>${section.title}</h1>
 
-  ${section.articles.connected.map(article).join('')}
+  ${section.articles.map(article).join('')}
 `;

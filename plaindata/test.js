@@ -33,6 +33,6 @@ console.log(result);
 
 // radio.title = validateString(document, 'Titel', { required: true });
 // radio.info = validateMarkdown(document, 'Allgemeine Info', { required: true });
-// radio.editors = { sourced: validateArray(document, 'Redaktion') };
+// radio.editors = { converted: validateArray(document, 'Redaktion') };
 //
 // validateKeys(document, ['Allgemeine Info', 'Redaktion', 'Titel']);

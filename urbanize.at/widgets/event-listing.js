@@ -20,7 +20,7 @@ module.exports = events => `
           ${event.address}
         </div>
         <div>
-          ${event.abstract ? event.abstract.sourced : ''}
+          ${event.abstract ? event.abstract.converted : ''}
         </div>
       </div>
     `).join('')}

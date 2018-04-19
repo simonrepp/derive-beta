@@ -19,12 +19,12 @@ module.exports = (data, pagination) => {
 
         <h1>${featured.title}</h1>
 
-        ${featured.description ? featured.description.sourced : ''}
+        ${featured.description ? featured.description.converted : ''}
 
         <div class="generic__margin-vertical">
           ${[
             featured.placeOfPublication ? `${featured.placeOfPublication}:` : '',
-            featured.publishers.connected.map(publisher => `<a href="/verlage/${publisher.permalink}/">${publisher.name}</a>`).join(', '),
+            featured.publishers.map(publisher => `<a href="/verlage/${publisher.permalink}/">${publisher.name}</a>`).join(', '),
             featured.yearOfPublication ? `(${featured.yearOfPublication})` : ''
           ].join(' ').trim()}
         </div>

@@ -36,7 +36,7 @@ module.exports = async (data, preview) => {
     }
 
     if(article.text) {
-      let text = article.text.sourced;
+      let text = article.text.converted;
 
       if(preview) {
         for(let download of article.text.downloads) {
@@ -90,7 +90,7 @@ module.exports = async (data, preview) => {
     }
 
     if(event.text) {
-      let text = event.text.sourced;
+      let text = event.text.converted;
 
       if(preview) {
         for(let download of event.text.downloads) {
@@ -160,7 +160,7 @@ module.exports = async (data, preview) => {
   //       are then enforced by a WHITELIST written by me, enforced on crossvalidate
   for(let page of data.pages.values()) {
     if(page.urbanize === null && page.text) {
-      let text = page.text.sourced;
+      let text = page.text.converted;
 
       if(preview) {
         for(let download of page.text.downloads) {
@@ -212,7 +212,7 @@ module.exports = async (data, preview) => {
     }
 
     if(program.text) {
-      let text = program.text.sourced;
+      let text = program.text.converted;
 
       if(preview) {
         for(let download of program.text.downloads) {

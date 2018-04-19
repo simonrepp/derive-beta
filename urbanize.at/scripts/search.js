@@ -17,7 +17,7 @@ const eventResult = function(event) {
   html +=      event.address;
   html += '  </div>';
   html += '  <div>';
-  html +=      event.abstract ? event.abstract.sourced : '';
+  html +=      event.abstract ? event.abstract.converted : '';
   html += '  </div>';
   html += '</div>';
 

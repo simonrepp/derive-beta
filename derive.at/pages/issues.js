@@ -21,8 +21,8 @@ module.exports = data => {
 
   const latestAuthors = new Set();
   latest.sections.forEach(section =>
-    section.articles.connected.forEach(article =>
-      article.authors.connected.forEach(author => latestAuthors.add(author))
+    section.articles.forEach(article =>
+      article.authors.forEach(author => latestAuthors.add(author))
     )
   );
 
@@ -44,14 +44,14 @@ module.exports = data => {
 
           ${latest.description ? `
             <div class="generic__margin-vertical">
-              ${latest.description.sourced}
+              ${latest.description.converted}
             </div>
           `:''}
 
           Mit Beiträgen von:<br/>
           ${authors([...latestAuthors])}<br/><br/>
 
-          ${tags(latest.tags.connected)}
+          ${tags(latest.tags)}
 
           ${share(latest.title, `https://derive.at/zeitschrift/${latest.number}/`)}
         </div>

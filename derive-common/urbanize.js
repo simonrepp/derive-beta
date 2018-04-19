@@ -33,7 +33,7 @@ module.exports = data => {
           }
         });
 
-        event.categories.connected.forEach(category => {
+        event.categories.forEach(category => {
           const existingCategory = data.urbanize[city].categories.get(category.permalink);
 
           if(existingCategory) {
@@ -49,15 +49,15 @@ module.exports = data => {
           }
         });
 
-        event.hosts.connected.forEach(host =>
+        event.hosts.forEach(host =>
           data.urbanize[city].participants.add(host)
         );
 
-        event.participants.connected.forEach(participant =>
+        event.participants.forEach(participant =>
           data.urbanize[city].participants.add(participant)
         );
 
-        event.tags.connected.forEach(tag => {
+        event.tags.forEach(tag => {
           const existingTag = data.urbanize[city].tags.get(tag.permalink);
 
           if(existingTag) {

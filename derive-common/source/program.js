@@ -51,8 +51,8 @@ module.exports = async (data, plainPath) => {
       program.soundfile = document.value('Soundfile', validatePath);
       program.editorReferences = document.values('Redaktion', { withTrace: true });
       program.language = document.value('Sprache');
-      program.categories = { sourced: document.values('Kategorien') };
-      program.tags = { sourced: document.values('Tags') };
+      program.categoriesDisconnected = document.values('Kategorien');
+      program.tagsDisconnected = document.values('Tags');
       program.abstract = document.value('Abstract', validateMarkdown);
       program.text = document.value('Text', validateMarkdownWithMedia);
 

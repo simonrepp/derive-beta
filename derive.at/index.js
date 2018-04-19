@@ -7,16 +7,16 @@ const { writeFile } = require('../derive-common/util.js');
 const indexArticles = data => {
   const indexed = Array.from(data.articles.values()).map(article => {
     const boosted = `${article.title} ${article.subtitle || ''}`;
-    const regular = [article.abstract ? striptags(article.abstract.sourced) : '',
-                     article.authors.connected.map(author => author.name).join(' '),
-                     article.categories.connected.map(category => category.name).join(' '),
-                     article.tags.connected.map(tag => tag.name).join(' '),
+    const regular = [article.abstract ? striptags(article.abstract.converted) : '',
+                     article.authors.map(author => author.name).join(' '),
+                     article.categories.map(category => category.name).join(' '),
+                     article.tags.map(tag => tag.name).join(' '),
                      article.text ? striptags(article.text.written) : ''].join(' ');
 
     return {
       article: {
         authors: {
-          connected: article.authors.connected.map(author => ({
+          connected: article.authors.map(author => ({
             name: author.name,
             permalink: author.permalink
           }))
@@ -43,11 +43,11 @@ const indexArticles = data => {
 
 const indexAuthors = data => {
   const indexed = data.authors.map(author => {
-    const boosted = `${author.name} ${author.biography ? striptags(author.biography.sourced) : ''}`;
+    const boosted = `${author.name} ${author.biography ? striptags(author.biography.converted) : ''}`;
     const regular = [author.city || '',
                      author.country || '',
-                     author.tags.connected.map(tag => tag.name).join(' '),
-                     author.text ? striptags(author.text.sourced) : '',
+                     author.tags.map(tag => tag.name).join(' '),
+                     author.text ? striptags(author.text.converted) : '',
                      author.website || ''].join(' ');
 
     return {
@@ -67,10 +67,10 @@ const indexAuthors = data => {
 const indexBooks = data => {
   const indexed = Array.from(data.books.values()).map(book => {
     const boosted = `${book.title} ${book.isxn || ''}`;
-    const regular = [book.authors.connected.map(author => author.name).join(' '),
-                     book.description ? striptags(book.description.sourced) : '',
-                     book.publishers.connected.map(publisher => publisher.name).join(' '),
-                     book.tags.connected.map(tag => tag.name).join(' '),
+    const regular = [book.authors.map(author => author.name).join(' '),
+                     book.description ? striptags(book.description.converted) : '',
+                     book.publishers.map(publisher => publisher.name).join(' '),
+                     book.tags.map(tag => tag.name).join(' '),
                      book.placeOfPublication || '',
                      book.url || '',
                      book.yearOfPublication || ''].join(' ');
@@ -78,7 +78,7 @@ const indexBooks = data => {
     return {
       book: {
         authors: {
-          connected: book.authors.connected.map(author => ({
+          connected: book.authors.map(author => ({
             name: author.name,
             permalink: author.permalink
           }))
@@ -87,7 +87,7 @@ const indexBooks = data => {
         permalink: book.permalink,
         placeOfPublication: book.placeOfPublication,
         publishers: {
-          connected: book.publishers.connected.map(publisher => ({
+          connected: book.publishers.map(publisher => ({
             name: publisher.name,
             permalink: publisher.permalink
           }))
@@ -113,8 +113,8 @@ const indexIssues = data => {
                      issue.title,
                      issue.features.join(' ')].join(' ');
     const regular = [issue.cooperation || '',
-                     issue.description ? striptags(issue.description.sourced) : '',
-                     issue.tags.connected.map(tag => tag.name).join(' ')].join(' ');
+                     issue.description ? striptags(issue.description.converted) : '',
+                     issue.tags.map(tag => tag.name).join(' ')].join(' ');
 
     return {
       issue: {
@@ -137,16 +137,16 @@ const indexIssues = data => {
 const indexPrograms = data => {
   const indexed = Array.from(data.programs.values()).map(program => {
     const boosted = [program.title, program.subtitle].join(' ');
-    const regular = [program.abstract ? striptags(program.abstract.sourced) : '',
-                     program.editors.connected.map(editor => editor.name).join(' '),
-                     program.categories.connected.map(category => category.name).join(' '),
-                     program.tags.connected.map(tag => tag.name).join(' '),
+    const regular = [program.abstract ? striptags(program.abstract.converted) : '',
+                     program.editors.map(editor => editor.name).join(' '),
+                     program.categories.map(category => category.name).join(' '),
+                     program.tags.map(tag => tag.name).join(' '),
                      program.text ? striptags(program.text.written) : ''].join(' ');
 
     return {
       program: {
         editors: {
-          connected: program.editors.connected.map(editor => ({
+          connected: program.editors.map(editor => ({
             name: editor.name,
             permalink: editor.permalink
           }))

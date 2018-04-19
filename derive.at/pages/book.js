@@ -22,14 +22,14 @@ module.exports = (data, book) => {
         <div class="generic__margin-vertical">
           ${[
             book.placeOfPublication ? `${book.placeOfPublication}:` : '',
-            book.publishers.connected.map(publisher => `<a href="/verlage/${publisher.permalink}/">${publisher.name}</a>`).join(', '),
+            book.publishers.map(publisher => `<a href="/verlage/${publisher.permalink}/">${publisher.name}</a>`).join(', '),
             book.yearOfPublication ? `(${book.yearOfPublication})` : ''
           ].join(' ').trim()}
         </div>
 
         ${book.reviews.length > 1 ? `<strong>${reviews(book.reviews)}</strong>` : ''}
 
-        ${tags(book.tags.connected)}
+        ${tags(book.tags)}
 
         <hr class="hr__light" />
 

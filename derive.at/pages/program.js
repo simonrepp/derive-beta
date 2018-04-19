@@ -13,7 +13,7 @@ module.exports = (data, program) => {
       </div>
 
       <div class="feature__text">
-        ${authors(program.editors.connected)}
+        ${authors(program.editors)}
 
         <h1>${program.title}</h1>
 
@@ -40,7 +40,7 @@ module.exports = (data, program) => {
         <br/><br/>
 
 
-        ${tags(program.tags.connected)}
+        ${tags(program.tags)}
 
         <hr class="hr__light" />
 

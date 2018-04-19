@@ -51,8 +51,8 @@ module.exports = async (data, plainPath) => {
       event.url = document.value('URL', validateAbsoluteUrl);
       event.hostReferences = document.values('Veranstalter', { withTrace: true });
       event.participantReferences = document.values('Teilnehmer', { withTrace: true });
-      event.categories = { sourced: document.values('Kategorien') };
-      event.tags = { sourced: document.values('Tags') };
+      event.categoriesDisconnected = document.values('Kategorien');
+      event.tagsDisconnected = document.values('Tags');
       event.image = document.value('Bild', validatePath);
       event.urbanize = document.value('Urbanize', validateEnum(URBANIZE_ENUM));
       event.address = document.value('Adresse');
