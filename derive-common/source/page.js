@@ -36,10 +36,13 @@ module.exports = async (data, plainPath) => {
 
     try {
       page.title = document.value('Titel', { required: true });
-      page.permalink = document.value('Permalink', { process: validatePermalink, required: true });
-      page.permalinkMeta = document.meta('Permalink');
-      page.urbanize = document.value('Urbanize', { process: validateEnum(URBANIZE_ENUM) });
-      page.text = document.value('Text', { process: validateMarkdownWithMedia });
+
+      const permalink = document.value('Permalink', validatePermalink, { required: true, withTrace: true });
+      page.permalink = permalink.value;
+      page.permalinkTrace = permalink.trace;
+
+      page.urbanize = document.value('Urbanize', validateEnum(URBANIZE_ENUM));
+      page.text = document.value('Text', validateMarkdownWithMedia);
 
       document.assertAllTouched();
     } catch(err) {

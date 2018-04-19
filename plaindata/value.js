@@ -11,8 +11,16 @@ class PlainValue {
     this.value = value.value;
   }
 
-  error(message) {
-    if(message === undefined) {
+  error(customMessage) {
+    let message;
+
+    if(customMessage) {
+      if(typeof customMessage === 'function') {
+        message = customMessage(this);
+      } else {
+        message = customMessage;
+      }
+    } else {
       message = this.context.messages.validation.genericError(this.key);
     }
 
@@ -25,14 +33,7 @@ class PlainValue {
 
   get() {
     this.touched = true;
-
     return this.value;
-  }
-
-  getLazy() {
-    this.touched = true;
-
-    return this;
   }
 
   touch() {

@@ -130,7 +130,7 @@ const parse = (input, options = { locale: 'en' }) => {
     }
 
     if(state === STATE_READ_VALUES) {
-      if(match = VALUE.exec(lineContent)) {
+      if((match = VALUE.exec(lineContent))) {
 
         // console.log('[value]', lineContent);
         const value = match[1] || null;
@@ -183,7 +183,7 @@ const parse = (input, options = { locale: 'en' }) => {
       }
     }
 
-    if(match = KEY_VALUE.exec(lineContent)) {
+    if((match = KEY_VALUE.exec(lineContent))) {
 
       // console.log('[key value pair]', lineContent);
 
@@ -216,7 +216,7 @@ const parse = (input, options = { locale: 'en' }) => {
       continue;
     }
 
-    if(match = KEY.exec(lineContent)) {
+    if((match = KEY.exec(lineContent))) {
 
       // console.log('[key]', lineContent);
 
@@ -239,7 +239,7 @@ const parse = (input, options = { locale: 'en' }) => {
       continue;
     }
 
-    if(match = MULTILINE_VALUE_BEGIN.exec(lineContent)) {
+    if((match = MULTILINE_VALUE_BEGIN.exec(lineContent))) {
       // console.log('[multiline value begin]', lineContent);
 
       const dashes = match[1];
@@ -265,7 +265,7 @@ const parse = (input, options = { locale: 'en' }) => {
       continue;
     }
 
-    if(match = ALTERNATIVE_KEY.exec(lineContent)) {
+    if((match = ALTERNATIVE_KEY.exec(lineContent))) {
       // console.log('[alternative key]', lineContent);
 
       const key = match[1];
@@ -287,7 +287,7 @@ const parse = (input, options = { locale: 'en' }) => {
       continue;
     }
 
-    if(match = SECTION.exec(lineContent)) {
+    if((match = SECTION.exec(lineContent))) {
       // console.log('[subdocument]', lineContent);
 
       const targetDepth = match[1].length;

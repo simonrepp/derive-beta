@@ -35,16 +35,21 @@ module.exports = async (data, plainPath) => {
     const player = { sourceFile: plainPath };
 
     try {
-      player.name = document.value('Name', { required: true });
-      player.nameMeta = document.meta('Name');
-      player.permalink = document.value('Permalink', { process: validatePermalink, required: true });
-      player.permalinkMeta = document.meta('Permalink');
+      const name = document.value('Name', { required: true, withTrace: true });
+      player.name = name.value;
+      player.nameTrace = name.trace;
+
+      // TODO: Consider processing function as a 2nd positional argument instead of verbose option
+      const permalink = document.value('Permalink', validatePermalink, { required: true, withTrace: true });
+      player.permalink = permalink.value;
+      player.permalinkTrace = permalink.trace;
+
       player.country = document.value('Land');
       player.city = document.value('Stadt');
       player.tags = { sourced: document.values('Tags') };
-      player.website = document.value('Website', { process: validateAbsoluteUrl });
-      player.biography = document.value('Biographie', { process: validateMarkdown });
-      player.text = document.value('Text', { process: validateMarkdown });
+      player.website = document.value('Website', validateAbsoluteUrl);
+      player.biography = document.value('Biographie', validateMarkdown);
+      player.text = document.value('Text', validateMarkdown);
 
       document.assertAllTouched();
     } catch(err) {

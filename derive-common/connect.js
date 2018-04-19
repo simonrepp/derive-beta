@@ -1,37 +1,41 @@
-const connectBooks = (data, collection, field, backReferenceField) => {
-  data[collection].forEach(document => {
-    document[field].connected = [];
-    document[field].sourced.forEach(title => {
-      const instance = data.booksByTitle.get(title);
+const connectBookReviews = data => {
+  data.articles.forEach(article => {
+    article.reviewedBooks = [];
+    article.reviewedBookReferences.forEach(({ trace, value }) => {
+      const book = data.booksByTitle.get(value);
 
-      if(instance) {
-        document[field].connected.push(instance);
-        instance[backReferenceField].push(document);
+      if(book) {
+        article.reviewedBooks.push(book);
+        book.reviews.push(document);
       } else {
+        const error = trace.error(`Im Artikel "${article.title}" wird das Buch "${value}" besprochen, allerdings wurde kein Buch mit diesem Titel gefunden.`);
+
         data.warnings.push({
-          files: [{ path: document.sourceFile }],
-          message: `Im Artikel "${document.title}" wird das Buch "${title}" besprochen, allerdings wurde in der Datenbank kein Buch mit diesem Titel gefunden.`,
-          snippet: 'TODO'
+          files: [{ path: article.sourceFile, ranges: error.ranges }],
+          message: error.message,
+          snippet: error.snippet
         });
       }
     });
   });
 };
 
-const connectPlayers = (data, collection, field, backReferenceField) => {
+const connectPlayers = (data, collection, referencesField, instancesField, backReferenceField) => {
   data[collection].forEach(document => {
-    document[field].connected = [];
-    document[field].sourced.forEach(name => {
-      const instance = data.playersByName.get(name);
+    document[instancesField] = [];
+    document[referencesField].forEach(({ trace, value }) => {
+      const instance = data.playersByName.get(value);
 
       if(instance) {
-        document[field].connected.push(instance);
+        document[instancesField].push(instance);
         instance[backReferenceField].push(document);
       } else {
+        const error = trace.error(`Im Feld "${trace.key}" wird die AkteurIn "${value}" angegeben, es wurde aber keine AkteurIn mit diesem Namen gefunden.`);
+
         data.warnings.push({
-          files: [{ path: document.sourceFile }],
-          message: `Die AkteurIn "${name}", angegeben als ${field} in einem Dokument vom Typ ${collection} wurde nicht gefunden.`,
-          snippet: 'TODO'
+          files: [{ path: document.sourceFile, ranges: error.ranges }],
+          message: error.message,
+          snippet: error.snippet
         });
       }
     });
@@ -53,20 +57,23 @@ const clearBackReferences = data => {
   });
 };
 
+// TODO: article .issue and .issueOnPages need to be cleared as a wipe step before reconnecting everything
+// TODO: Strictly speaking there *could* be an article in multiple issues in which case the current model is incorrect
+
 const connectIssuesWithArticles = data => {
   data.issues.forEach(issue => {
     issue.sections.forEach(section => {
       section.articles = [];
-      section.articlesUnconnected.forEach(article => {
-        const articleInstance = data.articlesByTitle.get(article.titleLazy.value);
+      section.articleReferences.forEach(reference => {
+        const article = data.articlesByTitle.get(reference.title);
 
-        if(articleInstance) {
-          section.articles.push(articleInstance);
+        if(article) {
+          section.articles.push(article);
 
-          articleInstance.issue = issue;
-          articleInstance.inIssueOnPages = article.pages;
+          article.issue = issue;
+          article.inIssueOnPages = article.pages;
         } else {
-          const error = article.titleLazy.error(`In Zeitschrift N° ${issue.number} wird in der Rubrik "${section.title}" der Artikel "${article.title}" referenziert, es wurde aber kein Artikel mit diesem Titel gefunden.`);
+          const error = reference.titleTrace.error(`In Zeitschrift N° ${issue.number} wird in der Rubrik "${section.title}" der Artikel "${reference.title}" referenziert, es wurde aber kein Artikel mit diesem Titel gefunden.`);
 
           data.warnings.push({
             files: [{ path: issue.sourceFile, ranges: error.ranges }],
@@ -82,13 +89,13 @@ const connectIssuesWithArticles = data => {
 const connectRadioEditors = data => {
   if(data.radio) {
     data.radio.editors = [];
-    data.radio.editorsLazy.forEach(name => {
-      const instance = data.playersByName.get(name.value);
+    data.radio.editorReferences.forEach(({ trace, value }) => {
+      const player = data.playersByName.get(value);
 
-      if(instance) {
-        data.radio.editors.push(instance);
+      if(player) {
+        data.radio.editors.push(player);
       } else {
-        const error = name.error(`Die AkteurIn "${name.value}", angegeben als Teil der allgemeinen Radio Redaktion, wurde nicht gefunden.`);
+        const error = trace.error(({ value }) => `Die AkteurIn "${value}", angegeben als Teil der allgemeinen Radio Redaktion, wurde nicht gefunden.`);
 
         data.errors.push({
           files: [{ path: data.radio.sourceFile, ranges: error.ranges }],
@@ -103,14 +110,14 @@ const connectRadioEditors = data => {
 module.exports = data => {
   clearBackReferences(data);
 
-  connectBooks(data, 'articles', 'bookReviews', 'reviews');
+  connectBookReviews(data);
 
-  connectPlayers(data, 'articles', 'authors', 'articles');
-  connectPlayers(data, 'books', 'authors', 'authoredBooks');
-  connectPlayers(data, 'books', 'publishers', 'publishedBooks');
-  connectPlayers(data, 'events', 'hosts', 'hostedEvents');
-  connectPlayers(data, 'events', 'participants', 'eventParticipations');
-  connectPlayers(data, 'programs', 'editors', 'programs');
+  connectPlayers(data, 'articles', 'authorReferences', 'authors', 'articles');
+  connectPlayers(data, 'books', 'authorReferences', 'authors', 'authoredBooks');
+  connectPlayers(data, 'books', 'publisherReferences', 'publishers', 'publishedBooks');
+  connectPlayers(data, 'events', 'hostReferences', 'hosts', 'hostedEvents');
+  connectPlayers(data, 'events', 'participantReferences', 'participants', 'eventParticipations');
+  connectPlayers(data, 'programs', 'editorReferences', 'editors', 'programs');
 
   connectIssuesWithArticles(data);
 

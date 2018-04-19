@@ -39,11 +39,11 @@ module.exports = async (data, plainPath) => {
     try {
       feature.title = document.value('Titel', { required: true });
       feature.header = document.value('Header');
-      feature.image = document.value('Bild', { process: validatePath });
-      feature.position = document.value('Position', { process: validateInteger });
-      feature.biggerBox = document.value('Größere Box', { process: validateBoolean });
-      feature.url = document.value('URL', { process: validateAbsoluteUrl });
-      feature.text = document.value('Text', { process: validateMarkdown });
+      feature.image = document.value('Bild', validatePath);
+      feature.position = document.value('Position', validateInteger);
+      feature.biggerBox = document.value('Größere Box', validateBoolean);
+      feature.url = document.value('URL', validateAbsoluteUrl);
+      feature.text = document.value('Text', validateMarkdown);
 
       document.assertAllTouched();
     } catch(err) {

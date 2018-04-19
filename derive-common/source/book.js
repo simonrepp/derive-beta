@@ -36,21 +36,25 @@ module.exports = async (data, plainPath) => {
     const book = { sourceFile: plainPath };
 
     try {
-      book.title = document.value('Titel', { required: true });
-      book.titleMeta = document.meta('Titel');
-      book.permalink = document.value('Permalink', { process: validatePermalink, required: true });
-      book.permalinkMeta = document.meta('Permalink');
-      book.yearOfPublication = document.value('Erscheinungsjahr', { process: validateInteger, required: true });
+      const title = document.value('Titel', { required: true, withTrace: true });
+      book.title = title.value;
+      book.titleTrace = title.trace;
+
+      const permalink = document.value('Permalink', validatePermalink, { required: true, withTrace: true });
+      book.permalink = permalink.value;
+      book.permalinkTrace = permalink.trace;
+
+      book.yearOfPublication = document.value('Erscheinungsjahr', validateInteger, { required: true });
       book.isxn = document.value('ISBN/ISSN');
-      book.url = document.value('URL', { process: validateAbsoluteUrl });
+      book.url = document.value('URL', validateAbsoluteUrl);
       book.placeOfPublication = document.value('Erscheinungsort');
-      book.numberOfPages = document.value('Seitenanzahl', { process: validateInteger });
+      book.numberOfPages = document.value('Seitenanzahl', validateInteger);
       book.price = document.value('Preis');
-      book.authors = { sourced: document.values('Autoren/Herausgeber') };
-      book.publishers = { sourced: document.values('Verleger') };
+      book.authorReferences = document.values('Autoren/Herausgeber', { withTrace: true });
+      book.publisherReferences = document.values('Verleger', { withTrace: true });
       book.tags = { sourced: document.values('Tags') };
-      book.cover = document.value('Cover', { process: validatePath });
-      book.description = document.value('Verlagstext', { process: validateMarkdown });
+      book.cover = document.value('Cover', validatePath);
+      book.description = document.value('Verlagstext', validateMarkdown);
 
       document.assertAllTouched();
     } catch(err) {

@@ -36,10 +36,10 @@ module.exports = async (data, plainPath) => {
     try {
       festival.title = document.value('Titel', { required: true });
       festival.subtitle = document.value('Untertitel', { required: true });
-      festival.description = document.value('Beschreibung', { process: validateMarkdown, required: true });
+      festival.description = document.value('Beschreibung', validateMarkdown, { required: true });
       festival.editions = document.sections('Edition').map(edition => ({
-        image: edition.value('Bild', { process: validatePath, required: true }),
-        url: edition.value('URL', { process: validateAbsoluteUrl, required: true })
+        image: edition.value('Bild', validatePath, { required: true }),
+        url: edition.value('URL', validateAbsoluteUrl, { required: true })
       }));
 
       document.assertAllTouched();

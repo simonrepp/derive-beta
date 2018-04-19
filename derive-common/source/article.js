@@ -39,25 +39,28 @@ module.exports = async (data, plainPath) => {
     const article = { sourceFile: plainPath };
 
     try {
+      const title = document.value('Titel', { required: true, withTrace: true });
+      article.title = title.value;
+      article.titleTrace = title.trace;
 
-      article.title = document.value('Titel', { required: true });
-      article.titleMeta = document.meta('Titel');
-      article.permalink = document.value('Permalink', { process: validatePermalink, required: true });
-      article.permalinkMeta = document.meta('Permalink');
+      const permalink = document.value('Permalink', validatePermalink, { required: true, withTrace: true });
+      article.permalink = permalink.value;
+      article.permalinkTrace = permalink.trace;
+
       article.subtitle = document.value('Untertitel');
-      article.image = document.value('Bild', { process: validatePath });
-      article.authors = { sourced: document.values('Autoren') };
+      article.image = document.value('Bild', validatePath);
+      article.authorReferences = document.values('Autoren', { withTrace: true });
       article.date = document.value('Datum');
       article.language = document.value('Sprache');
       article.categories = { sourced: document.values('Kategorien') };
       article.tags = { sourced: document.values('Tags') };
-      article.bookReviews = { sourced: document.values('Buchbesprechungen') };
-      article.publish = document.value('Veröffentlichen', { process: validateBoolean });
-      article.readable = document.value('Lesbar', { process: validateBoolean });
-      article.urbanize = document.value('Urbanize', { process: validateEnum(URBANIZE_ENUM) });
-      article.abstract = document.value('Abstract', { process: validateMarkdown });
-      article.bibliography = document.value('Literaturverzeichnis', { process: validateMarkdown });
-      article.text = document.value('Text', { process: validateMarkdownWithMedia });
+      article.reviewedBookReferences = document.values('Buchbesprechungen', { withTrace: true });
+      article.publish = document.value('Veröffentlichen', validateBoolean);
+      article.readable = document.value('Lesbar', validateBoolean);
+      article.urbanize = document.value('Urbanize', validateEnum(URBANIZE_ENUM));
+      article.abstract = document.value('Abstract', validateMarkdown);
+      article.bibliography = document.value('Literaturverzeichnis', validateMarkdown);
+      article.text = document.value('Text', validateMarkdownWithMedia);
 
       document.assertAllTouched();
     } catch(err) {

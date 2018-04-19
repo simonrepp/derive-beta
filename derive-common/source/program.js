@@ -37,18 +37,21 @@ module.exports = async (data, plainPath) => {
 
     try {
       program.title = document.value('Titel', { required: true });
-      program.permalink = document.value('Permalink', { process: validatePermalink, required: true });
-      program.permalinkMeta = document.meta('Permalink');
-      program.firstBroadcast = document.value('Erstausstrahlung', { process: validateDate, required: true });
+
+      const permalink = document.value('Permalink', validatePermalink, { required: true, withTrace: true });
+      program.permalink = permalink.value;
+      program.permalinkTrace = permalink.trace;
+
+      program.firstBroadcast = document.value('Erstausstrahlung', validateDate, { required: true });
       program.subtitle = document.value('Untertitel');
-      program.image = document.value('Bild', { process: validatePath });
-      program.soundfile = document.value('Soundfile', { process: validatePath });
-      program.editors = { sourced: document.values('Redaktion') };
+      program.image = document.value('Bild', validatePath);
+      program.soundfile = document.value('Soundfile', validatePath);
+      program.editorReferences = document.values('Redaktion', { withTrace: true });
       program.language = document.value('Sprache');
       program.categories = { sourced: document.values('Kategorien') };
       program.tags = { sourced: document.values('Tags') };
-      program.abstract = document.value('Abstract', { process: validateMarkdown });
-      program.text = document.value('Text', { process: validateMarkdownWithMedia });
+      program.abstract = document.value('Abstract', validateMarkdown);
+      program.text = document.value('Text', validateMarkdownWithMedia);
 
       document.assertAllTouched();
     } catch(err) {

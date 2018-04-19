@@ -37,27 +37,34 @@ module.exports = async (data, plainPath) => {
     const issue = { sourceFile: plainPath };
 
     try {
-      issue.number = document.value('Nummer', { process: validateInteger, required: true });
-      issue.numberMeta = document.meta('Nummer');
+      const number = document.value('Nummer', validateInteger, { required: true, withTrace: true });
+      issue.number = number.value;
+      issue.numberTrace = number.trace;
+
       issue.title = document.value('Titel', { required: true });
-      issue.year = document.value('Jahr', { process: validateInteger, required: true });
-      issue.quarter = document.value('Quartal', { process: validateInteger, required: true });
-      issue.cover = document.value('Cover', { process: validatePath, required: true });
+      issue.year = document.value('Jahr', validateInteger, { required: true });
+      issue.quarter = document.value('Quartal', validateInteger, { required: true });
+      issue.cover = document.value('Cover', validatePath, { required: true });
       issue.shopLink = document.value('Link zum Shop');
       issue.cooperation = document.value('Kooperation');
       issue.features = document.values('Schwerpunkte');
-      issue.outOfPrint = document.value('Vergriffen', { process: validateBoolean });
-      issue.publicationDate = document.value('Erscheinungsdatum', { process: validateDate });
+      issue.outOfPrint = document.value('Vergriffen', validateBoolean);
+      issue.publicationDate = document.value('Erscheinungsdatum', validateDate);
       issue.tags = { sourced: document.values('Tags') };
-      issue.publish = document.value('Veröffentlichen', { process: validateBoolean }); // TODO: Purpose of this? If "to test out things" we can maybe remove it because we now have staging, except long time process
-      issue.description = document.value('Beschreibung', { process: validateMarkdown });
+      issue.publish = document.value('Veröffentlichen', validateBoolean); // TODO: Purpose of this? If "to test out things" we can maybe remove it because we now have staging, except long time process
+      issue.description = document.value('Beschreibung', validateMarkdown);
 
       issue.sections = document.sections('Rubrik').map(section => ({
         title: section.value('Titel', { required: true }),
-        articlesUnconnected: section.sections('Artikel', { keyRequired: false }).map(article => ({
-          titleLazy: article.value('Titel', { lazy: true, required: true }),
-          pages: article.value('Seite(n)', { required: true })
-        }))
+        articleReferences: section.sections('Artikel', { keyRequired: false }).map(reference => {
+          const title = reference.value('Titel', { required: true, withTrace: true });
+
+          return {
+            pages: reference.value('Seite(n)', { required: true }),
+            title: title.value,
+            titleTrace: title.trace
+          };
+        })
       }));
 
       document.assertAllTouched();

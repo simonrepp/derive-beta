@@ -39,20 +39,23 @@ module.exports = async (data, plainPath) => {
 
     try {
       event.title = document.value('Titel', { required: true });
-      event.permalink = document.value('Permalink', { process: validatePermalink, required: true });
-      event.permalinkMeta = document.meta('Permalink');
+
+      const permalink = document.value('Permalink', validatePermalink, { required: true, withTrace: true });
+      event.permalink = permalink.value;
+      event.permalinkTrace = permalink.trace;
+
       event.subtitle = document.value('Untertitel');
-      event.url = document.value('URL', { process: validateAbsoluteUrl });
-      event.hosts = { sourced: document.values('Veranstalter') };
-      event.participants = { sourced: document.values('Teilnehmer') };
+      event.url = document.value('URL', validateAbsoluteUrl);
+      event.hostReferences = document.values('Veranstalter', { withTrace: true });
+      event.participantReferences = document.values('Teilnehmer', { withTrace: true });
       event.categories = { sourced: document.values('Kategorien') };
       event.tags = { sourced: document.values('Tags') };
-      event.image = document.value('Bild', { process: validatePath });
-      event.urbanize = document.value('Urbanize', { process: validateEnum(URBANIZE_ENUM) });
+      event.image = document.value('Bild', validatePath);
+      event.urbanize = document.value('Urbanize', validateEnum(URBANIZE_ENUM));
       event.address = document.value('Adresse');
-      event.abstract = document.value('Abstract', { process: validateMarkdown });
-      event.additionalInfo = document.value('Zusatzinfo', { process: validateMarkdown });
-      event.text = document.value('Text', { process: validateMarkdownWithMedia });
+      event.abstract = document.value('Abstract', validateMarkdown);
+      event.additionalInfo = document.value('Zusatzinfo', validateMarkdown);
+      event.text = document.value('Text', validateMarkdownWithMedia);
 
       event.dates = document.sections('Termin').map(date => ({
         date: date.value('Datum', { process: validateDate }),

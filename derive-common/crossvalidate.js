@@ -5,8 +5,8 @@ module.exports = data => {
     let existingArticle = data.articlesByTitle.get(article.title);
 
     if(existingArticle) {
-      const existingError = existingArticle.titleMeta.error();
-      const discardedError = article.titleMeta.error();
+      const existingError = existingArticle.titleTrace.error();
+      const discardedError = article.titleTrace.error();
 
       data.warnings.push({
         files: [
@@ -25,8 +25,8 @@ module.exports = data => {
     existingArticle = data.articlesByPermalink.get(article.permalink);
 
     if(existingArticle) {
-      const existingError = existingArticle.permalinkMeta.error();
-      const discardedError = article.permalinkMeta.error();
+      const existingError = existingArticle.permalinkTrace.error();
+      const discardedError = article.permalinkTrace.error();
 
       data.warnings.push({
         files: [
@@ -51,8 +51,8 @@ module.exports = data => {
     let existingBook = data.booksByTitle.get(book.title);
 
     if(existingBook) {
-      const existingError = existingBook.titleMeta.error();
-      const discardedError = book.titleMeta.error();
+      const existingError = existingBook.titleTrace.error();
+      const discardedError = book.titleTrace.error();
 
       data.warnings.push({
         files: [
@@ -70,8 +70,8 @@ module.exports = data => {
     existingBook = data.booksByPermalink.get(book.permalink);
 
     if(existingBook) {
-      const existingError = existingBook.permalinkMeta.error();
-      const discardedError = book.permalinkMeta.error();
+      const existingError = existingBook.permalinkTrace.error();
+      const discardedError = book.permalinkTrace.error();
 
       data.warnings.push({
         files: [
@@ -95,8 +95,8 @@ module.exports = data => {
     const existingEvent = data.eventsByPermalink.get(event.permalink);
 
     if(existingEvent) {
-      const existingError = existingEvent.permalinkMeta.error();
-      const discardedError = event.permalinkMeta.error();
+      const existingError = existingEvent.permalinkTrace.error();
+      const discardedError = event.permalinkTrace.error();
 
       data.warnings.push({
         files: [
@@ -118,8 +118,8 @@ module.exports = data => {
     const existingIssue = data.issuesByNumber.get(issue.number);
 
     if(existingIssue) {
-      const existingError = existingIssue.numberMeta.error();
-      const discardedError = issue.numberMeta.error();
+      const existingError = existingIssue.numberTrace.error();
+      const discardedError = issue.numberTrace.error();
 
       data.warnings.push({
         files: [
@@ -142,8 +142,8 @@ module.exports = data => {
     let existingPlayer = data.playersByName.get(player.name);
 
     if(existingPlayer) {
-      const existingError = existingPlayer.nameMeta.error();
-      const discardedError = player.nameMeta.error();
+      const existingError = existingPlayer.nameTrace.error();
+      const discardedError = player.nameTrace.error();
 
       data.warnings.push({
         files: [
@@ -161,8 +161,8 @@ module.exports = data => {
     existingPlayer = data.playersByPermalink.get(player.permalink);
 
     if(existingPlayer) {
-      const existingError = existingPlayer.permalinkMeta.error();
-      const discardedError = player.permalinkMeta.error();
+      const existingError = existingPlayer.permalinkTrace.error();
+      const discardedError = player.permalinkTrace.error();
 
       data.warnings.push({
         files: [
@@ -187,8 +187,8 @@ module.exports = data => {
     const existingPage = data.pagesByPermalink.get(permalinkInContext); // TODO: We check for permalink In Context but set permalink without context? Check again
 
     if(existingPage) {
-      const existingError = existingPage.permalinkMeta.error();
-      const discardedError = page.permalinkMeta.error();
+      const existingError = existingPage.permalinkTrace.error();
+      const discardedError = page.permalinkTrace.error();
 
       data.warnings.push({
         files: [
@@ -210,8 +210,8 @@ module.exports = data => {
     const existingProgram = data.programsByPermalink.get(program.permalink);
 
     if(existingProgram) {
-      const existingError = existingProgram.permalinkMeta.error();
-      const discardedError = program.permalinkMeta.error();
+      const existingError = existingProgram.permalinkTrace.error();
+      const discardedError = program.permalinkTrace.error();
 
       data.warnings.push({
         files: [

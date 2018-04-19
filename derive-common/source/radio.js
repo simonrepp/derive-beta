@@ -33,8 +33,8 @@ module.exports = async (data, plainPath) => {
 
     try {
       radio.title = document.value('Titel', { required: true });
-      radio.info = document.value('Allgemeine Info', { process: validateMarkdown, required: true });
-      radio.editorsLazy = document.values('Redaktion', { lazy: true });
+      radio.info = document.value('Allgemeine Info', validateMarkdown, { required: true });
+      radio.editorReferences = document.values('Redaktion', { withTrace: true });
 
       document.assertAllTouched();
     } catch(err) {

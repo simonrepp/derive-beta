@@ -25,12 +25,17 @@ module.exports = async data => {
   crossvalidate(data); // Ensure uniqueness of primary keys before attempting to connect everything
                        // Conflicting documents are removed (the later ones)
 
- console.timeEnd('crossvalidate');
- console.time('connect');
+  console.timeEnd('crossvalidate');
+  console.time('connect');
 
   connect(data); // Create relational references between all objects
 
   console.timeEnd('connect');
+  // console.time('removeDrafts'); TODO
+  //
+  // removeDrafts(data); // Take out drafts before connecting everything
+  //
+  // console.timeEnd('removeDrafts');
   console.time('expand');
 
   expand(data); // Create categories and tags, connected to their referenced objects

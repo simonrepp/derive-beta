@@ -42,19 +42,37 @@ class PlainSection {
   }
 
   // TODO: Configurable/overridable error message here
-  // TODO: Implement additional options flags
-  assertAllTouched(options = { except: [], only: [] }) {
-    for(let value of this.valuesSequential) {
-      if(!value.touched) {
-        throw new PlainDataError(
-          this.context.messages.validation.excessKey(value.key),
-          snippet(this.context.lines, value.keyRange.beginLine, value.keyRange.endLine),
-          [value.keyRange]
-        );
-      }
+  // assertAllTouched(...optional) => assertAllTouched([[message,] options])
+  assertAllTouched(options = {}) {
+    let keys;
 
-      if(value instanceof PlainSection) {
-        value.assertAllTouched();
+    if(options.only) {
+      keys = options.only;
+    } else {
+      keys = Object.keys(this.valuesAssociative);
+
+      if(options.except) {
+        keys = keys.filter(key => !options.except.includes(key));
+      }
+    }
+
+    for(let key of keys) {
+      const values = this.valuesAssociative[key];
+
+      if(values !== null) {
+        for(let value of values) {
+          if(!value.touched) {
+            throw new PlainDataError(
+              this.context.messages.validation.excessKey(value.key),
+              snippet(this.context.lines, value.keyRange.beginLine, value.keyRange.endLine),
+              [value.keyRange]
+            );
+          }
+
+          if(value instanceof PlainSection) {
+            value.assertAllTouched();
+          }
+        }
       }
     }
   }
@@ -75,10 +93,6 @@ class PlainSection {
     }
 
     return values;
-  }
-
-  meta(key) {
-    return this.valuesAssociative[key][0];
   }
 
   section(key, options = { keyRequired: true }) {
@@ -161,7 +175,18 @@ class PlainSection {
     this.touched = true;
   }
 
-  value(key, options = { keyRequired: true, lazy: false, process: false, required: false }) {
+  value(key, ...optional) {
+    let options = { keyRequired: true, required: false, withTrace: false };
+    let process = null;
+
+    for(let argument of optional) {
+      if(typeof argument === 'function') {
+        process = argument;
+      } else if(typeof argument === 'object') {
+        Object.assign(options, argument);
+      }
+    }
+
     const values = this.valuesAssociative[key];
 
     if(values === undefined) {
@@ -170,9 +195,22 @@ class PlainSection {
           this.context.messages.validation.missingKey(key),
           snippet(this.context.lines, 0)
         );
+      }
+
+      if(options.withTrace) {
+        return { trace: null, value: null };
       } else {
         return null;
       }
+    }
+
+    // TODO: Esp. for this usecase below, consider snippet() accepting multiple line ranges too
+    if(values.length > 1) {
+      throw new PlainDataError(
+        this.context.messages.validation.expectedValueGotList(key),
+        snippet(this.context.lines, values[0].range.beginLine, values[values.length - 1].range.endLine),
+        values.map(value => value.range)
+      );
     }
 
     if(values.length === 1) {
@@ -180,52 +218,60 @@ class PlainSection {
 
       value.touch();
 
-      if(value instanceof PlainValue) {
-        if(value.value === null) {
-          if(options.required) {
-            throw new PlainDataError(
-              this.context.messages.validation.missingValue(key),
-              snippet(this.context.lines, value.range.beginLine),
-              [value.range]
-            );
-          } else {
-            return options.lazy ? value : value.get();
-          }
-        }
-
-        if(options.process) {
-          try {
-            return options.process(value);
-          } catch(message) {
-            throw new PlainDataError(
-              message,
-              snippet(this.context.lines, value.range.beginLine, value.range.endLine), // TODO: Consider split between .parser and .messages ?
-              [value.range]
-            );
-          }
-        }
-
-        return options.lazy ? value : value.get();
+      if(!(value instanceof PlainValue)) {
+        throw new PlainDataError(
+          this.context.messages.validation.expectedValueGotSection(key),
+          snippet(this.context.lines, value.range.beginLine, value.range.endLine),
+          [value.keyRange]
+        );
       }
 
-      throw new PlainDataError(
-        this.context.messages.validation.expectedValueGotSection(key),
-        snippet(this.context.lines, value.range.beginLine, value.range.endLine),
-        [value.keyRange]
-      );
+      if(value.value === null) {
+        if(options.required) {
+          throw new PlainDataError(
+            this.context.messages.validation.missingValue(key),
+            snippet(this.context.lines, value.range.beginLine),
+            [value.range]
+          );
+        }
+
+        if(options.withTrace) {
+          return { trace: null, value: null };
+        } else {
+          return null;
+        }
+      }
+
+      if(process) {
+        try {
+          const processed = process(value);
+
+          if(options.withTrace) {
+            return { trace: value, value: processed };
+          } else {
+            return processed;
+          }
+        } catch(message) {
+          throw new PlainDataError(
+            message,
+            snippet(this.context.lines, value.range.beginLine, value.range.endLine), // TODO: Consider split between .parser and .messages ?
+            [value.range]
+          );
+        }
+      }
+
+      // TODO: Resolve ambiguity between value and value.value ? valueNode vs value ? node vs value ?
+
+      if(options.withTrace) {
+        return { trace: value, value: value.get() };
+      } else {
+        return value.get();
+      }
     }
-
-    // TODO: Ensure all errors are format msg, snippet (!), ranges
-
-    // TODO: Esp. for this usecase below, consider snippet() accepting multiple line ranges too
-    throw new PlainDataError(
-      this.context.messages.validation.expectedValueGotList(key),
-      snippet(this.context.lines, values[0].range.beginLine, values[values.length - 1].range.endLine),
-      values.map(value => value.range)
-    );
   }
 
-  values(key, options = { keyRequired: true, lazy: false }) {
+  // TODO: Extend with valueRequired option ?  process option ?
+  values(key, options = { keyRequired: true, withTrace: false }) {
     const values = this.valuesAssociative[key];
 
     if(values === undefined) {
@@ -234,9 +280,9 @@ class PlainSection {
           this.context.messages.validation.missingKey(key),
           snippet(this.context.lines, 0)
         );
-      } else {
-        return [];
       }
+
+      return [];
     }
 
     // TODO: Go to the bottom of this, possibly adapt the data structure cause this looks hacky :)
@@ -251,14 +297,18 @@ class PlainSection {
     return values.map(value => {
       value.touch();
 
-      if(value instanceof PlainValue) {
-        return options.lazy ? value : value.get();
-      } else {
+      if(!(value instanceof PlainValue)) {
         throw new PlainDataError(
           this.context.messages.validation.expectedValuesGotSection(key),
           snippet(this.context.lines, value.range.beginLine, value.range.endLine),
           [value.keyRange]
         );
+      }
+
+      if(options.withTrace) {
+        return { trace: value, value: value.get() };
+      } else {
+        return value.get();
       }
     });
   }
