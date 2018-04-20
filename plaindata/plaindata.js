@@ -76,7 +76,7 @@ const parse = (input, options = { locale: 'en' }) => {
 
         let value, range;
         if(lineNumber > readBuffer.keyRange.beginLine + 1) {
-          value = lines.slice(readBuffer.keyRange.beginLine, lineNumber).join('\n');
+          value = lines.slice(readBuffer.keyRange.beginLine, lineNumber - 1).join('\n');
           range = {
             beginColumn: 0,
             beginLine: readBuffer.keyRange.beginLine + 1,

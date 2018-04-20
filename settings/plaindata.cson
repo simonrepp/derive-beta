@@ -1,0 +1,3 @@
+'.source.plain':
+  'editor':
+    'commentStart': '> '
