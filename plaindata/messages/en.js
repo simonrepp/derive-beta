@@ -1,53 +1,33 @@
+// TODO: English messages
+
 module.exports = {
-  hierarchyLayerSkip: data => {
-    const {
-      currentDepth,
-      currentDepthBeginLine,
-      currentDepthBeginLineContent,
-      errorLine,
-      errorLineContent,
-      targetDepth
-    } = data;
-
-    return `In line ${errorLine} "${errorLineContent}" starts a new ` +
-           `subsection of the document, which lies two levels deeper ` +
-           `(${'#'.repeat(targetDepth)}) than the current section level ` +
-           `(${'#'.repeat(currentDepth)}) which was begun in line ` +
-           `${currentDepthBeginLine} with "${currentDepthBeginLineContent}", ` +
-           `however you can always only start a subsection one level` +
-           `deeper than the current one.`;
-  },
-  invalidLine: data => {
-    const { errorLine, errorLineContent } = data;
-
-    return `Line number ${errorLine} with its content ` +
-           `"${errorLineContent}" follows no permitted pattern.`;
-  },
-  unexpectedValue: data => {
-    const { errorLine, errorLineContent } = data;
-
-    return `The line ${errorLine} contains a value ` +
-           `("${errorLineContent}"), without any line before it specifying ` +
-           `an accompanying key first.`;
-  },
-  unterminatedMultilineValue: data => {
-    const {
-      multiLineValueBeginLine,
-      multiLineValueBeginLineContent
-    } = data;
-
-    return `The multiline textblock started in line ${multiLineValueBeginLine} ` +
-           `with "${multiLineValueBeginLineContent}" is not terminated ` +
-           `until the end of the document. (The terminating line ` +
-           `"${multiLineValueBeginLineContent}" after the textblock is missing)`;
+  parser: {
+    hierarchyLayerSkip: (line, currentSectionBeginLine) =>
+      `EN In Zeile ${line} wird eine neue Sektion im Dokument begonnen die zwei ` +
+      `Ebenen tiefer liegt als die aktuelle, die in Zeile ` +
+      `${currentSectionBeginLine} begonnen wurde, es darf jedoch immer nur ` +
+      `eine Untersektion begonnnen werden die maximal eine Ebene tiefer liegt.`,
+    invalidLine: line => `EN Die Zeile ${line} folgt keinem erlaubten Muster.`,
+    unexpectedValue: line =>
+      `EN Die Zeile ${line} enthält einen Wert, ohne dass in einer der Zeilen  ` +
+      `davor ein dazugehöriger Schlüssel angegeben wurde.`,
+    unterminatedMultilineValue: beginLine =>
+      `Der mehrzeilige Textblock der in Zeile ${beginLine} beginnt wird ` +
+      `bis zum Ende des Dokuments nicht beendet. (Eine abschliessende ` +
+      `Zeile ident zu Zeile ${beginLine} nach dem Textblock fehlt)`
   },
   validation: {
-    missingKey: key => {
-      return `Missing key "${key}" - If the key was provided look out for ` +
-             `potential typos and also observe correct case in your spelling.`;
-    },
-    missingValue: key => {
-      return `There needs to be a value provided for key "${key}".`;
-    }
+    excessKey: key => `Das Feld "${key}" ist nicht vorgesehen, handelt es sich eventuell um einen Tippfehler?`,
+    expectedSectionGotValue: key => `Das Feld "${key}" enthält einen Wert, muss aber eine Sektion enthalten.`,
+    expectedSectionGotList: key => `Das Feld "${key}" enthält eine Liste, muss aber eine Sektion enthalten.`,
+    expectedSectionsGotValue: key => `Die Liste "${key}" darf nur Sektionen enthalten, enhält aber einen einfachen Wert.`,
+    expectedValueGotValues: key => `Das Feld "${key}" enthält eine Liste, muss aber einen einzelnen Wert enthalten.`,
+    expectedValueGotSection: key => `Das Feld "${key}" enthält eine Sektion, muss aber einen einzelnen Wert enthalten.`,
+    expectedValuesGotSection: key => `Die Liste "${key}" darf nur einfache Werte enthalten, enhält aber eine Sektion.`,
+    genericError: key => `Es besteht ein Problem mit dem Feld "${key}".`,
+    missingKey: key =>
+      `Fehlendes Feld "${key}" - Falls das Feld angegeben wurde eventuell ` +
+      `nach Tippfehlern Ausschau halten und auch die Gross/Kleinschreibung beachten.`,
+    missingValue: key => `Das Feld "${key}" muss ausgefüllt sein.`
   }
 };

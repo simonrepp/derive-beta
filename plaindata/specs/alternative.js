@@ -3,18 +3,18 @@ const assert = require('assert').strict;
 const { parse } = require('../plaindata.js');
 
 const sample = `
--- key1
+:: key1
 - value
--- list1
+:: list1
 - value
 - value
-- value
-
--- key2
-
 - value
 
--- list2
+:: key2
+
+- value
+
+:: list2
 
 - value
 
@@ -24,13 +24,13 @@ const sample = `
 `;
 
 const expected = {
-  'key1': 'value',
+  'key1': ['value'],
   'list1': [
     'value',
     'value',
     'value'
   ],
-  'key2': 'value',
+  'key2': ['value'],
   'list2': [
     'value',
     'value',
@@ -40,5 +40,5 @@ const expected = {
 
 module.exports = () => {
   const result = parse(sample);
-  assert.deepStrictEqual(result, expected);
+  assert.deepStrictEqual(result.raw(), expected);
 };

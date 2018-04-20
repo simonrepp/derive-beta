@@ -1,16 +1,70 @@
 # `data/plain`
 
-> plaindata is the new plaintext
+> or just plaindata
 
-File extension brainstorming:
+## File extension proposals
+
 - `.plain`
-- Alternative `.pd` taken by PD (open source media framework) ?
-- `.dt` as in (plain) data, analog to `.txt` as in (plain) text
+- `.dt` meaning data, analog to `.txt` meaning text
+
+Rejected proposals appendix
+
+- `.pd` - Already taken by *Pure Data* (open source media framework)
+
+## Design principles
 
 > the whole idea with ignoring whitespace at the begin, end, between different connected lines and between relevant tokens is:
 > when you write on paper you don't care if something is "a little to the right, left, further down or whatever"
 > as long as "words" or whatever you write on paper are clearly separated and graspable by their intent,
-> everything is fine! So this is how plain data should behave as well because everything else is programmerthink
+> everything is fine! So this is how plaindata should behave as well because this caters to all audiences
+
+## Baseline profile (for all audiences)
+
+```plain
+> Comment
+
+# Section
+## Section
+### Section
+
+Key: Value
+
+Key:
+- Value
+- Value
+
+-- Key
+Value
+-- Key
+
+```
+
+## Extended profile (for technical audiences)
+
+```plain
+Key:
+Attribute Key = Attribute Value
+More Key = More Value
+
+:: Any Key
+- Value
+
+:: Any Key
+- Value
+- Value
+
+:: Any Key
+Attribute Key = Attribute Value
+Another Key = Another Value
+
+> These "null" keys/values take on their visual appearance as their keys
+
+--
+==
+##
+::
+
+```
 
 ```js
 const plaindata = require('plaindata');
@@ -61,13 +115,13 @@ dealt with behind the scenes, I'll gladly explain.
 1. Empty keys and values are ignored
 
   ```plain
-  --- Shopping list
-  --- Shopping list
-  Shopping list:
-  Shopping list:
-  -
-  -
   -- Shopping list
+  -- Shopping list
+  Shopping list:
+  Shopping list:
+  -
+  -
+  :: Shopping list
   -
   ```
   ```js
@@ -123,7 +177,7 @@ dealt with behind the scenes, I'll gladly explain.
   ```plain
   Shopping List:
   Shopping List:
-  -- Shopping List
+  :: Shopping List
   ```
   ```js
   document.sequential()

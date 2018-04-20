@@ -1,0 +1,36 @@
+> {
+>   foo: [ [1, 2], [3, 4], [5, 6]]
+> }
+
+foo:
+- 1, 2
+- 3, 4
+- 5, 6
+
+# foo
+
+foo:
+- 1
+- 2
+
+# foo
+
+foo:
+- 3
+- 4
+
+# foo
+
+foo:
+- 5
+- 6
+
+> # Fanny
+> href: /here/goes.jpg
+> label: nothing really!
+> #
+> Fanny: Depth 0
+> 
+> Content: Oh yeah
+> --
+> Contents: Oh yes!

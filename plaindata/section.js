@@ -77,7 +77,7 @@ class PlainSection {
     }
   }
 
-  // TODO: This not used yet, probably needs better usecase/specification
+  // TODO: This not used yet, probably needs better usecase/specification ("mixed" ?)
   list(key, options = { keyRequired: true }) {
     const values = this.valuesAssociative[key];
 
@@ -85,7 +85,8 @@ class PlainSection {
       if(options.keyRequired) {
         throw new PlainDataError(
           this.context.messages.validation.missingKey(key),
-          snippet(this.context.lines, 0)
+          snippet(this.context.lines, this.range.beginLine, this.range.endLine),
+          [this.range]
         );
       } else {
         return [];
@@ -95,6 +96,26 @@ class PlainSection {
     return values;
   }
 
+  raw() {
+    const exported = {};
+
+    for(let key of Object.keys(this.valuesAssociative)) {
+      const values = this.valuesAssociative[key];
+
+      exported[key] = values.map(value => {
+        if(value instanceof PlainSection) {
+          return value.raw();
+        }
+
+        if(value instanceof PlainValue) {
+          return value.get();
+        }
+      });
+    }
+
+    return exported;
+  }
+
   section(key, options = { keyRequired: true }) {
     const values = this.valuesAssociative[key];
 
@@ -102,7 +123,8 @@ class PlainSection {
       if(options.keyRequired) {
         throw new PlainDataError(
           this.context.messages.validation.missingKey(key),
-          snippet(this.context.lines, 0)
+          snippet(this.context.lines, this.range.beginLine, this.range.endLine),
+          [this.range]
         );
       } else {
         return {};
@@ -145,7 +167,8 @@ class PlainSection {
       if(options.keyRequired) {
         throw new PlainDataError(
           this.context.messages.validation.missingKey(key),
-          snippet(this.context.lines, 0)
+          snippet(this.context.lines, this.range.beginLine, this.range.endLine),
+          [this.range]
         );
       } else {
         return [];
@@ -168,6 +191,8 @@ class PlainSection {
   }
 
   sequential() {
+    this.valuesSequential.forEach(value => value.touch());
+
     return this.valuesSequential;
   }
 
@@ -193,7 +218,8 @@ class PlainSection {
       if(options.keyRequired) {
         throw new PlainDataError(
           this.context.messages.validation.missingKey(key),
-          snippet(this.context.lines, 0)
+          snippet(this.context.lines, this.range.beginLine, this.range.endLine),
+          [this.range]
         );
       }
 
@@ -277,10 +303,15 @@ class PlainSection {
     }
   }
 
-  // TODO: Quantity validation: atLeast / exactly / atMost
-  // TODO: Extend with valueRequired option ?  process option ?
   values(key, ...optional) {
-    let options = { keyRequired: true, includeEmpty: false, withTrace: false };
+    let options = {
+      exactCount: null,
+      includeEmpty: false,
+      keyRequired: true,
+      maxCount: null,
+      minCount: null,
+      withTrace: false
+    };
     let process = null;
 
     for(let argument of optional) {
@@ -297,7 +328,8 @@ class PlainSection {
       if(options.keyRequired) {
         throw new PlainDataError(
           this.context.messages.validation.missingKey(key),
-          snippet(this.context.lines, 0)
+          snippet(this.context.lines, this.range.beginLine, this.range.endLine),
+          [this.range]
         );
       }
 
@@ -343,6 +375,30 @@ class PlainSection {
         }
       }
     });
+
+    if(options.exactCount !== null && results.length !== options.exactCount) {
+      throw new PlainDataError(
+        this.context.messages.validation.exactCountNotMet(key, results.length, options.exactCount),
+        snippet(this.context.lines, values[0].range.beginLine, values[values.length - 1].range.endLine),
+        values.map(value => value.range)
+      );
+    }
+
+    if(options.minCount !== null && results.length < options.minCount) {
+      throw new PlainDataError(
+        this.context.messages.validation.minCountNotMet(key, results.length, options.minCount),
+        snippet(this.context.lines, values[0].range.beginLine, values[values.length - 1].range.endLine),
+        values.map(value => value.range)
+      );
+    }
+
+    if(options.maxCount !== null && results.length > options.maxCount) {
+      throw new PlainDataError(
+        this.context.messages.validation.maxCountNotMet(key, results.length, options.maxCount),
+        snippet(this.context.lines, values[0].range.beginLine, values[values.length - 1].range.endLine),
+        values.map(value => value.range)
+      );
+    }
 
     return results;
   }

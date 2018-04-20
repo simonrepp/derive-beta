@@ -12,15 +12,17 @@ try {
   result = parse(input, { locale: 'de' });
 } catch(err) {
   if(err instanceof PlainDataParseError) {
-    console.log(err, 'yea');
+    console.log(err.message, err.snippet, err.ranges);
   } else {
     throw err;
   }
 }
 
-const value = result.value('Beschreibung', { process: (opt) => console.log(opt) });
+const raw = result.raw();
+console.log(raw);
 
-console.log(result);
+const specific = result.section('Funky').value('Business');
+console.log(specific);
 
 // try {
 //   const gotten = result.getList('Titel');

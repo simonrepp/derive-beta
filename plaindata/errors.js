@@ -16,7 +16,6 @@ class PlainDataParseError extends Error {
     super(message);
 
     this.snippet = snippet;
-
     this.ranges = [range];
 
     Error.captureStackTrace(this, PlainDataParseError);

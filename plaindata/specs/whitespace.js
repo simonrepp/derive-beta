@@ -20,24 +20,24 @@ const sample =
 ;
 
 const expected = {
-  'key1': 'value:value:value: value:value:value: value',
-  'key2': 'value :value :value: value:value:value: value',
-  'key3': 'value  :value  :value    : value: value: value  : value',
-  'a': 'a',
-  'b': 'b',
-  'c': 'c',
-  'd': 'd',
-  'e': null,
-  'f': null,
+  'key1': ['value:value:value: value:value:value: value'],
+  'key2': ['value :value :value: value:value:value: value'],
+  'key3': ['value  :value  :value    : value: value: value  : value'],
+  'a': ['a'],
+  'b': ['b'],
+  'c': ['c'],
+  'd': ['d'],
+  'e': [null],
+  'f': [null],
   'list1': [
     null,
     null,
     null
   ],
-  'list2': 'list:list:list:listlist:list::list'
+  'list2': ['list:list:list:listlist:list::list']
 };
 
 module.exports = () => {
   const result = parse(sample);
-  assert.deepStrictEqual(result, expected);
+  assert.deepStrictEqual(result.raw(), expected);
 };

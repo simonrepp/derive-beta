@@ -4,15 +4,20 @@ fileTypes: [
   'plain'
 ]
 
+# TODO: Mildly colored background for --- Text blocks to offset them visually
+#       (Maybe also for sections, putting in more and more layers of distinction the deeper we go -
+#        could also reverse over to chaging the text color to adapt at some point!)
+#       Also goes for the section key line '# foo'
+
 # TODO: expand key: and -- alternative key matching onto next key line,
 #       so we can in between have correct invalid detection and highlighting
 
 patterns: [
   {
-    # --- multiline value
+    # -- multiline value
     # ...
-    # --- multiline value
-    'begin': '^\\s*(-{3,})\\s*(.+?)\\s*$'
+    # -- multiline value
+    'begin': '^\\s*(-{2,})\\s*(.+?)\\s*$'
     'beginCaptures':
       '1': 'name': 'punctuation.definition.block.multiline-value.begin.plain'
       '2': 'name': 'variable.other.key.plain'
@@ -36,11 +41,19 @@ patterns: [
       '1': 'name': 'punctuation.definition.comment.plain'
   }
   {
-    # -- alternative key
-    'match': '^\\s*(--)(?!-)\\s*(\\S.*?)\\s*$'
+    # :: any key
+    'match': '^\\s*(::)(?!:)\\s*(\\S.*?)\\s*$'
     'captures':
       '1': 'name': 'punctuation.definition.key.plain'
       '2': 'name': 'variable.other.key.plain'
+  }
+  {
+    # attribute: value
+    'match': '^\\s*(?![>\\-#=:])([^=:]+?)\\s*(=)\\s*(\\S.*?)\\s*$'
+    'captures':
+      '1': 'name': 'variable.other.key.attribute.plain'
+      '2': 'name': 'punctuation.separator.key-value.attribute-value.plain'
+      '3': 'name': 'markup.raw.inline.value.plain'
   }
   {
     # - value
@@ -72,7 +85,7 @@ patterns: [
   }
   {
     # key: value
-    'match': '^\\s*(?![>\\-#])([^:]+?)\\s*(:)\\s*(\\S.*?)\\s*$'
+    'match': '^\\s*(?![>\\-#=:])([^=:]+?)\\s*(:)\\s*(\\S.*?)\\s*$'
     'captures':
       '1': 'name': 'variable.other.key.plain'
       '2': 'name': 'punctuation.separator.key-value.plain'
@@ -80,7 +93,7 @@ patterns: [
   }
   {
     # key:
-    'match': '^\\s*(?![>\\-#])([^:]+?)\\s*(:)\\s*$'
+    'match': '^\\s*(?![>\\-#=:])([^=:]+?)\\s*(:)\\s*$'
     'captures':
       '1': 'name': 'variable.other.key.plain'
       '2': 'name': 'punctuation.separator.key-value.plain'

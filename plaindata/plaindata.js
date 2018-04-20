@@ -1,6 +1,9 @@
 // TODO: Clarify internally to devs as well as externally to users, whether line and beginLine in PlainDataParseError metadata refers to array index (0+ -indexed) or human line reference (1+ -indexed)
 //       And possibly have specs that ensure this is actually correctly reflected in the parser implementation for all possible errors
 
+// TODO: Consider (internally) abstracting the parser into a class
+//       Especially methods for handling the interesting bits, too long to read now
+
 const { PlainDataParseError } = require('./errors.js');
 const PlainSection = require('./section.js');
 const PlainValue = require('./value.js');
@@ -9,14 +12,17 @@ const snippet = require('./snippet.js');
 const SUPPORTED_LOCALES = ['de', 'en'];
 
 const STATE_RESET = null;
-const STATE_READ_MULTILINE_VALUE = 1;
-const STATE_READ_VALUES = 2;
+const STATE_READ_AFTER_KEY = 1;
+const STATE_READ_ATTRIBUTES = 2;
+const STATE_READ_MULTILINE_VALUE = 3;
+const STATE_READ_VALUES = 4;
 
-const ALTERNATIVE_KEY = /^\s*--(?!-)\s*(\S.*?)\s*$/;
+const ALTERNATIVE_KEY = /^\s*::(?!:)\s*(\S.*?)\s*$/;
+const ATTRIBUTE = /^\s*(?![>\-#])([^=:]+?)\s*=\s*(\S.*?)\s*$/;
 const COMMENT_OR_EMPTY = /^\s*(>|$)/;
-const KEY = /^\s*([^:]+?)\s*:\s*$/;
-const KEY_VALUE = /^\s*(?![>\-#])([^:]+?)\s*:\s*(\S.*?)\s*$/;
-const MULTILINE_VALUE_BEGIN = /^\s*(-{3,})\s*(\S.*?)\s*$/;
+const KEY = /^\s*(?![>\-#])([^=:]+?)\s*:\s*$/;
+const KEY_VALUE = /^\s*(?![>\-#])([^=:]+?)\s*:\s*(\S.*?)\s*$/;
+const MULTILINE_VALUE_BEGIN = /^\s*(-{2,})\s*(\S.*?)\s*$/;
 const SECTION = /^\s*(#+)\s*(\S.*?)\s*$/;
 const VALUE = /^\s*-(?!-)\s*(.+?)?\s*$/;
 
@@ -25,7 +31,7 @@ const parse = (input, options = { locale: 'en' }) => {
     throw new RangeError(
       'The provided message locale requested through the parser options is ' +
       'not supported. Translation contributions are very welcome and an easy ' +
-      'thing to do - less than 10 messages need to be translated!'
+      'thing to do - only a few easy messages need to be translated!'
     );
   }
 
@@ -117,46 +123,27 @@ const parse = (input, options = { locale: 'en' }) => {
       continue;
     }
 
-    if(lineContent.match(COMMENT_OR_EMPTY)) {
-      // Comment or empty line
+    if(lineContent.match(COMMENT_OR_EMPTY)) {STATE_READ_VALUES
       // console.log('[comment or empty line]', lineContent);
       continue;
     }
 
-    if(state === STATE_READ_VALUES) {
+    if(state === STATE_READ_AFTER_KEY ||
+       state === STATE_READ_ATTRIBUTES ||
+       state === STATE_READ_VALUES) {
+
       if((match = VALUE.exec(lineContent))) {
 
-        // console.log('[value]', lineContent);
-        const value = match[1] || null;
-        const valueColumn = value ? lineContent.lastIndexOf(value) :
-                                    Math.min(lineContent.indexOf('-') + 1,
-                                             lineContent.length);
+        if(state === STATE_READ_AFTER_KEY) {
+          state = STATE_READ_VALUES;
+        }
 
-        const newValue = new PlainValue({
-          context: parserContext,
-          key: readBuffer.key,
-          keyRange: readBuffer.keyRange,
-          range: {
-            beginColumn: valueColumn,
-            beginLine: lineNumber,
-            endColumn: value ? valueColumn + value.length : valueColumn,
-            endLine: lineNumber
-          },
-          value: value
-        });
-
-        lookupIndex[lineNumber] = newValue;
-        currentSection.add(newValue);
-
-        readBuffer.empty = false;
-
-        continue;
-
-      } else {
-
-        if(readBuffer.empty) {
-          const keyBeginLine = lines[readBuffer.keyRange.beginLine - 1];
-          const valueColumn = Math.min(keyBeginLine.length, keyBeginLine.replace(/\s*$/, '').length + 1);
+        if(state === STATE_READ_VALUES) {
+          // console.log('[value]', lineContent);
+          const value = match[1] || null;
+          const valueColumn = value ? lineContent.lastIndexOf(value) :
+                                      Math.min(lineContent.indexOf('-') + 1,
+                                               lineContent.length);
 
           const newValue = new PlainValue({
             context: parserContext,
@@ -164,19 +151,132 @@ const parse = (input, options = { locale: 'en' }) => {
             keyRange: readBuffer.keyRange,
             range: {
               beginColumn: valueColumn,
-              beginLine: readBuffer.keyRange.beginLine,
-              endColumn: valueColumn,
-              endLine: readBuffer.keyRange.beginLine
+              beginLine: lineNumber,
+              endColumn: value ? valueColumn + value.length : valueColumn,
+              endLine: lineNumber
             },
-            value: null
+            value: value
           });
 
-          lookupIndex[readBuffer.keyRange.beginLine] = newValue;
+          lookupIndex[lineNumber] = newValue;
           currentSection.add(newValue);
+
+          continue;
         }
 
-        state = STATE_RESET;
+        if(state === STATE_READ_ATTRIBUTES) {
+          const errorRange = {
+            beginColumn: 0,
+            beginLine: lineNumber,
+            endColumn: lineContent.length,
+            endLine: lineNumber
+          };
+
+          throw new PlainDataParseError(
+            messages.attributesAndValuesMixed(readBuffer.keyRange.beginLine, readBuffer.key),
+            snippet(lines, currentSection.keyRange.beginLine, lineNumber),
+            errorRange
+          );
+        }
       }
+
+      if((match = ATTRIBUTE.exec(lineContent))) {
+        // console.log('[attribute]', lineContent);
+
+        if(state === STATE_READ_AFTER_KEY) {
+          const newSection = new PlainSection({
+            context: parserContext,
+            depth: currentSection.depth + 1,
+            key: readBuffer.key,
+            keyRange: readBuffer.keyRange,
+            parent: currentSection,
+            range: {
+              beginColumn: readBuffer.keyRange.endColumn,
+              beginLine: readBuffer.keyRange.beginLine,
+              endColumn: readBuffer.keyRange.endColumn,
+              endLine: readBuffer.keyRange.beginLine
+            }
+          });
+
+          lookupIndex[readBuffer.keyRange.beginLine] = newSection; // TODO: Clean up/expand lookupIndex implementation and concept (e.g. better ranges for null values)
+          currentSection.add(newSection);
+          currentSection = newSection;
+
+          state = STATE_READ_ATTRIBUTES;
+        }
+
+        if(state === STATE_READ_ATTRIBUTES) {
+          const key = match[1];
+          const keyColumn = lineContent.indexOf(key);
+          const value = match[2];
+          const valueColumn = lineContent.lastIndexOf(value);
+
+          const newValue = new PlainValue({
+            context: parserContext,
+            key: key,
+            keyRange: {
+              beginColumn: keyColumn,
+              beginLine: lineNumber,
+              endColumn: keyColumn + key.length,
+              endLine: lineNumber
+            },
+            range: {
+              beginColumn: valueColumn,
+              beginLine: lineNumber,
+              endColumn: valueColumn + value.length,
+              endLine: lineNumber
+            },
+            value: value
+          });
+
+          lookupIndex[lineNumber] = newValue;
+          currentSection.add(newValue);
+
+          continue;
+        }
+
+        if(state === STATE_READ_VALUES) {
+          const errorRange = {
+            beginColumn: 0,
+            beginLine: lineNumber,
+            endColumn: lineContent.length,
+            endLine: lineNumber
+          };
+
+          throw new PlainDataParseError(
+            messages.attributesAndValuesMixed(readBuffer.keyRange.beginLine, readBuffer.key),
+            snippet(lines, currentSection.keyRange.beginLine, lineNumber),
+            errorRange
+          );
+        }
+      }
+
+      if(state === STATE_READ_AFTER_KEY) {
+        const keyBeginLine = lines[readBuffer.keyRange.beginLine - 1];
+        const valueColumn = Math.min(keyBeginLine.length, keyBeginLine.replace(/\s*$/, '').length + 1);
+
+        const newValue = new PlainValue({
+          context: parserContext,
+          key: readBuffer.key,
+          keyRange: readBuffer.keyRange,
+          range: {
+            beginColumn: valueColumn,
+            beginLine: readBuffer.keyRange.beginLine,
+            endColumn: valueColumn,
+            endLine: readBuffer.keyRange.beginLine
+          },
+          value: null
+        });
+
+        lookupIndex[readBuffer.keyRange.beginLine] = newValue;
+        currentSection.add(newValue);
+      }
+
+      if(state === STATE_READ_ATTRIBUTES) {
+        currentSection = currentSection.parent;
+      }
+
+      state = STATE_RESET;
     }
 
     if((match = KEY_VALUE.exec(lineContent))) {
@@ -220,7 +320,6 @@ const parse = (input, options = { locale: 'en' }) => {
       const column = lineContent.indexOf(key);
 
       readBuffer = {
-        empty: true,
         key: key,
         keyRange: {
           beginColumn: column,
@@ -230,7 +329,7 @@ const parse = (input, options = { locale: 'en' }) => {
         }
       };
 
-      state = STATE_READ_VALUES;
+      state = STATE_READ_AFTER_KEY;
 
       continue;
     }
@@ -263,7 +362,6 @@ const parse = (input, options = { locale: 'en' }) => {
       const column = lineContent.lastIndexOf(key);
 
       readBuffer = {
-        empty: true,
         key: key,
         keyRange: {
           beginColumn: column,
@@ -273,13 +371,13 @@ const parse = (input, options = { locale: 'en' }) => {
         }
       };
 
-      state = STATE_READ_VALUES;
+      state = STATE_READ_AFTER_KEY;
 
       continue;
     }
 
     if((match = SECTION.exec(lineContent))) {
-      // console.log('[subdocument]', lineContent);
+      // console.log('[section]', lineContent);
 
       const targetDepth = match[1].length;
       const key = match[2];
@@ -359,26 +457,24 @@ const parse = (input, options = { locale: 'en' }) => {
     );
   }
 
-  if(state === STATE_READ_VALUES) {
-    // console.log('[end of document while reading values]');
+  if(state === STATE_READ_AFTER_KEY) {
+    // console.log('[end of document while reading after key]');
 
-    if(readBuffer.empty) {
-      const newValue = new PlainValue({
-        context: parserContext,
-        key: readBuffer.key,
-        keyRange: readBuffer.keyRange,
-        range: {
-          beginColumn: lines[readBuffer.keyRange.beginLine - 1].length,
-          beginLine: readBuffer.keyRange.beginLine,
-          endColumn: lines[readBuffer.keyRange.beginLine - 1].length,
-          endLine: readBuffer.keyRange.beginLine
-        },
-        value: null
-      });
+    const newValue = new PlainValue({
+      context: parserContext,
+      key: readBuffer.key,
+      keyRange: readBuffer.keyRange,
+      range: {
+        beginColumn: lines[readBuffer.keyRange.beginLine - 1].length,
+        beginLine: readBuffer.keyRange.beginLine,
+        endColumn: lines[readBuffer.keyRange.beginLine - 1].length,
+        endLine: readBuffer.keyRange.beginLine
+      },
+      value: null
+    });
 
-      lookupIndex[readBuffer.keyRange.beginLine] = newValue;
-      currentSection.add(newValue);
-    }
+    lookupIndex[readBuffer.keyRange.beginLine] = newValue;
+    currentSection.add(newValue);
   }
 
   if(state === STATE_READ_MULTILINE_VALUE) {

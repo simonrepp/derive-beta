@@ -13,14 +13,14 @@ leer:
 -
 
 nichts:
--- nada
+:: nada
 
 # nothing
 ## none
 void:
 emptyness:
---- leere
---- leere
+-- leere
+-- leere
 
 # ningun
 absence:
@@ -30,38 +30,38 @@ absence:
 -
 
 
--- non
+:: non
 end:
 `;
 
 const expected = {
-  empty: null,
+  empty: [null],
   leer: [
     null,
     null,
     null
   ],
-  nichts: null,
-  nada: null,
-  nothing: {
-    none: {
-      void: null,
-      emptyness: null,
-      leere: null
-    }
-  },
-  ningun: {
+  nothing: [{
+    none: [{
+      void: [null],
+      emptyness: [null],
+      leere: [null]
+    }]
+  }],
+  nichts: [null],
+  nada: [null],
+  ningun: [{
     absence: [
       null,
       null,
       null
     ],
-    non: null,
-    end: null
-  }
+    non: [null],
+    end: [null]
+  }]
 };
 
 module.exports = () => {
   const result = parse(sample);
-  assert.deepStrictEqual(result, expected);
+  assert.deepStrictEqual(result.raw(), expected);
 };
