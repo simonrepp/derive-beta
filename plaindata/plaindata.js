@@ -5,9 +5,9 @@
 //       Especially methods for handling the interesting bits, too long to read now
 
 const { PlainDataParseError } = require('./errors.js');
-const PlainSection = require('./section.js');
-const PlainValue = require('./value.js');
-const snippet = require('./snippet.js');
+const PlainDataSection = require('./section.js');
+const PlainDataValue = require('./value.js');
+const PlainDataLinePrinter = require('./line-printer.js');
 
 const SUPPORTED_LOCALES = ['de', 'en'];
 
@@ -38,7 +38,10 @@ const parse = (input, options = { locale: 'en' }) => {
   const messageDictionary = require(`./messages/${options.locale}.js`);
   const messages = messageDictionary.parser;
 
+
   const lines = input.split(/\r?\n/);
+
+  const printer = new PlainDataLinePrinter(lines, messageDictionary);
 
   let state = STATE_RESET;
   let readBuffer;
@@ -51,7 +54,7 @@ const parse = (input, options = { locale: 'en' }) => {
 
   const lookupIndex = {};
 
-  const document = new PlainSection({
+  const document = new PlainDataSection({
     context: parserContext,
     depth: 0,
     key: null,
@@ -99,7 +102,7 @@ const parse = (input, options = { locale: 'en' }) => {
           };
         }
 
-        const newValue = new PlainValue({
+        const newValue = new PlainDataValue({
           context: parserContext,
           key: readBuffer.key,
           keyRange: {
@@ -145,7 +148,7 @@ const parse = (input, options = { locale: 'en' }) => {
                                       Math.min(lineContent.indexOf('-') + 1,
                                                lineContent.length);
 
-          const newValue = new PlainValue({
+          const newValue = new PlainDataValue({
             context: parserContext,
             key: readBuffer.key,
             keyRange: readBuffer.keyRange,
@@ -174,7 +177,7 @@ const parse = (input, options = { locale: 'en' }) => {
 
           throw new PlainDataParseError(
             messages.attributesAndValuesMixed(readBuffer.keyRange.beginLine, readBuffer.key),
-            snippet(lines, currentSection.keyRange.beginLine, lineNumber),
+            printer.print(currentSection.keyRange.beginLine, lineNumber),
             errorRange
           );
         }
@@ -184,7 +187,7 @@ const parse = (input, options = { locale: 'en' }) => {
         // console.log('[attribute]', lineContent);
 
         if(state === STATE_READ_AFTER_KEY) {
-          const newSection = new PlainSection({
+          const newSection = new PlainDataSection({
             context: parserContext,
             depth: currentSection.depth + 1,
             key: readBuffer.key,
@@ -211,7 +214,7 @@ const parse = (input, options = { locale: 'en' }) => {
           const value = match[2];
           const valueColumn = lineContent.lastIndexOf(value);
 
-          const newValue = new PlainValue({
+          const newValue = new PlainDataValue({
             context: parserContext,
             key: key,
             keyRange: {
@@ -245,7 +248,7 @@ const parse = (input, options = { locale: 'en' }) => {
 
           throw new PlainDataParseError(
             messages.attributesAndValuesMixed(readBuffer.keyRange.beginLine, readBuffer.key),
-            snippet(lines, currentSection.keyRange.beginLine, lineNumber),
+            printer.print(currentSection.keyRange.beginLine, lineNumber),
             errorRange
           );
         }
@@ -255,7 +258,7 @@ const parse = (input, options = { locale: 'en' }) => {
         const keyBeginLine = lines[readBuffer.keyRange.beginLine - 1];
         const valueColumn = Math.min(keyBeginLine.length, keyBeginLine.replace(/\s*$/, '').length + 1);
 
-        const newValue = new PlainValue({
+        const newValue = new PlainDataValue({
           context: parserContext,
           key: readBuffer.key,
           keyRange: readBuffer.keyRange,
@@ -288,7 +291,7 @@ const parse = (input, options = { locale: 'en' }) => {
       const value = match[2];
       const valueColumn = lineContent.lastIndexOf(value);
 
-      const newValue = new PlainValue({
+      const newValue = new PlainDataValue({
         context: parserContext,
         key: key,
         keyRange: {
@@ -393,7 +396,7 @@ const parse = (input, options = { locale: 'en' }) => {
 
         throw new PlainDataParseError(
           messages.hierarchyLayerSkip(lineNumber, currentSection.keyRange.beginLine),
-          snippet(lines, currentSection.keyRange.beginLine, lineNumber),
+          printer.print(currentSection.keyRange.beginLine, lineNumber),
           errorRange
         );
       }
@@ -402,7 +405,7 @@ const parse = (input, options = { locale: 'en' }) => {
         currentSection = currentSection.parent;
       }
 
-      const newSection = new PlainSection({
+      const newSection = new PlainDataSection({
         context: parserContext,
         depth: currentSection.depth + 1,
         key: key,
@@ -438,7 +441,7 @@ const parse = (input, options = { locale: 'en' }) => {
 
       throw new PlainDataParseError(
         messages.unexpectedValue(lineNumber),
-        snippet(lines, lineNumber),
+        printer.print(lineNumber),
         errorRange
       );
     }
@@ -452,7 +455,7 @@ const parse = (input, options = { locale: 'en' }) => {
 
     throw new PlainDataParseError(
       messages.invalidLine(lineNumber),
-      snippet(lines, lineNumber),
+      printer.print(lineNumber),
       errorRange
     );
   }
@@ -460,7 +463,7 @@ const parse = (input, options = { locale: 'en' }) => {
   if(state === STATE_READ_AFTER_KEY) {
     // console.log('[end of document while reading after key]');
 
-    const newValue = new PlainValue({
+    const newValue = new PlainDataValue({
       context: parserContext,
       key: readBuffer.key,
       keyRange: readBuffer.keyRange,
@@ -487,7 +490,7 @@ const parse = (input, options = { locale: 'en' }) => {
 
     throw new PlainDataParseError(
       messages.unterminatedMultilineValue(readBuffer.keyRange.beginLine),
-      snippet(lines, errorRange.beginLine, errorRange.endLine),
+      printer.print(errorRange.beginLine, errorRange.endLine),
       errorRange
     );
   }

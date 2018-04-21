@@ -66,6 +66,15 @@ Another Key = Another Value
 
 ```
 
+## AST and wording considerations
+
+Sections
+  - Assignments / Key-value pairs
+  - Collections of attributes
+  - Collections of values / Lists
+
+## General introduction snippets
+
 ```js
 const plaindata = require('plaindata');
 
@@ -76,7 +85,7 @@ const greeting = document.value('Greeting');
 
 ```plain
 > Rules for comments: They start with > and contain whatever
-Rules for keys: The may not start with - # > and can not contain :
+Rules for keys: The may not start with - # > = : and can not contain :
 Rules for values: They can contain whatever
 
 Key: Value

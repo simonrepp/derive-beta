@@ -18,6 +18,10 @@ module.exports = {
       `einfache Werte als auch Attribute zugewiesen, er kann aber nur das ` +
       `eine oder das andere enhalten, nicht beides.`
   },
+  printer: {
+    content: 'Inhalt',
+    line: 'Zeile'
+  },
   validation: {
     exactCountNotMet: (key, actual, expected) => `Das Feld "${key}" enthält ${actual} Einträge, muss aber genau ${expected} Einträge enthalten.`,
     minCountNotMet: (key, actual, minimum) => `Das Feld "${key}" enthält ${actual} Einträge, muss aber mindestens ${minimum} Einträge enthalten.`,

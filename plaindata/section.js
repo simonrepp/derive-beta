@@ -1,14 +1,17 @@
 const { PlainDataError } = require('./errors.js');
-const PlainValue = require('./value.js');
-const snippet = require('./snippet.js');
+const PlainDataValue = require('./value.js');
+const PlainDataLinePrinter = require('./line-printer.js');
 
-class PlainSection {
+class PlainDataSection {
   constructor(section) {
     this.context = section.context;
     this.depth = section.depth;
     this.key = section.key;
     this.keyRange = section.keyRange;
     this.parent = section.parent;
+
+    this.printer = new PlainDataLinePrinter(this.context.lines, this.context.messages);
+
     this.range = section.range;
 
     if(section.lookupIndex) {
@@ -64,12 +67,12 @@ class PlainSection {
           if(!value.touched) {
             throw new PlainDataError(
               this.context.messages.validation.excessKey(value.key),
-              snippet(this.context.lines, value.keyRange.beginLine, value.keyRange.endLine),
+              this.printer.print(value.keyRange.beginLine, value.keyRange.endLine),
               [value.keyRange]
             );
           }
 
-          if(value instanceof PlainSection) {
+          if(value instanceof PlainDataSection) {
             value.assertAllTouched();
           }
         }
@@ -85,7 +88,7 @@ class PlainSection {
       if(options.keyRequired) {
         throw new PlainDataError(
           this.context.messages.validation.missingKey(key),
-          snippet(this.context.lines, this.range.beginLine, this.range.endLine),
+          this.printer.print(this.range.beginLine, this.range.endLine),
           [this.range]
         );
       } else {
@@ -103,11 +106,11 @@ class PlainSection {
       const values = this.valuesAssociative[key];
 
       exported[key] = values.map(value => {
-        if(value instanceof PlainSection) {
+        if(value instanceof PlainDataSection) {
           return value.raw();
         }
 
-        if(value instanceof PlainValue) {
+        if(value instanceof PlainDataValue) {
           return value.get();
         }
       });
@@ -123,7 +126,7 @@ class PlainSection {
       if(options.keyRequired) {
         throw new PlainDataError(
           this.context.messages.validation.missingKey(key),
-          snippet(this.context.lines, this.range.beginLine, this.range.endLine),
+          this.printer.print(this.range.beginLine, this.range.endLine),
           [this.range]
         );
       } else {
@@ -136,12 +139,25 @@ class PlainSection {
 
       value.touch();
 
-      if(value instanceof PlainSection) {
+      if(value instanceof PlainDataSection) {
         return value;
       } else {
+
+        // TODO: Now that we have "inline" sections ...
+        //       Foo:
+        //       Bar = Baz
+        //       there is no telling if an empty "Foo" was really meant as:
+        //       Foo:
+        //       - Bar
+        //       thus empty can be either value(s) or section(s) and there
+        //       cannot be an error that an empty "Foo:" is not a section,
+        //       because it just might be an inline section that is empy.
+        //
+        // TODO: This might tie in ideally with AST restructuring (also tackling value.value inconsistencies and missing parent pointer for values, etc.)
+
         throw new PlainDataError(
           this.context.messages.validation.expectedSectionGotValue(key),
-          snippet(this.context.lines, value.range.beginLine, value.range.endLine),
+          this.printer.print(value.range.beginLine, value.range.endLine),
           [value.keyRange, value.range]
         );
       }
@@ -155,7 +171,7 @@ class PlainSection {
 
     throw new PlainDataError(
       this.context.messages.validation.expectedSectionGotList(key),
-      snippet(this.context.lines, values[0].range.beginLine, values[values.length - 1].range.endLine),
+      this.printer.print(values[0].range.beginLine, values[values.length - 1].range.endLine),
       [...ranges]
     );
   }
@@ -167,7 +183,7 @@ class PlainSection {
       if(options.keyRequired) {
         throw new PlainDataError(
           this.context.messages.validation.missingKey(key),
-          snippet(this.context.lines, this.range.beginLine, this.range.endLine),
+          this.printer.print(this.range.beginLine, this.range.endLine),
           [this.range]
         );
       } else {
@@ -178,12 +194,12 @@ class PlainSection {
     return values.map(value => {
       value.touch();
 
-      if(value instanceof PlainSection) {
+      if(value instanceof PlainDataSection) {
         return value;
       } else {
         throw new PlainDataError(
           this.context.messages.validation.expectedSectionsGotValue(key),
-          snippet(this.context.lines, value.range.beginLine, value.range.endLine),
+          this.printer.print(value.range.beginLine, value.range.endLine),
           [value.range]
         );
       }
@@ -218,7 +234,7 @@ class PlainSection {
       if(options.keyRequired) {
         throw new PlainDataError(
           this.context.messages.validation.missingKey(key),
-          snippet(this.context.lines, this.range.beginLine, this.range.endLine),
+          this.printer.print(this.range.beginLine, this.range.endLine),
           [this.range]
         );
       }
@@ -243,10 +259,10 @@ class PlainSection {
     if(nonEmptyValues.length === 1) {
       const value = nonEmptyValues[0];
 
-      if(!(value instanceof PlainValue)) {
+      if(!(value instanceof PlainDataValue)) {
         throw new PlainDataError(
           this.context.messages.validation.expectedValueGotSection(key),
-          snippet(this.context.lines, value.range.beginLine, value.range.endLine),
+          this.printer.print(value.range.beginLine, value.range.endLine),
           [value.keyRange]
         );
       }
@@ -263,7 +279,7 @@ class PlainSection {
         } catch(message) {
           throw new PlainDataError(
             message,
-            snippet(this.context.lines, value.range.beginLine, value.range.endLine), // TODO: Consider split between .parser and .messages ?
+            this.printer.print(value.range.beginLine, value.range.endLine), // TODO: Consider split between .parser and .messages ?
             [value.range]
           );
         }
@@ -282,7 +298,7 @@ class PlainSection {
       // TODO: Esp. for this usecase, consider snippet() accepting multiple line ranges too
       throw new PlainDataError(
         this.context.messages.validation.expectedValueGotValues(key),
-        snippet(this.context.lines, nonEmptyValues[0].range.beginLine, nonEmptyValues[nonEmptyValues.length - 1].range.endLine),
+        this.printer.print(nonEmptyValues[0].range.beginLine, nonEmptyValues[nonEmptyValues.length - 1].range.endLine),
         nonEmptyValues.map(value => value.range)
       );
     }
@@ -291,7 +307,7 @@ class PlainSection {
       // TODO: Also for this usecase, consider snippet() accepting multiple line ranges too
       throw new PlainDataError(
         this.context.messages.validation.missingValue(key),
-        snippet(this.context.lines, values[0].range.beginLine, values[values.length - 1].range.endLine),
+        this.printer.print(values[0].range.beginLine, values[values.length - 1].range.endLine),
         values.map(value => value.range)
       );
     }
@@ -328,7 +344,7 @@ class PlainSection {
       if(options.keyRequired) {
         throw new PlainDataError(
           this.context.messages.validation.missingKey(key),
-          snippet(this.context.lines, this.range.beginLine, this.range.endLine),
+          this.printer.print(this.range.beginLine, this.range.endLine),
           [this.range]
         );
       }
@@ -341,10 +357,10 @@ class PlainSection {
     values.forEach(value => {
       value.touch();
 
-      if(!(value instanceof PlainValue)) {
+      if(!(value instanceof PlainDataValue)) {
         throw new PlainDataError(
           this.context.messages.validation.expectedValuesGotSection(key),
-          snippet(this.context.lines, value.range.beginLine, value.range.endLine),
+          this.printer.print(value.range.beginLine, value.range.endLine),
           [value.keyRange]
         );
       }
@@ -362,7 +378,7 @@ class PlainSection {
           } catch(message) {
             throw new PlainDataError(
               message,
-              snippet(this.context.lines, value.range.beginLine, value.range.endLine), // TODO: Consider split between .parser and .messages ?
+              this.printer.print(value.range.beginLine, value.range.endLine), // TODO: Consider split between .parser and .messages ?
               [value.range]
             );
           }
@@ -379,7 +395,7 @@ class PlainSection {
     if(options.exactCount !== null && results.length !== options.exactCount) {
       throw new PlainDataError(
         this.context.messages.validation.exactCountNotMet(key, results.length, options.exactCount),
-        snippet(this.context.lines, values[0].range.beginLine, values[values.length - 1].range.endLine),
+        this.printer.print(values[0].range.beginLine, values[values.length - 1].range.endLine),
         values.map(value => value.range)
       );
     }
@@ -387,7 +403,7 @@ class PlainSection {
     if(options.minCount !== null && results.length < options.minCount) {
       throw new PlainDataError(
         this.context.messages.validation.minCountNotMet(key, results.length, options.minCount),
-        snippet(this.context.lines, values[0].range.beginLine, values[values.length - 1].range.endLine),
+        this.printer.print(values[0].range.beginLine, values[values.length - 1].range.endLine),
         values.map(value => value.range)
       );
     }
@@ -395,7 +411,7 @@ class PlainSection {
     if(options.maxCount !== null && results.length > options.maxCount) {
       throw new PlainDataError(
         this.context.messages.validation.maxCountNotMet(key, results.length, options.maxCount),
-        snippet(this.context.lines, values[0].range.beginLine, values[values.length - 1].range.endLine),
+        this.printer.print(values[0].range.beginLine, values[values.length - 1].range.endLine),
         values.map(value => value.range)
       );
     }
@@ -404,4 +420,4 @@ class PlainSection {
   }
 }
 
-module.exports = PlainSection;
+module.exports = PlainDataSection;

@@ -1,7 +1,7 @@
 const { PlainDataError } = require('./errors.js');
-const snippet = require('./snippet.js');
+const PlainDataLinePrinter = require('./line-printer.js');
 
-class PlainValue {
+class PlainDataValue {
   constructor(value) {
     this.context = value.context;
     this.key = value.key;
@@ -9,6 +9,8 @@ class PlainValue {
     this.range = value.range;
     this.touched = false;
     this.value = value.value;
+
+    this.printer = new PlainDataLinePrinter(this.context.lines, this.context.messages);
   }
 
   error(customMessage) {
@@ -41,4 +43,4 @@ class PlainValue {
   }
 }
 
-module.exports = PlainValue;
+module.exports = PlainDataValue;
