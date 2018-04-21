@@ -10,7 +10,7 @@ const connectBookReviews = data => {
           book.reviews.push(document);
         }
       } else {
-        const error = trace.error(`Im Artikel "${article.title}" wird das Buch "${value}" besprochen, allerdings wurde kein Buch mit diesem Titel gefunden.`);
+        const error = trace.getError(`Im Artikel "${article.title}" wird das Buch "${value}" besprochen, allerdings wurde kein Buch mit diesem Titel gefunden.`);
 
         data.warnings.push({
           files: [{ path: article.sourceFile, ranges: error.ranges }],
@@ -34,7 +34,7 @@ const connectPlayers = (data, collection, referencesField, instancesField, backR
           instance[backReferenceField].push(document);
         }
       } else {
-        const error = trace.error(`Im Feld "${trace.key}" wird die AkteurIn "${value}" angegeben, es wurde aber keine AkteurIn mit diesem Namen gefunden.`);
+        const error = trace.getError(`Im Feld "${trace.key}" wird die AkteurIn "${value}" angegeben, es wurde aber keine AkteurIn mit diesem Namen gefunden.`);
 
         data.warnings.push({
           files: [{ path: document.sourceFile, ranges: error.ranges }],
@@ -83,7 +83,7 @@ const connectIssuesWithArticles = data => {
             article.inIssueOnPages = article.pages;
           }
         } else {
-          const error = reference.titleTrace.error(`In Zeitschrift N° ${issue.number} wird in der Rubrik "${section.title}" der Artikel "${reference.title}" referenziert, es wurde aber kein Artikel mit diesem Titel gefunden.`);
+          const error = reference.titleTrace.getError(`In Zeitschrift N° ${issue.number} wird in der Rubrik "${section.title}" der Artikel "${reference.title}" referenziert, es wurde aber kein Artikel mit diesem Titel gefunden.`);
 
           data.warnings.push({
             files: [{ path: issue.sourceFile, ranges: error.ranges }],
@@ -107,7 +107,7 @@ const connectRadioEditors = data => {
           data.radio.editors.push(player);
         }
       } else {
-        const error = trace.error(({ value }) => `Die AkteurIn "${value}", angegeben als Teil der allgemeinen Radio Redaktion, wurde nicht gefunden.`);
+        const error = trace.getError(({ value }) => `Die AkteurIn "${value}", angegeben als Teil der allgemeinen Radio Redaktion, wurde nicht gefunden.`);
 
         data.errors.push({
           files: [{ path: data.radio.sourceFile, ranges: error.ranges }],

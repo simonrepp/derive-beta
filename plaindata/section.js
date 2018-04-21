@@ -1,6 +1,6 @@
-const { PlainDataError } = require('./errors.js');
+const { errors } = require('./messages/codes.js');
+const { PlainDataValidationError } = require('./errors.js');
 const PlainDataValue = require('./value.js');
-const PlainDataLinePrinter = require('./line-printer.js');
 
 class PlainDataSection {
   constructor(section) {
@@ -9,8 +9,6 @@ class PlainDataSection {
     this.key = section.key;
     this.keyRange = section.keyRange;
     this.parent = section.parent;
-
-    this.printer = new PlainDataLinePrinter(this.context.lines, this.context.messages);
 
     this.range = section.range;
 
@@ -65,11 +63,12 @@ class PlainDataSection {
       if(values !== null) {
         for(let value of values) {
           if(!value.touched) {
-            throw new PlainDataError(
-              this.context.messages.validation.excessKey(value.key),
-              this.printer.print(value.keyRange.beginLine, value.keyRange.endLine),
-              [value.keyRange]
-            );
+            throw new PlainDataValidationError(this.context, {
+              code: errors.validation.EXCESS_KEY,
+              meta: { key: value.key },
+              printRanges: [[value.keyRange.beginLine, value.keyRange.endLine]],
+              editorRanges: [value.keyRange]
+            });
           }
 
           if(value instanceof PlainDataSection) {
@@ -86,11 +85,12 @@ class PlainDataSection {
 
     if(values === undefined) {
       if(options.keyRequired) {
-        throw new PlainDataError(
-          this.context.messages.validation.missingKey(key),
-          this.printer.print(this.range.beginLine, this.range.endLine),
-          [this.range]
-        );
+        throw new PlainDataValidationError(this.context, {
+          code: errors.validation.MISSING_KEY,
+          meta: { key: value.key },
+          printRanges: [[this.range.beginLine, this.range.endLine]],
+          editorRanges: [this.range]
+        });
       } else {
         return [];
       }
@@ -124,11 +124,12 @@ class PlainDataSection {
 
     if(values === undefined) {
       if(options.keyRequired) {
-        throw new PlainDataError(
-          this.context.messages.validation.missingKey(key),
-          this.printer.print(this.range.beginLine, this.range.endLine),
-          [this.range]
-        );
+        throw new PlainDataValidationError(this.context, {
+          code: errors.validation.MISSING_KEY,
+          meta: { key: value.key },
+          printRanges: [[this.range.beginLine, this.range.endLine]],
+          editorRanges: [this.range]
+        });
       } else {
         return {};
       }
@@ -155,11 +156,12 @@ class PlainDataSection {
         //
         // TODO: This might tie in ideally with AST restructuring (also tackling value.value inconsistencies and missing parent pointer for values, etc.)
 
-        throw new PlainDataError(
-          this.context.messages.validation.expectedSectionGotValue(key),
-          this.printer.print(value.range.beginLine, value.range.endLine),
-          [value.keyRange, value.range]
-        );
+        throw new PlainDataValidationError(this.context, {
+          code: errors.validation.EXPECTED_SECTION_GOT_VALUE,
+          meta: { key: key },
+          printRanges: [[value.range.beginLine, value.range.endLine]],
+          editorRanges: [value.keyRange, value.range]
+        });
       }
     }
 
@@ -169,11 +171,12 @@ class PlainDataSection {
       ranges.add(value.range);
     });
 
-    throw new PlainDataError(
-      this.context.messages.validation.expectedSectionGotList(key),
-      this.printer.print(values[0].range.beginLine, values[values.length - 1].range.endLine),
-      [...ranges]
-    );
+    throw new PlainDataValidationError(this.context, {
+      code: errors.validation.EXPECTED_SECTION_GOT_LIST,
+      meta: { key: key },
+      printRanges: [[values[0].range.beginLine, values[values.length - 1].range.endLine]],
+      editorRanges: [...ranges]
+    });
   }
 
   sections(key, options = { keyRequired: true }) {
@@ -181,11 +184,12 @@ class PlainDataSection {
 
     if(values === undefined) {
       if(options.keyRequired) {
-        throw new PlainDataError(
-          this.context.messages.validation.missingKey(key),
-          this.printer.print(this.range.beginLine, this.range.endLine),
-          [this.range]
-        );
+        throw new PlainDataValidationError(this.context, {
+          code: errors.validation.MISSING_KEY,
+          meta: { key: value.key },
+          printRanges: [[this.range.beginLine, this.range.endLine]],
+          editorRanges: [this.range]
+        });
       } else {
         return [];
       }
@@ -197,11 +201,12 @@ class PlainDataSection {
       if(value instanceof PlainDataSection) {
         return value;
       } else {
-        throw new PlainDataError(
-          this.context.messages.validation.expectedSectionsGotValue(key),
-          this.printer.print(value.range.beginLine, value.range.endLine),
-          [value.range]
-        );
+        throw new PlainDataValidationError(this.context, {
+          code: errors.validation.EXPECTED_SECTIONS_GOT_VALUE,
+          meta: { key: key },
+          printRanges: [[value.range.beginLine, value.range.endLine]],
+          editorRanges: [value.range]
+        });
       }
     });
   }
@@ -232,11 +237,12 @@ class PlainDataSection {
 
     if(values === undefined) {
       if(options.keyRequired) {
-        throw new PlainDataError(
-          this.context.messages.validation.missingKey(key),
-          this.printer.print(this.range.beginLine, this.range.endLine),
-          [this.range]
-        );
+        throw new PlainDataValidationError(this.context, {
+          code: errors.validation.MISSING_KEY,
+          meta: { key: key },
+          printRanges: [[this.range.beginLine, this.range.endLine]],
+          editorRanges: [this.range]
+        });
       }
 
       if(options.withTrace) {
@@ -260,11 +266,12 @@ class PlainDataSection {
       const value = nonEmptyValues[0];
 
       if(!(value instanceof PlainDataValue)) {
-        throw new PlainDataError(
-          this.context.messages.validation.expectedValueGotSection(key),
-          this.printer.print(value.range.beginLine, value.range.endLine),
-          [value.keyRange]
-        );
+        throw new PlainDataValidationError(this.context, {
+          code: errors.validation.EXPECTED_VALUE_GOT_SECTION,
+          meta: { key: key },
+          printRanges: [[value.range.beginLine, value.range.endLine]],
+          editorRanges: [value.keyRange]
+        });
       }
 
       if(process) {
@@ -277,11 +284,11 @@ class PlainDataSection {
             return processed;
           }
         } catch(message) {
-          throw new PlainDataError(
-            message,
-            this.printer.print(value.range.beginLine, value.range.endLine), // TODO: Consider split between .parser and .messages ?
-            [value.range]
-          );
+          throw new PlainDataValidationError(this.context, {
+            message: message,
+            printRanges: [[value.range.beginLine, value.range.endLine]],
+            editorRanges: [value.range]
+          });
         }
       }
 
@@ -295,21 +302,21 @@ class PlainDataSection {
     }
 
     if(nonEmptyValues.length > 1) {
-      // TODO: Esp. for this usecase, consider snippet() accepting multiple line ranges too
-      throw new PlainDataError(
-        this.context.messages.validation.expectedValueGotValues(key),
-        this.printer.print(nonEmptyValues[0].range.beginLine, nonEmptyValues[nonEmptyValues.length - 1].range.endLine),
-        nonEmptyValues.map(value => value.range)
-      );
+      throw new PlainDataValidationError(this.context, {
+        code: errors.validation.EXPECTED_VALUE_GOT_VALUES,
+        meta: { key: key },
+        printRanges: nonEmptyValues.map(value => [value.range.beginLine, value.range.endLine]),
+        editorRanges: [nonEmptyValues.map(value => value.range)]
+      });
     }
 
     if(options.required) {
-      // TODO: Also for this usecase, consider snippet() accepting multiple line ranges too
-      throw new PlainDataError(
-        this.context.messages.validation.missingValue(key),
-        this.printer.print(values[0].range.beginLine, values[values.length - 1].range.endLine),
-        values.map(value => value.range)
-      );
+      throw new PlainDataValidationError(this.context, {
+        code: errors.validation.MISSING_VALUE,
+        meta: { key: key },
+        printRanges: values.map(value => [value.range.beginLine, value.range.endLine]),
+        editorRanges: values.map(value => value.range)
+      });
     }
 
     if(options.withTrace) {
@@ -342,11 +349,12 @@ class PlainDataSection {
 
     if(values === undefined) {
       if(options.keyRequired) {
-        throw new PlainDataError(
-          this.context.messages.validation.missingKey(key),
-          this.printer.print(this.range.beginLine, this.range.endLine),
-          [this.range]
-        );
+        throw new PlainDataValidationError(this.context, {
+          code: errors.validation.MISSING_KEY,
+          meta: { key: value.key },
+          printRanges: [[this.range.beginLine, this.range.endLine]],
+          editorRanges: [this.range]
+        });
       }
 
       return [];
@@ -358,11 +366,12 @@ class PlainDataSection {
       value.touch();
 
       if(!(value instanceof PlainDataValue)) {
-        throw new PlainDataError(
-          this.context.messages.validation.expectedValuesGotSection(key),
-          this.printer.print(value.range.beginLine, value.range.endLine),
-          [value.keyRange]
-        );
+        throw new PlainDataValidationError(this.context, {
+          code: errors.validation.EXPECTED_VALUES_GOT_SECTION,
+          meta: { key: key },
+          printRanges: [[value.range.beginLine, value.range.endLine]],
+          editorRanges: [value.keyRange]
+        });
       }
 
       if(options.includeEmpty || value.value !== null) {
@@ -376,11 +385,11 @@ class PlainDataSection {
               return processed;
             }
           } catch(message) {
-            throw new PlainDataError(
-              message,
-              this.printer.print(value.range.beginLine, value.range.endLine), // TODO: Consider split between .parser and .messages ?
-              [value.range]
-            );
+            throw new PlainDataValidationError(this.context, {
+              message: message,
+              printRanges: [[value.range.beginLine, value.range.endLine]],
+              editorRanges: [value.range]
+            });
           }
         }
 
@@ -393,27 +402,30 @@ class PlainDataSection {
     });
 
     if(options.exactCount !== null && results.length !== options.exactCount) {
-      throw new PlainDataError(
-        this.context.messages.validation.exactCountNotMet(key, results.length, options.exactCount),
-        this.printer.print(values[0].range.beginLine, values[values.length - 1].range.endLine),
-        values.map(value => value.range)
-      );
+      throw new PlainDataValidationError(this.context, {
+        code: errors.validation.EXACT_COUNT_NOT_MET,
+        meta: { actual: results.length, expected: options.exactCount, key: key },
+        printRanges: [[values[0].range.beginLine, values[values.length - 1].range.endLine]],
+        editorRanges: values.map(value => value.range)
+      });
     }
 
     if(options.minCount !== null && results.length < options.minCount) {
-      throw new PlainDataError(
-        this.context.messages.validation.minCountNotMet(key, results.length, options.minCount),
-        this.printer.print(values[0].range.beginLine, values[values.length - 1].range.endLine),
-        values.map(value => value.range)
-      );
+      throw new PlainDataValidationError(this.context, {
+        code: errors.validation.MIN_COUNT_NOT_MET,
+        meta: { actual: results.length, expected: options.minCount, key: key },
+        printRanges: [[values[0].range.beginLine, values[values.length - 1].range.endLine]],
+        editorRanges: values.map(value => value.range)
+      });
     }
 
     if(options.maxCount !== null && results.length > options.maxCount) {
-      throw new PlainDataError(
-        this.context.messages.validation.maxCountNotMet(key, results.length, options.maxCount),
-        this.printer.print(values[0].range.beginLine, values[values.length - 1].range.endLine),
-        values.map(value => value.range)
-      );
+      throw new PlainDataValidationError(this.context, {
+        code: errors.validation.MAX_COUNT_NOT_MET,
+        meta: { actual: results.length, expected: options.maxCount, key: key },
+        printRanges: [[values[0].range.beginLine, values[values.length - 1].range.endLine]],
+        editorRanges: values.map(value => value.range)
+      });
     }
 
     return results;

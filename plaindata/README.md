@@ -68,10 +68,65 @@ Another Key = Another Value
 
 ## AST and wording considerations
 
-Sections
-  - Assignments / Key-value pairs
-  - Collections of attributes
-  - Collections of values / Lists
+The `Document` builds the top level structure, it is a `Section` without a key or parent.
+
+```plain
+> ...
+```
+
+A `Section` has a key and can have `Attributes`, `Lists`, `Collections`, and `Sections`.
+
+```plain
+# Key
+
+> ...
+```
+
+An `Attribute` has a `Key` and a `Value`.
+
+```plain
+Key: Value
+
+-- Key
+Value
+-- Key
+
+:: Key
+- Value
+```
+
+A `List` has a `Key` any number of `Values`.
+
+```plain
+Key: Value
+Key: Value
+
+-- Key
+Value
+-- Key
+
+-- Key
+Value
+-- Key
+
+Key:
+- Value
+- Value
+
+:: Key
+- Value
+- Value
+```
+
+A `Collection` consists of any number of `Collection Attributes`.
+
+```plain
+Key:
+Collection Attribute = Value
+
+:: Key
+Collection Attribute = Value
+```
 
 ## General introduction snippets
 

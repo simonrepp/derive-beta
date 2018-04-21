@@ -4,12 +4,11 @@
 // TODO: Consider (internally) abstracting the parser into a class
 //       Especially methods for handling the interesting bits, too long to read now
 
+const { errors } = require('./messages/codes.js');
+const locales = require('./messages/locales.js');
 const { PlainDataParseError } = require('./errors.js');
 const PlainDataSection = require('./section.js');
 const PlainDataValue = require('./value.js');
-const PlainDataLinePrinter = require('./line-printer.js');
-
-const SUPPORTED_LOCALES = ['de', 'en'];
 
 const STATE_RESET = null;
 const STATE_READ_AFTER_KEY = 1;
@@ -26,36 +25,30 @@ const MULTILINE_VALUE_BEGIN = /^\s*(-{2,})\s*(\S.*?)\s*$/;
 const SECTION = /^\s*(#+)\s*(\S.*?)\s*$/;
 const VALUE = /^\s*-(?!-)\s*(.+?)?\s*$/;
 
-const parse = (input, options = { locale: 'en' }) => {
-  if(!SUPPORTED_LOCALES.includes(options.locale)) {
+const parse = (input, locale = 'en') => {
+  if(!locales.includes(locale)) {
     throw new RangeError(
-      'The provided message locale requested through the parser options is ' +
-      'not supported. Translation contributions are very welcome and an easy ' +
-      'thing to do - only a few easy messages need to be translated!'
+      `The requested locale "${locale}" is not supported. Translation contributions are ` +
+      `very welcome and an easy thing to do - only a few easy messages need ` +
+      `to be translated!`
     );
   }
 
-  const messageDictionary = require(`./messages/${options.locale}.js`);
-  const messages = messageDictionary.parser;
-
-
   const lines = input.split(/\r?\n/);
-
-  const printer = new PlainDataLinePrinter(lines, messageDictionary);
 
   let state = STATE_RESET;
   let readBuffer;
   let match;
 
-  const parserContext = {
-    messages: messageDictionary,
-    lines: lines
+  const context = {
+    lines: lines,
+    locale: locale
   };
 
   const lookupIndex = {};
 
   const document = new PlainDataSection({
-    context: parserContext,
+    context: context,
     depth: 0,
     key: null,
     keyRange: {
@@ -103,7 +96,7 @@ const parse = (input, options = { locale: 'en' }) => {
         }
 
         const newValue = new PlainDataValue({
-          context: parserContext,
+          context: context,
           key: readBuffer.key,
           keyRange: {
             beginColumn: readBuffer.keyRange.beginColumn,
@@ -149,7 +142,7 @@ const parse = (input, options = { locale: 'en' }) => {
                                                lineContent.length);
 
           const newValue = new PlainDataValue({
-            context: parserContext,
+            context: context,
             key: readBuffer.key,
             keyRange: readBuffer.keyRange,
             range: {
@@ -175,11 +168,12 @@ const parse = (input, options = { locale: 'en' }) => {
             endLine: lineNumber
           };
 
-          throw new PlainDataParseError(
-            messages.attributesAndValuesMixed(readBuffer.keyRange.beginLine, readBuffer.key),
-            printer.print(currentSection.keyRange.beginLine, lineNumber),
-            errorRange
-          );
+          throw new PlainDataParseError(context, {
+            code: errors.parser.ATTRIBUTES_AND_VALUES_MIXED,
+            meta: { line: readBuffer.keyRange.beginLine, key: readBuffer.key },
+            printRanges: [[currentSection.keyRange.beginLine, lineNumber]],
+            editorRanges: [errorRange]
+          });
         }
       }
 
@@ -188,7 +182,7 @@ const parse = (input, options = { locale: 'en' }) => {
 
         if(state === STATE_READ_AFTER_KEY) {
           const newSection = new PlainDataSection({
-            context: parserContext,
+            context: context,
             depth: currentSection.depth + 1,
             key: readBuffer.key,
             keyRange: readBuffer.keyRange,
@@ -215,7 +209,7 @@ const parse = (input, options = { locale: 'en' }) => {
           const valueColumn = lineContent.lastIndexOf(value);
 
           const newValue = new PlainDataValue({
-            context: parserContext,
+            context: context,
             key: key,
             keyRange: {
               beginColumn: keyColumn,
@@ -246,11 +240,12 @@ const parse = (input, options = { locale: 'en' }) => {
             endLine: lineNumber
           };
 
-          throw new PlainDataParseError(
-            messages.attributesAndValuesMixed(readBuffer.keyRange.beginLine, readBuffer.key),
-            printer.print(currentSection.keyRange.beginLine, lineNumber),
-            errorRange
-          );
+          throw new PlainDataParseError(context, {
+            code: errors.parser.ATTRIBUTES_AND_VALUES_MIXED,
+            meta: { line: readBuffer.keyRange.beginLine, key: readBuffer.key },
+            printRanges: [[currentSection.keyRange.beginLine, lineNumber]],
+            editorRanges: [errorRange]
+          });
         }
       }
 
@@ -259,7 +254,7 @@ const parse = (input, options = { locale: 'en' }) => {
         const valueColumn = Math.min(keyBeginLine.length, keyBeginLine.replace(/\s*$/, '').length + 1);
 
         const newValue = new PlainDataValue({
-          context: parserContext,
+          context: context,
           key: readBuffer.key,
           keyRange: readBuffer.keyRange,
           range: {
@@ -292,7 +287,7 @@ const parse = (input, options = { locale: 'en' }) => {
       const valueColumn = lineContent.lastIndexOf(value);
 
       const newValue = new PlainDataValue({
-        context: parserContext,
+        context: context,
         key: key,
         keyRange: {
           beginColumn: keyColumn,
@@ -394,11 +389,12 @@ const parse = (input, options = { locale: 'en' }) => {
           endLine: lineNumber
         };
 
-        throw new PlainDataParseError(
-          messages.hierarchyLayerSkip(lineNumber, currentSection.keyRange.beginLine),
-          printer.print(currentSection.keyRange.beginLine, lineNumber),
-          errorRange
-        );
+        throw new PlainDataParseError(context, {
+          code: errors.parser.HIERARCHY_LAYER_SKIP,
+          meta: { line: lineNumber, beginLine: currentSection.keyRange.beginLine },
+          printRanges: [[currentSection.keyRange.beginLine, lineNumber]],
+          editorRanges: [errorRange]
+        });
       }
 
       while(currentSection.depth >= targetDepth) {
@@ -406,7 +402,7 @@ const parse = (input, options = { locale: 'en' }) => {
       }
 
       const newSection = new PlainDataSection({
-        context: parserContext,
+        context: context,
         depth: currentSection.depth + 1,
         key: key,
         keyRange: {
@@ -439,11 +435,12 @@ const parse = (input, options = { locale: 'en' }) => {
         endLine: lineNumber
       };
 
-      throw new PlainDataParseError(
-        messages.unexpectedValue(lineNumber),
-        printer.print(lineNumber),
-        errorRange
-      );
+      throw new PlainDataParseError(context, {
+        code: errors.parser.UNEXPECTED_VALUE,
+        meta: { line: lineNumber },
+        printRanges: [[lineNumber]],
+        editorRanges: [errorRange]
+      });
     }
 
     const errorRange = {
@@ -453,18 +450,19 @@ const parse = (input, options = { locale: 'en' }) => {
       endLine: lineNumber
     };
 
-    throw new PlainDataParseError(
-      messages.invalidLine(lineNumber),
-      printer.print(lineNumber),
-      errorRange
-    );
+    throw new PlainDataParseError(context, {
+      code: errors.parser.INVALID_LINE,
+      meta: { line: lineNumber },
+      printRanges: [[lineNumber]],
+      editorRanges: [errorRange]
+    });
   }
 
   if(state === STATE_READ_AFTER_KEY) {
     // console.log('[end of document while reading after key]');
 
     const newValue = new PlainDataValue({
-      context: parserContext,
+      context: context,
       key: readBuffer.key,
       keyRange: readBuffer.keyRange,
       range: {
@@ -488,11 +486,12 @@ const parse = (input, options = { locale: 'en' }) => {
       endLine: lines.length
     };
 
-    throw new PlainDataParseError(
-      messages.unterminatedMultilineValue(readBuffer.keyRange.beginLine),
-      printer.print(errorRange.beginLine, errorRange.endLine),
-      errorRange
-    );
+    throw new PlainDataParseError(context, {
+      code: errors.parser.UNTERMINATED_MULTILINE_VALUE,
+      meta: { beginLine: readBuffer.keyRange.beginLine },
+      printRanges: [[errorRange.beginLine, errorRange.endLine]],
+      editorRanges: [errorRange]
+    });
   }
 
   return document;

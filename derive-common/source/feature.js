@@ -1,5 +1,5 @@
 const { loadPlain, statFile } = require('../util.js'),
-      { PlainDataError, PlainDataParseError } = require('../../plaindata/errors.js'),
+      { PlainDataValidationError, PlainDataParseError } = require('../../plaindata/errors.js'),
       validateAbsoluteUrl = require('../validate/absolute-url.js'),
       validateBoolean = require('../validate/boolean.js'),
       validateInteger = require('../validate/integer.js'),
@@ -52,7 +52,7 @@ module.exports = async (data, plainPath) => {
     } catch(err) {
       data.cache.delete(plainPath);
 
-      if(err instanceof PlainDataError) {
+      if(err instanceof PlainDataValidationError) {
         data.warnings.push({
           detail: err.message,
           files: [{ path: plainPath, ranges: err.ranges }],

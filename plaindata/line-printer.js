@@ -1,9 +1,11 @@
+const { strings } = require('./messages/codes.js');
+
 class PlainDataLinePrinter {
   constructor(lines, messages) {
     this.lines = lines;
 
-    const contentColumnHeader = messages.printer.content;
-    const lineColumnHeader = messages.printer.line.padStart(5);
+    const contentColumnHeader = messages[strings.SNIPPET_CONTENT_HEADER];
+    const lineColumnHeader = messages[strings.SNIPPET_LINE_HEADER].padStart(5);
 
     this.lineColumnWidth = lineColumnHeader.length + 3;
     this.header = `  ${lineColumnHeader} | ${contentColumnHeader}\n`;
@@ -11,52 +13,51 @@ class PlainDataLinePrinter {
     this.emphasized_omission = ` >${' '.repeat(this.lineColumnWidth - 7)}...\n`
   }
 
-  print(beginLine, endLine) {
-    if(!endLine) {
-      endLine = beginLine;
-    }
-
+  print(lineRanges) {
     let snippet = this.header;
 
-    let line = Math.max(1, beginLine - 2);
+    let inOmission = false;
 
-    if(line > 1) {
-      snippet += this.omission;
-    }
+    for(let lineNumber = 1; lineNumber <= this.lines.length; lineNumber++) {
+      let print = false;
+      let emphasize = false;
 
-    if(endLine - beginLine > 3) {
-      while(line <= beginLine + 1) {
-        const content = this.lines[line - 1];
-        const lineNumber = line.toString();
+      for(let lineRange of lineRanges) {
+        const beginLine = lineRange[0];
+        const endLine = lineRange.length > 1 ? lineRange[1] : beginLine;
 
-        if(line >= beginLine && line <= endLine) {
-          snippet += ` >${lineNumber.padStart(this.lineColumnWidth - 3)} | ${content}\n`;
-        } else {
-          snippet += `${lineNumber.padStart(this.lineColumnWidth - 1)} | ${content}\n`;
+        if(lineNumber >= beginLine - 2 && lineNumber <= beginLine + 2 ||
+           lineNumber >= endLine - 2 && lineNumber <= endLine + 2) {
+          print = true;
         }
 
-        line++;
+        if(lineNumber >= beginLine && lineNumber <= endLine) {
+          emphasize = true;
+        }
       }
 
-      snippet += this.emphasized_omission;
-      line = endLine - 1;
-    }
+      if(print) {
+        const content = this.lines[lineNumber - 1];
+        const lineNumberString = lineNumber.toString();
 
-    while(line <= Math.min(this.lines.length, endLine + 2)) {
-      const content = this.lines[line - 1];
-      const lineNumber = line.toString();
+        if(emphasize) {
+          snippet += ` >${lineNumberString.padStart(this.lineColumnWidth - 3)} | ${content}\n`;
+        } else {
+          snippet += `${lineNumberString.padStart(this.lineColumnWidth - 1)} | ${content}\n`;
+        }
 
-      if(line >= beginLine && line <= endLine) {
-        snippet += ` >${lineNumber.padStart(this.lineColumnWidth - 3)} | ${content}\n`;
+        inOmission = false;
       } else {
-        snippet += `${lineNumber.padStart(this.lineColumnWidth - 1)} | ${content}\n`;
+        if(!inOmission) {
+          if(emphasize) {
+            snippet += this.emphasized_omission;
+          } else {
+            snippet += this.omission;
+          }
+
+          inOmission = true;
+        }
       }
-
-      line++;
-    }
-
-    if(line < this.lines.length) {
-      snippet += this.omission;
     }
 
     return snippet;

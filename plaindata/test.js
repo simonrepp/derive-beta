@@ -2,7 +2,7 @@ const fs = require('fs'),
       path = require('path');
 
 const { parse, PlainDataParseError } = require('./plaindata.js');
-const { PlainDataError } = require('./errors.js');
+const { PlainDataValidationError } = require('./errors.js');
 
 // const input = fs.readFileSync(path.join(__dirname, '/home/simon/derive/publish.derive.at/public/export/full_database/Radio/Radio.plain'), 'utf-8');
 const input = fs.readFileSync('/home/simon/derive/publish.derive.at/public/export/full_database/Zeitschriften/10.plain', 'utf-8');
@@ -10,12 +10,13 @@ const input = fs.readFileSync('/home/simon/derive/publish.derive.at/public/expor
 let result;
 
 try {
-  result = parse(input, { locale: 'de' });
+  result = parse(input, 'de');
 
-  const specific = result.section('Funky').value('Businessy');
+  // const specific = result.section('Funky').value('Business');
+  const specific = result.value('Frogs');
   console.log(specific);
 } catch(err) {
-  if(err instanceof PlainDataParseError || err instanceof PlainDataError) {
+  if(err instanceof PlainDataParseError || err instanceof PlainDataValidationError) {
     console.log(`${err.message}\n\n${err.snippet}\n\n${err.ranges}`);
   } else {
     throw err;

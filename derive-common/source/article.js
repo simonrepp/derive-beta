@@ -1,5 +1,5 @@
 const { loadPlain, statFile, URBANIZE_ENUM } = require('../util.js'),
-      { PlainDataError, PlainDataParseError } = require('../../plaindata/errors.js'),
+      { PlainDataValidationError, PlainDataParseError } = require('../../plaindata/errors.js'),
       validateBoolean = require('../validate/boolean.js'),
       validateDate = require('../validate/date.js'),
       validateEnum = require('../validate/enum.js'),
@@ -68,7 +68,7 @@ module.exports = async (data, plainPath) => {
     } catch(err) {
       data.cache.delete(plainPath);
 
-      if(err instanceof PlainDataError) {
+      if(err instanceof PlainDataValidationError) {
         data.warnings.push({
           detail: err.message,
           files: [{ path: plainPath, ranges: err.ranges }],

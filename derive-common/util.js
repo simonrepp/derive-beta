@@ -38,7 +38,7 @@ exports.loadPlain = (directory, plainPath) => new Promise((resolve, reject) =>
       reject(err);
     } else {
       try {
-        resolve( plaindata.parse(content, { locale: 'de' }) );
+        resolve( plaindata.parse(content, 'de') );
       } catch(err) {
         reject(err);
       }
