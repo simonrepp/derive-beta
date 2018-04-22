@@ -1,5 +1,5 @@
 const { loadPlain, statFile } = require('../util.js'),
-      { PlainDataValidationError, PlainDataParseError } = require('../../plaindata/errors.js'),
+      { PlainDataValidationError, PlainDataParseError } = require('../../plaindata/plaindata.js'),
       validateAbsoluteUrl = require('../validate/absolute-url.js'),
       validateBoolean = require('../validate/boolean.js'),
       validateInteger = require('../validate/integer.js'),

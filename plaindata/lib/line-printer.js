@@ -1,4 +1,4 @@
-const { strings } = require('./messages/codes.js');
+const { strings } = require('./message-codes.js');
 
 class PlainDataLinePrinter {
   constructor(lines, messages) {

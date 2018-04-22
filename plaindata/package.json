@@ -1,0 +1,14 @@
+{
+  "name": "plaindata",
+  "version": "0.1.0",
+  "description": "A user-centric plaintext data framework",
+  "main": "plaindata.js",
+  "scripts": {
+    "test": "node run-specs.js"
+  },
+  "keywords": [
+    "data",
+    "plaintext"
+  ],
+  "author": "Simon Repp"
+}

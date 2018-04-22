@@ -113,8 +113,8 @@ const dump = (object, depth = 1) => {
   let sequential = [];
   let trailing = [];
 
-  for(let key of Object.keys(object)) {
-    const key = sanitizeKey(key);
+  for(let rawKey of Object.keys(object)) {
+    const key = sanitizeKey(rawKey);
     const value = object[key];
 
     if(value === null) {

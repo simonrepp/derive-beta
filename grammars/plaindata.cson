@@ -56,6 +56,13 @@ patterns: [
       '3': 'name': 'markup.raw.inline.value.plain'
   }
   {
+    # : value
+    'match': '^\\s*(:)(?!:)\\s*(.+?)?\\s*$'
+    'captures':
+      '1': 'name': 'punctuation.definition.value.plain'
+      '2': 'name': 'markup.raw.inline.value.plain'
+  }
+  {
     # - value
     'match': '^\\s*(-)(?!-)\\s*(.+?)?\\s*$'
     'captures':

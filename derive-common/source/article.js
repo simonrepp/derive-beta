@@ -1,5 +1,5 @@
 const { loadPlain, statFile, URBANIZE_ENUM } = require('../util.js'),
-      { PlainDataValidationError, PlainDataParseError } = require('../../plaindata/errors.js'),
+      { PlainDataValidationError, PlainDataParseError } = require('../../plaindata/plaindata.js'),
       validateBoolean = require('../validate/boolean.js'),
       validateDate = require('../validate/date.js'),
       validateEnum = require('../validate/enum.js'),

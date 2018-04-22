@@ -1,4 +1,4 @@
-const { errors } = require('./messages/codes.js');
+const { errors } = require('./message-codes.js');
 const { PlainDataValidationError } = require('./errors.js');
 
 class PlainDataValue {

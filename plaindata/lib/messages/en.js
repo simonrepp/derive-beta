@@ -1,4 +1,6 @@
-const { errors, strings } = require('./codes.js');
+// TODO: English messages
+
+const { errors, strings } = require('../message-codes.js');
 
 const messages = {};
 
@@ -19,10 +21,10 @@ messages[errors.validation.EXPECTED_VALUE_GOT_VALUES] = meta => `Das Feld "${met
 messages[errors.validation.EXPECTED_VALUE_GOT_SECTION] = meta => `Das Feld "${meta.key}" enthält eine Sektion, muss aber einen einzelnen Wert enthalten.`;
 messages[errors.validation.EXPECTED_VALUES_GOT_SECTION] = meta => `Die Liste "${meta.key}" darf nur einfache Werte enthalten, enhält aber eine Sektion.`;
 messages[errors.validation.GENERIC_ERROR] = meta => `Es besteht ein Problem mit dem Feld "${meta.key}".`;
-messages[errors.validation.MISSING_KEY] = meta => `Fehlendes Feld "${meta.key}" - Falls das Feld angegeben wurde eventuell nach Tippfehlern Ausschau halten und auch die Gross/Kleinschreibung beachten.`;
+messages[errors.validation.MISSING_KEY] = meta => `Missing key "${meta.key}" - If the key was provided look out for typos and also pay attention to correct capitalization.`;
 messages[errors.validation.MISSING_VALUE] = meta => `Das Feld "${meta.key}" muss ausgefüllt sein.`;
 
-messages[strings.SNIPPET_CONTENT_HEADER] = 'Inhalt';
-messages[strings.SNIPPET_LINE_HEADER] = 'Zeile';
+messages[strings.SNIPPET_CONTENT_HEADER] = 'Content';
+messages[strings.SNIPPET_LINE_HEADER] = 'Line';
 
 module.exports = messages;
