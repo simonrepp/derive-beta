@@ -24,18 +24,18 @@ const sample = `
 `;
 
 const expected = {
-  'key1': ['value'],
-  'list1': [
+  'key1': [['value']],
+  'list1': [[
     'value',
     'value',
     'value'
-  ],
-  'key2': ['value'],
-  'list2': [
+  ]],
+  'key2': [['value']],
+  'list2': [[
     'value',
     'value',
     'value'
-  ]
+  ]]
 };
 
 module.exports = () => {

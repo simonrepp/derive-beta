@@ -29,11 +29,11 @@ const expected = {
   'd': ['d'],
   'e': [null],
   'f': [null],
-  'list1': [
+  'list1': [[
     null,
     null,
     null
-  ],
+  ]],
   'list2': ['list:list:list:listlist:list::list']
 };
 

@@ -42,27 +42,27 @@ module.exports = async (data, plainPath) => {
     };
 
     try {
-      const title = document.value('Titel', { required: true, withTrace: true });
+      const title = document.attribute('Titel', { required: true, withTrace: true });
       article.title = title.value;
       article.titleTrace = title.trace;
 
-      const permalink = document.value('Permalink', validatePermalink, { required: true, withTrace: true });
+      const permalink = document.attribute('Permalink', validatePermalink, { required: true, withTrace: true });
       article.permalink = permalink.value;
       article.permalinkTrace = permalink.trace;
 
-      article.subtitle = document.value('Untertitel');
-      article.image = document.value('Bild', validatePath);
-      article.authorReferences = document.values('Autoren', { withTrace: true });
-      article.date = document.value('Datum');
-      article.language = document.value('Sprache');
-      article.categoriesDisconnected = document.values('Kategorien');
-      article.tagsDisconnected = document.values('Tags');
-      article.reviewedBookReferences = document.values('Buchbesprechungen', { withTrace: true });
-      article.readable = document.value('Lesbar', validateBoolean);
-      article.urbanize = document.value('Urbanize', validateEnum(URBANIZE_ENUM));
-      article.abstract = document.value('Abstract', validateMarkdown);
-      article.bibliography = document.value('Literaturverzeichnis', validateMarkdown);
-      article.text = document.value('Text', validateMarkdownWithMedia);
+      article.subtitle = document.attribute('Untertitel');
+      article.image = document.attribute('Bild', validatePath);
+      article.authorReferences = document.list('Autoren', { withTrace: true });
+      article.date = document.attribute('Datum');
+      article.language = document.attribute('Sprache');
+      article.categoriesDisconnected = document.list('Kategorien');
+      article.tagsDisconnected = document.list('Tags');
+      article.reviewedBookReferences = document.list('Buchbesprechungen', { withTrace: true });
+      article.readable = document.attribute('Lesbar', validateBoolean);
+      article.urbanize = document.attribute('Urbanize', validateEnum(URBANIZE_ENUM));
+      article.abstract = document.attribute('Abstract', validateMarkdown);
+      article.bibliography = document.attribute('Literaturverzeichnis', validateMarkdown);
+      article.text = document.attribute('Text', validateMarkdownWithMedia);
 
       document.assertAllTouched();
     } catch(err) {

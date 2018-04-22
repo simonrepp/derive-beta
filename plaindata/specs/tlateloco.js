@@ -8,18 +8,18 @@ const expected = {
   Titel: ['Tlatelolco: Wohnblocks, Ruinen und Massaker'],
   Untertitel: ['»Tlatelolco«, ein Film von Lotte Schreiber'],
   Bild: [null],
-  Autoren: ['Georg Oswald'],
+  Autoren: [['Georg Oswald']],
   Datum: ['2013-01-01'],
   Sprache: ['DE'],
-  Kategorien: ['Besprechung', 'Film'],
-  Tags: [
+  Kategorien: [['Besprechung', 'Film']],
+  Tags: [[
     'Mexiko',
     'Tlatelolco',
     'Olympische Spiele',
     'Architektur',
     'Mexico City',
     'Polizeigewalt'
-  ],
+  ]],
   Permalink: ['tlatelolco-wohnblocks-ruinen-und-massaker'],
   Buchbesprechungen: [null],
   Lesbar: ['Ja'],

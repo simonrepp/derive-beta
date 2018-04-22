@@ -135,7 +135,7 @@ const plaindata = require('plaindata');
 
 const document = plaindata.parse('Greeting: Hello world!');
 
-const greeting = document.value('Greeting');
+const greeting = document.attribute('Greeting');
 ```
 
 ```plain
@@ -165,7 +165,7 @@ const parseNumber = ({ key, value }) => {
   }
 };
 
-document.value('The Number', { process: parseNumber });
+document.attribute('The Number', { process: parseNumber });
   => 666
 ```
 
@@ -189,17 +189,17 @@ dealt with behind the scenes, I'll gladly explain.
   -
   ```
   ```js
-  document.value('Shopping list')
+  document.attribute('Shopping list')
     => null
 
-  document.values('Shopping list')
+  document.list('Shopping list')
     => []
   ```
 
   You can explicitly request them though
 
   ```js
-  document.values('Shopping List', { includeEmpty: true })
+  document.list('Shopping List', { includeEmpty: true })
     => [ null, null, null, null, null ]
   ```
 
@@ -210,10 +210,10 @@ dealt with behind the scenes, I'll gladly explain.
   -
   ```
   ```js
-  document.value('Shopping List')
+  document.attribute('Shopping List')
     => null
 
-  document.values('Shopping List')
+  document.list('Shopping List')
     => [ null ]
   ```
 
@@ -225,14 +225,14 @@ dealt with behind the scenes, I'll gladly explain.
   -
   ```
   ```js
-  document.values('Shopping List')
+  document.list('Shopping List')
     => [ null, null ]
 
-  document.value('Shopping List')
+  document.attribute('Shopping List')
     => 'Error: "Shopping List" can only be a single value, not a list!'
 
   document = parse(input, { locale: 'de' })
-  document.value('Einkaufsliste')
+  document.attribute('Einkaufsliste')
     => 'Fehler: "Einkaufsliste" darf nur ein einfacher Wert sein, aber keine Liste!'
   ```
 

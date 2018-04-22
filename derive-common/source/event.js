@@ -41,28 +41,28 @@ module.exports = async (data, plainPath) => {
     };
 
     try {
-      event.title = document.value('Titel', { required: true });
+      event.title = document.attribute('Titel', { required: true });
 
-      const permalink = document.value('Permalink', validatePermalink, { required: true, withTrace: true });
+      const permalink = document.attribute('Permalink', validatePermalink, { required: true, withTrace: true });
       event.permalink = permalink.value;
       event.permalinkTrace = permalink.trace;
 
-      event.subtitle = document.value('Untertitel');
-      event.url = document.value('URL', validateAbsoluteUrl);
-      event.hostReferences = document.values('Veranstalter', { withTrace: true });
-      event.participantReferences = document.values('Teilnehmer', { withTrace: true });
-      event.categoriesDisconnected = document.values('Kategorien');
-      event.tagsDisconnected = document.values('Tags');
-      event.image = document.value('Bild', validatePath);
-      event.urbanize = document.value('Urbanize', validateEnum(URBANIZE_ENUM));
-      event.address = document.value('Adresse');
-      event.abstract = document.value('Abstract', validateMarkdown);
-      event.additionalInfo = document.value('Zusatzinfo', validateMarkdown);
-      event.text = document.value('Text', validateMarkdownWithMedia);
+      event.subtitle = document.attribute('Untertitel');
+      event.url = document.attribute('URL', validateAbsoluteUrl);
+      event.hostReferences = document.list('Veranstalter', { withTrace: true });
+      event.participantReferences = document.list('Teilnehmer', { withTrace: true });
+      event.categoriesDisconnected = document.list('Kategorien');
+      event.tagsDisconnected = document.list('Tags');
+      event.image = document.attribute('Bild', validatePath);
+      event.urbanize = document.attribute('Urbanize', validateEnum(URBANIZE_ENUM));
+      event.address = document.attribute('Adresse');
+      event.abstract = document.attribute('Abstract', validateMarkdown);
+      event.additionalInfo = document.attribute('Zusatzinfo', validateMarkdown);
+      event.text = document.attribute('Text', validateMarkdownWithMedia);
 
       event.dates = document.sections('Termin').map(date => ({
-        date: date.value('Datum', { process: validateDate }),
-        time: date.value('Zeit')
+        date: date.attribute('Datum', { process: validateDate }),
+        time: date.attribute('Zeit')
       }));
 
       document.assertAllTouched();

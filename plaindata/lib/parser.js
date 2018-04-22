@@ -1,22 +1,21 @@
 // TODO: Clarify internally to devs as well as externally to users, whether line and beginLine in PlainDataParseError metadata refers to array index (0+ -indexed) or human line reference (1+ -indexed)
 //       And possibly have specs that ensure this is actually correctly reflected in the parser implementation for all possible errors
 
-// TODO: Consider (internally) abstracting the parser into a class
-//       Especially methods for handling the interesting bits, too long to read now
-
 const { errors } = require('./message-codes.js');
 const { PlainDataParseError } = require('./errors.js');
+const PlainDataCollection = require('./collection.js');
+const PlainDataList = require('./list.js');
 const PlainDataSection = require('./section.js');
 const PlainDataValue = require('./value.js');
 
 const STATE_RESET = null;
 const STATE_READ_AFTER_KEY = 1;
-const STATE_READ_ATTRIBUTES = 2;
+const STATE_READ_COLLECTION_ATTRIBUTES = 2;
 const STATE_READ_MULTILINE_VALUE = 3;
-const STATE_READ_VALUES = 4;
+const STATE_READ_LIST_VALUES = 4;
 
 const ANY_KEY = /^\s*::(?!:)\s*(\S.*?)\s*$/;
-const ATTRIBUTE = /^\s*(?![>\-#])([^=:]+?)\s*=\s*(\S.*?)\s*$/;
+const ATTRIBUTE = /^\s*(?![>\-#])([^=:]+?)\s*=\s*(.+?)?\s*$/;
 const COMMENT_OR_EMPTY = /^\s*(>|$)/;
 const KEY = /^\s*(?![>\-#])([^=:]+?)\s*:\s*$/;
 const KEY_VALUE = /^\s*(?![>\-#])([^=:]+?)\s*:\s*(\S.*?)\s*$/;
@@ -24,6 +23,11 @@ const LIST_VALUE = /^\s*-(?!-)\s*(.+?)?\s*$/;
 const MULTILINE_VALUE_BEGIN = /^\s*(-{2,})\s*(\S.*?)\s*$/;
 const SECTION = /^\s*(#+)\s*(\S.*?)\s*$/;
 const VALUE = /^\s*:(?!:)\s*(.+?)?\s*$/; // Use?! => ': single explicity value syntax'
+
+// TODO: Consider the == Any key instead of :: Any Key syntax
+//
+// == Traumhaeuser
+// = Erhaeltlich
 
 class PlainDataParser {
   constructor(input, locale) {
@@ -35,19 +39,16 @@ class PlainDataParser {
       locale: locale
     };
 
-    // TODO: PlainDataDocument ? (extends PlainDataSection)
     this.document = new PlainDataSection({
       context: this.context,
       depth: 0,
-      key: null,
       keyRange: {
         beginColumn: 0,
-        beginLine: 1,
+        beginLine: 0,
         endColumn: 0,
-        endLine: 1
+        endLine: 0
       },
       lookupIndex: this.lookupIndex,
-      parent: null,
       range: {
         beginColumn: 0,
         beginLine: 1,
@@ -75,15 +76,22 @@ class PlainDataParser {
     };
   }
 
+  // TODO: Section has fields, collection has attributes ? point out that fields can be text fields and relate to forms in websites
+  // TODO: value(key, value) {} -> that's the single explicit value that follows after key somewhere
+
   // Key = Value (syntax)
   // kkk   vvvvv (ranges)
   attribute(key, value) {
     const keyColumn = this.lineContent.indexOf(key);
-    const valueColumn = this.lineContent.lastIndexOf(value);
+    let valueColumn;
+
+    if(value) {
+      valueColumn = this.lineContent.lastIndexOf(value);
+    } else {
+      valueColumn = Math.min(this.lineContent.indexOf('=') + 1, this.lineContent.length);
+    }
 
     const newValue = new PlainDataValue({
-      context: this.context,
-      key: key,
       keyRange: {
         beginColumn: keyColumn,
         beginLine: this.lineNumber,
@@ -93,36 +101,14 @@ class PlainDataParser {
       range: {
         beginColumn: valueColumn,
         beginLine: this.lineNumber,
-        endColumn: valueColumn + value.length,
+        endColumn: value ? valueColumn + value.length : valueColumn,
         endLine: this.lineNumber
       },
       value: value
     });
 
     this.lookupIndex[this.lineNumber] = newValue;
-    this.currentSection.add(newValue);
-  }
-
-  // Key = Value (syntax)
-  attributeAfterKey() {
-    const newSection = new PlainDataSection({
-      context: this.context,
-      depth: this.currentSection.depth + 1,
-      key: this.buffer.key,
-      keyRange: this.buffer.keyRange,
-      parent: this.currentSection,
-      range: {
-        beginColumn: this.buffer.keyRange.endColumn,
-        beginLine: this.buffer.keyRange.beginLine,
-        endColumn: this.buffer.keyRange.endColumn,
-        endLine: this.buffer.keyRange.beginLine
-      }
-    });
-
-    // TODO: Clean up/expand lookupIndex implementation and concept (e.g. better ranges for null values)
-    this.lookupIndex[this.buffer.keyRange.beginLine] = newSection;
-    this.currentSection.add(newSection);
-    this.currentSection = newSection;
+    this.buffer.collection.assign(key, newValue);
   }
 
   // - Value (syntax)
@@ -143,13 +129,29 @@ class PlainDataParser {
     });
   }
 
+  // Key = Value (syntax)
+  collectionAfterKey() {
+    const newCollection = new PlainDataCollection({
+      keyRange: this.buffer.keyRange,
+      range: {
+        beginColumn: this.buffer.keyRange.endColumn,
+        beginLine: this.buffer.keyRange.beginLine,
+        endColumn: this.buffer.keyRange.endColumn,
+        endLine: this.buffer.keyRange.beginLine
+      }
+    });
+
+    // TODO: Clean up/expand lookupIndex implementation and concept (e.g. better ranges for null values)
+    this.lookupIndex[this.buffer.keyRange.beginLine] = newCollection;
+    this.currentSection.append(this.buffer.key, newCollection);
+    this.buffer.collection = newCollection;
+  }
+
   empty() {
     const keyBeginLine = this.lines[this.buffer.keyRange.beginLine - 1];
     const valueColumn = Math.min(keyBeginLine.length, keyBeginLine.replace(/\s*$/, '').length + 1);
 
     const newValue = new PlainDataValue({
-      context: this.context,
-      key: this.buffer.key,
       keyRange: this.buffer.keyRange,
       range: {
         beginColumn: valueColumn,
@@ -161,15 +163,13 @@ class PlainDataParser {
     });
 
     this.lookupIndex[this.buffer.keyRange.beginLine] = newValue;
-    this.currentSection.add(newValue);
+    this.currentSection.append(this.buffer.key, newValue);
   }
 
   // Key:  (syntax)
   //     v (ranges)
   endOfDocumentAfterKey() {
     const newValue = new PlainDataValue({
-      context: this.context,
-      key: this.buffer.key,
       keyRange: this.buffer.keyRange,
       range: {
         beginColumn: this.lines[this.buffer.keyRange.beginLine - 1].length,
@@ -181,7 +181,7 @@ class PlainDataParser {
     });
 
     this.lookupIndex[this.buffer.keyRange.beginLine] = newValue;
-    this.currentSection.add(newValue);
+    this.currentSection.append(this.buffer.key, newValue);
   }
 
   // anything (syntax)
@@ -220,13 +220,11 @@ class PlainDataParser {
 
   // Key: Value (syntax)
   // kkk  vvvvv (ranges)
-  keyValue(key, value) {
+  field(key, value) {
     const keyColumn = this.lineContent.indexOf(key);
     const valueColumn = this.lineContent.lastIndexOf(value);
 
     const newValue = new PlainDataValue({
-      context: this.context,
-      key: key,
       keyRange: {
         beginColumn: keyColumn,
         beginLine: this.lineNumber,
@@ -243,7 +241,52 @@ class PlainDataParser {
     });
 
     this.lookupIndex[this.lineNumber] = newValue;
-    this.currentSection.add(newValue);
+    this.currentSection.append(key, newValue);
+  }
+
+  // - Value (syntax)
+  listAfterKey() {
+    const newList = new PlainDataList({
+      keyRange: this.buffer.keyRange,
+      range: {
+        beginColumn: 0,
+        beginLine: this.lineNumber,
+        endColumn: this.lineContent.length,
+        endLine: this.lineNumber
+      }
+    });
+
+    // TODO: Clean up/expand lookupIndex implementation and concept (e.g. better ranges for null values)
+    this.lookupIndex[this.buffer.keyRange.beginLine] = newList;
+    this.currentSection.append(this.buffer.key, newList);
+
+    this.buffer.list = newList;
+  }
+
+  // - Value (syntax)
+  //   vvvvv (ranges)
+  listValue(value) {
+    let valueColumn;
+
+    if(value) {
+      valueColumn = this.lineContent.lastIndexOf(value);
+    } else {
+      valueColumn = Math.min(this.lineContent.indexOf('-') + 1, this.lineContent.length);
+    }
+
+    const newValue = new PlainDataValue({
+      keyRange: this.buffer.keyRange,
+      range: {
+        beginColumn: valueColumn,
+        beginLine: this.lineNumber,
+        endColumn: value ? valueColumn + value.length : valueColumn,
+        endLine: this.lineNumber
+      },
+      value: value
+    });
+
+    this.lookupIndex[this.lineNumber] = newValue;
+    this.buffer.list.append(newValue);
   }
 
   // -- Key (syntax)
@@ -285,8 +328,6 @@ class PlainDataParser {
     }
 
     const newValue = new PlainDataValue({
-      context: this.context,
-      key: this.buffer.key,
       keyRange: {
         beginColumn: this.buffer.keyRange.beginColumn,
         beginLine: this.buffer.keyRange.beginLine,
@@ -297,36 +338,11 @@ class PlainDataParser {
       value: value
     });
 
-    this.lookupIndex[this.lineNumber] = newValue;
-    this.currentSection.add(newValue);
-  }
+    this.currentSection.append(this.buffer.key, newValue);
 
-  // - Value (syntax)
-  //   vvvvv (ranges)
-  listValue(value) {
-    let valueColumn;
-
-    if(value) {
-      valueColumn = this.lineContent.lastIndexOf(value);
-    } else {
-      valueColumn = Math.min(this.lineContent.indexOf('-') + 1, this.lineContent.length);
+    for(let indexLine = newValue.keyRange.beginLine; indexLine <= newValue.keyRange.endLine; indexLine++) {
+      this.lookupIndex[indexLine] = newValue;
     }
-
-    const newValue = new PlainDataValue({
-      context: this.context,
-      key: this.buffer.key,
-      keyRange: this.buffer.keyRange,
-      range: {
-        beginColumn: valueColumn,
-        beginLine: this.lineNumber,
-        endColumn: value ? valueColumn + value.length : valueColumn,
-        endLine: this.lineNumber
-      },
-      value: value
-    });
-
-    this.lookupIndex[this.lineNumber] = newValue;
-    this.currentSection.add(newValue);
   }
 
   run() {
@@ -338,7 +354,6 @@ class PlainDataParser {
 
       if(state === STATE_READ_MULTILINE_VALUE) {
         if(this.lineContent.match(this.buffer.multiLineValueEnd)) {
-          // console.log('[multiline value end]', this.lineContent);
           this.multiLineValueEnd();
           state = STATE_RESET;
         }
@@ -347,44 +362,41 @@ class PlainDataParser {
 
       if(this.lineContent.match(COMMENT_OR_EMPTY)) {
         // TODO: possibly Remove log lines if checku pafter refactoring works ok without them
-        // console.log('[comment or empty line]', this.lineContent);
         continue;
       }
 
       if(state === STATE_READ_AFTER_KEY ||
-         state === STATE_READ_ATTRIBUTES ||
-         state === STATE_READ_VALUES) {
+         state === STATE_READ_COLLECTION_ATTRIBUTES ||
+         state === STATE_READ_LIST_VALUES) {
 
         if((match = LIST_VALUE.exec(this.lineContent))) {
           if(state === STATE_READ_AFTER_KEY) {
-            // TODO: new ast says this.listAfterKey() i guess
-            state = STATE_READ_VALUES;
+            this.listAfterKey();
+            state = STATE_READ_LIST_VALUES;
           }
 
-          if(state === STATE_READ_VALUES) {
-            // console.log('[value]', this.lineContent);
+          if(state === STATE_READ_LIST_VALUES) {
             this.listValue(match[1] || null);
             continue;
           }
 
-          if(state === STATE_READ_ATTRIBUTES) {
+          if(state === STATE_READ_COLLECTION_ATTRIBUTES) {
             this.attributesAndValuesMixed();
           }
         }
 
         if((match = ATTRIBUTE.exec(this.lineContent))) {
           if(state === STATE_READ_AFTER_KEY) {
-            this.attributeAfterKey();
-            state = STATE_READ_ATTRIBUTES;
+            this.collectionAfterKey();
+            state = STATE_READ_COLLECTION_ATTRIBUTES;
           }
 
-          if(state === STATE_READ_ATTRIBUTES) {
-            // console.log('[attribute]', this.lineContent);
-            this.attribute(match[1], match[2]);
+          if(state === STATE_READ_COLLECTION_ATTRIBUTES) {
+            this.attribute(match[1], match[2] || null);
             continue;
           }
 
-          if(state === STATE_READ_VALUES) {
+          if(state === STATE_READ_LIST_VALUES) {
             this.attributesAndValuesMixed();
           }
         }
@@ -393,42 +405,35 @@ class PlainDataParser {
           this.empty();
         }
 
-        if(state === STATE_READ_ATTRIBUTES) {
-          this.currentSection = this.currentSection.parent;
-        }
+        // TODO: Recursive range expansion of parent sections (already happning maybe?) when stuff gets added to children, eg. lists, collections, aso.
 
         state = STATE_RESET;
       }
 
       if((match = KEY_VALUE.exec(this.lineContent))) {
-        // console.log('[key value pair]', this.lineContent);
-        this.keyValue(match[1], match[2]);
+        this.field(match[1], match[2]);
         continue;
       }
 
       if((match = KEY.exec(this.lineContent))) {
-        // console.log('[key]', this.lineContent);
         this.key(match[1]);
         state = STATE_READ_AFTER_KEY;
         continue;
       }
 
       if((match = MULTILINE_VALUE_BEGIN.exec(this.lineContent))) {
-        // console.log('[multiline value begin]', this.lineContent);
         this.multilineValueBegin(match[1], match[2]);
         state = STATE_READ_MULTILINE_VALUE;
         continue;
       }
 
       if((match = ANY_KEY.exec(this.lineContent))) {
-        // console.log('[any key]', this.lineContent);
         this.anyKey(match[1]);
         state = STATE_READ_AFTER_KEY;
         continue;
       }
 
       if((match = SECTION.exec(this.lineContent))) {
-        // console.log('[section]', this.lineContent);
         this.section(match[1], match[2]);
         continue;
       }
@@ -441,7 +446,6 @@ class PlainDataParser {
     }
 
     if(state === STATE_READ_AFTER_KEY) {
-      // console.log('[end of document while reading after key]');
       this.endOfDocumentAfterKey();
     }
 
@@ -480,16 +484,13 @@ class PlainDataParser {
     const keyColumn = this.lineContent.lastIndexOf(key);
 
     const newSection = new PlainDataSection({
-      context: this.context,
-      depth: this.currentSection.depth + 1,
-      key: key,
+      depth: this.currentSection.depth + 1, // TODO: Automate depth reset in section.append() ?
       keyRange: {
         beginColumn: keyColumn,
         beginLine: this.lineNumber,
         endColumn: keyColumn + key.length,
         endLine: this.lineNumber
       },
-      parent: this.currentSection,
       range: {
         beginColumn: keyColumn + key.length,
         beginLine: this.lineNumber,
@@ -500,7 +501,7 @@ class PlainDataParser {
 
     // TODO: Clean up/expand lookupIndex implementation and concept (e.g. better ranges for null values)
     this.lookupIndex[this.lineNumber] = newSection;
-    this.currentSection.add(newSection);
+    this.currentSection.append(key, newSection);
     this.currentSection = newSection;
   }
 

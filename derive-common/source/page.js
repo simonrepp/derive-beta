@@ -38,14 +38,14 @@ module.exports = async (data, plainPath) => {
     };
 
     try {
-      page.title = document.value('Titel', { required: true });
+      page.title = document.attribute('Titel', { required: true });
 
-      const permalink = document.value('Permalink', validatePermalink, { required: true, withTrace: true });
+      const permalink = document.attribute('Permalink', validatePermalink, { required: true, withTrace: true });
       page.permalink = permalink.value;
       page.permalinkTrace = permalink.trace;
 
-      page.urbanize = document.value('Urbanize', validateEnum(URBANIZE_ENUM));
-      page.text = document.value('Text', validateMarkdownWithMedia);
+      page.urbanize = document.attribute('Urbanize', validateEnum(URBANIZE_ENUM));
+      page.text = document.attribute('Text', validateMarkdownWithMedia);
 
       document.assertAllTouched();
     } catch(err) {

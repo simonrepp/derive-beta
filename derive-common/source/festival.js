@@ -34,12 +34,12 @@ module.exports = async (data, plainPath) => {
     const festival = { sourceFile: plainPath };
 
     try {
-      festival.title = document.value('Titel', { required: true });
-      festival.subtitle = document.value('Untertitel', { required: true });
-      festival.description = document.value('Beschreibung', validateMarkdown, { required: true });
+      festival.title = document.attribute('Titel', { required: true });
+      festival.subtitle = document.attribute('Untertitel', { required: true });
+      festival.description = document.attribute('Beschreibung', validateMarkdown, { required: true });
       festival.editions = document.sections('Edition').map(edition => ({
-        image: edition.value('Bild', validatePath, { required: true }),
-        url: edition.value('URL', validateAbsoluteUrl, { required: true })
+        image: edition.attribute('Bild', validatePath, { required: true }),
+        url: edition.attribute('URL', validateAbsoluteUrl, { required: true })
       }));
 
       document.assertAllTouched();

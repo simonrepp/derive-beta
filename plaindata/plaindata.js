@@ -5,16 +5,24 @@ const locales = require('./lib/locales.js');
 
 // TODO: Parser/Dumper vs Decoder/Encoder ?
 
-// exports.dump = object => {
-//
-//   // TODO: Validate it's an object here ? (or insider dumper?)
-//
+exports.dump = object => {
+
+  if(typeof object !== 'object') {
+    throw new TypeError(
+      `The dumper accepts only objects as input, input was: ${object}`
+    );
+  }
+
 //   const dumper = new PlainDataDumper(input, locale);
-// };
+};
 
 exports.parse = (input, locale = 'en') => {
 
-  // TODO: Validate input here ? (if it's a string)
+  if(typeof input !== 'string') {
+    throw new TypeError(
+      `The parser accepts only strings as input, input was: ${input}`
+    );
+  }
 
   if(!locales.includes(locale)) {
     throw new RangeError(

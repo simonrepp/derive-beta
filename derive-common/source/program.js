@@ -39,22 +39,22 @@ module.exports = async (data, plainPath) => {
     };
 
     try {
-      program.title = document.value('Titel', { required: true });
+      program.title = document.attribute('Titel', { required: true });
 
-      const permalink = document.value('Permalink', validatePermalink, { required: true, withTrace: true });
+      const permalink = document.attribute('Permalink', validatePermalink, { required: true, withTrace: true });
       program.permalink = permalink.value;
       program.permalinkTrace = permalink.trace;
 
-      program.firstBroadcast = document.value('Erstausstrahlung', validateDate, { required: true });
-      program.subtitle = document.value('Untertitel');
-      program.image = document.value('Bild', validatePath);
-      program.soundfile = document.value('Soundfile', validatePath);
-      program.editorReferences = document.values('Redaktion', { withTrace: true });
-      program.language = document.value('Sprache');
-      program.categoriesDisconnected = document.values('Kategorien');
-      program.tagsDisconnected = document.values('Tags');
-      program.abstract = document.value('Abstract', validateMarkdown);
-      program.text = document.value('Text', validateMarkdownWithMedia);
+      program.firstBroadcast = document.attribute('Erstausstrahlung', validateDate, { required: true });
+      program.subtitle = document.attribute('Untertitel');
+      program.image = document.attribute('Bild', validatePath);
+      program.soundfile = document.attribute('Soundfile', validatePath);
+      program.editorReferences = document.list('Redaktion', { withTrace: true });
+      program.language = document.attribute('Sprache');
+      program.categoriesDisconnected = document.list('Kategorien');
+      program.tagsDisconnected = document.list('Tags');
+      program.abstract = document.attribute('Abstract', validateMarkdown);
+      program.text = document.attribute('Text', validateMarkdownWithMedia);
 
       document.assertAllTouched();
     } catch(err) {

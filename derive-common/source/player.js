@@ -38,20 +38,20 @@ module.exports = async (data, plainPath) => {
     };
 
     try {
-      const name = document.value('Name', { required: true, withTrace: true });
+      const name = document.attribute('Name', { required: true, withTrace: true });
       player.name = name.value;
       player.nameTrace = name.trace;
 
-      const permalink = document.value('Permalink', validatePermalink, { required: true, withTrace: true });
+      const permalink = document.attribute('Permalink', validatePermalink, { required: true, withTrace: true });
       player.permalink = permalink.value;
       player.permalinkTrace = permalink.trace;
 
-      player.country = document.value('Land');
-      player.city = document.value('Stadt');
-      player.tagsDisconnected = document.values('Tags');
-      player.website = document.value('Website', validateAbsoluteUrl);
-      player.biography = document.value('Biographie', validateMarkdown);
-      player.text = document.value('Text', validateMarkdown);
+      player.country = document.attribute('Land');
+      player.city = document.attribute('Stadt');
+      player.tagsDisconnected = document.list('Tags');
+      player.website = document.attribute('Website', validateAbsoluteUrl);
+      player.biography = document.attribute('Biographie', validateMarkdown);
+      player.text = document.attribute('Text', validateMarkdown);
 
       document.assertAllTouched();
     } catch(err) {

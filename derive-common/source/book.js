@@ -39,25 +39,25 @@ module.exports = async (data, plainPath) => {
     };
 
     try {
-      const title = document.value('Titel', { required: true, withTrace: true });
+      const title = document.attribute('Titel', { required: true, withTrace: true });
       book.title = title.value;
       book.titleTrace = title.trace;
 
-      const permalink = document.value('Permalink', validatePermalink, { required: true, withTrace: true });
+      const permalink = document.attribute('Permalink', validatePermalink, { required: true, withTrace: true });
       book.permalink = permalink.value;
       book.permalinkTrace = permalink.trace;
 
-      book.yearOfPublication = document.value('Erscheinungsjahr', validateInteger, { required: true });
-      book.isxn = document.value('ISBN/ISSN');
-      book.url = document.value('URL', validateAbsoluteUrl);
-      book.placeOfPublication = document.value('Erscheinungsort');
-      book.numberOfPages = document.value('Seitenanzahl', validateInteger);
-      book.price = document.value('Preis');
-      book.authorReferences = document.values('Autoren/Herausgeber', { withTrace: true });
-      book.publisherReferences = document.values('Verleger', { withTrace: true });
-      book.tagsDisconnected = document.values('Tags');
-      book.cover = document.value('Cover', validatePath);
-      book.description = document.value('Verlagstext', validateMarkdown);
+      book.yearOfPublication = document.attribute('Erscheinungsjahr', validateInteger, { required: true });
+      book.isxn = document.attribute('ISBN/ISSN');
+      book.url = document.attribute('URL', validateAbsoluteUrl);
+      book.placeOfPublication = document.attribute('Erscheinungsort');
+      book.numberOfPages = document.attribute('Seitenanzahl', validateInteger);
+      book.price = document.attribute('Preis');
+      book.authorReferences = document.list('Autoren/Herausgeber', { withTrace: true });
+      book.publisherReferences = document.list('Verleger', { withTrace: true });
+      book.tagsDisconnected = document.list('Tags');
+      book.cover = document.attribute('Cover', validatePath);
+      book.description = document.attribute('Verlagstext', validateMarkdown);
 
       document.assertAllTouched();
     } catch(err) {

@@ -36,6 +36,10 @@ class PlainDataValue {
     return this.value;
   }
 
+  raw() {
+    return this.value;
+  }
+
   touch() {
     this.touched = true;
   }

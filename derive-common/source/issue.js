@@ -40,29 +40,29 @@ module.exports = async (data, plainPath) => {
     };
 
     try {
-      const number = document.value('Nummer', validateInteger, { required: true, withTrace: true });
+      const number = document.attribute('Nummer', validateInteger, { required: true, withTrace: true });
       issue.number = number.value;
       issue.numberTrace = number.trace;
 
-      issue.title = document.value('Titel', { required: true });
-      issue.year = document.value('Jahr', validateInteger, { required: true });
-      issue.quarter = document.value('Quartal', validateInteger, { required: true });
-      issue.cover = document.value('Cover', validatePath, { required: true });
-      issue.shopLink = document.value('Link zum Shop');
-      issue.cooperation = document.value('Kooperation');
-      issue.features = document.values('Schwerpunkte');
-      issue.outOfPrint = document.value('Vergriffen', validateBoolean);
-      issue.publicationDate = document.value('Erscheinungsdatum', validateDate);
-      issue.tagsDisconnected = document.values('Tags');
-      issue.description = document.value('Beschreibung', validateMarkdown);
+      issue.title = document.attribute('Titel', { required: true });
+      issue.year = document.attribute('Jahr', validateInteger, { required: true });
+      issue.quarter = document.attribute('Quartal', validateInteger, { required: true });
+      issue.cover = document.attribute('Cover', validatePath, { required: true });
+      issue.shopLink = document.attribute('Link zum Shop');
+      issue.cooperation = document.attribute('Kooperation');
+      issue.features = document.list('Schwerpunkte');
+      issue.outOfPrint = document.attribute('Vergriffen', validateBoolean);
+      issue.publicationDate = document.attribute('Erscheinungsdatum', validateDate);
+      issue.tagsDisconnected = document.list('Tags');
+      issue.description = document.attribute('Beschreibung', validateMarkdown);
 
       issue.sections = document.sections('Rubrik').map(section => ({
-        title: section.value('Titel', { required: true }),
+        title: section.attribute('Titel', { required: true }),
         articleReferences: section.sections('Artikel', { keyRequired: false }).map(reference => {
-          const title = reference.value('Titel', { required: true, withTrace: true });
+          const title = reference.attribute('Titel', { required: true, withTrace: true });
 
           return {
-            pages: reference.value('Seite(n)', { required: true }),
+            pages: reference.attribute('Seite(n)', { required: true }),
             title: title.value,
             titleTrace: title.trace
           };

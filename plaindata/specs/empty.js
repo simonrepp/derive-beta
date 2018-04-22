@@ -36,11 +36,11 @@ end:
 
 const expected = {
   empty: [null],
-  leer: [
+  leer: [[
     null,
     null,
     null
-  ],
+  ]],
   nothing: [{
     none: [{
       void: [null],
@@ -51,11 +51,11 @@ const expected = {
   nichts: [null],
   nada: [null],
   ningun: [{
-    absence: [
+    absence: [[
       null,
       null,
       null
-    ],
+    ]],
     non: [null],
     end: [null]
   }]

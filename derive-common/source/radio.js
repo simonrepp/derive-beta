@@ -32,9 +32,9 @@ module.exports = async (data, plainPath) => {
     const radio = { sourceFile: plainPath };
 
     try {
-      radio.title = document.value('Titel', { required: true });
-      radio.info = document.value('Allgemeine Info', validateMarkdown, { required: true });
-      radio.editorReferences = document.values('Redaktion', { withTrace: true });
+      radio.title = document.attribute('Titel', { required: true });
+      radio.info = document.attribute('Allgemeine Info', validateMarkdown, { required: true });
+      radio.editorReferences = document.list('Redaktion', { withTrace: true });
 
       document.assertAllTouched();
     } catch(err) {

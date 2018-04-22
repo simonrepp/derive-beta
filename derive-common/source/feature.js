@@ -40,13 +40,13 @@ module.exports = async (data, plainPath) => {
     };
 
     try {
-      feature.title = document.value('Titel', { required: true });
-      feature.header = document.value('Header');
-      feature.image = document.value('Bild', validatePath);
-      feature.position = document.value('Position', validateInteger);
-      feature.biggerBox = document.value('Größere Box', validateBoolean);
-      feature.url = document.value('URL', validateAbsoluteUrl);
-      feature.text = document.value('Text', validateMarkdown);
+      feature.title = document.attribute('Titel', { required: true });
+      feature.header = document.attribute('Header');
+      feature.image = document.attribute('Bild', validatePath);
+      feature.position = document.attribute('Position', validateInteger);
+      feature.biggerBox = document.attribute('Größere Box', validateBoolean);
+      feature.url = document.attribute('URL', validateAbsoluteUrl);
+      feature.text = document.attribute('Text', validateMarkdown);
 
       document.assertAllTouched();
     } catch(err) {

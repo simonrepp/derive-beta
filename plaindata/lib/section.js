@@ -1,32 +1,38 @@
 const { errors } = require('./message-codes.js');
 const { PlainDataValidationError } = require('./errors.js');
+const PlainDataCollection = require('./collection.js');
+const PlainDataList = require('./list.js');
 const PlainDataValue = require('./value.js');
 
 class PlainDataSection {
   constructor(section) {
-    this.context = section.context;
-    this.depth = section.depth;
-    this.key = section.key;
-    this.keyRange = section.keyRange;
-    this.parent = section.parent;
-
-    this.range = section.range;
+    if(section.context) {
+      this.context = section.context;
+    }
 
     if(section.lookupIndex) {
       this.lookupIndex = section.lookupIndex;
     }
 
-    this.touched = this.key ? false : true;
+    this.depth = section.depth;
+    this.keyRange = section.keyRange;
+    this.range = section.range;
 
-    this.valuesAssociative = {};
-    this.valuesSequential = [];
+    this.touched = false;
+
+    this.elementsAssociative = {};
+    this.elementsSequential = [];
   }
 
-  add(value) {
-    const existingAssociative = this.valuesAssociative[value.key];
+  append(key, value) {
+    value.key = key;
+    value.context = this.context;
+    value.parent = this;
+
+    const existingAssociative = this.elementsAssociative[value.key];
 
     if(existingAssociative === undefined) {
-      this.valuesAssociative[value.key] = [value];
+      this.elementsAssociative[value.key] = [value];
     } else {
       existingAssociative.push(value);
     }
@@ -36,10 +42,9 @@ class PlainDataSection {
       this.range.beginLine = value.keyRange.beginLine;
     }
 
-    this.range.endColumn = value.range.endColumn;
-    this.range.endLine = value.range.endLine;
+    this.extendRange(value.range.endLine, value.range.endColumn);
 
-    this.valuesSequential.push(value);
+    this.elementsSequential.push(value);
   }
 
   // TODO: Configurable/overridable error message here
@@ -50,7 +55,7 @@ class PlainDataSection {
     if(options.only) {
       keys = options.only;
     } else {
-      keys = Object.keys(this.valuesAssociative);
+      keys = Object.keys(this.elementsAssociative);
 
       if(options.except) {
         keys = keys.filter(key => !options.except.includes(key));
@@ -58,7 +63,7 @@ class PlainDataSection {
     }
 
     for(let key of keys) {
-      const values = this.valuesAssociative[key];
+      const values = this.elementsAssociative[key];
 
       if(values !== null) {
         for(let value of values) {
@@ -79,149 +84,13 @@ class PlainDataSection {
     }
   }
 
-  // TODO: This not used yet, probably needs better usecase/specification ("mixed" ?)
-  list(key, options = { keyRequired: true }) {
-    const values = this.valuesAssociative[key];
-
-    if(values === undefined) {
-      if(options.keyRequired) {
-        throw new PlainDataValidationError(this.context, {
-          code: errors.validation.MISSING_KEY,
-          meta: { key: value.key },
-          printRanges: [[this.range.beginLine, this.range.endLine]],
-          editorRanges: [this.range]
-        });
-      } else {
-        return [];
-      }
-    }
-
-    return values;
-  }
-
-  raw() {
-    const exported = {};
-
-    for(let key of Object.keys(this.valuesAssociative)) {
-      const values = this.valuesAssociative[key];
-
-      exported[key] = values.map(value => {
-        if(value instanceof PlainDataSection) {
-          return value.raw();
-        }
-
-        if(value instanceof PlainDataValue) {
-          return value.get();
-        }
-      });
-    }
-
-    return exported;
-  }
-
-  section(key, options = { keyRequired: true }) {
-    const values = this.valuesAssociative[key];
-
-    if(values === undefined) {
-      if(options.keyRequired) {
-        throw new PlainDataValidationError(this.context, {
-          code: errors.validation.MISSING_KEY,
-          meta: { key: value.key },
-          printRanges: [[this.range.beginLine, this.range.endLine]],
-          editorRanges: [this.range]
-        });
-      } else {
-        return {};
-      }
-    }
-
-    if(values.length === 1) {
-      const value = values[0];
-
-      value.touch();
-
-      if(value instanceof PlainDataSection) {
-        return value;
-      } else {
-
-        // TODO: Now that we have "inline" sections ...
-        //       Foo:
-        //       Bar = Baz
-        //       there is no telling if an empty "Foo" was really meant as:
-        //       Foo:
-        //       - Bar
-        //       thus empty can be either value(s) or section(s) and there
-        //       cannot be an error that an empty "Foo:" is not a section,
-        //       because it just might be an inline section that is empy.
-        //
-        // TODO: This might tie in ideally with AST restructuring (also tackling value.value inconsistencies and missing parent pointer for values, etc.)
-
-        throw new PlainDataValidationError(this.context, {
-          code: errors.validation.EXPECTED_SECTION_GOT_VALUE,
-          meta: { key: key },
-          printRanges: [[value.range.beginLine, value.range.endLine]],
-          editorRanges: [value.keyRange, value.range]
-        });
-      }
-    }
-
-    const ranges = new Set();
-    values.forEach(value => {
-      ranges.add(value.keyRange);
-      ranges.add(value.range);
-    });
-
-    throw new PlainDataValidationError(this.context, {
-      code: errors.validation.EXPECTED_SECTION_GOT_LIST,
-      meta: { key: key },
-      printRanges: [[values[0].range.beginLine, values[values.length - 1].range.endLine]],
-      editorRanges: [...ranges]
-    });
-  }
-
-  sections(key, options = { keyRequired: true }) {
-    const values = this.valuesAssociative[key];
-
-    if(values === undefined) {
-      if(options.keyRequired) {
-        throw new PlainDataValidationError(this.context, {
-          code: errors.validation.MISSING_KEY,
-          meta: { key: value.key },
-          printRanges: [[this.range.beginLine, this.range.endLine]],
-          editorRanges: [this.range]
-        });
-      } else {
-        return [];
-      }
-    }
-
-    return values.map(value => {
-      value.touch();
-
-      if(value instanceof PlainDataSection) {
-        return value;
-      } else {
-        throw new PlainDataValidationError(this.context, {
-          code: errors.validation.EXPECTED_SECTIONS_GOT_VALUE,
-          meta: { key: key },
-          printRanges: [[value.range.beginLine, value.range.endLine]],
-          editorRanges: [value.range]
-        });
-      }
-    });
-  }
-
-  sequential() {
-    this.valuesSequential.forEach(value => value.touch());
-
-    return this.valuesSequential;
-  }
-
-  touch() {
-    this.touched = true;
-  }
-
-  value(key, ...optional) {
+  // TODO: Consider going from '*-key' terminology to '*-name', especially in public facing lingo this is cool because:
+  // "Each (Section or Collection) Attribute has a name and a value"
+  // "Each List has a name and values"
+  // "Each Section has a name"
+  // "Each Collection has a name"
+  //  .. This is much clearer to non-technical persons than "key" everywhere
+  attribute(key, ...optional) {
     let options = { keyRequired: true, required: false, withTrace: false };
     let process = null;
 
@@ -233,12 +102,12 @@ class PlainDataSection {
       }
     }
 
-    const values = this.valuesAssociative[key];
+    const elements = this.elementsAssociative[key];
 
-    if(values === undefined) {
+    if(elements === undefined) {
       if(options.keyRequired) {
         throw new PlainDataValidationError(this.context, {
-          code: errors.validation.MISSING_KEY,
+          code: errors.validation.MISSING_FIELD,
           meta: { key: key },
           printRanges: [[this.range.beginLine, this.range.endLine]],
           editorRanges: [this.range]
@@ -252,27 +121,43 @@ class PlainDataSection {
       }
     }
 
-    const nonEmptyValues = [];
+    const results = [];
+    const nonEmptyResults = [];
 
-    for(let value of values) {
-      value.touch();
+    for(let element of elements) {
+      element.touch();
 
-      if(value.value !== null) {
-        nonEmptyValues.push(value);
+      if(element instanceof PlainDataCollection) {
+        throw new PlainDataValidationError(this.context, {
+          code: errors.validation.EXPECTED_ATTRIBUTE_GOT_COLLECTION,
+          meta: { key: key },
+          printRanges: [[element.keyRange.beginLine, element.range.endLine]],
+          editorRanges: [element.keyRange] // TODO: Needs a custom range ? like the printRange basically - from key up to last value
+        });
+      }
+
+      if(element instanceof PlainDataSection) {
+        throw new PlainDataValidationError(this.context, {
+          code: errors.validation.EXPECTED_ATTRIBUTE_GOT_SECTION,
+          meta: { key: key },
+          printRanges: [[element.keyRange.beginLine, element.range.endLine]],
+          editorRanges: [element.keyRange]
+        });
+      }
+
+      const values = element instanceof PlainDataList ? element.values : [element];
+
+      for(let value of values) {
+        results.push(value);
+
+        if(value.value !== null) {
+          nonEmptyResults.push(value);
+        }
       }
     }
 
-    if(nonEmptyValues.length === 1) {
-      const value = nonEmptyValues[0];
-
-      if(!(value instanceof PlainDataValue)) {
-        throw new PlainDataValidationError(this.context, {
-          code: errors.validation.EXPECTED_VALUE_GOT_SECTION,
-          meta: { key: key },
-          printRanges: [[value.range.beginLine, value.range.endLine]],
-          editorRanges: [value.keyRange]
-        });
-      }
+    if(nonEmptyResults.length === 1) {
+      const value = nonEmptyResults[0];
 
       if(process) {
         try {
@@ -301,21 +186,22 @@ class PlainDataSection {
       }
     }
 
-    if(nonEmptyValues.length > 1) {
+    if(nonEmptyResults.length > 1) {
+      console.log(results);
       throw new PlainDataValidationError(this.context, {
-        code: errors.validation.EXPECTED_VALUE_GOT_VALUES,
+        code: errors.validation.EXPECTED_ATTRIBUTE_GOT_LIST,
         meta: { key: key },
-        printRanges: nonEmptyValues.map(value => [value.range.beginLine, value.range.endLine]),
-        editorRanges: [nonEmptyValues.map(value => value.range)]
+        printRanges: nonEmptyResults.map(value => [value.range.beginLine, value.range.endLine]),
+        editorRanges: nonEmptyResults.map(value => value.range)
       });
     }
 
     if(options.required) {
       throw new PlainDataValidationError(this.context, {
-        code: errors.validation.MISSING_VALUE,
+        code: errors.validation.MISSING_FIELD,
         meta: { key: key },
-        printRanges: values.map(value => [value.range.beginLine, value.range.endLine]),
-        editorRanges: values.map(value => value.range)
+        printRanges: results.map(value => [value.range.beginLine, value.range.endLine]),
+        editorRanges: results.map(value => value.range)
       });
     }
 
@@ -326,7 +212,116 @@ class PlainDataSection {
     }
   }
 
-  values(key, ...optional) {
+  collection(key, ...optional) {
+    let options = { keyRequired: true };
+
+    for(let argument of optional) {
+      if(typeof argument === 'object') {
+        Object.assign(options, argument);
+      }
+    }
+
+    const elements = this.elementsAssociative[key];
+
+    if(elements === undefined) {
+      if(options.keyRequired) {
+        throw new PlainDataValidationError(this.context, {
+          code: errors.validation.MISSING_COLLECTION,
+          meta: { key: key },
+          printRanges: [[this.range.beginLine, this.range.endLine]],
+          editorRanges: [this.range]
+        });
+      }
+
+      return {}; // TODO: Or should this return null? hm! :)
+    }
+
+    for(let element of elements) {
+      element.touch();
+
+      // TODO: An empty collection registers as an empty PlainDataValue,
+      //       this triggers a validation error here - in error - so that
+      //       means we either manually check for null - meh - or better,
+      //       we introduce a PlainDataEmpty type that covers this :)
+
+      if(element instanceof PlainDataValue) {
+        throw new PlainDataValidationError(this.context, {
+          code: errors.validation.EXPECTED_COLLECTION_GOT_ATTRIBUTE,
+          meta: { key: key },
+          printRanges: [[element.keyRange.beginLine, element.range.endLine]],
+          editorRanges: [element.keyRange] // TODO: Should be full range / key & value
+        });
+      }
+
+      // TODO: There is an ambiguity:
+      //       Multiple multiline values count as multiple attributes,
+      //       somehow they are a list though as soon as there 2, beacuse they have no syntactical distinction.
+
+      if(element instanceof PlainDataList) {
+        throw new PlainDataValidationError(this.context, {
+          code: errors.validation.EXPECTED_COLLECTION_GOT_LIST,
+          meta: { key: key },
+          printRanges: element.values.map(value => [value.range]),
+          editorRanges: element.values.map(value => value.range)
+        });
+      }
+
+      if(element instanceof PlainDataSection) {
+        throw new PlainDataValidationError(this.context, {
+          code: errors.validation.EXPECTED_COLLECTION_GOT_SECTION,
+          meta: { key: key },
+          printRanges: [[element.keyRange.beginLine, element.range.endLine]],
+          editorRanges: [element.keyRange] // TODO: Should be full range / key & value
+        });
+      }
+    }
+
+    if(elements.length === 1) {
+      return elements[0];
+    }
+
+    if(elements.length > 1) {
+      throw new PlainDataValidationError(this.context, {
+        code: errors.validation.EXPECTED_COLLECTION_GOT_COLLECTIONS,
+        meta: { key: key },
+        printRanges: elements.map(element => [element.keyRange.beginLine, element.range.endLine]),
+        editorRanges: elements.map(element => element.range) // TODO: Should be full range / key & value
+      });
+    }
+
+    return {}; // TODO: Or should this return null? hm! :)
+  }
+
+  // TODO: This not used yet, needs usecase/specification
+  // mixed(key, options = { keyRequired: true }) {
+  //   const values = this.elementsAssociative[key];
+  //
+  //   if(values === undefined) {
+  //     if(options.keyRequired) {
+  //       throw new PlainDataValidationError(this.context, {
+  //         code: errors.validation.MISSING_GENERIC_FOO,
+  //         meta: { key: value.key },
+  //         printRanges: [[this.range.beginLine, this.range.endLine]],
+  //         editorRanges: [this.range]
+  //       });
+  //     } else {
+  //       return [];
+  //     }
+  //   }
+  //
+  //   return values;
+  // }
+
+  extendRange(line, column) {
+    this.range.endColumn = column;
+    this.range.endLine = line;
+
+    if(this.parent) {
+      this.parent.extendRange(line, column);
+    }
+  }
+
+  list(key, ...optional) {
     let options = {
       exactCount: null,
       includeEmpty: false,
@@ -335,6 +330,7 @@ class PlainDataSection {
       minCount: null,
       withTrace: false
     };
+
     let process = null;
 
     for(let argument of optional) {
@@ -345,12 +341,12 @@ class PlainDataSection {
       }
     }
 
-    const values = this.valuesAssociative[key];
+    const elements = this.elementsAssociative[key];
 
-    if(values === undefined) {
+    if(elements === undefined) {
       if(options.keyRequired) {
         throw new PlainDataValidationError(this.context, {
-          code: errors.validation.MISSING_KEY,
+          code: errors.validation.MISSING_LIST,
           meta: { key: value.key },
           printRanges: [[this.range.beginLine, this.range.endLine]],
           editorRanges: [this.range]
@@ -362,51 +358,66 @@ class PlainDataSection {
 
     const results = [];
 
-    values.forEach(value => {
-      value.touch();
+    // TODO: values => can be Section Attribute(s), List(s), Collection(s), Section(s)
+    //       Some other terminology than value would be super cool, e.g. elements ? (here is good, consider everywhere)
+    for(let element of elements) {
+      element.touch();
 
-      if(!(value instanceof PlainDataValue)) {
+      if(element instanceof PlainDataCollection) {
         throw new PlainDataValidationError(this.context, {
-          code: errors.validation.EXPECTED_VALUES_GOT_SECTION,
+          code: errors.validation.EXPECTED_LIST_GOT_COLLECTION,
           meta: { key: key },
-          printRanges: [[value.range.beginLine, value.range.endLine]],
-          editorRanges: [value.keyRange]
+          printRanges: [[element.keyRange.beginLine, element.range.endLine]],
+          editorRanges: [element.keyRange] // TODO: Needs a custom range ? like the printRange basically - from key up to last value
         });
       }
 
-      if(options.includeEmpty || value.value !== null) {
-        if(process) {
-          try {
-            const processed = process(value);
+      if(element instanceof PlainDataSection) {
+        throw new PlainDataValidationError(this.context, {
+          code: errors.validation.EXPECTED_LIST_GOT_SECTION,
+          meta: { key: key },
+          printRanges: [[element.keyRange.beginLine, element.range.endLine]],
+          editorRanges: [element.keyRange]
+        });
+      }
 
-            if(options.withTrace) {
-              return { trace: value, value: processed };
-            } else {
-              return processed;
+      const values = element instanceof PlainDataList ? element.values : [element];
+
+      for(let value of values) {
+        if(options.includeEmpty || value.value !== null) {
+          if(process) {
+            try {
+              const processed = process(value);
+
+              if(options.withTrace) {
+                results.push({ trace: value, value: processed });
+              } else {
+                results.push(processed);
+              }
+            } catch(message) {
+              throw new PlainDataValidationError(this.context, {
+                message: message,
+                printRanges: [[value.range.beginLine, value.range.endLine]],
+                editorRanges: [value.range]
+              });
             }
-          } catch(message) {
-            throw new PlainDataValidationError(this.context, {
-              message: message,
-              printRanges: [[value.range.beginLine, value.range.endLine]],
-              editorRanges: [value.range]
-            });
+          }
+
+          if(options.withTrace) {
+            results.push({ trace: value, value: value.get() });
+          } else {
+            results.push(value.get());
           }
         }
-
-        if(options.withTrace) {
-          results.push({ trace: value, value: value.get() });
-        } else {
-          results.push(value.get());
-        }
       }
-    });
+    }
 
     if(options.exactCount !== null && results.length !== options.exactCount) {
       throw new PlainDataValidationError(this.context, {
         code: errors.validation.EXACT_COUNT_NOT_MET,
         meta: { actual: results.length, expected: options.exactCount, key: key },
-        printRanges: [[values[0].range.beginLine, values[values.length - 1].range.endLine]],
-        editorRanges: values.map(value => value.range)
+        printRanges: results.map(value => [value.range.beginLine, value.range.endLine]), // Possibly directly pass ranges and let line-printer.js extract the beginLine/endLine itself (unless there needs to be manual picking between begin and end, only possible issue! check :)
+        editorRanges: results.map(value => value.range)
       });
     }
 
@@ -414,8 +425,8 @@ class PlainDataSection {
       throw new PlainDataValidationError(this.context, {
         code: errors.validation.MIN_COUNT_NOT_MET,
         meta: { actual: results.length, expected: options.minCount, key: key },
-        printRanges: [[values[0].range.beginLine, values[values.length - 1].range.endLine]],
-        editorRanges: values.map(value => value.range)
+        printRanges: results.map(value => [value.range.beginLine, value.range.endLine]),
+        editorRanges: results.map(value => value.range)
       });
     }
 
@@ -423,12 +434,139 @@ class PlainDataSection {
       throw new PlainDataValidationError(this.context, {
         code: errors.validation.MAX_COUNT_NOT_MET,
         meta: { actual: results.length, expected: options.maxCount, key: key },
-        printRanges: [[values[0].range.beginLine, values[values.length - 1].range.endLine]],
-        editorRanges: values.map(value => value.range)
+        printRanges: results.map(value => [value.range.beginLine, value.range.endLine]),
+        editorRanges: results.map(value => value.range)
       });
     }
 
     return results;
+  }
+
+  raw() {
+    const exported = {};
+
+    for(let key of Object.keys(this.elementsAssociative)) {
+      const elements = this.elementsAssociative[key];
+      exported[key] = elements.map(element => element.raw());
+    }
+
+    return exported;
+  }
+
+  // process possibilty to consume tree? maybe chained as function?
+  section(key, options = { keyRequired: true }) {
+    const elements = this.elementsAssociative[key];
+
+    if(elements === undefined) {
+      if(options.keyRequired) {
+        throw new PlainDataValidationError(this.context, {
+          code: errors.validation.MISSING_SECTION,
+          meta: { key: value.key },
+          printRanges: [[this.range.beginLine, this.range.endLine]],
+          editorRanges: [this.range]
+        });
+      } else {
+        return {}; // TODO: Strictly speaking this should be null I guess ? {} is definitely wrong in any case.
+                   //       We could also construct a virtual section and return it
+                   //       (because the calls on section for values still need to work)
+                   //       but consider if that is a good idea first, in all aspects :)
+      }
+    }
+
+    for(let element of elements) {
+      element.touch();
+
+      if(element instanceof PlainDataValue) {
+        throw new PlainDataValidationError(this.context, {
+          code: errors.validation.EXPECTED_SECTION_GOT_ATTRIBUTE,
+          meta: { key: key },
+          printRanges: [[element.keyRange.beginLine, element.range.endLine]],
+          editorRanges: [element.keyRange] // TODO: Needs a custom range ? like the printRange basically - from key up to last value
+        });
+      }
+
+      if(element instanceof PlainDataCollection) {
+        throw new PlainDataValidationError(this.context, {
+          code: errors.validation.EXPECTED_SECTION_GOT_COLLECTION,
+          meta: { key: key },
+          printRanges: [[element.keyRange.beginLine, element.range.endLine]],
+          editorRanges: [element.keyRange] // TODO: Needs a custom range ? like the printRange basically - from key up to last value
+        });
+      }
+
+      if(element instanceof PlainDataList) {
+        throw new PlainDataValidationError(this.context, {
+          code: errors.validation.EXPECTED_SECTION_GOT_LIST,
+          meta: { key: key },
+          printRanges: [[element.keyRange.beginLine, element.range.endLine]],
+          editorRanges: [element.keyRange]
+        });
+      }
+    }
+
+    if(elements.length === 1) {
+      return elements[0];
+    }
+
+    // TODO: Maybe a differentation range / keyRange / valueRange makes sense too? where the first contains the two following
+
+    throw new PlainDataValidationError(this.context, {
+      code: errors.validation.EXPECTED_SECTION_GOT_SECTIONS,
+      meta: { key: key },
+      printRanges: elements.map(element => [element.keyRange.beginLine, element.range.endLine]),
+      editorRanges: elements.map(element => element.range)
+    });
+  }
+
+  sections(key) {
+    const elements = this.elementsAssociative[key];
+
+    if(elements === undefined) {
+      return [];
+    }
+
+    for(let element of elements) {
+      element.touch();
+
+      if(element instanceof PlainDataValue) {
+        throw new PlainDataValidationError(this.context, {
+          code: errors.validation.EXPECTED_SECTIONS_GOT_ATTRIBUTE,
+          meta: { key: key },
+          printRanges: [[element.keyRange.beginLine, element.range.endLine]],
+          editorRanges: [element.keyRange] // TODO: Needs a custom range ? like the printRange basically - from key up to last value
+        });
+      }
+
+      if(element instanceof PlainDataCollection) {
+        throw new PlainDataValidationError(this.context, {
+          code: errors.validation.EXPECTED_SECTIONS_GOT_COLLECTION,
+          meta: { key: key },
+          printRanges: [[element.keyRange.beginLine, element.range.endLine]],
+          editorRanges: [element.keyRange] // TODO: Needs a custom range ? like the printRange basically - from key up to last value
+        });
+      }
+
+      if(element instanceof PlainDataList) {
+        throw new PlainDataValidationError(this.context, {
+          code: errors.validation.EXPECTED_SECTIONS_GOT_LIST,
+          meta: { key: key },
+          printRanges: [[element.keyRange.beginLine, element.range.endLine]],
+          editorRanges: [element.keyRange]
+        });
+      }
+    }
+
+    return elements;
+  }
+
+  sequential() {
+    this.elementsSequential.forEach(element => element.touch());
+
+    return this.elementsSequential;
+  }
+
+  touch() {
+    this.touched = true;
   }
 }
 
