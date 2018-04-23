@@ -17,7 +17,7 @@ patterns: [
     # -- multiline value
     # ...
     # -- multiline value
-    'begin': '^\\s*(-{2,})\\s*(.+?)\\s*$'
+    'begin': '^\\s*(-{2,})(?!-)\\s*(.+?)\\s*$'
     'beginCaptures':
       '1': 'name': 'punctuation.definition.block.multiline-value.begin.plain'
       '2': 'name': 'variable.other.key.plain'
