@@ -14,7 +14,7 @@ const STATE_READ_COLLECTION_ATTRIBUTES = 2;
 const STATE_READ_MULTILINE_VALUE = 3;
 const STATE_READ_LIST_VALUES = 4;
 
-const ANY_KEY = /^\s*::(?!:)\s*(\S.*?)\s*$/;
+const ANY_KEY = /^\s*==(?!=)\s*(\S.*?)\s*$/;
 const ATTRIBUTE = /^\s*(?![>\-#])([^=:]+?)\s*=\s*(.+?)?\s*$/;
 const COMMENT_OR_EMPTY = /^\s*(>|$)/;
 const KEY = /^\s*(?![>\-#])([^=:]+?)\s*:\s*$/;
@@ -22,7 +22,6 @@ const KEY_VALUE = /^\s*(?![>\-#])([^=:]+?)\s*:\s*(\S.*?)\s*$/;
 const LIST_VALUE = /^\s*-(?!-)\s*(.+?)?\s*$/;
 const MULTILINE_VALUE_BEGIN = /^\s*(-{2,})\s*(\S.*?)\s*$/;
 const SECTION = /^\s*(#+)\s*(\S.*?)\s*$/;
-const VALUE = /^\s*:(?!:)\s*(.+?)?\s*$/; // Use?! => ': single explicity value syntax'
 
 // TODO: Consider the == Any key instead of :: Any Key syntax
 //

@@ -3,18 +3,18 @@ const assert = require('assert').strict;
 const { parse } = require('../plaindata.js');
 
 const sample = `
-:: key1
+== key1
 - value
-:: list1
+== list1
 - value
 - value
-- value
-
-:: key2
-
 - value
 
-:: list2
+== key2
+
+- value
+
+== list2
 
 - value
 

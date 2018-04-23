@@ -13,7 +13,7 @@ leer:
 -
 
 nichts:
-:: nada
+== nada
 
 # nothing
 ## none
@@ -30,7 +30,7 @@ absence:
 -
 
 
-:: non
+== non
 end:
 `;
 

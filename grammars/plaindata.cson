@@ -41,8 +41,8 @@ patterns: [
       '1': 'name': 'punctuation.definition.comment.plain'
   }
   {
-    # :: any key
-    'match': '^\\s*(::)(?!:)\\s*(\\S.*?)\\s*$'
+    # == any key
+    'match': '^\\s*(==)(?!=)\\s*(\\S.*?)\\s*$'
     'captures':
       '1': 'name': 'punctuation.definition.key.plain'
       '2': 'name': 'variable.other.key.plain'
@@ -54,13 +54,6 @@ patterns: [
       '1': 'name': 'variable.other.key.attribute.plain'
       '2': 'name': 'punctuation.separator.key-value.attribute-value.plain'
       '3': 'name': 'markup.raw.inline.value.plain'
-  }
-  {
-    # : value
-    'match': '^\\s*(:)(?!:)\\s*(.+?)?\\s*$'
-    'captures':
-      '1': 'name': 'punctuation.definition.value.plain'
-      '2': 'name': 'markup.raw.inline.value.plain'
   }
   {
     # - value
