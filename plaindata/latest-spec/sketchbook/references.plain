@@ -1,0 +1,63 @@
+> You could pass in a dictionary to the parse function that supplies
+> predefined values for reference, thereby turning this into a templating
+> lite solution.
+>
+> These reference values can also be defined in the plain document itself
+> Approach it with constraints! Only single value references.  Don't bloat the spec! focus!
+
+
+> const templates = {
+>   'Copyright': 'By Simon (2016)',
+>   'Laura': 'Laura Winterstein',
+>   'Simon': 'Simon Repp'
+> };
+>
+> const document = plaindata.parse(fileContent, templates);
+
+# Work
+
+Title: The reckoning
+
+Label:
+* Copyright
+
+Description:
+* Lorem Ipsum
+
+Authors:
+* Laura
+* Simon
+
+# Work
+
+Title: The choir (v2)
+
+Label:
+* Copyright
+
+Description:
+* Lorem Ipsum
+
+* Lorem Ipsum:
+| We as signatories of the treaty of Azkaban declare that there are only
+| about 40.000 different types of default texts that we are willing
+| to use to illustrate plaindata spec examples.
+
+* Martin: Martin Heidegger
+
+* Agnes:
+| Agnes Miljewitsch
+
+* Jack:
+| Jack the Ripper
+
+Autoren:
+* Martin
+* Agnes
+* Jack
+* Quote
+
+** Quote
+We are surely not the first.
+And we won't be the last either.
+** Quote

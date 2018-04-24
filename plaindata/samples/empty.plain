@@ -8,15 +8,15 @@ leer:
 -
 
 nichts:
--- nada
+== nada
 -
 
 # nothing
 ## none
 void:
 emptyness:
---- leere
---- leere
+-- leere
+-- leere
 
 # ningun
 absence:
@@ -26,5 +26,5 @@ absence:
 -
 
 
--- non
+== non
 -

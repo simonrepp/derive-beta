@@ -47,7 +47,7 @@ Attribute Key = Attribute Value
 More Key = More Value
 
 :: Any Key
-: Value
+- Value
 
 :: Any Key
 - Value

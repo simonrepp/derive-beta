@@ -1,35 +1,92 @@
-> {
->   foo: [ [1, 2], [3, 4], [5, 6]]
-> }
+> - = # | \ : *
+
+# SOME NEW FINDINGS TO PLEASE FOLLOW BECAUSE I THOUGHT VERY HARD ABOUT IT
+
+Findings:
+- x Colon is only used for "key: (value)", period.
+- x "== Key" is very consistent and decorative, use this as the any key syntax!
+- x There is explicit syntax for "single value", because we need to be able to communicate intent!!
+- Consider PDEmpty to represent "typeless"/unknown-type empty
+
+## Explicit value syntax variants
+
+Intro: Gut
+
+Titel:
+| Denkbar
+
+== Titel
+| Flüchtig
+
+Am Ende doch eine Zuweisung:
+| Weisheit
+| kommt
+| in
+| grosser
+| dosis
+|
+| newline!
+
+-- Beschreibung
+Fraglich
+-- Beschreibung
+
+## Explicit list syntax variants
+
+Berufe:
+- Schneider
+- Bauarbeiter
+- Putzkraft
+
+Texte:
+| Frag nicht hey
+| komisch
+
+Texte:
+| prinzessin
+| quak quak ernsthaft
+
+== List
+- 1 
+- 2 
+- 3 
+
+## Mapping
+
+Foo:
+Fun = Good
+Things = Alright
+
+Internal Reference Variant:
+* Le Footnote
+
+Also helps to un-duplicate content:
+* Le Footnote
+
+Fun:
+- Things
+- Can
+- Be
+- Fun
+
+** Le Footnote
+This could be like the crazy longest text ever
+** Le Footnote
 
 foo:
-- 1
-- 2
+| bar
+| baz
 
 foo:
-- 3
-- 4
+| bom
+| bum
 
-foo:
-- 5
-- 6
+-- foo
+bar
+baz
+-- foo
 
-> # Fanny
-> href: /here/goes.jpg
-> label: nothing really!
-> #
-> Fanny: Depth 0
-> 
-> Content: Oh yeah
-> --
-> Contents: Oh yes!
-
-Key: Value
-
-:: Key
-: Value
-
-Key:
-: Value
-
-:: Key
+-- foo
+bom
+bum
+-- foo

@@ -5,6 +5,11 @@ const locales = require('./lib/locales.js');
 
 // TODO: Parser/Dumper vs Decoder/Encoder ?
 
+// TODO: - Pass default loaders to parse(..), which are always run when getting any values from the resulting document (e.g. ERB default loader to interpolate things)
+//       - Genereally enable possiblity to run multiple loaders in order (then you can also pass multiple loaders to the individual getters e.g.)
+//       - Make reference definition dictionary globally available to loaders ? (in order to eg. interpolate variables from there)
+
+
 exports.dump = object => {
 
   if(typeof object !== 'object') {

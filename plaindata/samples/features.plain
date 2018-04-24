@@ -9,40 +9,40 @@ Key:Value
 Key : Value
  Key: Value
 
--- :K:e:y::
-- Value
+== :K:e:y::
+| Value
 
--- K: ey
-- Value
+== K: ey
+| Value
 
--- > Key
-- Value
+== > Key
+| Value
 
--- - Key
-- Value
+== - Key
+| Value
 
--- -- Key
-- Value
+== -- Key
+| Value
 
--- --- Key
-- Value
+== --- Key
+| Value
 
--- # Key
-- Value
+== # Key
+| Value
 
--- ## Key
-- Value
+== ## Key
+| Value
 
--- ### Key
-- Value
+== ### Key
+| Value
 
---- Key
+-- Key
 Multi-
 
 -line-
 
 -value
---- Key
+-- Key
 
 Key:
 - Value

@@ -1,0 +1,41 @@
+== Any Key
+- Value
+- Value
+
+Key:
+Attribute A = Value
+Attribute B = Value
+
+== Any Key
+Attribute A = Value
+Attribute B = Value
+
+Key:
+| Value
+
+== Any Key
+| Value
+
+Key:
+| Value
+| Append value preceded by newline
+\ Append value preceded by space
+
+== Any Key
+| Value
+| Append value preceded by newline
+\ Append value preceded by space
+
+Key:
+* Reference
+* Long Reference
+
+== Any Key
+* Reference
+* Long Reference
+
+* Reference: Value
+
+** Long Reference
+Long Value
+** Long Reference

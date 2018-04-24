@@ -4,29 +4,32 @@
 const { errors } = require('./message-codes.js');
 const { PlainDataParseError } = require('./errors.js');
 const PlainDataCollection = require('./collection.js');
+const PlainDataEmpty = require('./empty.js');
 const PlainDataList = require('./list.js');
 const PlainDataSection = require('./section.js');
 const PlainDataValue = require('./value.js');
 
 const STATE_RESET = null;
 const STATE_READ_AFTER_KEY = 1;
-const STATE_READ_COLLECTION_ATTRIBUTES = 2;
-const STATE_READ_MULTILINE_VALUE = 3;
-const STATE_READ_LIST_VALUES = 4;
+const STATE_READ_COLLECTION = 2;
+const STATE_READ_FIELD = 3;
+const STATE_READ_VERBATIM_FIELD = 4;
+const STATE_READ_LIST = 5;
 
 const ANY_KEY = /^\s*==(?!=)\s*(\S.*?)\s*$/;
-const ATTRIBUTE = /^\s*(?![>\-#])([^=:]+?)\s*=\s*(.+?)?\s*$/;
+const ATTRIBUTE = /^\s*(?![>\-#|\\*])([^\s=:][^=:]*?)\s*=\s*(.+?)?\s*$/;
 const COMMENT_OR_EMPTY = /^\s*(>|$)/;
-const KEY = /^\s*(?![>\-#])([^=:]+?)\s*:\s*$/;
-const KEY_VALUE = /^\s*(?![>\-#])([^=:]+?)\s*:\s*(\S.*?)\s*$/;
-const LIST_VALUE = /^\s*-(?!-)\s*(.+?)?\s*$/;
-const MULTILINE_VALUE_BEGIN = /^\s*(-{2,})\s*(\S.*?)\s*$/;
+const EMPTY = /^\s*$/;
+const FIELD = /^\s*(?![>\-#|\\*])([^\s=:][^=:]*?)\s*:\s*(\S.*?)\s*$/;
+const FIELD_APPEND_WITH_SPACE = /^\s*\\\s*(.+?)?\s*$/;
+const FIELD_APPEND_WITH_NEWLINE = /^\s*\|\s*(.+?)?\s*$/;
+const KEY = /^\s*(?![>\-#|\\*])([^\s=:][^=:]*?)\s*:\s*$/;
+const REFERENCE = /^\s*\*(?!\*)\s*([^\s:][^:]*?)\s*$/;
+const REFERENCE_VALUE = /^\s*\*(?!\*)\s*([^\s:][^:]*?)\s*:\s*(.+?)?\s*$/;
+const REFERENCE_VERBATIM_VALUE = /^\s*\*\*(?!\*)\s*([^\s:][^:]*?)\s*$/;
 const SECTION = /^\s*(#+)\s*(\S.*?)\s*$/;
-
-// TODO: Consider the == Any key instead of :: Any Key syntax
-//
-// == Traumhaeuser
-// = Erhaeltlich
+const VALUE = /^\s*-(?!-)\s*(.+?)?\s*$/;
+const VERBATIM_FIELD = /^\s*(-{2,})\s*(\S.*?)\s*$/;
 
 class PlainDataParser {
   constructor(input, locale) {
@@ -59,7 +62,7 @@ class PlainDataParser {
     this.currentSection = this.document;
   }
 
-  // :: Key (syntax)
+  // == Key (syntax)
   //    kkk (ranges)
   anyKey(key) {
     const column = this.lineContent.lastIndexOf(key);
@@ -76,7 +79,6 @@ class PlainDataParser {
   }
 
   // TODO: Section has fields, collection has attributes ? point out that fields can be text fields and relate to forms in websites
-  // TODO: value(key, value) {} -> that's the single explicit value that follows after key somewhere
 
   // Key = Value (syntax)
   // kkk   vvvvv (ranges)
@@ -146,34 +148,20 @@ class PlainDataParser {
     this.buffer.collection = newCollection;
   }
 
+  // == Key   (syntax)
+  //        v (ranges)
+  // Key:     (syntax)
+  //      v   (ranges)
   empty() {
     const keyBeginLine = this.lines[this.buffer.keyRange.beginLine - 1];
-    const valueColumn = Math.min(keyBeginLine.length, keyBeginLine.replace(/\s*$/, '').length + 1);
+    const valueColumn = Math.min(keyBeginLine.replace(/\s*$/, '').length + 1, keyBeginLine.length);
 
-    const newValue = new PlainDataValue({
+    const newValue = new PlainDataEmpty({
       keyRange: this.buffer.keyRange,
       range: {
         beginColumn: valueColumn,
         beginLine: this.buffer.keyRange.beginLine,
         endColumn: valueColumn,
-        endLine: this.buffer.keyRange.beginLine
-      },
-      value: null
-    });
-
-    this.lookupIndex[this.buffer.keyRange.beginLine] = newValue;
-    this.currentSection.append(this.buffer.key, newValue);
-  }
-
-  // Key:  (syntax)
-  //     v (ranges)
-  endOfDocumentAfterKey() {
-    const newValue = new PlainDataValue({
-      keyRange: this.buffer.keyRange,
-      range: {
-        beginColumn: this.lines[this.buffer.keyRange.beginLine - 1].length,
-        beginLine: this.buffer.keyRange.beginLine,
-        endColumn: this.lines[this.buffer.keyRange.beginLine - 1].length,
         endLine: this.buffer.keyRange.beginLine
       },
       value: null
@@ -223,13 +211,15 @@ class PlainDataParser {
     const keyColumn = this.lineContent.indexOf(key);
     const valueColumn = this.lineContent.lastIndexOf(value);
 
-    const newValue = new PlainDataValue({
+    this.buffer = {
+      key: key,
       keyRange: {
         beginColumn: keyColumn,
         beginLine: this.lineNumber,
         endColumn: keyColumn + key.length,
         endLine: this.lineNumber
       },
+      lines: [this.lineNumber],
       range: {
         beginColumn: valueColumn,
         beginLine: this.lineNumber,
@@ -237,60 +227,88 @@ class PlainDataParser {
         endLine: this.lineNumber
       },
       value: value
-    });
-
-    this.lookupIndex[this.lineNumber] = newValue;
-    this.currentSection.append(key, newValue);
+    };
   }
 
-  // - Value (syntax)
-  listAfterKey() {
-    const newList = new PlainDataList({
-      keyRange: this.buffer.keyRange,
-      range: {
-        beginColumn: 0,
-        beginLine: this.lineNumber,
-        endColumn: this.lineContent.length,
-        endLine: this.lineNumber
-      }
-    });
-
-    // TODO: Clean up/expand lookupIndex implementation and concept (e.g. better ranges for null values)
-    this.lookupIndex[this.buffer.keyRange.beginLine] = newList;
-    this.currentSection.append(this.buffer.key, newList);
-
-    this.buffer.list = newList;
-  }
-
-  // - Value (syntax)
+  // | Value (syntax)
   //   vvvvv (ranges)
-  listValue(value) {
+  fieldAppendWithNewline(value) {
     let valueColumn;
 
     if(value) {
       valueColumn = this.lineContent.lastIndexOf(value);
     } else {
-      valueColumn = Math.min(this.lineContent.indexOf('-') + 1, this.lineContent.length);
+      valueColumn = Math.min(this.lineContent.indexOf('|') + 1, this.lineContent.length);
     }
 
-    const newValue = new PlainDataValue({
-      keyRange: this.buffer.keyRange,
-      range: {
+    if(this.buffer.value === undefined) {
+      this.buffer.lines = [this.lineNumber];
+      this.buffer.range = {
         beginColumn: valueColumn,
         beginLine: this.lineNumber,
         endColumn: value ? valueColumn + value.length : valueColumn,
         endLine: this.lineNumber
-      },
-      value: value
+      };
+      this.buffer.value = value || '';
+    } else {
+      this.buffer.lines.push(this.lineNumber);
+      this.buffer.range.endColumn = value ? valueColumn + value.length : valueColumn;
+      this.buffer.range.endLine = this.lineNumber;
+      this.buffer.value += value ? `\n${value}` : '\n';
+    }
+  }
+
+  // \ Value (syntax)
+  //   vvvvv (ranges)
+  fieldAppendWithSpace(value) {
+    let valueColumn;
+
+    if(value) {
+      valueColumn = this.lineContent.lastIndexOf(value);
+    } else {
+      valueColumn = Math.min(this.lineContent.indexOf('|') + 1, this.lineContent.length);
+    }
+
+    if(this.buffer.value === undefined) {
+      this.buffer.lines = [this.lineNumber];
+      this.buffer.range = {
+        beginColumn: valueColumn,
+        beginLine: this.lineNumber,
+        endColumn: value ? valueColumn + value.length : valueColumn,
+        endLine: this.lineNumber
+      };
+      this.buffer.value = value || '';
+    } else {
+      this.buffer.lines.push(this.lineNumber);
+      this.buffer.range.endColumn = value ? valueColumn + value.length : valueColumn;
+      this.buffer.range.endLine = this.lineNumber;
+      if(value) {
+        this.buffer.value += ` ${value}`;
+      }
+    }
+  }
+
+  fieldEnd() {
+    if(this.buffer.value.match(EMPTY)) {
+      this.buffer.value = null;
+    }
+
+    const newValue = new PlainDataValue({
+      keyRange: this.buffer.keyRange,
+      range: this.buffer.range,
+      value: this.buffer.value
     });
 
-    this.lookupIndex[this.lineNumber] = newValue;
-    this.buffer.list.append(newValue);
+    for(let indexLine of this.buffer.lines) {
+      this.lookupIndex[indexLine] = newValue;
+    }
+
+    this.currentSection.append(this.buffer.key, newValue);
   }
 
   // -- Key (syntax)
   // k...   (ranges)
-  multilineValueBegin(dashes, key) {
+  verbatimFieldBegin(dashes, key) {
     const keyEscaped = key.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
 
     this.buffer = {
@@ -299,13 +317,13 @@ class PlainDataParser {
         beginColumn: 0,
         beginLine: this.lineNumber
       },
-      multiLineValueEnd: new RegExp(`^\\s*${dashes}\\s*${keyEscaped}\\s*$`)
+      verbatimFieldEndRegex: new RegExp(`^\\s*${dashes}\\s*${keyEscaped}\\s*$`)
     };
   }
 
   // -- Key  (end syntax)
   //   ...k  (end ranges)
-  multiLineValueEnd() {
+  verbatimFieldEnd() {
     let value, range;
     if(this.lineNumber > this.buffer.keyRange.beginLine + 1) {
       value = this.lines.slice(this.buffer.keyRange.beginLine, this.lineNumber - 1).join('\n');
@@ -344,6 +362,22 @@ class PlainDataParser {
     }
   }
 
+  // * Key (syntax)
+  // TODO ranges
+  reference(key) {
+    const keyEscaped = key.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
+
+    // TODO
+    // this.buffer = {
+    //   key: key,
+    //   keyRange: {
+    //     beginColumn: 0,
+    //     beginLine: this.lineNumber
+    //   },
+    //   referenceRegex: new RegExp(`^\\s*::\\s*${keyEscaped}\\s*$`)
+    // };
+  }
+
   run() {
     let match;
     let state = STATE_RESET;
@@ -351,35 +385,50 @@ class PlainDataParser {
     for(this.lineNumber = 1; this.lineNumber <= this.lines.length; this.lineNumber++) {
       this.lineContent = this.lines[this.lineNumber - 1];
 
-      if(state === STATE_READ_MULTILINE_VALUE) {
-        if(this.lineContent.match(this.buffer.multiLineValueEnd)) {
-          this.multiLineValueEnd();
+      if(state === STATE_READ_VERBATIM_FIELD) {
+        if(this.lineContent.match(this.buffer.verbatimFieldEndRegex)) {
+          this.verbatimFieldEnd();
           state = STATE_RESET;
         }
         continue;
       }
 
       if(this.lineContent.match(COMMENT_OR_EMPTY)) {
-        // TODO: possibly Remove log lines if checku pafter refactoring works ok without them
         continue;
       }
 
-      if(state === STATE_READ_AFTER_KEY ||
-         state === STATE_READ_COLLECTION_ATTRIBUTES ||
-         state === STATE_READ_LIST_VALUES) {
+      if(state === STATE_READ_FIELD) {
+        if((match = FIELD_APPEND_WITH_NEWLINE.exec(this.lineContent))) {
+          this.fieldAppendWithNewline(match[1] || null);
+          continue;
+        }
 
-        if((match = LIST_VALUE.exec(this.lineContent))) {
+        if((match = FIELD_APPEND_WITH_SPACE.exec(this.lineContent))) {
+          this.fieldAppendWithSpace(match[1] || null);
+          continue;
+        }
+
+        this.fieldEnd();
+
+        state = STATE_RESET;
+      }
+
+      if(state === STATE_READ_AFTER_KEY ||
+         state === STATE_READ_COLLECTION ||
+         state === STATE_READ_LIST) {
+
+        if((match = VALUE.exec(this.lineContent))) {
           if(state === STATE_READ_AFTER_KEY) {
-            this.listAfterKey();
-            state = STATE_READ_LIST_VALUES;
+            this.valueAfterKey();
+            state = STATE_READ_LIST;
           }
 
-          if(state === STATE_READ_LIST_VALUES) {
-            this.listValue(match[1] || null);
+          if(state === STATE_READ_LIST) {
+            this.value(match[1] || null);
             continue;
           }
 
-          if(state === STATE_READ_COLLECTION_ATTRIBUTES) {
+          if(state === STATE_READ_COLLECTION) {
             this.attributesAndValuesMixed();
           }
         }
@@ -387,30 +436,41 @@ class PlainDataParser {
         if((match = ATTRIBUTE.exec(this.lineContent))) {
           if(state === STATE_READ_AFTER_KEY) {
             this.collectionAfterKey();
-            state = STATE_READ_COLLECTION_ATTRIBUTES;
+            state = STATE_READ_COLLECTION;
           }
 
-          if(state === STATE_READ_COLLECTION_ATTRIBUTES) {
+          if(state === STATE_READ_COLLECTION) {
             this.attribute(match[1], match[2] || null);
             continue;
           }
 
-          if(state === STATE_READ_LIST_VALUES) {
+          if(state === STATE_READ_LIST) {
             this.attributesAndValuesMixed();
           }
+        }
+
+        if((match = FIELD_APPEND_WITH_NEWLINE.exec(this.lineContent))) {
+          this.fieldAppendWithNewline(match[1] || null);
+          state = STATE_READ_FIELD;
+          continue;
+        }
+
+        if((match = FIELD_APPEND_WITH_SPACE.exec(this.lineContent))) {
+          this.fieldAppendWithSpace(match[1] || null);
+          state = STATE_READ_FIELD;
+          continue;
         }
 
         if(state === STATE_READ_AFTER_KEY) {
           this.empty();
         }
 
-        // TODO: Recursive range expansion of parent sections (already happning maybe?) when stuff gets added to children, eg. lists, collections, aso.
-
         state = STATE_RESET;
       }
 
-      if((match = KEY_VALUE.exec(this.lineContent))) {
+      if((match = FIELD.exec(this.lineContent))) {
         this.field(match[1], match[2]);
+        state = STATE_READ_FIELD;
         continue;
       }
 
@@ -420,9 +480,14 @@ class PlainDataParser {
         continue;
       }
 
-      if((match = MULTILINE_VALUE_BEGIN.exec(this.lineContent))) {
-        this.multilineValueBegin(match[1], match[2]);
-        state = STATE_READ_MULTILINE_VALUE;
+      if((match = VERBATIM_FIELD.exec(this.lineContent))) {
+        this.verbatimFieldBegin(match[1], match[2]);
+        state = STATE_READ_VERBATIM_FIELD;
+        continue;
+      }
+
+      if((match = SECTION.exec(this.lineContent))) {
+        this.section(match[1], match[2]);
         continue;
       }
 
@@ -432,12 +497,22 @@ class PlainDataParser {
         continue;
       }
 
-      if((match = SECTION.exec(this.lineContent))) {
-        this.section(match[1], match[2]);
+      if((match = REFERENCE.exec(this.lineContent))) {
+        this.reference(match[1]);
         continue;
       }
 
-      if(this.lineContent.match(LIST_VALUE)) {
+      if((match = REFERENCE_VALUE.exec(this.lineContent))) {
+        // this.reference(match[1]); TODO
+        continue;
+      }
+
+      if((match = REFERENCE_VERBATIM_VALUE.exec(this.lineContent))) {
+        // this.reference(match[1]); TODO
+        continue;
+      }
+
+      if(this.lineContent.match(VALUE)) {
         this.unexpectedValue();
       }
 
@@ -445,11 +520,17 @@ class PlainDataParser {
     }
 
     if(state === STATE_READ_AFTER_KEY) {
-      this.endOfDocumentAfterKey();
+      this.empty();
     }
 
-    if(state === STATE_READ_MULTILINE_VALUE) {
-      this.unterminatedMultilineValue();
+    // TODO: Ensure all "wrap up collection/list/whatever and commit buffered value to actual Value in section" code is there
+
+    if(state === STATE_READ_FIELD) {
+      this.fieldEnd();
+    }
+
+    if(state === STATE_READ_VERBATIM_FIELD) {
+      this.unterminatedVerbatimField();
     }
 
     return this.document;
@@ -524,7 +605,7 @@ class PlainDataParser {
 
   // -- Key (syntax)
   // eeeeee... until end of document (ranges)
-  unterminatedMultilineValue() {
+  unterminatedVerbatimField() {
     const errorRange = {
       beginColumn: this.buffer.keyRange.beginColumn,
       beginLine: this.buffer.keyRange.beginLine,
@@ -533,11 +614,56 @@ class PlainDataParser {
     };
 
     throw new PlainDataParseError(this.context, {
-      code: errors.parser.UNTERMINATED_MULTILINE_VALUE,
+      code: errors.parser.UNTERMINATED_VERBATIM_FIELD,
       meta: { beginLine: this.buffer.keyRange.beginLine },
       printRanges: [[errorRange.beginLine, errorRange.endLine]],
       editorRanges: [errorRange]
     });
+  }
+
+  // - Value (syntax)
+  //   vvvvv (ranges)
+  value(value) {
+    let valueColumn;
+
+    if(value) {
+      valueColumn = this.lineContent.lastIndexOf(value);
+    } else {
+      valueColumn = Math.min(this.lineContent.indexOf('-') + 1, this.lineContent.length);
+    }
+
+    const newValue = new PlainDataValue({
+      keyRange: this.buffer.keyRange,
+      range: {
+        beginColumn: valueColumn,
+        beginLine: this.lineNumber,
+        endColumn: value ? valueColumn + value.length : valueColumn,
+        endLine: this.lineNumber
+      },
+      value: value
+    });
+
+    this.lookupIndex[this.lineNumber] = newValue;
+    this.buffer.list.append(newValue);
+  }
+
+  // - Value (syntax)
+  valueAfterKey() {
+    const newList = new PlainDataList({
+      keyRange: this.buffer.keyRange,
+      range: {
+        beginColumn: 0,
+        beginLine: this.lineNumber,
+        endColumn: this.lineContent.length,
+        endLine: this.lineNumber
+      }
+    });
+
+    // TODO: Clean up/expand lookupIndex implementation and concept (e.g. better ranges for null values)
+    this.lookupIndex[this.buffer.keyRange.beginLine] = newList;
+    this.currentSection.append(this.buffer.key, newList);
+
+    this.buffer.list = newList;
   }
 }
 

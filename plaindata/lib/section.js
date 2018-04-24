@@ -1,6 +1,7 @@
 const { errors } = require('./message-codes.js');
 const { PlainDataValidationError } = require('./errors.js');
 const PlainDataCollection = require('./collection.js');
+const PlainDataEmpty = require('./empty.js');
 const PlainDataList = require('./list.js');
 const PlainDataValue = require('./value.js');
 
@@ -63,21 +64,21 @@ class PlainDataSection {
     }
 
     for(let key of keys) {
-      const values = this.elementsAssociative[key];
+      const elements = this.elementsAssociative[key];
 
-      if(values !== null) {
-        for(let value of values) {
-          if(!value.touched) {
+      if(elements !== undefined) {
+        for(let element of elements) {
+          if(!element.touched) {
             throw new PlainDataValidationError(this.context, {
               code: errors.validation.EXCESS_KEY,
-              meta: { key: value.key },
-              printRanges: [[value.keyRange.beginLine, value.keyRange.endLine]],
-              editorRanges: [value.keyRange]
+              meta: { key: element.key },
+              printRanges: [[element.keyRange.beginLine, element.keyRange.endLine]],
+              editorRanges: [element.keyRange]
             });
           }
 
-          if(value instanceof PlainDataSection) {
-            value.assertAllTouched();
+          if(element instanceof PlainDataSection) {
+            element.assertAllTouched();
           }
         }
       }
@@ -92,11 +93,11 @@ class PlainDataSection {
   //  .. This is much clearer to non-technical persons than "key" everywhere
   attribute(key, ...optional) {
     let options = { keyRequired: true, required: false, withTrace: false };
-    let process = null;
+    let loader = null;
 
     for(let argument of optional) {
       if(typeof argument === 'function') {
-        process = argument;
+        loader = argument;
       } else if(typeof argument === 'object') {
         Object.assign(options, argument);
       }
@@ -114,6 +115,7 @@ class PlainDataSection {
         });
       }
 
+      // TODO: A trace to a missing key is not really sensible i guess, consider how to deal with this
       if(options.withTrace) {
         return { trace: null, value: null };
       } else {
@@ -121,15 +123,21 @@ class PlainDataSection {
       }
     }
 
-    const results = [];
-    const nonEmptyResults = [];
-
     for(let element of elements) {
       element.touch();
 
       if(element instanceof PlainDataCollection) {
         throw new PlainDataValidationError(this.context, {
-          code: errors.validation.EXPECTED_ATTRIBUTE_GOT_COLLECTION,
+          code: errors.validation.EXPECTED_FIELD_GOT_COLLECTION,
+          meta: { key: key },
+          printRanges: [[element.keyRange.beginLine, element.range.endLine]],
+          editorRanges: [element.keyRange] // TODO: Needs a custom range ? like the printRange basically - from key up to last value
+        });
+      }
+
+      if(element instanceof PlainDataList) {
+        throw new PlainDataValidationError(this.context, {
+          code: errors.validation.EXPECTED_FIELD_GOT_LIST,
           meta: { key: key },
           printRanges: [[element.keyRange.beginLine, element.range.endLine]],
           editorRanges: [element.keyRange] // TODO: Needs a custom range ? like the printRange basically - from key up to last value
@@ -138,41 +146,50 @@ class PlainDataSection {
 
       if(element instanceof PlainDataSection) {
         throw new PlainDataValidationError(this.context, {
-          code: errors.validation.EXPECTED_ATTRIBUTE_GOT_SECTION,
+          code: errors.validation.EXPECTED_FIELD_GOT_SECTION,
           meta: { key: key },
           printRanges: [[element.keyRange.beginLine, element.range.endLine]],
           editorRanges: [element.keyRange]
         });
       }
-
-      const values = element instanceof PlainDataList ? element.values : [element];
-
-      for(let value of values) {
-        results.push(value);
-
-        if(value.value !== null) {
-          nonEmptyResults.push(value);
-        }
-      }
     }
 
-    if(nonEmptyResults.length === 1) {
-      const value = nonEmptyResults[0];
+    if(elements.length === 1) {
+      const element = elements[0];
 
-      if(process) {
+      if(element instanceof PlainDataEmpty || element.value === null) {
+        if(options.required) {
+          throw new PlainDataValidationError(this.context, {
+            code: errors.validation.MISSING_FIELD,
+            meta: { key: key },
+            printRanges: [[element.range.beginLine, element.range.endLine]],
+            editorRanges: [element.range]
+          });
+        }
+
+        // TODO: A trace to a missing key is not really sensible i guess, consider how to deal with this
+        //       => We could put the trace on the parent element !?
+        if(options.withTrace) {
+          return { trace: null, value: null };
+        } else {
+          return null;
+        }
+      }
+
+      if(loader) {
         try {
-          const processed = process(value);
+          const processed = loader(element);
 
           if(options.withTrace) {
-            return { trace: value, value: processed };
+            return { trace: element, value: processed };
           } else {
             return processed;
           }
         } catch(message) {
           throw new PlainDataValidationError(this.context, {
             message: message,
-            printRanges: [[value.range.beginLine, value.range.endLine]],
-            editorRanges: [value.range]
+            printRanges: [[element.range.beginLine, element.range.endLine]],
+            editorRanges: [element.range]
           });
         }
       }
@@ -180,35 +197,19 @@ class PlainDataSection {
       // TODO: Resolve ambiguity between value and value.value ? valueNode vs value ? node vs value ? pairs ? assignments ? association ?
 
       if(options.withTrace) {
-        return { trace: value, value: value.get() };
+        return { trace: element, value: element.get() };
       } else {
-        return value.get();
+        return element.get();
       }
     }
 
-    if(nonEmptyResults.length > 1) {
-      console.log(results);
+    if(elements.length > 1) {
       throw new PlainDataValidationError(this.context, {
-        code: errors.validation.EXPECTED_ATTRIBUTE_GOT_LIST,
+        code: errors.validation.EXPECTED_FIELD_GOT_MULTIPLE_FIELDS,
         meta: { key: key },
-        printRanges: nonEmptyResults.map(value => [value.range.beginLine, value.range.endLine]),
-        editorRanges: nonEmptyResults.map(value => value.range)
+        printRanges: elements.map(element => [element.range.beginLine, element.range.endLine]),
+        editorRanges: elements.map(element => element.range) // TODO: Should be the full ranges i guess
       });
-    }
-
-    if(options.required) {
-      throw new PlainDataValidationError(this.context, {
-        code: errors.validation.MISSING_FIELD,
-        meta: { key: key },
-        printRanges: results.map(value => [value.range.beginLine, value.range.endLine]),
-        editorRanges: results.map(value => value.range)
-      });
-    }
-
-    if(options.withTrace) {
-      return { trace: null, value: null };
-    } else {
-      return null;
     }
   }
 
@@ -233,29 +234,11 @@ class PlainDataSection {
         });
       }
 
-      return {}; // TODO: Or should this return null? hm! :)
+      return null;
     }
 
     for(let element of elements) {
       element.touch();
-
-      // TODO: An empty collection registers as an empty PlainDataValue,
-      //       this triggers a validation error here - in error - so that
-      //       means we either manually check for null - meh - or better,
-      //       we introduce a PlainDataEmpty type that covers this :)
-
-      if(element instanceof PlainDataValue) {
-        throw new PlainDataValidationError(this.context, {
-          code: errors.validation.EXPECTED_COLLECTION_GOT_ATTRIBUTE,
-          meta: { key: key },
-          printRanges: [[element.keyRange.beginLine, element.range.endLine]],
-          editorRanges: [element.keyRange] // TODO: Should be full range / key & value
-        });
-      }
-
-      // TODO: There is an ambiguity:
-      //       Multiple multiline values count as multiple attributes,
-      //       somehow they are a list though as soon as there 2, beacuse they have no syntactical distinction.
 
       if(element instanceof PlainDataList) {
         throw new PlainDataValidationError(this.context, {
@@ -274,10 +257,26 @@ class PlainDataSection {
           editorRanges: [element.keyRange] // TODO: Should be full range / key & value
         });
       }
+
+      if(element instanceof PlainDataValue) {
+        throw new PlainDataValidationError(this.context, {
+          code: errors.validation.EXPECTED_COLLECTION_GOT_FIELD,
+          meta: { key: key },
+          printRanges: [[element.keyRange.beginLine, element.range.endLine]],
+          editorRanges: [element.range]
+        });
+      }
     }
 
     if(elements.length === 1) {
-      return elements[0];
+      const element = elements[0];
+
+      if(element instanceof PlainDataEmpty) {
+        // TODO: Construct PlainDataCollection from PlainDataEmpty, or make the empty behave like a collection, and return it
+        return null;
+      }
+
+      return element;
     }
 
     if(elements.length > 1) {
@@ -288,8 +287,6 @@ class PlainDataSection {
         editorRanges: elements.map(element => element.range) // TODO: Should be full range / key & value
       });
     }
-
-    return {}; // TODO: Or should this return null? hm! :)
   }
 
   // TODO: This not used yet, needs usecase/specification
@@ -331,11 +328,11 @@ class PlainDataSection {
       withTrace: false
     };
 
-    let process = null;
+    let loader = null;
 
     for(let argument of optional) {
       if(typeof argument === 'function') {
-        process = argument;
+        loader = argument;
       } else if(typeof argument === 'object') {
         Object.assign(options, argument);
       }
@@ -358,10 +355,46 @@ class PlainDataSection {
 
     const results = [];
 
-    // TODO: values => can be Section Attribute(s), List(s), Collection(s), Section(s)
-    //       Some other terminology than value would be super cool, e.g. elements ? (here is good, consider everywhere)
     for(let element of elements) {
       element.touch();
+
+      if(element instanceof PlainDataList ||
+         element instanceof PlainDataValue) {
+
+
+        const valueElements = element instanceof PlainDataList ? element.values :
+                                                                 [element];
+
+        for(let value of valueElements) {
+          if(options.includeEmpty || value.value !== null) {
+            if(loader) {
+              try {
+                const processed = loader(value);
+
+                if(options.withTrace) {
+                  results.push({ trace: value, value: processed });
+                } else {
+                  results.push(processed);
+                }
+              } catch(message) {
+                throw new PlainDataValidationError(this.context, {
+                  message: message,
+                  printRanges: [[value.range.beginLine, value.range.endLine]],
+                  editorRanges: [value.range]
+                });
+              }
+
+              continue;
+            }
+
+            if(options.withTrace) {
+              results.push({ trace: value, value: value.get() });
+            } else {
+              results.push(value.get());
+            }
+          }
+        }
+      }
 
       if(element instanceof PlainDataCollection) {
         throw new PlainDataValidationError(this.context, {
@@ -379,36 +412,6 @@ class PlainDataSection {
           printRanges: [[element.keyRange.beginLine, element.range.endLine]],
           editorRanges: [element.keyRange]
         });
-      }
-
-      const values = element instanceof PlainDataList ? element.values : [element];
-
-      for(let value of values) {
-        if(options.includeEmpty || value.value !== null) {
-          if(process) {
-            try {
-              const processed = process(value);
-
-              if(options.withTrace) {
-                results.push({ trace: value, value: processed });
-              } else {
-                results.push(processed);
-              }
-            } catch(message) {
-              throw new PlainDataValidationError(this.context, {
-                message: message,
-                printRanges: [[value.range.beginLine, value.range.endLine]],
-                editorRanges: [value.range]
-              });
-            }
-          }
-
-          if(options.withTrace) {
-            results.push({ trace: value, value: value.get() });
-          } else {
-            results.push(value.get());
-          }
-        }
       }
     }
 
@@ -453,7 +456,7 @@ class PlainDataSection {
     return exported;
   }
 
-  // process possibilty to consume tree? maybe chained as function?
+  // TODO: possibilty to consume tree with loader function
   section(key, options = { keyRequired: true }) {
     const elements = this.elementsAssociative[key];
 
@@ -461,29 +464,19 @@ class PlainDataSection {
       if(options.keyRequired) {
         throw new PlainDataValidationError(this.context, {
           code: errors.validation.MISSING_SECTION,
-          meta: { key: value.key },
+          meta: { key: key },
           printRanges: [[this.range.beginLine, this.range.endLine]],
           editorRanges: [this.range]
         });
       } else {
-        return {}; // TODO: Strictly speaking this should be null I guess ? {} is definitely wrong in any case.
-                   //       We could also construct a virtual section and return it
-                   //       (because the calls on section for values still need to work)
-                   //       but consider if that is a good idea first, in all aspects :)
+        return null;
       }
     }
 
+    // TODO: For each value store the representational type as well ? (e.g. string may come from "- foo" or -- foo\nxxx\n-- foo) and used that for precise error messages?
+
     for(let element of elements) {
       element.touch();
-
-      if(element instanceof PlainDataValue) {
-        throw new PlainDataValidationError(this.context, {
-          code: errors.validation.EXPECTED_SECTION_GOT_ATTRIBUTE,
-          meta: { key: key },
-          printRanges: [[element.keyRange.beginLine, element.range.endLine]],
-          editorRanges: [element.keyRange] // TODO: Needs a custom range ? like the printRange basically - from key up to last value
-        });
-      }
 
       if(element instanceof PlainDataCollection) {
         throw new PlainDataValidationError(this.context, {
@@ -494,12 +487,30 @@ class PlainDataSection {
         });
       }
 
+      if(element instanceof PlainDataEmpty) {
+        throw new PlainDataValidationError(this.context, {
+          code: errors.validation.EXPECTED_SECTION_GOT_EMPTY,
+          meta: { key: key },
+          printRanges: [[element.keyRange.beginLine, element.range.endLine]],
+          editorRanges: [element.keyRange]
+        });
+      }
+
       if(element instanceof PlainDataList) {
         throw new PlainDataValidationError(this.context, {
           code: errors.validation.EXPECTED_SECTION_GOT_LIST,
           meta: { key: key },
           printRanges: [[element.keyRange.beginLine, element.range.endLine]],
           editorRanges: [element.keyRange]
+        });
+      }
+
+      if(element instanceof PlainDataValue) {
+        throw new PlainDataValidationError(this.context, {
+          code: errors.validation.EXPECTED_SECTION_GOT_FIELD,
+          meta: { key: key },
+          printRanges: [[element.keyRange.beginLine, element.range.endLine]],
+          editorRanges: [element.keyRange] // TODO: Needs a custom range ! like the printRange basically - from key up to last value
         });
       }
     }
@@ -528,18 +539,18 @@ class PlainDataSection {
     for(let element of elements) {
       element.touch();
 
-      if(element instanceof PlainDataValue) {
+      if(element instanceof PlainDataCollection) {
         throw new PlainDataValidationError(this.context, {
-          code: errors.validation.EXPECTED_SECTIONS_GOT_ATTRIBUTE,
+          code: errors.validation.EXPECTED_SECTIONS_GOT_COLLECTION,
           meta: { key: key },
           printRanges: [[element.keyRange.beginLine, element.range.endLine]],
           editorRanges: [element.keyRange] // TODO: Needs a custom range ? like the printRange basically - from key up to last value
         });
       }
 
-      if(element instanceof PlainDataCollection) {
+      if(element instanceof PlainDataEmpty) {
         throw new PlainDataValidationError(this.context, {
-          code: errors.validation.EXPECTED_SECTIONS_GOT_COLLECTION,
+          code: errors.validation.EXPECTED_SECTIONS_GOT_EMPTY,
           meta: { key: key },
           printRanges: [[element.keyRange.beginLine, element.range.endLine]],
           editorRanges: [element.keyRange] // TODO: Needs a custom range ? like the printRange basically - from key up to last value
@@ -552,6 +563,15 @@ class PlainDataSection {
           meta: { key: key },
           printRanges: [[element.keyRange.beginLine, element.range.endLine]],
           editorRanges: [element.keyRange]
+        });
+      }
+
+      if(element instanceof PlainDataValue) {
+        throw new PlainDataValidationError(this.context, {
+          code: errors.validation.EXPECTED_SECTIONS_GOT_FIELD,
+          meta: { key: key },
+          printRanges: [[element.keyRange.beginLine, element.range.endLine]],
+          editorRanges: [element.keyRange] // TODO: Needs a custom range ? like the printRange basically - from key up to last value
         });
       }
     }

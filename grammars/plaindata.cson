@@ -1,106 +1,171 @@
+# TODO: Mildly colored background for --- Text blocks to offset them visually
+#       (Maybe also for sections, putting in more and more layers of distinction the deeper we go -
+#        could also reverse over to chaging the text color to adapt at some point!)
+#       Also goes for the section key line '# foo'
+
+# TODO: expand key: and == alternative key matching onto next key line,
+#       so we can in between have correct invalid detection and highlighting !!
+#       yes yes please more complex structure for this also with repository ?
+
 scopeName: 'source.plain'
 name: 'Plain Data'
 fileTypes: [
   'plain'
 ]
 
-# TODO: Mildly colored background for --- Text blocks to offset them visually
-#       (Maybe also for sections, putting in more and more layers of distinction the deeper we go -
-#        could also reverse over to chaging the text color to adapt at some point!)
-#       Also goes for the section key line '# foo'
-
-# TODO: expand key: and -- alternative key matching onto next key line,
-#       so we can in between have correct invalid detection and highlighting
-
 patterns: [
-  {
-    # -- multiline value
-    # ...
-    # -- multiline value
-    'begin': '^\\s*(-{2,})(?!-)\\s*(.+?)\\s*$'
-    'beginCaptures':
-      '1': 'name': 'punctuation.definition.block.multiline-value.begin.plain'
-      '2': 'name': 'variable.other.key.plain'
-    'end': '^\\s*(\\1)\\s*(\\2)\\s*$'
-    'endCaptures':
-      '1': 'name': 'punctuation.definition.block.multiline-value.end.plain'
-      '2': 'name': 'variable.other.key.plain'
-    'patterns': [
-      {
-        'name': 'markup.raw.block.value.plain'
-      }
+  { include: '#sectionFirstLevel' }
+  { include: '#sectionSecondLevel' }
+  { include: '#sectionThirdPlusLevel' }
+  { include: '#comment' }
+  { include: '#field' }
+  { include: '#key' }
+  { include: '#value' }
+  { include: '#multilineAttribute' }
+  { include: '#anyKey' }
+  { include: '#singleValue' }
+  { include: '#attribute' }
+  { include: '#reference' }
+  { include: '#referenceKey' }
+  { include: '#referenceValue' }
+  { include: '#referenceMultilineValue' }
+  { include: '#illegal' }
+]
+
+repository:
+  anyKey: {
+    comment: '== any key'
+    match: '^\\s*(==)(?!=)\\s*(\\S.*?)\\s*$'
+    captures:
+      1: name: 'punctuation.definition.key.plain'
+      2: name: 'variable.other.key.plain'
+  }
+  attribute: {
+    comment: 'key = value'
+    match: '^\\s*(?![>\\-#*\\\\|])([^=:]+?)\\s*(=)\\s*(\\S.*?)\\s*$'
+    captures:
+      1: name: 'variable.other.key.attribute.plain'
+      2: name: 'punctuation.separator.key.attribute.plain'
+      3: name: 'value.plain'
+  }
+  comment: {
+    comment: '> comment'
+    match: '^\\s*(>).*$'
+    name: 'comment.line.angled-bracket.plain'
+    captures:
+      1: name: 'punctuation.definition.comment.plain'
+  }
+  empyLine: {
+    match: '^\\s*$'
+  }
+  field: {
+    comment: 'key: value'
+    match: '^\\s*(?![>\\-#=:*\\\\|])([^=:]+?)\\s*(:)\\s*(\\S.*?)\\s*$'
+    captures:
+      1: name: 'variable.other.key.plain'
+      2: name: 'punctuation.separator.key.plain'
+      3: name: 'value.plain'
+  }
+  illegal: {
+    match: '^\\s*(\\S.*+)\\s*$'
+    captures:
+      1: name: 'invalid.illegal.unspecified.plain'
+  }
+  key: {
+    comment: 'key:'
+    match: '^\\s*(?![>\\-#=:*\\\\|])([^=:]+?)\\s*(:)\\s*$'
+    captures:
+      1: name: 'variable.other.key.plain'
+      2: name: 'punctuation.separator.key.plain'
+  }
+  multilineAttribute: {
+    comment: '-- key'
+    begin: '^\\s*(-{2,})(?!-)\\s*(.+?)\\s*$'
+    beginCaptures:
+      1: name: 'punctuation.definition.block.key.begin.plain'
+      2: name: 'variable.other.key.plain'
+    contentName: 'verbatim.value.plain'
+    end: '^\\s*(\\1)\\s*(\\2)\\s*$'
+    endCaptures:
+      1: name: 'punctuation.definition.block.key.end.plain'
+      2: name: 'variable.other.key.plain'
+    patterns: [
       { 'include': 'text.md' }
       { 'include': 'source.gfm' }
     ]
   }
-  {
-    # > comment
-    'match': '^\\s*(>).*$'
-    'name': 'comment.line.angled-bracket.plain'
-    'captures':
-      '1': 'name': 'punctuation.definition.comment.plain'
+  reference: {
+    comment: '* key'
+    match: '^\\s*(\\*)(?!\\*)\\s*([^\\s:][^:]*?)\\s*$'
+    captures:
+      1: name: 'punctuation.definition.reference.key.plain'
+      2: name: 'variable.other.key.reference.plain'
   }
-  {
-    # == any key
-    'match': '^\\s*(==)(?!=)\\s*(\\S.*?)\\s*$'
-    'captures':
-      '1': 'name': 'punctuation.definition.key.plain'
-      '2': 'name': 'variable.other.key.plain'
+  referenceKey: {
+    comment: '* key:'
+    match: '^\\s*(\\*)(?!\\*)\\s*([^\\s:][^:]*?)\\s*(:)\\s*$'
+    captures:
+      1: name: 'punctuation.definition.reference.key.plain'
+      2: name: 'variable.other.key.plain'
+      3: name: 'punctuation.definition.reference.key.plain'
   }
-  {
-    # attribute: value
-    'match': '^\\s*(?![>\\-#=:])([^=:]+?)\\s*(=)\\s*(\\S.*?)\\s*$'
-    'captures':
-      '1': 'name': 'variable.other.key.attribute.plain'
-      '2': 'name': 'punctuation.separator.key-value.attribute-value.plain'
-      '3': 'name': 'markup.raw.inline.value.plain'
+  referenceValue: {
+    comment: '* key: value'
+    match: '^\\s*(\\*)(?!\\*)\\s*([^\\s:][^:]*?)\\s*(:)\\s*(\\S.*?)\\s*$'
+    captures:
+      1: name: 'punctuation.definition.reference.key.plain'
+      2: name: 'variable.other.key.plain'
+      3: name: 'punctuation.separator.reference.key-value.plain'
+      4: name: 'value.plain'
   }
-  {
-    # - value
-    'match': '^\\s*(-)(?!-)\\s*(.+?)?\\s*$'
-    'captures':
-      '1': 'name': 'punctuation.definition.value.plain'
-      '2': 'name': 'markup.raw.inline.value.plain'
+  referenceMultilineValue: {
+    comment: '** key'
+    begin: '^\\s*(\\*{2,})(?!\\*)\\s*(.+?)\\s*$'
+    beginCaptures:
+      1: name: 'punctuation.definition.block.multiline-value.reference.begin.plain'
+      2: name: 'variable.other.reference.key.plain'
+    contentName: 'verbatim.value.plain'
+    end: '^\\s*(\\1)\\s*(\\2)\\s*$'
+    endCaptures:
+      1: name: 'punctuation.definition.block.multiline-value.reference.end.plain'
+      2: name: 'variable.other.reference.key.plain'
+    patterns: [
+      { 'include': 'text.md' }
+      { 'include': 'source.gfm' }
+    ]
   }
-  {
-    # # subsection 1st level
-    'match': '^\\s*(#)(?!#)\\s*(\\S.*?)\\s*$'
-    'captures':
-      '1': 'name': 'punctuation.definition.dictionary.key.plain'
-      '2': 'name': 'variable.other.key.plain'
+  sectionFirstLevel: {
+    comment: '# section'
+    match: '^\\s*(#)(?!#)\\s*(\\S.*?)\\s*$'
+    captures:
+      1: name: 'punctuation.definition.section.first-level.key.plain'
+      2: name: 'variable.other.section.first-level.key.plain'
   }
-  {
-    # ## subsection 2nd level
-    'match': '^\\s*(##)(?!#)\\s*(\\S.*?)\\s*$'
-    'captures':
-      '1': 'name': 'punctuation.definition.dictionary.key.plain'
-      '2': 'name': 'variable.other.key.plain'
+  sectionSecondLevel: {
+    comment: '## section'
+    match: '^\\s*(##)(?!#)\\s*(\\S.*?)\\s*$'
+    captures:
+      1: name: 'punctuation.definition.section.second-level.key.plain'
+      2: name: 'variable.other.section.second-level.key.plain'
   }
-  {
-    # ###(##) subsection 3rd to 5th level
-    'match': '^\\s*(#{3,5})(?!#)\\s*(\\S.*?)\\s*$'
-    'captures':
-      '1': 'name': 'punctuation.definition.dictionary.key.plain'
-      '2': 'name': 'variable.other.key.plain'
+  sectionThirdPlusLevel: {
+    comment: '### section'
+    match: '^\\s*(#{3,})(?!#)\\s*(\\S.*?)\\s*$'
+    captures:
+      1: name: 'punctuation.definition.section.third-level-plus.key.plain'
+      2: name: 'variable.other.section.third-level-plus.key.plain'
   }
-  {
-    # key: value
-    'match': '^\\s*(?![>\\-#=:])([^=:]+?)\\s*(:)\\s*(\\S.*?)\\s*$'
-    'captures':
-      '1': 'name': 'variable.other.key.plain'
-      '2': 'name': 'punctuation.separator.key-value.plain'
-      '3': 'name': 'markup.raw.inline.value.plain'
+  singleValue: {
+    comment: '| value OR \\ value'
+    match: '^\\s*([\\\\|])(?![\\\\|])\\s*(.+?)?\\s*$'
+    captures:
+      1: name: 'punctuation.definition.single-value.plain'
+      2: name: 'value.plain'
   }
-  {
-    # key:
-    'match': '^\\s*(?![>\\-#=:])([^=:]+?)\\s*(:)\\s*$'
-    'captures':
-      '1': 'name': 'variable.other.key.plain'
-      '2': 'name': 'punctuation.separator.key-value.plain'
+  value: {
+    comment: '- value'
+    match: '^\\s*(-)(?!-)\\s*(.+?)?\\s*$'
+    captures:
+      1: name: 'punctuation.definition.list.value.plain'
+      2: name: 'value.plain'
   }
-  {
-    'match': '^\\s*(\\S.*+)\\s*$'
-    'captures':
-      '1': 'name': 'invalid.illegal.unspecified.plain'
-  }
-]

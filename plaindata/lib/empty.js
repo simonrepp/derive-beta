@@ -1,12 +1,11 @@
 const { errors } = require('./message-codes.js');
 const { PlainDataValidationError } = require('./errors.js');
 
-class PlainDataValue {
+class PlainDataEmpty {
   constructor(value) {
     this.keyRange = value.keyRange;
     this.range = value.range;
     this.touched = false;
-    this.value = value.value;
   }
 
   getError(customMessage) {
@@ -31,11 +30,11 @@ class PlainDataValue {
 
   get() {
     this.touched = true;
-    return this.value;
+    return null;
   }
 
   raw() {
-    return this.value;
+    return null;
   }
 
   touch() {
@@ -43,4 +42,4 @@ class PlainDataValue {
   }
 }
 
-module.exports = PlainDataValue;
+module.exports = PlainDataEmpty;
