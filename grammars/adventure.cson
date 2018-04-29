@@ -1,0 +1,218 @@
+# TODO: Mildly colored background for --- Text blocks to offset them visually
+#       (Maybe also for sections, putting in more and more layers of distinction the deeper we go -
+#        could also reverse over to chaging the text color to adapt at some point!)
+#       Also goes for the section key line '# foo'
+
+# TODO: expand name: matching onto next key line,
+#       so we can in between have correct invalid detection and highlighting !!
+#       yes yes please more complex structure for this. (=tree sitter grammar required)
+
+scopeName: 'text.adventure'
+name: 'Adventure'
+fileTypes: [
+  'ad'
+  'adv'
+  'at'
+  'atex'
+  'atxt'
+  'plain'
+]
+
+patterns: [
+  { include: '#comment' }
+  { include: '#name' }
+  { include: '#field' }
+  { include: '#listItem' }
+  { include: '#dictionaryEntry' }
+  { include: '#block' }
+  { include: '#append' }
+  { include: '#section1stLevel' }
+  { include: '#section2ndLevel' }
+  { include: '#section3rdLevelPlus' }
+  { include: '#inheritance' }
+  { include: '#escapedDictionaryEntry' }
+  { include: '#escapedField' }
+  { include: '#escapedInheritance' }
+  { include: '#escapedName' }
+  { include: '#escapedSection1stLevel' }
+  { include: '#escapedSection2ndLevel' }
+  { include: '#escapedSection3rdLevelPlus' }
+  { include: '#illegal' }
+]
+
+repository:
+  append: {
+    comment: '| value OR \\ value'
+    match: '^\\s*([\\\\|])(?![\\\\|])\\s*(.+?)?\\s*$'
+    captures:
+      1: name: 'punctuation.definition.single-value.adventure'
+      2: name: 'value.adventure'
+  }
+  block: {
+    comment: '-- name'
+    begin: '^\\s*(-{2,})(?!-)\\s*(.+?)\\s*$'
+    beginCaptures:
+      1: name: 'punctuation.definition.block.key.begin.adventure'
+      2: name: 'variable.other.key.adventure'
+    contentName: 'verbatim.value.adventure'
+    end: '^\\s*(\\1)\\s*(\\2)\\s*$'
+    endCaptures:
+      1: name: 'punctuation.definition.block.key.end.adventure'
+      2: name: 'variable.other.key.adventure'
+    patterns: [
+      { 'include': 'text.md' }
+      { 'include': 'source.gfm' }
+    ]
+  }
+  comment: {
+    comment: '> comment'
+    match: '^\\s*(>).*$'
+    name: 'comment.line.angled-bracket.adventure'
+    captures:
+      1: name: 'punctuation.definition.comment.adventure'
+  }
+  dictionaryEntry: {
+    comment: 'key = value'
+    match: '^\\s*(?![>\\-#\\\\|`])([^<=:]+?)\\s*(=)\\s*(\\S.*?)\\s*$'
+    captures:
+      1: name: 'variable.other.key.attribute.adventure'
+      2: name: 'punctuation.separator.key.attribute.adventure'
+      3: name: 'value.adventure'
+  }
+  empyLine: {
+    match: '^\\s*$'
+  }
+  escapedDictionaryEntry: {
+    comment: '`name` = value'
+    match: '^\\s*(`+)\\s*((?:(?!\\1).)+)\\s*(\\1)\\s*(=)\\s*(\\S.*?)\\s*$'
+    captures:
+      1: name: 'punctuation.definition.string.begin.adventure'
+      2: name: 'variable.other.key.attribute.adventure'
+      3: name: 'punctuation.definition.string.end.adventure'
+      4: name: 'punctuation.separator.key.attribute.adventure'
+      5: name: 'value.adventure'
+  }
+  escapedField: {
+    comment: '`name`: value'
+    match: '^\\s*(`+)\\s*((?:(?!\\1).)+)\\s*(\\1)\\s*(:)\\s*(\\S.*?)\\s*$'
+    captures:
+      1: name: 'punctuation.definition.string.begin.adventure'
+      2: name: 'variable.other.key.adventure'
+      3: name: 'punctuation.definition.string.end.adventure'
+      4: name: 'punctuation.separator.key.adventure'
+      5: name: 'value.adventure'
+  }
+  escapedInheritance: {
+    comment: 'key < reference'
+    match: '^\\s*(`+)\\s*((?:(?!\\1).)+)\\s*(\\1)\\s*(<)\\s*(\\S.*?)\\s*$'
+    captures:
+      1: name: 'punctuation.definition.string.begin.adventure'
+      2: name: 'variable.other.key.adventure'
+      3: name: 'punctuation.definition.string.end.adventure'
+      4: name: 'punctuation.separator.key.adventure'
+      5: name: 'variable.other.key.reference.adventure'
+  }
+  escapedName: {
+    comment: '`name`:'
+    match: '^\\s*(`+)\\s*((?:(?!\\1).)+)\\s*(\\1)\\s*(:)\\s*$'
+    captures:
+      1: name: 'punctuation.definition.string.begin.adventure'
+      2: name: 'variable.other.key.adventure'
+      3: name: 'punctuation.definition.string.end.adventure'
+      4: name: 'punctuation.separator.key.adventure'
+  }
+  escapedSection1stLevel: {
+    comment: '# `section` [< section]'
+    match: '^\\s*(#)(?!#)\\s*(`+)\\s*((?:(?!\\2).)+)\\s*(\\2)\\s*(?:(<)\\s*(\\S.*?)\\s*)?$'
+    captures:
+      1: name: 'punctuation.definition.section.first-level.key.adventure'
+      2: name: 'punctuation.definition.string.begin.adventure'
+      3: name: 'variable.other.section.first-level.key.adventure'
+      4: name: 'punctuation.definition.string.end.adventure'
+      5: name: 'punctuation.separator.key.adventure'
+      6: name: 'variable.other.section.reference.adventure'
+  }
+  escapedSection2ndLevel: {
+    comment: '## `section` [< section]'
+    match: '^\\s*(##)(?!#)\\s*(`+)\\s*((?:(?!\\2).)+)\\s*(\\2)\\s*(?:(<)\\s*(\\S.*?)\\s*)?$'
+    captures:
+      1: name: 'punctuation.definition.section.second-level.key.adventure'
+      2: name: 'punctuation.definition.string.begin.adventure'
+      3: name: 'variable.other.section.first-level.key.adventure'
+      4: name: 'punctuation.definition.string.end.adventure'
+      5: name: 'punctuation.separator.key.adventure'
+      6: name: 'variable.other.section.reference.adventure'
+  }
+  escapedSection3rdLevelPlus: {
+    comment: '### `section` [< section]'
+    match: '^\\s*(#{3,})(?!#)\\s*(`+)\\s*((?:(?!\\2).)+)\\s*(\\2)\\s*(?:(<)\\s*(\\S.*?)\\s*)?$'
+    captures:
+      1: name: 'punctuation.definition.section.third-level-plus.key.adventure'
+      2: name: 'punctuation.definition.string.begin.adventure'
+      3: name: 'variable.other.section.first-level.key.adventure'
+      4: name: 'punctuation.definition.string.end.adventure'
+      5: name: 'punctuation.separator.key.adventure'
+      6: name: 'variable.other.section.reference.adventure'
+  }
+  field: {
+    comment: 'name: value'
+    match: '^\\s*(?![>\\-#\\\\|`])([^<=:]+?)\\s*(:)\\s*(\\S.*?)\\s*$'
+    captures:
+      1: name: 'variable.other.key.adventure'
+      2: name: 'punctuation.separator.key.adventure'
+      3: name: 'value.adventure'
+  }
+  illegal: {
+    match: '^\\s*(\\S.*+)\\s*$'
+    captures:
+      1: name: 'invalid.illegal.unspecified.adventure'
+  }
+  inheritance: {
+    comment: 'key < reference'
+    match: '^\\s*(?![>\\-#\\\\|`])([^<=:]+?)\\s*(<)\\s*(\\S.*?)\\s*$'
+    captures:
+      1: name: 'variable.other.key.adventure'
+      2: name: 'punctuation.separator.key.adventure'
+      3: name: 'variable.other.key.reference.adventure'
+  }
+  listItem: {
+    comment: '- value'
+    match: '^\\s*(-)(?!-)\\s*(.+?)?\\s*$'
+    captures:
+      1: name: 'punctuation.definition.list.value.adventure'
+      2: name: 'value.adventure'
+  }
+  name: {
+    comment: 'name:'
+    match: '^\\s*(?![>\\-#=:*\\\\|`])([^<=:]+?)\\s*(:)\\s*$'
+    captures:
+      1: name: 'variable.other.key.adventure'
+      2: name: 'punctuation.separator.key.adventure'
+  }
+  section1stLevel: {
+    comment: '# section [< section]'
+    match: '^\\s*(#)(?!#)\\s*([^\\s<`][^<]*?)\\s*(?:(<)\\s*(\\S.*?)\\s*)?$'
+    captures:
+      1: name: 'punctuation.definition.section.first-level.key.adventure'
+      2: name: 'variable.other.section.first-level.key.adventure'
+      3: name: 'punctuation.separator.key.adventure'
+      4: name: 'variable.other.section.reference.adventure'
+  }
+  section2ndLevel: {
+    comment: '## section [< section]'
+    match: '^\\s*(##)(?!#)\\s*([^\\s<`][^<]*?)\\s*(?:(<)\\s*(\\S.*?)\\s*)?$'
+    captures:
+      1: name: 'punctuation.definition.section.second-level.key.adventure'
+      2: name: 'variable.other.section.second-level.key.adventure'
+      3: name: 'punctuation.separator.key.adventure'
+      4: name: 'variable.other.section.reference.adventure'
+  }
+  section3rdLevelPlus: {
+    comment: '### section [< section]'
+    match: '^\\s*(#{3,})(?!#)\\s*([^\\s<`][^<]*?)\\s*(?:(<)\\s*(\\S.*?)\\s*)?$'
+    captures:
+      1: name: 'punctuation.definition.section.third-level-plus.key.adventure'
+      2: name: 'variable.other.section.third-level-plus.key.adventure'
+      3: name: 'punctuation.separator.key.adventure'
+      4: name: 'variable.other.section.reference.adventure'
+  }

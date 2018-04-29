@@ -1,0 +1,10 @@
+command: gcc fibonacci.c
+
+command: gcc fibonacci.c
+  \          -Wall
+  \          --static-only
+
+command:
+| gcc fibonacci.c
+\     -Wall
+\     --static-only

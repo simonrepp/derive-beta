@@ -1,9 +1,9 @@
 const urlRegex = /^https?:\/\/.+\..+$/;
 
-module.exports = ({ key, value }) => {
+module.exports = ({ name, value }) => {
   if(value.match(urlRegex)) {
     return value;
   } else {
-    throw `Das Feld "${key}" muss als eine vollständige absolute URL im Format "http(s)://beispiel.com" formatiert sein, vorgefunden wurde aber "${value}".`;
+    throw `Das Feld "${name}" muss als eine vollständige absolute URL im Format "http(s)://beispiel.com" formatiert sein, vorgefunden wurde aber "${value}".`;
   }
 };

@@ -1,4 +1,5 @@
-/node_modules
 /public
 /config.js
 /deploy.js
+
+node_modules

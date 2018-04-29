@@ -1,0 +1,3 @@
+'.text.adventure':
+  'editor':
+    'commentStart': '> '

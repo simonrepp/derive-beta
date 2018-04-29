@@ -11,7 +11,7 @@ const markdownMediaRegex = /(!|)\[(?:(?!\[.*\]).)*\]\((?!https?:\/\/|\/\/)(\S(?:
 // Pluggable, modulare regex components to build the md/html rules? - also think more in terms of inception matching (no src="" inside src="", no ![]() inside ![]() ..)
 // match(/!\[((?!!\[.*\]\(.*\)).)*\]\(((?!!\[.*\]\(.*\)).)*\)/g); (possibly resuse to improve regexes later, missing ](https?: NEGATIVE LOOKAHEAD THINGY)
 
-const validate = ({ key, value }, mediaAllowed) => {
+const validate = ({ name, value }, mediaAllowed) => {
   const downloads = [];
   const embeds = [];
 
@@ -36,7 +36,7 @@ const validate = ({ key, value }, mediaAllowed) => {
 
         return fullMatch.replace(urlMatch, embed.placeholder);
       } else {
-        throw `Das Markdown-Feld "${key}" enthält einen Embed der Datei "${urlMatch}", dessen Dateityp ist aber für Embeds nicht erlaubt.`;
+        throw `Das Markdown-Feld "${name}" enthält einen Embed der Datei "${urlMatch}", dessen Dateityp ist aber für Embeds nicht erlaubt.`;
       }
     } else if(typeMatch === '' || typeMatch === 'href') {
       const download = {
@@ -59,14 +59,14 @@ const validate = ({ key, value }, mediaAllowed) => {
   value = value.replace(htmlMediaRegex, validateEmbeddedMedia);
 
   if(!mediaAllowed && (downloads.length > 0 || embeds.length > 0)) {
-    throw `Das Markdown im Feld "${key}" enhält Verweise auf Mediendateien, in diesem Feld ist das aber nicht erlaubt.`;
+    throw `Das Markdown im Feld "${name}" enhält Verweise auf Mediendateien, in diesem Feld ist das aber nicht erlaubt.`;
   }
 
   let html;
   try {
     html = renderMarkdown(value);
   } catch(err) {
-    throw `Das Markdown im Feld "${key}" hat beim konvertieren einen Fehler ausgelöst: ${err}`;
+    throw `Das Markdown im Feld "${name}" hat beim konvertieren einen Fehler ausgelöst: ${err}`;
   }
 
   return {
@@ -76,5 +76,5 @@ const validate = ({ key, value }, mediaAllowed) => {
   };
 };
 
-exports.validateMarkdown = plainValue => validate(plainValue, false);
-exports.validateMarkdownWithMedia = plainValue => validate(plainValue, true);
+exports.validateMarkdown = adventureValue => validate(adventureValue, false);
+exports.validateMarkdownWithMedia = adventureValue => validate(adventureValue, true);

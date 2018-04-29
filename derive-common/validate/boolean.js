@@ -1,4 +1,4 @@
-module.exports = ({ key, value }) => {
+module.exports = ({ name, value }) => {
   const lowercase = value.toLowerCase();
 
   if(lowercase === 'ja') {
@@ -9,5 +9,5 @@ module.exports = ({ key, value }) => {
     return false;
   }
 
-  throw `Das Feld "${key}" muss den Wert "Ja" oder "Nein" enthalten, enthält aber den Wert "${value}".`;
+  throw `Das Feld "${name}" muss den Wert "Ja" oder "Nein" enthalten, enthält aber den Wert "${value}".`;
 };

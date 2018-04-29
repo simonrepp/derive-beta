@@ -10,8 +10,8 @@ module.exports = data => {
 
       data.warnings.push({
         files: [
-          { path: existingArticle.sourceFile, ranges: existingError.ranges },
-          { path: article.sourceFile, ranges: discardedError.ranges }
+          { path: existingArticle.sourceFile, selection: existingError.selection },
+          { path: article.sourceFile, selection: discardedError.selection }
         ],
         message: `Es existieren zwei Artikel mit dem Titel "${article.title}"`,
         snippet: discardedError.snippet
@@ -30,8 +30,8 @@ module.exports = data => {
 
       data.warnings.push({
         files: [
-          { path: existingArticle.sourceFile, ranges: existingError.ranges },
-          { path: article.sourceFile, ranges: discardedError.ranges }
+          { path: existingArticle.sourceFile, selection: existingError.selection },
+          { path: article.sourceFile, selection: discardedError.selection }
         ],
         message: `Es existieren zwei Artikel mit dem Permalink "${article.permalink}"`,
         snippet: discardedError.snippet
@@ -56,8 +56,8 @@ module.exports = data => {
 
       data.warnings.push({
         files: [
-          { path: existingBook.sourceFile, ranges: existingError.ranges },
-          { path: book.sourceFile, ranges: discardedError.ranges }
+          { path: existingBook.sourceFile, selection: existingError.selection },
+          { path: book.sourceFile, selection: discardedError.selection }
         ],
         message: `Es existieren zwei Bücher mit dem Titel "${book.title}"`,
         snippet: discardedError.snippet
@@ -75,8 +75,8 @@ module.exports = data => {
 
       data.warnings.push({
         files: [
-          { path: existingBook.sourceFile, ranges: existingError.ranges },
-          { path: book.sourceFile, ranges: discardedError.ranges }
+          { path: existingBook.sourceFile, selection: existingError.selection },
+          { path: book.sourceFile, selection: discardedError.selection }
         ],
         message: `Es existieren zwei Bücher mit dem Permalink "${book.permalink}"`,
         snippet: discardedError.snippet
@@ -100,8 +100,8 @@ module.exports = data => {
 
       data.warnings.push({
         files: [
-          { path: existingEvent.sourceFile, ranges: existingError.ranges },
-          { path: event.sourceFile, ranges: discardedError.ranges }
+          { path: existingEvent.sourceFile, selection: existingError.selection },
+          { path: event.sourceFile, selection: discardedError.selection }
         ],
         message: `Es existieren zwei Veranstaltungen mit dem Permalink "${event.permalink}"`,
         snippet: discardedError.snippet
@@ -123,8 +123,8 @@ module.exports = data => {
 
       data.warnings.push({
         files: [
-          { path: existingIssue.sourceFile, ranges: existingError.ranges },
-          { path: issue.sourceFile, ranges: discardedError.ranges }
+          { path: existingIssue.sourceFile, selection: existingError.selection },
+          { path: issue.sourceFile, selection: discardedError.selection }
         ],
         message: `Es existieren zwei Zeitschriften mit der Nummer ${issue.number}`,
         snippet: discardedError.snippet
@@ -147,8 +147,8 @@ module.exports = data => {
 
       data.warnings.push({
         files: [
-          { path: existingPlayer.sourceFile, ranges: existingError.ranges },
-          { path: player.sourceFile, ranges: discardedError.ranges }
+          { path: existingPlayer.sourceFile, selection: existingError.selection },
+          { path: player.sourceFile, selection: discardedError.selection }
         ],
         message: `Es existieren zwei Akteure mit dem Namen "${player.name}"`,
         snippet: discardedError.snippet
@@ -166,8 +166,8 @@ module.exports = data => {
 
       data.warnings.push({
         files: [
-          { path: existingPlayer.sourceFile, ranges: existingError.ranges },
-          { path: player.sourceFile, ranges: discardedError.ranges }
+          { path: existingPlayer.sourceFile, selection: existingError.selection },
+          { path: player.sourceFile, selection: discardedError.selection }
         ],
         message: `Es existieren zwei Akteure mit dem Permalink "${player.permalink}"`,
         snippet: discardedError.snippet
@@ -192,8 +192,8 @@ module.exports = data => {
 
       data.warnings.push({
         files: [
-          { path: existingPage.sourceFile, ranges: existingError.ranges },
-          { path: page.sourceFile, ranges: discardedError.ranges }
+          { path: existingPage.sourceFile, selection: existingError.selection },
+          { path: page.sourceFile, selection: discardedError.selection }
         ],
         message: `Es existieren zwei Seiten mit dem Permalink "${page.permalink}" im selben Kontext (z.b. Urbanize Festival)`,
         snippet: discardedError.snippet
@@ -215,8 +215,8 @@ module.exports = data => {
 
       data.warnings.push({
         files: [
-          { path: existingProgram.sourceFile, ranges: existingError.ranges },
-          { path: program.sourceFile, ranges: discardedError.ranges }
+          { path: existingProgram.sourceFile, selection: existingError.selection },
+          { path: program.sourceFile, selection: discardedError.selection }
         ],
         message: `Es existieren zwei Radiosendungen mit dem Permalink "${program.permalink}"`,
         snippet: discardedError.snippet

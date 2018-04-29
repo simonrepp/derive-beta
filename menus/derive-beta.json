@@ -94,7 +94,7 @@
               "command": "derive-beta:markdown-reference"
             },
             {
-              "label": "Plain Data Handbuch",
+              "label": "Adventure Handbuch",
               "command": "derive-beta:plain-reference"
             },
             {

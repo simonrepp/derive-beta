@@ -1,5 +1,5 @@
-const { loadPlain, statFile } = require('../util.js'),
-      { PlainValidationError, PlainParseError } = require('../../plain/plain.js'),
+const { loadAdventure, statFile } = require('../util.js'),
+      { AdventureValidationError, AdventureParseError } = require('../../adventurejs/adventure.js'),
       validateAbsoluteUrl = require('../validate/absolute-url.js'),
       { validateMarkdown } = require('../validate/markdown.js'),
       validatePermalink = require('../validate/permalink.js');
@@ -14,15 +14,14 @@ module.exports = async (data, plainPath) => {
     let doc;
 
     try {
-      doc = await loadPlain(data.root, plainPath);
+      doc = await loadAdventure(data.root, plainPath);
     } catch(err) {
       data.cache.delete(plainPath);
 
-      if(err instanceof PlainParseError) {
+      if(err instanceof AdventureParseError) {
         data.warnings.push({
-          detail: err.message,
-          files: [{ path: plainPath, ranges: err.ranges }],
-          message: err.message,
+          files: [{ path: plainPath, selection: err.selection }],
+          message: err.text,
           snippet: err.snippet
         });
 
@@ -59,11 +58,10 @@ module.exports = async (data, plainPath) => {
     } catch(err) {
       data.cache.delete(plainPath);
 
-      if(err instanceof PlainValidationError) {
+      if(err instanceof AdventureValidationError) {
         data.warnings.push({
-          detail: err.message,
-          files: [{ path: plainPath, ranges: err.ranges }],
-          message: err.message,
+          files: [{ path: plainPath, selection: err.selection }],
+          message: err.text,
           snippet: err.snippet
         });
 

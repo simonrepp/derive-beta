@@ -1,0 +1,12 @@
+require_relative 'adventure/errors.rb'
+require_relative 'adventure/field.rb'
+require_relative 'adventure/lexer_pass.rb'
+require_relative 'adventure/list.rb'
+require_relative 'adventure/mapping.rb'
+require_relative 'adventure/message_codes.rb'
+require_relative 'adventure/regex_patterns.rb'
+require_relative 'adventure/resolver_pass.rb'
+require_relative 'adventure/section.rb'
+require_relative 'adventure/solver_pass.rb'
+
+require_relative 'adventure/messages/de.rb'

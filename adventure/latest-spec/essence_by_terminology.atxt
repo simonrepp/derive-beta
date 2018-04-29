@@ -1,0 +1,38 @@
+> Text of Comment
+
+[Name of Field]: [Value of Field]
+
+-- [Name of Block]
+[Value of ...
+ ... Block]
+-- [Name of Block]
+
+[Name of List]:
+- [Value of Item]
+- [Value of Item]
+
+[Name of Dictionary]:
+[Name of Entry A] = [Value of Entry A]
+[Name of Entry B] = [Value of Entry B]
+
+[Name of Field/List/Dictionary] < [Name of Field/List/Dictionary to copy]
+
+# [Name of Section]
+## [Name of Section]
+### [Name of Section]
+
+# [Name of Section] < [Name of Section to copy]
+
+`[Escaped Name of Field]`: [Value of Field]
+
+`[Escaped Name of List]`:
+- [Value of Item]
+- [Value of Item]
+
+`[Escaped Name of Dictionary]`:
+`[Escaped Name of Entry A]` = [Value of Entry A]
+`[Escaped Name of Entry B]` = [Value of Entry B]
+
+`[Escaped Name of Field/List/Dictionary]` < [Name of Field/List/Dictionary to copy]
+
+# `[Escaped Name of Section]` < [Name of Section to copy]

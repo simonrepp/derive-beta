@@ -51,7 +51,7 @@ module.exports = data => {
         if(err instanceof ConnectMediaError) {
           data.warnings.push({
             files: [{ path: article.sourceFile }],
-            message: `Problem beim prüfen der eingebetteten Mediendateien im Artikel "${article.title}": ${err.message}`
+            message: `Problem beim prüfen der eingebetteten Mediendateien im Artikel "${article.title}": ${err.text}`
           });
 
           data.articles.delete(article.sourceFile);
@@ -89,9 +89,8 @@ module.exports = data => {
       } catch(err) {
         if(err instanceof ConnectMediaError) {
           data.warnings.push({
-            detail: err.message,
             files: [{ path: event.sourceFile }],
-            message: `Problem beim prüfen der eingebetteten Mediendateien in der Veranstaltung "${event.title}": ${err.message}`
+            message: `Problem beim prüfen der eingebetteten Mediendateien in der Veranstaltung "${event.title}": ${err.text}`
           });
 
           data.events.delete(event.sourceFile);
@@ -145,7 +144,7 @@ module.exports = data => {
         if(err instanceof ConnectMediaError) {
           data.warnings.push({
             files: [{ path: page.sourceFile }],
-            message: `Problem beim prüfen der eingebetteten Mediendateien auf der Seite "${page.title}": ${err.message}`
+            message: `Problem beim prüfen der eingebetteten Mediendateien auf der Seite "${page.title}": ${err.text}`
           });
 
           data.pages.delete(page.sourceFile);
@@ -184,7 +183,7 @@ module.exports = data => {
         if(err instanceof ConnectMediaError) {
           data.warnings.push({
             files: [{ path: program.sourceFile }],
-            message: `Problem beim prüfen der eingebetteten Mediendateien in der Radiosendung "${program.title}": ${err.message}`
+            message: `Problem beim prüfen der eingebetteten Mediendateien in der Radiosendung "${program.title}": ${err.text}`
           });
 
           data.programs.delete(program.sourceFile);

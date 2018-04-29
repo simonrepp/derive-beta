@@ -13,8 +13,8 @@ const connectBookReviews = data => {
         const error = trace.getError(`Im Artikel "${article.title}" wird das Buch "${value}" besprochen, allerdings wurde kein Buch mit diesem Titel gefunden.`);
 
         data.warnings.push({
-          files: [{ path: article.sourceFile, ranges: error.ranges }],
-          message: error.message,
+          files: [{ path: article.sourceFile, selection: error.selection }],
+          message: error.text,
           snippet: error.snippet
         });
       }
@@ -34,11 +34,11 @@ const connectPlayers = (data, collection, referencesField, instancesField, backR
           instance[backReferenceField].push(document);
         }
       } else {
-        const error = trace.getError(`Im Feld "${trace.key}" wird die AkteurIn "${value}" angegeben, es wurde aber keine AkteurIn mit diesem Namen gefunden.`);
+        const error = trace.getError(`Im Feld "${trace.name}" wird die AkteurIn "${value}" angegeben, es wurde aber keine AkteurIn mit diesem Namen gefunden.`);
 
         data.warnings.push({
-          files: [{ path: document.sourceFile, ranges: error.ranges }],
-          message: error.message,
+          files: [{ path: document.sourceFile, selection: error.selection }],
+          message: error.text,
           snippet: error.snippet
         });
       }
@@ -86,8 +86,8 @@ const connectIssuesWithArticles = data => {
           const error = reference.titleTrace.getError(`In Zeitschrift N° ${issue.number} wird in der Rubrik "${section.title}" der Artikel "${reference.title}" referenziert, es wurde aber kein Artikel mit diesem Titel gefunden.`);
 
           data.warnings.push({
-            files: [{ path: issue.sourceFile, ranges: error.ranges }],
-            message: error.message,
+            files: [{ path: issue.sourceFile, selection: error.selection }],
+            message: error.text,
             snippet: error.snippet
           });
         }
@@ -110,8 +110,8 @@ const connectRadioEditors = data => {
         const error = trace.getError(({ value }) => `Die AkteurIn "${value}", angegeben als Teil der allgemeinen Radio Redaktion, wurde nicht gefunden.`);
 
         data.errors.push({
-          files: [{ path: data.radio.sourceFile, ranges: error.ranges }],
-          message: error.message,
+          files: [{ path: data.radio.sourceFile, selection: error.selection }],
+          message: error.text,
           snippet: error.snippet
         });
       }

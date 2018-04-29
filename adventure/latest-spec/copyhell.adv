@@ -1,0 +1,39 @@
+# production
+
+## server a
+conf-original: i should land in staging
+
+## server b
+conf: i should be discarded
+
+## server c
+
+### ruby
+
+empty words:
+
+versions:
+- 1
+
+# staging < production
+
+## server a
+
+conf-original < conf-original
+| ... and on a different route as well!
+
+## server c
+
+### python
+
+enabled: true
+
+### ruby
+
+versions:
+- 2
+- 3
+- 4
+
+## server b
+conf: i should have replaced the other one

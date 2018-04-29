@@ -1,0 +1,81 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Du hast succeeds 1`] = `
+Object {
+  "Song": Array [
+    Object {
+      "Verse A": Array [
+        Object {
+          "Line A": Array [
+            "Du",
+          ],
+          "Line B": Array [
+            "Du hast",
+          ],
+          "Line C": Array [
+            "Du hast mich",
+          ],
+        },
+        Object {
+          "Line A": Array [
+            "Du",
+          ],
+          "Line B": Array [
+            "Du hast",
+          ],
+          "Line C": Array [
+            "Du hast mich",
+          ],
+        },
+        Object {
+          "Line A": Array [
+            "Du",
+          ],
+          "Line B": Array [
+            "Du hast",
+          ],
+          "Line C": Array [
+            "Du hast mich",
+          ],
+        },
+        Object {
+          "Line A": Array [
+            "Du",
+          ],
+          "Line B": Array [
+            "Du hast",
+          ],
+          "Line C": Array [
+            "Du hast mich",
+          ],
+        },
+        Object {
+          "Line A": Array [
+            "Du",
+          ],
+          "Line B": Array [
+            "Du hast",
+          ],
+          "Line C": Array [
+            "Du hast mich",
+          ],
+        },
+      ],
+      "Verse B": Array [
+        Object {
+          "Line C": Array [
+            "Du hast mich",
+          ],
+          "Line D": Array [
+            "Du hast mich gefragt",
+            "Du hast mich gefragt",
+          ],
+          "Line E": Array [
+            "Du hast mich gefragt und ich hab nichts gesagt",
+          ],
+        },
+      ],
+    },
+  ],
+}
+`;

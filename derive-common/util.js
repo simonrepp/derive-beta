@@ -6,7 +6,7 @@ const fs = require('fs'),
 
 markdownIt.use(markdownItFootnote);
 
-const plain = require('../plain/plain.js');
+const plain = require('../adventurejs/adventure.js');
 
 exports.URBANIZE_ENUM = [
   '2012',
@@ -32,7 +32,7 @@ exports.loadFile = filePath => new Promise((resolve, reject) =>
   fs.readFile(filePath, 'utf-8', (err, content) => err ? reject(err) : resolve(content))
 );
 
-exports.loadPlain = (directory, plainPath) => new Promise((resolve, reject) =>
+exports.loadAdventure = (directory, plainPath) => new Promise((resolve, reject) =>
   fs.readFile(path.join(directory, plainPath), 'utf-8', (err, content) => {
     if(err) {
       reject(err);
