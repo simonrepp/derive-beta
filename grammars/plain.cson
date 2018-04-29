@@ -8,7 +8,7 @@
 #       yes yes please more complex structure for this also with repository ?
 
 scopeName: 'source.plain'
-name: 'Plain Data'
+name: 'plain'
 fileTypes: [
   'plain'
 ]

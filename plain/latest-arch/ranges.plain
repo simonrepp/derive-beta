@@ -10,11 +10,9 @@
 
 -- select
 
-foo:
-- item
-vvvvvvvvvvv
-key = value
-^^^^^^^^^^^
+  foo:
+  - item
+> key = value <
 
 -- select
 
@@ -33,10 +31,8 @@ key = value
 
 -- select
 
-* ref:
-vvvvvvvvvvv
-key = value
-^^^^^^^^^^^
+  * ref:
+> key = value <
 
 -- select
 
@@ -44,15 +40,15 @@ key = value
 
 -- print
 
-> # foo
->
-> < ref
->
+  # foo
+
+  < ref
+
 > bar:
 > - item
 
-> *# ref
->
+  *# ref
+
 > bar:
 > key = value
 
@@ -60,9 +56,46 @@ key = value
 
 -- select
 
-* ref:
-vvvvvvvvvvv
-key = value
-^^^^^^^^^^^
+( the one inside the *# ref is selected )
 
+  bar:
+> key = value <
+
+-- select
+
+# HIERARCHY_LAYER_SKIP
+
+-- print
+
+> # frufru
+
+  ...
+
+> ### frafra
+
+-- print
+
+-- select
+
+> ### frafra <
+
+-- select
+
+# UNTERMINATED_VERBATIM_FIELD
+
+-- print
+
+> -- frufru
+>
+>  ...
+>
+> Something else (EOD)
+
+-- print
+
+-- select
+
+> -- frufru <
+
+  ...
 -- select
