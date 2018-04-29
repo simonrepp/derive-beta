@@ -90,3 +90,11 @@ baz
 bom
 bum
 -- foo
+
+*# Foo
+
+*--foo
+- hahah!
+*--foo
+
+*foo:bar

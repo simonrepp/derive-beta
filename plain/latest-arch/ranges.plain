@@ -1,0 +1,68 @@
+# ATTRIBUTES_AND_VALUES_MIXED
+
+-- print
+
+> foo:
+> - item
+> key = value
+
+-- print
+
+-- select
+
+foo:
+- item
+vvvvvvvvvvv
+key = value
+^^^^^^^^^^^
+
+-- select
+
+# ATTRIBUTES_AND_VALUES_MIXED (reference)
+
+-- print
+
+> foo:
+> - item
+> < ref
+
+> * ref:
+> key = value
+
+-- print
+
+-- select
+
+* ref:
+vvvvvvvvvvv
+key = value
+^^^^^^^^^^^
+
+-- select
+
+# ATTRIBUTES_AND_VALUES_MIXED (deep reference)
+
+-- print
+
+> # foo
+>
+> < ref
+>
+> bar:
+> - item
+
+> *# ref
+>
+> bar:
+> key = value
+
+-- print
+
+-- select
+
+* ref:
+vvvvvvvvvvv
+key = value
+^^^^^^^^^^^
+
+-- select

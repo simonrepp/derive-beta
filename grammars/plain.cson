@@ -96,7 +96,7 @@ repository:
   }
   reference: {
     comment: '* key'
-    match: '^\\s*(\\*)(?!\\*)\\s*([^\\s:][^:]*?)\\s*$'
+    match: '^\\s*([\\*<])(?![\\*<])\\s*([^\\s:][^:]*?)\\s*$'
     captures:
       1: name: 'punctuation.definition.reference.key.plain'
       2: name: 'variable.other.key.reference.plain'
