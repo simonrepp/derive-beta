@@ -1,5 +1,5 @@
 const { loadPlain, statFile, URBANIZE_ENUM } = require('../util.js'),
-      { PlainDataValidationError, PlainDataParseError } = require('../../plaindata/plaindata.js'),
+      { PlainValidationError, PlainParseError } = require('../../plain/plain.js'),
       validateBoolean = require('../validate/boolean.js'),
       validateDate = require('../validate/date.js'),
       validateEnum = require('../validate/enum.js'),
@@ -15,14 +15,14 @@ module.exports = async (data, plainPath) => {
   if(cached && stats.size === cached.stats.size && stats.mTimeMs === cached.stats.mTimeMs) {
     data.articles.set(plainPath, cached.article);
   } else {
-    let document;
+    let doc;
 
     try {
-      document = await loadPlain(data.root, plainPath);
+      doc = await loadPlain(data.root, plainPath);
     } catch(err) {
       data.cache.delete(plainPath);
 
-      if(err instanceof PlainDataParseError) {
+      if(err instanceof PlainParseError) {
         data.warnings.push({
           detail: err.message,
           files: [{ path: plainPath, ranges: err.ranges }],
@@ -41,34 +41,36 @@ module.exports = async (data, plainPath) => {
       sourceFile: plainPath
     };
 
+    doc.enforcePresence(true);
+
     try {
-      const title = document.attribute('Titel', { required: true, withTrace: true });
+      const title = doc.field('Titel', { required: true, withTrace: true });
       article.title = title.value;
       article.titleTrace = title.trace;
 
-      const permalink = document.attribute('Permalink', validatePermalink, { required: true, withTrace: true });
+      const permalink = doc.field('Permalink', validatePermalink, { required: true, withTrace: true });
       article.permalink = permalink.value;
       article.permalinkTrace = permalink.trace;
 
-      article.subtitle = document.attribute('Untertitel');
-      article.image = document.attribute('Bild', validatePath);
-      article.authorReferences = document.list('Autoren', { withTrace: true });
-      article.date = document.attribute('Datum');
-      article.language = document.attribute('Sprache');
-      article.categoriesDisconnected = document.list('Kategorien');
-      article.tagsDisconnected = document.list('Tags');
-      article.reviewedBookReferences = document.list('Buchbesprechungen', { withTrace: true });
-      article.readable = document.attribute('Lesbar', validateBoolean);
-      article.urbanize = document.attribute('Urbanize', validateEnum(URBANIZE_ENUM));
-      article.abstract = document.attribute('Abstract', validateMarkdown);
-      article.bibliography = document.attribute('Literaturverzeichnis', validateMarkdown);
-      article.text = document.attribute('Text', validateMarkdownWithMedia);
+      article.subtitle = doc.field('Untertitel');
+      article.image = doc.field('Bild', validatePath);
+      article.authorReferences = doc.list('Autoren', { withTrace: true });
+      article.date = doc.field('Datum');
+      article.language = doc.field('Sprache');
+      article.categoriesDisconnected = doc.list('Kategorien');
+      article.tagsDisconnected = doc.list('Tags');
+      article.reviewedBookReferences = doc.list('Buchbesprechungen', { withTrace: true });
+      article.readable = doc.field('Lesbar', validateBoolean);
+      article.urbanize = doc.field('Urbanize', validateEnum(URBANIZE_ENUM));
+      article.abstract = doc.field('Abstract', validateMarkdown);
+      article.bibliography = doc.field('Literaturverzeichnis', validateMarkdown);
+      article.text = doc.field('Text', validateMarkdownWithMedia);
 
-      document.assertAllTouched();
+      doc.assertAllTouched();
     } catch(err) {
       data.cache.delete(plainPath);
 
-      if(err instanceof PlainDataValidationError) {
+      if(err instanceof PlainValidationError) {
         data.warnings.push({
           detail: err.message,
           files: [{ path: plainPath, ranges: err.ranges }],

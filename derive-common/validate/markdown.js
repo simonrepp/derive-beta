@@ -76,5 +76,5 @@ const validate = ({ key, value }, mediaAllowed) => {
   };
 };
 
-exports.validateMarkdown = plaindataValue => validate(plaindataValue, false);
-exports.validateMarkdownWithMedia = plaindataValue => validate(plaindataValue, true);
+exports.validateMarkdown = plainValue => validate(plainValue, false);
+exports.validateMarkdownWithMedia = plainValue => validate(plainValue, true);

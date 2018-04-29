@@ -1,5 +1,5 @@
 const { loadPlain, statFile } = require('../util.js'),
-      { PlainDataValidationError, PlainDataParseError } = require('../../plaindata/plaindata.js'),
+      { PlainValidationError, PlainParseError } = require('../../plain/plain.js'),
       validateAbsoluteUrl = require('../validate/absolute-url.js'),
       validateBoolean = require('../validate/boolean.js'),
       validateInteger = require('../validate/integer.js'),
@@ -13,14 +13,14 @@ module.exports = async (data, plainPath) => {
   if(cached && stats.size === cached.stats.size && stats.mTimeMs === cached.stats.mTimeMs) {
     data.features.set(plainPath, cached.feature);
   } else {
-    let document;
+    let doc;
 
     try {
-      document = await loadPlain(data.root, plainPath);
+      doc = await loadPlain(data.root, plainPath);
     } catch(err) {
       data.cache.delete(plainPath);
 
-      if(err instanceof PlainDataParseError) {
+      if(err instanceof PlainParseError) {
         data.warnings.push({
           detail: err.message,
           files: [{ path: plainPath, ranges: err.ranges }],
@@ -39,20 +39,22 @@ module.exports = async (data, plainPath) => {
       sourceFile: plainPath
     };
 
-    try {
-      feature.title = document.attribute('Titel', { required: true });
-      feature.header = document.attribute('Header');
-      feature.image = document.attribute('Bild', validatePath);
-      feature.position = document.attribute('Position', validateInteger);
-      feature.biggerBox = document.attribute('Größere Box', validateBoolean);
-      feature.url = document.attribute('URL', validateAbsoluteUrl);
-      feature.text = document.attribute('Text', validateMarkdown);
+    doc.enforcePresence(true);
 
-      document.assertAllTouched();
+    try {
+      feature.title = doc.field('Titel', { required: true });
+      feature.header = doc.field('Header');
+      feature.image = doc.field('Bild', validatePath);
+      feature.position = doc.field('Position', validateInteger);
+      feature.biggerBox = doc.field('Größere Box', validateBoolean);
+      feature.url = doc.field('URL', validateAbsoluteUrl);
+      feature.text = doc.field('Text', validateMarkdown);
+
+      doc.assertAllTouched();
     } catch(err) {
       data.cache.delete(plainPath);
 
-      if(err instanceof PlainDataValidationError) {
+      if(err instanceof PlainValidationError) {
         data.warnings.push({
           detail: err.message,
           files: [{ path: plainPath, ranges: err.ranges }],

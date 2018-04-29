@@ -1,5 +1,5 @@
 const { loadPlain, statFile } = require('../util.js'),
-      { PlainDataValidationError, PlainDataParseError } = require('../../plaindata/plaindata.js'),
+      { PlainValidationError, PlainParseError } = require('../../plain/plain.js'),
       validateBoolean = require('../validate/boolean.js'),
       validateDate = require('../validate/date.js'),
       validateInteger = require('../validate/integer.js'),
@@ -13,14 +13,14 @@ module.exports = async (data, plainPath) => {
   if(cached && stats.size === cached.stats.size && stats.mTimeMs === cached.stats.mTimeMs) {
     data.issues.set(plainPath, cached.issue);
   } else {
-    let document;
+    let doc;
 
     try {
-      document = await loadPlain(data.root, plainPath);
+      doc = await loadPlain(data.root, plainPath);
     } catch(err) {
       data.cache.delete(plainPath);
 
-      if(err instanceof PlainDataParseError) {
+      if(err instanceof PlainParseError) {
         data.warnings.push({
           detail: err.message,
           files: [{ path: plainPath, ranges: err.ranges }],
@@ -39,41 +39,43 @@ module.exports = async (data, plainPath) => {
       sourceFile: plainPath
     };
 
+    doc.enforcePresence(true);
+
     try {
-      const number = document.attribute('Nummer', validateInteger, { required: true, withTrace: true });
+      const number = doc.field('Nummer', validateInteger, { required: true, withTrace: true });
       issue.number = number.value;
       issue.numberTrace = number.trace;
 
-      issue.title = document.attribute('Titel', { required: true });
-      issue.year = document.attribute('Jahr', validateInteger, { required: true });
-      issue.quarter = document.attribute('Quartal', validateInteger, { required: true });
-      issue.cover = document.attribute('Cover', validatePath, { required: true });
-      issue.shopLink = document.attribute('Link zum Shop');
-      issue.cooperation = document.attribute('Kooperation');
-      issue.features = document.list('Schwerpunkte');
-      issue.outOfPrint = document.attribute('Vergriffen', validateBoolean);
-      issue.publicationDate = document.attribute('Erscheinungsdatum', validateDate);
-      issue.tagsDisconnected = document.list('Tags');
-      issue.description = document.attribute('Beschreibung', validateMarkdown);
+      issue.title = doc.field('Titel', { required: true });
+      issue.year = doc.field('Jahr', validateInteger, { required: true });
+      issue.quarter = doc.field('Quartal', validateInteger, { required: true });
+      issue.cover = doc.field('Cover', validatePath, { required: true });
+      issue.shopLink = doc.field('Link zum Shop');
+      issue.cooperation = doc.field('Kooperation');
+      issue.features = doc.list('Schwerpunkte');
+      issue.outOfPrint = doc.field('Vergriffen', validateBoolean);
+      issue.publicationDate = doc.field('Erscheinungsdatum', validateDate);
+      issue.tagsDisconnected = doc.list('Tags');
+      issue.description = doc.field('Beschreibung', validateMarkdown);
 
-      issue.sections = document.sections('Rubrik').map(section => ({
-        title: section.attribute('Titel', { required: true }),
-        articleReferences: section.sections('Artikel', { keyRequired: false }).map(reference => {
-          const title = reference.attribute('Titel', { required: true, withTrace: true });
+      issue.sections = doc.sections('Rubrik').map(section => ({
+        title: section.field('Titel', { required: true }),
+        articleReferences: section.sections('Artikel').map(reference => {
+          const title = reference.field('Titel', { required: true, withTrace: true });
 
           return {
-            pages: reference.attribute('Seite(n)', { required: true }),
+            pages: reference.field('Seite(n)', { required: true }),
             title: title.value,
             titleTrace: title.trace
           };
         })
       }));
 
-      document.assertAllTouched();
+      doc.assertAllTouched();
     } catch(err) {
       data.cache.delete(plainPath);
 
-      if(err instanceof PlainDataValidationError) {
+      if(err instanceof PlainValidationError) {
         data.warnings.push({
           detail: err.message,
           files: [{ path: plainPath, ranges: err.ranges }],

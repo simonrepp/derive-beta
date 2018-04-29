@@ -1,5 +1,5 @@
 const { loadPlain, statFile } = require('../util.js'),
-      { PlainDataValidationError, PlainDataParseError } = require('../../plaindata/plaindata.js'),
+      { PlainValidationError, PlainParseError } = require('../../plain/plain.js'),
       validateDate = require('../validate/date.js'),
       { validateMarkdown, validateMarkdownWithMedia } = require('../validate/markdown.js'),
       validatePath = require('../validate/path.js'),
@@ -12,14 +12,14 @@ module.exports = async (data, plainPath) => {
   if(cached && stats.size === cached.stats.size && stats.mTimeMs === cached.stats.mTimeMs) {
     data.programs.set(plainPath, cached.program);
   } else {
-    let document;
+    let doc;
 
     try {
-      document = await loadPlain(data.root, plainPath);
+      doc = await loadPlain(data.root, plainPath);
     } catch(err) {
       data.cache.delete(plainPath);
 
-      if(err instanceof PlainDataParseError) {
+      if(err instanceof PlainParseError) {
         data.warnings.push({
           detail: err.message,
           files: [{ path: plainPath, ranges: err.ranges }],
@@ -38,29 +38,31 @@ module.exports = async (data, plainPath) => {
       sourceFile: plainPath
     };
 
-    try {
-      program.title = document.attribute('Titel', { required: true });
+    doc.enforcePresence(true);
 
-      const permalink = document.attribute('Permalink', validatePermalink, { required: true, withTrace: true });
+    try {
+      program.title = doc.field('Titel', { required: true });
+
+      const permalink = doc.field('Permalink', validatePermalink, { required: true, withTrace: true });
       program.permalink = permalink.value;
       program.permalinkTrace = permalink.trace;
 
-      program.firstBroadcast = document.attribute('Erstausstrahlung', validateDate, { required: true });
-      program.subtitle = document.attribute('Untertitel');
-      program.image = document.attribute('Bild', validatePath);
-      program.soundfile = document.attribute('Soundfile', validatePath);
-      program.editorReferences = document.list('Redaktion', { withTrace: true });
-      program.language = document.attribute('Sprache');
-      program.categoriesDisconnected = document.list('Kategorien');
-      program.tagsDisconnected = document.list('Tags');
-      program.abstract = document.attribute('Abstract', validateMarkdown);
-      program.text = document.attribute('Text', validateMarkdownWithMedia);
+      program.firstBroadcast = doc.field('Erstausstrahlung', validateDate, { required: true });
+      program.subtitle = doc.field('Untertitel');
+      program.image = doc.field('Bild', validatePath);
+      program.soundfile = doc.field('Soundfile', validatePath);
+      program.editorReferences = doc.list('Redaktion', { withTrace: true });
+      program.language = doc.field('Sprache');
+      program.categoriesDisconnected = doc.list('Kategorien');
+      program.tagsDisconnected = doc.list('Tags');
+      program.abstract = doc.field('Abstract', validateMarkdown);
+      program.text = doc.field('Text', validateMarkdownWithMedia);
 
-      document.assertAllTouched();
+      doc.assertAllTouched();
     } catch(err) {
       data.cache.delete(plainPath);
 
-      if(err instanceof PlainDataValidationError) {
+      if(err instanceof PlainValidationError) {
         data.warnings.push({
           detail: err.message,
           files: [{ path: plainPath, ranges: err.ranges }],

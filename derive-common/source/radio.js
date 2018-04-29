@@ -1,5 +1,5 @@
 const { loadPlain, statFile } = require('../util.js'),
-      { PlainDataValidationError, PlainDataParseError } = require('../../plaindata/plaindata.js'),
+      { PlainValidationError, PlainParseError } = require('../../plain/plain.js'),
       { validateMarkdown } = require('../validate/markdown.js');
 
 module.exports = async (data, plainPath) => {
@@ -9,14 +9,14 @@ module.exports = async (data, plainPath) => {
   if(cached && stats.size === cached.stats.size && stats.mTimeMs === cached.stats.mTimeMs) {
     data.radio = cached.radio;
   } else {
-    let document;
+    let doc;
 
     try {
-      document = await loadPlain(data.root, plainPath);
+      doc = await loadPlain(data.root, plainPath);
     } catch(err) {
       data.cache.delete(plainPath);
 
-      if(err instanceof PlainDataParseError) {
+      if(err instanceof PlainParseError) {
         data.errors.push({
           files: [{ path: plainPath, ranges: err.ranges }],
           message: err.message,
@@ -31,16 +31,18 @@ module.exports = async (data, plainPath) => {
 
     const radio = { sourceFile: plainPath };
 
-    try {
-      radio.title = document.attribute('Titel', { required: true });
-      radio.info = document.attribute('Allgemeine Info', validateMarkdown, { required: true });
-      radio.editorReferences = document.list('Redaktion', { withTrace: true });
+    doc.enforcePresence(true);
 
-      document.assertAllTouched();
+    try {
+      radio.title = doc.field('Titel', { required: true });
+      radio.info = doc.field('Allgemeine Info', validateMarkdown, { required: true });
+      radio.editorReferences = doc.list('Redaktion', { withTrace: true });
+
+      doc.assertAllTouched();
     } catch(err) {
       data.cache.delete(plainPath);
 
-      if(err instanceof PlainDataValidationError) {
+      if(err instanceof PlainValidationError) {
         data.errors.push({
           files: [{ path: plainPath, ranges: err.ranges }],
           message: err.message,

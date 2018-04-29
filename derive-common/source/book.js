@@ -1,5 +1,5 @@
 const { loadPlain, statFile } = require('../util.js'),
-      { PlainDataValidationError, PlainDataParseError } = require('../../plaindata/plaindata.js'),
+      { PlainValidationError, PlainParseError } = require('../../plain/plain.js'),
       validateAbsoluteUrl = require('../validate/absolute-url.js'),
       validateInteger = require('../validate/integer.js'),
       { validateMarkdown } = require('../validate/markdown.js'),
@@ -13,14 +13,14 @@ module.exports = async (data, plainPath) => {
   if(cached && stats.size === cached.stats.size && stats.mTimeMs === cached.stats.mTimeMs) {
     data.books.set(plainPath, cached.book);
   } else {
-    let document;
+    let doc;
 
     try {
-      document = await loadPlain(data.root, plainPath);
+      doc = await loadPlain(data.root, plainPath);
     } catch(err) {
       data.cache.delete(plainPath);
 
-      if(err instanceof PlainDataParseError) {
+      if(err instanceof PlainParseError) {
         data.warnings.push({
           files: [{ path: plainPath, ranges: err.ranges }],
           message: err.message,
@@ -38,32 +38,34 @@ module.exports = async (data, plainPath) => {
       sourceFile: plainPath
     };
 
+    doc.enforcePresence(true);
+
     try {
-      const title = document.attribute('Titel', { required: true, withTrace: true });
+      const title = doc.field('Titel', { required: true, withTrace: true });
       book.title = title.value;
       book.titleTrace = title.trace;
 
-      const permalink = document.attribute('Permalink', validatePermalink, { required: true, withTrace: true });
+      const permalink = doc.field('Permalink', validatePermalink, { required: true, withTrace: true });
       book.permalink = permalink.value;
       book.permalinkTrace = permalink.trace;
 
-      book.yearOfPublication = document.attribute('Erscheinungsjahr', validateInteger, { required: true });
-      book.isxn = document.attribute('ISBN/ISSN');
-      book.url = document.attribute('URL', validateAbsoluteUrl);
-      book.placeOfPublication = document.attribute('Erscheinungsort');
-      book.numberOfPages = document.attribute('Seitenanzahl', validateInteger);
-      book.price = document.attribute('Preis');
-      book.authorReferences = document.list('Autoren/Herausgeber', { withTrace: true });
-      book.publisherReferences = document.list('Verleger', { withTrace: true });
-      book.tagsDisconnected = document.list('Tags');
-      book.cover = document.attribute('Cover', validatePath);
-      book.description = document.attribute('Verlagstext', validateMarkdown);
+      book.yearOfPublication = doc.field('Erscheinungsjahr', validateInteger, { required: true });
+      book.isxn = doc.field('ISBN/ISSN');
+      book.url = doc.field('URL', validateAbsoluteUrl);
+      book.placeOfPublication = doc.field('Erscheinungsort');
+      book.numberOfPages = doc.field('Seitenanzahl', validateInteger);
+      book.price = doc.field('Preis');
+      book.authorReferences = doc.list('Autoren/Herausgeber', { withTrace: true });
+      book.publisherReferences = doc.list('Verleger', { withTrace: true });
+      book.tagsDisconnected = doc.list('Tags');
+      book.cover = doc.field('Cover', validatePath);
+      book.description = doc.field('Verlagstext', validateMarkdown);
 
-      document.assertAllTouched();
+      doc.assertAllTouched();
     } catch(err) {
       data.cache.delete(plainPath);
 
-      if(err instanceof PlainDataValidationError) {
+      if(err instanceof PlainValidationError) {
         data.warnings.push({
           detail: err.message,
           files: [{ path: plainPath, ranges: err.ranges }],

@@ -1,5 +1,5 @@
 const { loadPlain, statFile } = require('../util.js'),
-      { PlainDataValidationError, PlainDataParseError } = require('../../plaindata/plaindata.js'),
+      { PlainValidationError, PlainParseError } = require('../../plain/plain.js'),
       validateAbsoluteUrl = require('../validate/absolute-url.js'),
       { validateMarkdown } = require('../validate/markdown.js'),
       validatePermalink = require('../validate/permalink.js');
@@ -11,14 +11,14 @@ module.exports = async (data, plainPath) => {
   if(cached && stats.size === cached.stats.size && stats.mTimeMs === cached.stats.mTimeMs) {
     data.players.set(plainPath, cached.player);
   } else {
-    let document;
+    let doc;
 
     try {
-      document = await loadPlain(data.root, plainPath);
+      doc = await loadPlain(data.root, plainPath);
     } catch(err) {
       data.cache.delete(plainPath);
 
-      if(err instanceof PlainDataParseError) {
+      if(err instanceof PlainParseError) {
         data.warnings.push({
           detail: err.message,
           files: [{ path: plainPath, ranges: err.ranges }],
@@ -37,27 +37,29 @@ module.exports = async (data, plainPath) => {
       sourceFile: plainPath
     };
 
+    doc.enforcePresence(true);
+
     try {
-      const name = document.attribute('Name', { required: true, withTrace: true });
+      const name = doc.field('Name', { required: true, withTrace: true });
       player.name = name.value;
       player.nameTrace = name.trace;
 
-      const permalink = document.attribute('Permalink', validatePermalink, { required: true, withTrace: true });
+      const permalink = doc.field('Permalink', validatePermalink, { required: true, withTrace: true });
       player.permalink = permalink.value;
       player.permalinkTrace = permalink.trace;
 
-      player.country = document.attribute('Land');
-      player.city = document.attribute('Stadt');
-      player.tagsDisconnected = document.list('Tags');
-      player.website = document.attribute('Website', validateAbsoluteUrl);
-      player.biography = document.attribute('Biographie', validateMarkdown);
-      player.text = document.attribute('Text', validateMarkdown);
+      player.country = doc.field('Land');
+      player.city = doc.field('Stadt');
+      player.tagsDisconnected = doc.list('Tags');
+      player.website = doc.field('Website', validateAbsoluteUrl);
+      player.biography = doc.field('Biographie', validateMarkdown);
+      player.text = doc.field('Text', validateMarkdown);
 
-      document.assertAllTouched();
+      doc.assertAllTouched();
     } catch(err) {
       data.cache.delete(plainPath);
 
-      if(err instanceof PlainDataValidationError) {
+      if(err instanceof PlainValidationError) {
         data.warnings.push({
           detail: err.message,
           files: [{ path: plainPath, ranges: err.ranges }],

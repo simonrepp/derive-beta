@@ -6,7 +6,7 @@ const fs = require('fs'),
 
 markdownIt.use(markdownItFootnote);
 
-const plaindata = require('../plaindata/plaindata.js');
+const plain = require('../plain/plain.js');
 
 exports.URBANIZE_ENUM = [
   '2012',
@@ -38,7 +38,7 @@ exports.loadPlain = (directory, plainPath) => new Promise((resolve, reject) =>
       reject(err);
     } else {
       try {
-        resolve( plaindata.parse(content, 'de') );
+        resolve( plain.parse(content, 'de') );
       } catch(err) {
         reject(err);
       }

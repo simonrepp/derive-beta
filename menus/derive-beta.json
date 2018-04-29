@@ -95,7 +95,7 @@
             },
             {
               "label": "Plain Data Handbuch",
-              "command": "derive-beta:plaindata-reference"
+              "command": "derive-beta:plain-reference"
             },
             {
               "type": "separator"
