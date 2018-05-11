@@ -2,7 +2,14 @@
 
 ## File extension
 
-First candidate proposal: `.atxt`
+First candidate proposal: `.adv`
+
+> Why .adv ?
+> It has the most apparent likelihood with "adventure"
+> It's short and elegant
+> Also looks abit like "advance" or "advantage"
+
+Second candidate proposal: `.atxt`
 
 > Why .atxt ?
 > It closely associates with .txt - which it should! - thereby
@@ -14,11 +21,6 @@ First candidate proposal: `.atxt`
 > (except for .txt, for which - curiously - these mental rules
 > are often not applied, or less so anyhow)
 
-Second candidate proposal: `.adv`
-
-> Why .adv ?
-> It has the most apparent likelihood with "adventure"
-
 Other candidates: ` .at / .avt / .av / .ad / .txta `
 
 ## MIME Type
@@ -29,6 +31,13 @@ Other candidates: ` .at / .avt / .av / .ad / .txta `
 
 Proposed: `tryadventure.org`
 Other candidates: `textslashadventure.org`
+
+## Design principles
+
+> the whole idea with ignoring whitespace at the begin, end, between different connected lines and between relevant tokens is:
+> when you write on paper you don't care if something is "a little to the right, left, further down or whatever"
+> as long as "words" or whatever you write on paper are clearly separated and graspable by their intent,
+> everything is fine! So this is how plain should behave as well because this caters to all audiences
 
 ## Libraries
 

@@ -1,23 +1,3 @@
-# `data/plain`
-
-> or just plain
-
-## File extension proposals
-
-- `.plain`
-- `.dt` meaning data, analog to `.txt` meaning text
-
-Rejected proposals appendix
-
-- `.pd` - Already taken by *Pure Data* (open source media framework)
-
-## Design principles
-
-> the whole idea with ignoring whitespace at the begin, end, between different connected lines and between relevant tokens is:
-> when you write on paper you don't care if something is "a little to the right, left, further down or whatever"
-> as long as "words" or whatever you write on paper are clearly separated and graspable by their intent,
-> everything is fine! So this is how plain should behave as well because this caters to all audiences
-
 ## Baseline profile (for all audiences)
 
 ```plain

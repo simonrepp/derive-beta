@@ -4,7 +4,7 @@ const { AdventureParseError, AdventureValidationError } = require('./lib/errors.
 
 const locales = ['de', 'en'];
 
-// TODO: Parser and Builder (no generic builder concept exists in plain)
+// TODO: Parser and Builder (no generic dumper concept exists in plain)
 
 // TODO: - Pass default loaders to parse(..), which are always run when getting any values from the resulting document (e.g. ERB default loader to interpolate things)
 //       - Generally enable possiblity to run multiple loaders in order (then you can also pass multiple loaders to the individual getters e.g.)

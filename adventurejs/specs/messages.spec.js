@@ -1,14 +1,21 @@
-const locales = require('../lib/locales.js');
+const en = require('../locale/en.js');
 
-const messageDictionary = {};
-for(let locale of locales) {
-  messageDictionary[locale] = require(`../lib/messages/${locale}.js`);
-}
+const locales = {
+  de: require('../locale/de.js')
+};
 
 describe('Translation messages', () => {
-  test('all present', () => {
-    expect(document.raw()).toMatchSnapshot();
-  });
+  for(let [group, messages] of Object.entries(en)) {
+    for(let message of Object.keys(messages)) {
+      describe(message, () => {
+        for(let [locale, groups] of Object.entries(locales)) {
+          test('present in `${locale}`', () => {
+            expect(groups[group][message]).toBeDefined();
+          });
+        }
+      })
+    }
+  }
 });
 
 // module.exports = () => {
