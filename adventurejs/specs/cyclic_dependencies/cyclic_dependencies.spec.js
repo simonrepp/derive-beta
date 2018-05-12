@@ -49,6 +49,12 @@ const scenarios = {
     # foo
     ## bar < foo
     # baz < foo
+  `,
+
+  F: `
+    # a
+    ## b
+    ### c < a
   `
 
 };

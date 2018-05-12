@@ -114,9 +114,10 @@ module.exports = {
     const firstInstruction = feedbackChain[0];
     const lastInstruction = feedbackChain[feedbackChain.length - 1];
 
-    if(lastInstruction.template === firstInstruction.name) {
+    let copyInstruction;
+    if(lastInstruction.template) {
       copyInstruction = lastInstruction;
-    } else if(firstInstruction.template === lastInstruction.name) {
+    } else if(firstInstruction.template) {
       copyInstruction = firstInstruction;
     }
 
@@ -124,7 +125,12 @@ module.exports = {
       copyInstruction.lineNumber,
       copyInstruction.template
     );
-    const snippet = report(context, feedbackChain);
+    const snippet = report(
+      context,
+      copyInstruction,
+      feedbackChain.filter(instruction => instruction !== copyInstruction)
+    );
+
     const selection = [
       [copyInstruction.lineNumber, copyInstruction.ranges.template[0]],
       [copyInstruction.lineNumber, copyInstruction.ranges.template[1]]

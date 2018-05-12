@@ -3,8 +3,6 @@
 exports[`Presence of elements enforced when requested 1`] = `
 "Der Eintrag \\"missing\\" fehlt - falls er angegeben wurde eventuell nach Tippfehlern Ausschau halten und auch die Gross/Kleinschreibung beachten.
 
-2,10,2,10
-
   Zeile | Inhalt
       1 | 
       2 | dictionary:
@@ -17,8 +15,6 @@ exports[`Presence of elements enforced when requested 1`] = `
 
 exports[`Presence of elements enforced when requested 2`] = `
 "Das Feld \\"missing\\" fehlt.
-
-1,0,1,0
 
   Zeile | Inhalt
  >    1 | 
@@ -35,8 +31,6 @@ exports[`Presence of elements enforced when requested 2`] = `
 exports[`Presence of elements enforced when requested 3`] = `
 "Der Eintrag \\"missing\\" fehlt - falls er angegeben wurde eventuell nach Tippfehlern Ausschau halten und auch die Gross/Kleinschreibung beachten.
 
-7,21,7,21
-
   Zeile | Inhalt
    ...
       6 | 
@@ -48,8 +42,6 @@ exports[`Presence of elements enforced when requested 3`] = `
 
 exports[`Presence of elements enforced when requested 4`] = `
 "Das Feld \\"missing\\" fehlt.
-
-5,9,5,9
 
   Zeile | Inhalt
    ...

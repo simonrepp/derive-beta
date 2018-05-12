@@ -3,11 +3,9 @@
 exports[`Cyclic dependencies Scenario A throws 1`] = `
 "In Zeile 6 wird \\"a\\" in sich selbst kopiert.
 
-6,8,6,9
-
   Zeile | Inhalt
       1 | 
- >    2 |     a < b
+ *    2 |     a < b
       3 |     - 1
       4 |     - 2
       5 | 
@@ -21,13 +19,11 @@ exports[`Cyclic dependencies Scenario A throws 1`] = `
 exports[`Cyclic dependencies Scenario B throws 1`] = `
 "In Zeile 8 wird \\"one\\" in sich selbst kopiert.
 
-8,10,8,13
-
   Zeile | Inhalt
    ...
       3 |     | all
       4 | 
- >    5 |     one < two
+ *    5 |     one < two
       6 |     | one
       7 | 
  >    8 |     two < one
@@ -39,11 +35,9 @@ exports[`Cyclic dependencies Scenario B throws 1`] = `
 exports[`Cyclic dependencies Scenario C throws 1`] = `
 "In Zeile 5 wird \\"either\\" in sich selbst kopiert.
 
-5,9,5,15
-
   Zeile | Inhalt
       1 | 
- >    2 |     either < or
+ *    2 |     either < or
       3 |     either = or
       4 | 
  >    5 |     or < either
@@ -55,14 +49,12 @@ exports[`Cyclic dependencies Scenario C throws 1`] = `
 exports[`Cyclic dependencies Scenario D throws 1`] = `
 "In Zeile 11 wird \\"one\\" in sich selbst kopiert.
 
-11,14,11,17
-
   Zeile | Inhalt
       1 | 
- >    2 |     # one < two
+ *    2 |     # one < two
       3 |     1: one
       4 | 
- >    5 |     ## three < four
+ *    5 |     ## three < four
       6 |     3: three
       7 | 
    ...
@@ -77,13 +69,23 @@ exports[`Cyclic dependencies Scenario D throws 1`] = `
 exports[`Cyclic dependencies Scenario E throws 1`] = `
 "In Zeile 3 wird \\"foo\\" in sich selbst kopiert.
 
-3,13,3,16
+  Zeile | Inhalt
+      1 | 
+ *    2 |     # foo
+ >    3 |     ## bar < foo
+      4 |     # baz < foo
+      5 |   
+"
+`;
+
+exports[`Cyclic dependencies Scenario F throws 1`] = `
+"In Zeile 4 wird \\"a\\" in sich selbst kopiert.
 
   Zeile | Inhalt
       1 | 
- >    2 |     # foo
- >    3 |     ## bar < foo
-      4 |     # baz < foo
+ *    2 |     # a
+ *    3 |     ## b
+ >    4 |     ### c < a
       5 |   
 "
 `;
