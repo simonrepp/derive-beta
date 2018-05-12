@@ -73,3 +73,17 @@ exports[`Cyclic dependencies Scenario D throws 1`] = `
      13 |   
 "
 `;
+
+exports[`Cyclic dependencies Scenario E throws 1`] = `
+"In Zeile 3 wird \\"foo\\" in sich selbst kopiert.
+
+3,13,3,16
+
+  Zeile | Inhalt
+      1 | 
+ >    2 |     # foo
+ >    3 |     ## bar < foo
+      4 |     # baz < foo
+      5 |   
+"
+`;

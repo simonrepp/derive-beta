@@ -7,7 +7,8 @@ class AdventureError extends Error {
     this.snippet = snippet;
     this.text = text;
 
-    Error.captureStackTrace(this, AdventureError);
+    // TODO: Dynamically enable only in a node environment
+    // Error.captureStackTrace(this, AdventureError);
   }
 }
 
@@ -15,7 +16,8 @@ class AdventureParseError extends AdventureError {
   constructor(...args) {
     super(...args);
 
-    Error.captureStackTrace(this, AdventureParseError);
+    // TODO: Dynamically enable only in a node environment
+    // Error.captureStackTrace(this, AdventureParseError);
   }
 }
 
@@ -23,7 +25,8 @@ class AdventureValidationError extends AdventureError {
   constructor(...args) {
     super(...args);
 
-    Error.captureStackTrace(this, AdventureValidationError);
+    // TODO: Dynamically enable only in a node environment
+    // Error.captureStackTrace(this, AdventureValidationError);
   }
 }
 

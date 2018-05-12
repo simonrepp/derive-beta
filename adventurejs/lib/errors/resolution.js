@@ -111,17 +111,25 @@ module.exports = {
   cyclicDependency: (context, instruction, instructionChain) => {
     const firstOccurrence = instructionChain.indexOf(instruction);
     const feedbackChain = instructionChain.slice(firstOccurrence);
-    const lastInstruction = instructionChain[instructionChain.length - 1];
+    const firstInstruction = feedbackChain[0];
+    const lastInstruction = feedbackChain[feedbackChain.length - 1];
+
+    if(lastInstruction.template === firstInstruction.name) {
+      copyInstruction = lastInstruction;
+    } else if(firstInstruction.template === lastInstruction.name) {
+      copyInstruction = firstInstruction;
+    }
 
     const message = context.messages.resolution.cyclicDependency(
-      lastInstruction.lineNumber,
-      instruction.name
+      copyInstruction.lineNumber,
+      copyInstruction.template
     );
     const snippet = report(context, feedbackChain);
     const selection = [
-      [lastInstruction.lineNumber, lastInstruction.ranges.template[0]],
-      [lastInstruction.lineNumber, lastInstruction.ranges.template[1]]
+      [copyInstruction.lineNumber, copyInstruction.ranges.template[0]],
+      [copyInstruction.lineNumber, copyInstruction.ranges.template[1]]
     ];
+
 
     throw new AdventureParseError(message, snippet, selection);
   },

@@ -19,8 +19,24 @@ class AdventureList {
     }
   }
 
+  inspect(indentation = '') {
+    const results = [`${indentation}${this.context.messages.inspection.list} ${this.name}`];
+
+    indentation += '  ';
+
+    for(let value of this.values) {
+      results.push(`${indentation}${this.context.messages.inspection.listItem} ${value.value}`);
+    }
+
+    return results.join('\n');
+  }
+
   raw() {
     return this.values.map(value => value.get());
+  }
+
+  toString() {
+    return this.inspect();
   }
 
   touch() {

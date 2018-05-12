@@ -89,6 +89,18 @@ class AdventureDictionary {
     this.enforcePresenceDefault = enforce === undefined ? true : enforce;
   }
 
+  inspect(indentation = '') {
+    const results = [`${indentation}${this.context.messages.inspection.dictionary} ${this.name}`];
+
+    indentation += '  ';
+
+    for(let [name, value] of Object.entries(this.entries)) {
+      results.push(`${indentation}${this.context.messages.inspection.dictionaryEntry} ${name} = ${value.value}`);
+    }
+
+    return results.join('\n');
+  }
+
   raw() {
     const exported = {};
 
@@ -98,6 +110,11 @@ class AdventureDictionary {
 
     return exported;
   }
+
+  toString() {
+    return this.inspect();
+  }
+
   touch() {
     this.touched = true;
   }

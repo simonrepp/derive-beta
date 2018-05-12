@@ -14,6 +14,18 @@ module.exports = {
     sectionHierarchyLayerSkip: lineNumber => `Zeile ${lineNumber} beginnt eine Sektion die mehr als eine Ebene tiefer liegt als die aktuelle.`
   },
 
+  inspection: {
+    dictionary: 'Dictionary',
+    dictionaryEntry: 'Dictionary Eintrag',
+    document: 'Dokument',
+    empty: 'Leeres Element',
+    field: 'Feld',
+    list: 'Liste',
+    listItem: 'Listeneintrag',
+    section: 'Sektion',
+    value: 'Wert'
+  },
+
   reporting: {
     contentHeader: 'Inhalt',
     gutterHeader: 'Zeile'

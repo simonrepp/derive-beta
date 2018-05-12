@@ -13,6 +13,7 @@ class AdventureParser {
     });
 
     this.context = {
+      input: input,
       instructions: instructions,
       messages: require(`../locale/${locale}.js`),
       locale: locale,

@@ -274,6 +274,47 @@ class AdventureSection {
     }
   }
 
+  inspect(indentation = '') {
+    const results = [];
+
+    if(this.name === '<>#:=|\\_ADVENTURE_DOCUMENT') {
+      results.push(`${indentation}${this.context.messages.inspection.document}`);
+    } else {
+      results.push(`${indentation}${this.context.messages.inspection.section} ${this.name}`);
+    }
+
+    indentation += '  ';
+
+    for(let element of this.elementsSequential) {
+      if(element instanceof AdventureEmpty) {
+        results.push(`${indentation}${this.context.messages.inspection.empty} ${element.name}`);
+        continue;
+      }
+
+      if(element instanceof AdventureValue) {
+        results.push(`${indentation}${this.context.messages.inspection.field} ${element.name}: ${element.value}`);
+        continue;
+      }
+
+      if(element instanceof AdventureList) {
+        results.push(element.inspect(indentation));
+        continue;
+      }
+
+      if(element instanceof AdventureDictionary) {
+        results.push(element.inspect(indentation));
+        continue;
+      }
+
+      if(element instanceof AdventureSection) {
+        results.push(element.inspect(indentation));
+        continue;
+      }
+    }
+
+    return results.join('\n');
+  }
+
   list(name, ...optional) {
     let options = {
       enforcePresence: this.enforcePresenceDefault,
@@ -378,7 +419,25 @@ class AdventureSection {
     return results;
   }
 
-  lookup(line, column) {
+  lookup(...position) {
+    let line, column;
+
+    if(position.length === 1) {
+      line = 1;
+      column = 0;
+      for(let index = 0; index <= position[0]; index++) {
+        if(index > 0 && this.context.input.charAt(index - 1) === '\n') {
+          line++;
+          column = 0;
+        } else {
+          column++;
+        }
+      }
+    } else {
+      line = position[0];
+      column = position [1];
+    }
+
     const instruction = this.context.instructions.find(instruction => {
       return instruction.lineNumber === line;
     });

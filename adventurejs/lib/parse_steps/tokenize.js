@@ -15,11 +15,11 @@ module.exports = context => {
         instruction.type = 'BLOCK_TERMINATOR';
 
         const dashes = match[1];
-        const dashesColumn = instruction.line.indexOf(dashes);
+        const operatorColumn = instruction.line.indexOf(dashes);
         const nameColumn = instruction.line.lastIndexOf(instruction.name);
 
         instruction.ranges = {
-          dashes: [dashesColumn, dashesColumn + dashes.length],
+          blockOperator: [operatorColumn, operatorColumn + dashes.length],
           name: [nameColumn, nameColumn + instruction.name.length]
         };
 
@@ -48,14 +48,14 @@ module.exports = context => {
       if(match[matcher.COMMENT_ANGLE_INDEX]) {
         instruction.type = 'COMMENT';
 
-        const angleColumn = instruction.line.indexOf('>');
-        instruction.ranges = { angle: [angleColumn, angleColumn + 1] };
+        const operatorColumn = instruction.line.indexOf('>');
+        instruction.ranges = { commentOperator: [operatorColumn, operatorColumn + 1] };
 
         instruction.text = match[matcher.COMMENT_TEXT_INDEX] || null;
 
         if(instruction.text) {
           const textColumn = instruction.line.lastIndexOf(instruction.text);
-          instruction.ranges.text = [textColumn, textColumn + instruction.text.length];
+          instruction.ranges.comment = [textColumn, textColumn + instruction.text.length];
         }
 
         continue;
@@ -67,10 +67,10 @@ module.exports = context => {
                            match[matcher.NAME_ESCAPED_INDEX];
 
         const nameColumn = instruction.line.indexOf(instruction.name);
-        const colonColumn = instruction.line.indexOf(':', nameColumn + instruction.name.length);
+        const operatorColumn = instruction.line.indexOf(':', nameColumn + instruction.name.length);
 
         instruction.ranges = {
-          colon: [colonColumn, colonColumn + 1],
+          nameOperator: [operatorColumn, operatorColumn + 1],
           name: [nameColumn, nameColumn + instruction.name.length]
         };
 
@@ -83,7 +83,7 @@ module.exports = context => {
           instruction.ranges.value = [valueColumn, valueColumn + value.length];
         } else {
           instruction.type = 'NAME';
-          instruction.ranges.value = [colonColumn + 1, instruction.line.length];
+          instruction.ranges.value = [operatorColumn + 1, instruction.line.length];
         }
 
         continue;
@@ -94,14 +94,14 @@ module.exports = context => {
         instruction.type = 'LIST_ITEM';
         instruction.value = match[matcher.LIST_ITEM_VALUE_INDEX] || null;
 
-        const dashColumn = instruction.line.indexOf('-');
-        instruction.ranges = { dash: [dashColumn, dashColumn + 1] };
+        const operatorColumn = instruction.line.indexOf('-');
+        instruction.ranges = { itemOperator: [operatorColumn, operatorColumn + 1] };
 
         if(instruction.value) {
           const valueColumn = instruction.line.lastIndexOf(instruction.value);
           instruction.ranges.value = [valueColumn, valueColumn + instruction.value.length];
         } else {
-          instruction.ranges.value = [dashColumn + 1, instruction.line.length];
+          instruction.ranges.value = [operatorColumn + 1, instruction.line.length];
         }
 
         continue;
@@ -116,10 +116,10 @@ module.exports = context => {
         instruction.value = match[matcher.DICTIONARY_ENTRY_VALUE_INDEX] || null;
 
         const nameColumn = instruction.line.indexOf(instruction.name); // TODO: Account for ``` `` ``` possibility ... :)
-        const equalsColumn = instruction.line.indexOf('=', nameColumn + instruction.name.length);
+        const operatorColumn = instruction.line.indexOf('=', nameColumn + instruction.name.length);
 
         instruction.ranges = {
-          equals: [equalsColumn, equalsColumn + 1],
+          entryOperator: [operatorColumn, operatorColumn + 1],
           name: [nameColumn, nameColumn + instruction.name.length]
         };
 
@@ -127,7 +127,7 @@ module.exports = context => {
           const valueColumn = instruction.line.lastIndexOf(instruction.value);
           instruction.ranges.value = [valueColumn, valueColumn + instruction.value.length];
         } else {
-          instruction.ranges.value = [equalsColumn + 1, instruction.line.length];
+          instruction.ranges.value = [operatorColumn + 1, instruction.line.length];
         }
 
         continue;
@@ -139,10 +139,10 @@ module.exports = context => {
         instruction.name = match[matcher.BLOCK_NAME_INDEX];
         instruction.type = 'BLOCK';
 
-        const dashesColumn = instruction.line.indexOf(blockDashes);
+        const operatorColumn = instruction.line.indexOf(blockDashes);
         const nameColumn = instruction.line.lastIndexOf(instruction.name);
         instruction.ranges = {
-          dashes: [dashesColumn, dashesColumn + blockDashes.length],
+          blockOperator: [operatorColumn, operatorColumn + blockDashes.length],
           name: [nameColumn, nameColumn + instruction.name.length]
         };
 

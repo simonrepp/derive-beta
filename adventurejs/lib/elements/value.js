@@ -47,8 +47,16 @@ class AdventureValue {
     return this.value;
   }
 
+  inspect(indentation = '') {
+    return `${indentation}${this.context.messages.inspection.value} ${this.value} (${this.name})`;
+  }
+
   raw() {
     return this.value;
+  }
+
+  toString() {
+    return this.inspect();
   }
 
   touch() {
