@@ -241,6 +241,8 @@ const SCENARIOS = {
     }
   ],
 
+
+
   INVALID_SCENARIOS: [
     {
       syntax: 'Invalid',
@@ -281,6 +283,10 @@ const SCENARIOS = {
     {
       syntax: '= Invalid',
       variants: space('=', 'Invalid')
+    },
+    {
+      syntax: '### `Invalid',
+      variants: space('###', '`Invalid')
     }
   ],
 

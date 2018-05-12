@@ -35,7 +35,7 @@ exports.BLOCK_DASHES_INDEX = 10;
 exports.BLOCK_NAME_INDEX = 11;
 
 // #
-const SECTION_HASHES = '(#+)';
+const SECTION_HASHES = '(#+)(?!#)';
 exports.SECTION_HASHES_INDEX = 12;
 
 // # [Name of Section]
