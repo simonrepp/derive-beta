@@ -2,7 +2,7 @@
 const AdventureParser = require('./lib/parser.js');
 const { AdventureParseError, AdventureValidationError } = require('./lib/errors.js');
 
-const locales = ['de', 'en'];
+const locales = ['de', 'en', 'es'];
 
 // TODO: Parser and Builder (no generic dumper concept exists in plain)
 
@@ -20,7 +20,8 @@ const build = object => {
 //   const builder = new AdventureDumper(input, locale);
 };
 
-const parse = (input, locale = 'en') => {
+// TODO: Make en the default locale again as things stabilize and we tackle final translations
+const parse = (input, locale = 'de') => {
 
   if(typeof input !== 'string') {
     throw new TypeError(

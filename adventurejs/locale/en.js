@@ -55,7 +55,7 @@ module.exports = {
   tokenization: {
     escapedUnterminatedName: lineNumber => `In line ${lineNumber} the name of an element is escaped with backticks, but this escape sequence is not terminated until the end of the line.`,
     invalidLine: lineNumber => `line ${lineNumber} does not follow a permitted pattern.`,
-    subminatedBlock: (name, lineNumber) => `The block" ${name} "starting in line ${lineNumber} will not be terminated until the end of the document.`
+    unterminatedBlock: (name, lineNumber) => `The block" ${name} "starting in line ${lineNumber} will not be terminated until the end of the document.`
   },
 
   validation: {

@@ -87,7 +87,7 @@ module.exports = {
     missingDictionaryEntry: name => `Der Eintrag "${name}" fehlt - falls er angegeben wurde eventuell nach Tippfehlern Ausschau halten und auch die Gross/Kleinschreibung beachten.`,
     missingField: name => `Das Feld "${name}" fehlt.`,
     missingList: name => `Die Liste "${name}" fehlt - Falls das Feld angegeben wurde eventuell nach Tippfehlern Ausschau halten und auch die Gross/Kleinschreibung beachten.`,
-    missingSection: name => `Die Sektion "${name}" fehlt.`,
+    missingSection: name => `Die Sektion "${name}" fehlt.`
   }
 
 };
