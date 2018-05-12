@@ -3,7 +3,7 @@ module.exports = {
   analysis: {
     dictionaryEntryInList: lineNumber => `Line ${lineNumber} contiene una entrada de diccionario en el medio de una lista.`,
     dictionaryEntryInField: lineNumber => `line ${lineNumber} contiene una entrada de diccionario en el medio de un campo.`,
-    duplicateDictionaryEntryName: (dictionaryName, entryName) => `El diccionario" ${dictionaryName} "contiene dos entradas llamadas" ${entryName} ".`,
+    duplicateDictionaryEntryName: (dictionaryName, entryName) => `El diccionario "${dictionaryName}" contiene dos entradas llamadas "${entryName}".`,
     fieldAppendInDictionary: lineNumber => `line ${lineNumber} contiene una extensión de campo en el medio de un diccionario.`,
     fieldAppendInList: lineNumber => `line ${lineNumber} contiene una extensión de campo en el medio de una lista.`,
     listItemInDictionary: lineNumber => `Line ${lineNumber} contiene una entrada de lista en el medio de un diccionario.`,
@@ -20,7 +20,7 @@ module.exports = {
     document: 'Documento',
     empty: 'elemento vacío',
     field: 'campo',
-    lista: 'Lista',
+    list: 'Lista',
     listItem: 'list entry',
     section: 'Sección',
     value: 'valor'
@@ -47,15 +47,15 @@ module.exports = {
     copyingSectionIntoField: lineNumber => `En la línea ${lineNumber}, se copia una sección en un campo.`,
     copyingSectionIntoDictionary: lineNumber => `En la línea ${lineNumber}, una sección se copia en un diccionario.`,
     copyingSectionIntoList: lineNumber => `Una línea se copia a una lista en la línea ${lineNumber} .`,
-    cyclicDependency: (lineNumber, name) => `En la línea ${lineNumber}" ${name} "se copia en sí mismo.`,
-    multipleTemplatesFound: (lineNumber, name) => `En la línea ${lineNumber} no está claro qué elemento con el nombre" ${name} "debe copiarse.`,
-    templateNotFound: (lineNumber, name) => `En la línea ${lineNumber} debe copiarse el elemento" ${name} ", pero no se encontró.`
+    cyclicDependency: (lineNumber, name) => `En la línea ${lineNumber} "${name}" se copia en sí mismo.`,
+    multipleTemplatesFound: (lineNumber, name) => `En la línea ${lineNumber} no está claro qué elemento con el nombre "${name}" debe copiarse.`,
+    templateNotFound: (lineNumber, name) => `En la línea ${lineNumber} debe copiarse el elemento "${name}", pero no se encontró.`
   },
 
   tokenization: {
     escapedUnterminatedName: lineNumber => `En la línea ${lineNumber}, el nombre de un elemento se escapa con backticks, pero esta secuencia de escape no termina hasta el final de la línea.`,
     invalidLine: lineNumber => `line ${lineNumber} no sigue un patrón permitido.`,
-    subminatedBlock: (name, lineNumber) => `El bloque" ${name} "que comienza en la línea ${lineNumber} no terminará hasta el final del documento.`
+    unterminatedBlock: (name, lineNumber) => `El bloque "${name}" que comienza en la línea ${lineNumber} no terminará hasta el final del documento.`
   },
 
   validation: {
@@ -67,15 +67,15 @@ module.exports = {
     expectedDictionaryGotSection: name => `En lugar de la colección esperada "${name}", se encontró una sección con este nombre.`,
     expectedFieldGotDictionary: name => `En lugar del campo esperado "${name}", se encontró una colección con este nombre.`,
     expectedFieldGotList: name => `En lugar del campo esperado "${name}", se encontró una lista con el mismo nombre.`,
-    expectedFieldGotMultipleFields: name => `En lugar del único campo esperado "${name}"se encontraron varios campos con este nombre.`,
+    expectedFieldGotMultipleFields: name => `En lugar del único campo esperado "${name}" se encontraron varios campos con este nombre.`,
     expectedFieldGotSection: name => `En lugar del campo esperado "${name}", se encontró una sección con este nombre.`,
     expectedListGotDictionary: name => ` "${name}"debe ser una colección de valores, pero incluye una colección.`,
     expectedListGotSection: name => ` "${name}"debe ser una colección de valores, pero incluye una sección.`,
-    expectedSectionGotDictionary: name => `Con el nombre "${name}"se encontró un diccionario, pero hay una sección proporcionada.`,
+    expectedSectionGotDictionary: name => `Con el nombre "${name}" se encontró un diccionario, pero hay una sección proporcionada.`,
     expectedSectionGotEmpty: name => `En lugar de la sección esperada "${name}", se encontró un campo vacío.`,
-    expectedSectionGotField: name => `En lugar de la sección esperada "${name}"se encontró un campo.`,
+    expectedSectionGotField: name => `En lugar de la sección esperada "${name}" se encontró un campo.`,
     expectedSectionGotList: name => `El campo "${name}"contiene una lista, pero debe contener una sección.`,
-    expectedSectionGotSections: name => `En lugar de la única sección esperada "${name}"se encontraron varias secciones.`,
+    expectedSectionGotSections: name => `En lugar de la única sección esperada "${name}" se encontraron varias secciones.`,
     expectedSectionsGotDictionary: name => `Solo se esperaban secciones con el nombre "${name}", pero se encontró una colección.`,
     expectedSectionsGotEmpty: name => `En lugar de las secciones esperadas con el nombre "${name}", se encontró un campo vacío.`,
     expectedSectionsGotField: name => `En lugar de las secciones esperadas llamadas "${name}", se encontró un campo con este nombre.`,

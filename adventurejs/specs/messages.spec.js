@@ -1,7 +1,8 @@
 const en = require('../locale/en.js');
 
 const locales = {
-  de: require('../locale/de.js')
+  de: require('../locale/de.js'),
+  es: require('../locale/es.js')
 };
 
 describe('Translation messages', () => {

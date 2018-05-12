@@ -6,7 +6,7 @@ const input = fs.readFileSync('/home/simon/derive/derive-beta/adventure/latest-s
 
 let document;
 
-document = parse(input, 'de', 'html');
+document = parse(input, 'es', 'terminal');
 
 // console.log(document);
 
