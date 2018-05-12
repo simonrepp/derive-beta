@@ -519,8 +519,6 @@ class AdventureSection {
       return elements[0];
     }
 
-    // TODO: Maybe a differentation range / nameRange / valueRange makes sense too? where the first contains the two following
-
     error.expectedSectionGotSections(this.context, name, elements.map(element => element.instruction));
   }
 

@@ -1,3 +1,11 @@
+const nodeEnviroment = () => {
+  try {
+    return this === global;
+  } catch(e) {
+    return false;
+  }
+};
+
 class AdventureError extends Error {
   constructor(text, snippet, selection, cursor) {
     super(`${text}\n\n${snippet}`);
@@ -7,8 +15,9 @@ class AdventureError extends Error {
     this.snippet = snippet;
     this.text = text;
 
-    // TODO: Dynamically enable only in a node environment
-    // Error.captureStackTrace(this, AdventureError);
+    if(nodeEnviroment()) {
+      Error.captureStackTrace(this, AdventureError);
+    }
   }
 
   cursor() {
@@ -20,8 +29,9 @@ class AdventureParseError extends AdventureError {
   constructor(...args) {
     super(...args);
 
-    // TODO: Dynamically enable only in a node environment
-    // Error.captureStackTrace(this, AdventureParseError);
+    if(nodeEnviroment()) {
+      Error.captureStackTrace(this, AdventureParseError);
+    }
   }
 }
 
@@ -29,8 +39,9 @@ class AdventureValidationError extends AdventureError {
   constructor(...args) {
     super(...args);
 
-    // TODO: Dynamically enable only in a node environment
-    // Error.captureStackTrace(this, AdventureValidationError);
+    if(nodeEnviroment()) {
+      Error.captureStackTrace(this, AdventureValidationError);
+    }
   }
 }
 

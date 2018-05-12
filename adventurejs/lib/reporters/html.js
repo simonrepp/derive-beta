@@ -1,9 +1,20 @@
+const htmlEscape = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;',
+  '/': '&#x2F;'
+};
+
+const escape = string => string.replace(/[&<>"'\/]/g, c => htmlEscape[c]);
+
 const line = (gutter, content, ...classes) => {
   let result = '';
 
   result += `<div class="adventure-report-line ${classes.join(' ')}">`;
   result +=   `<div class="adventure-report-gutter">${gutter.padStart(10)}</div>`;
-  result +=   `<div class="adventure-report-content">${content}</div>`;
+  result +=   `<div class="adventure-report-content">${escape(content)}</div>`;
   result += '</div>';
 
   return result;

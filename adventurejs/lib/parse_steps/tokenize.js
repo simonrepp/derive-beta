@@ -244,12 +244,8 @@ module.exports = context => {
         continue;
       }
 
-
     } else {
       errors.invalidLine(context, instruction);
-
-      // const matcher = new ErrorMatcher(); // TODO: Expand on error matching architecture
-      // matcher.interpret(instructions, instructionContent); // throws on match
     }
   }
 

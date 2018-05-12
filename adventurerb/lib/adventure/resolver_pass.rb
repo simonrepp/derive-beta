@@ -1,7 +1,5 @@
 # Top-down resolver pass (3)
 
-# TODO: The "pair" terminology does not work, find something else
-
 module Adventure
   def self.resolve(instructions)
     document = Section.new(nil)
