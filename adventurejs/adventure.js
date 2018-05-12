@@ -21,7 +21,7 @@ const build = object => {
 };
 
 // TODO: Make en the default locale again as things stabilize and we tackle final translations
-const parse = (input, locale = 'de') => {
+const parse = (input, locale = 'de', reporter = 'text') => {
 
   if(typeof input !== 'string') {
     throw new TypeError(
@@ -37,7 +37,7 @@ const parse = (input, locale = 'de') => {
     );
   }
 
-  const parser = new AdventureParser(input, locale);
+  const parser = new AdventureParser(input, locale, reporter);
 
   return parser.run();
 };

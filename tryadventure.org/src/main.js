@@ -33,7 +33,7 @@ const refresh = () => {
   const input = editor.value;
 
   try {
-    doc = parse(input, locale);
+    doc = parse(input, locale, 'html');
 
     log.innerHTML = `<b>inspect()</b><br/><br/>${doc.inspect()}<br/><br/><b>raw()</b><br/><br/>${JSON.stringify(doc.raw(), null, 2)}`;
   } catch(err) {

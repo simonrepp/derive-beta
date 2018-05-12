@@ -1,5 +1,5 @@
 const { AdventureValidationError } = require('../errors.js');
-const report = require('../reporters/text.js');
+const report = require('../reporters/report.js');
 
 // TODO: Generalize some line gathering code for reporting / maybe even generalize whole error classes (in between, here, not the translations)
 // TODO: Need to filter out copied subinstructions for print/selection ranges in some places

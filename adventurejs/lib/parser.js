@@ -4,7 +4,7 @@ const resolve = require('./parse_steps/resolve.js');
 const tokenize = require('./parse_steps/tokenize.js');
 
 class AdventureParser {
-  constructor(input, locale) {
+  constructor(input, locale, reporter) {
     const instructions = input.split(/\r?\n/).map((content, index) => {
       return {
         line: content,
@@ -19,6 +19,10 @@ class AdventureParser {
       locale: locale,
       templateIndex: {}
     };
+
+    if(reporter) {
+      this.context.reporter = reporter;
+    }
   }
 
   run() {

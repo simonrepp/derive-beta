@@ -1,67 +1,58 @@
-class AdventureHTMLReporter {
-  constructor(lines, messages) {
-    this.lines = lines;
+const line = (gutter, content, ...classes) => {
+  let result = '';
 
-    const contentColumnHeader = messages[strings.SNIPPET_CONTENT_HEADER];
-    const lineColumnHeader = messages[strings.SNIPPET_LINE_HEADER].padStart(5);
+  result += `<div class="adventure-report-line ${classes.join(' ')}">`;
+  result +=   `<div class="adventure-report-gutter">${gutter.padStart(10)}</div>`;
+  result +=   `<div class="adventure-report-content">${content}</div>`;
+  result += '</div>';
 
-    this.lineColumnWidth = lineColumnHeader.length + 3;
-    this.header = `  ${lineColumnHeader} | ${contentColumnHeader}\n`;
-    this.omission = `${' '.repeat(this.lineColumnWidth - 5)}...\n`;
-    this.emphasized_omission = ` >${' '.repeat(this.lineColumnWidth - 7)}...\n`;
-  }
+  return result;
+};
 
-  report(ranges) {
-    let snippet = this.header;
+module.exports = (context, emphasized = [], marked = []) => {
+  const contentHeader = context.messages.reporting.contentHeader;
+  const gutterHeader = context.messages.reporting.gutterHeader;
+  const omission = line('...', '...');
 
-    let inOmission = false;
+  let snippet = '<pre class="adventure-report">';
 
-    for(let lineNumber = 1; lineNumber <= this.lines.length; lineNumber++) {
-      let print = false;
-      let emphasize = false;
+  snippet += line(gutterHeader, contentHeader);
 
-      for(let range of ranges) {
-        const beginLine = range[0];
-        const endLine = range.length > 1 ? range[1] : beginLine;
+  let inOmission = false;
 
-        if(lineNumber >= range.line && lineNumber <= range.line) {
-          emphasize = true;
-          print = true;
-        }
+  for(let instruction of context.instructions) {
+    const emphasize = emphasized.includes(instruction);
+    const mark = marked.includes(instruction);
+    let show = false;
 
-        if(lineNumber >= range.line - 2 && lineNumber <= range.line + 2 ||
-           lineNumber >= range.line - 2 && lineNumber <= range.line + 2) {
-          print = true;
-        }
-
-      }
-
-      if(print) {
-        const content = this.lines[lineNumber - 1];
-        const lineNumberString = lineNumber.toString();
-
-        if(emphasize) {
-          snippet += ` >${lineNumberString.padStart(this.lineColumnWidth - 3)} | ${content}\n`;
-        } else {
-          snippet += `${lineNumberString.padStart(this.lineColumnWidth - 1)} | ${content}\n`;
-        }
-
-        inOmission = false;
-      } else {
-        if(!inOmission) {
-          if(emphasize) {
-            snippet += this.emphasized_omission;
-          } else {
-            snippet += this.omission;
-          }
-
-          inOmission = true;
-        }
+    for(let shownInstruction of [...emphasized, ...marked]) {
+      if(instruction.lineNumber >= shownInstruction.lineNumber - 2 &&
+         instruction.lineNumber <= shownInstruction.lineNumber + 2) {
+        show = true;
+        break;
       }
     }
 
-    return snippet;
-  }
-}
+    if(show) {
+      const classes = [];
 
-module.exports = AdventureHTMLReporter;
+      if(emphasize) { classes.push('adventure-report-line-emphasized'); }
+      if(mark) { classes.push('adventure-report-line-marked'); }
+
+      snippet += line(
+        instruction.lineNumber.toString(),
+        instruction.line,
+        ...classes
+      );
+
+      inOmission = false;
+    } else if(!inOmission) {
+      snippet += omission;
+      inOmission = true;
+    }
+  }
+
+  snippet += '</pre>';
+
+  return snippet;
+};

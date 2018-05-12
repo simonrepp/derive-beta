@@ -1,12 +1,4 @@
 module.exports = (context, emphasized = [], marked = []) => {
-  if(!Array.isArray(emphasized)) {
-    emphasized = [emphasized];
-  }
-
-  if(!Array.isArray(marked)) {
-    marked = [marked];
-  }
-
   const contentHeader = context.messages.reporting.contentHeader;
   const gutterHeader = context.messages.reporting.gutterHeader.padStart(5);
 

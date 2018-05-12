@@ -1,5 +1,5 @@
 const { AdventureParseError } = require('../errors.js');
-const report = require('../reporters/text.js');
+const report = require('../reporters/report.js');
 
 module.exports = {
 
