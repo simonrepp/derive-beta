@@ -1,6 +1,6 @@
 class AdventureError extends Error {
   constructor(text, snippet, selection, cursor) {
-    super(`${text}\n\n${selection}\n\n${snippet}`);
+    super(`${text}\n\n${snippet}`);
 
     this.cursor = cursor;
     this.selection = selection;
@@ -9,6 +9,10 @@ class AdventureError extends Error {
 
     // TODO: Dynamically enable only in a node environment
     // Error.captureStackTrace(this, AdventureError);
+  }
+
+  cursor() {
+    return this.selection ? this.selection[0] : null;
   }
 }
 
