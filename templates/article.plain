@@ -25,20 +25,20 @@ Lesbar: Ja
 
 Urbanize:
 
---- Abstract
+-- Abstract
 Die Kurzfassung.
 Markdown aber keine Medien.
---- Abstract
+-- Abstract
 
---- Text
+-- Text
 Langer Text ...
 
 Markdown und Medien unterstützt.
 
 ... ist lang.
---- Text
+-- Text
 
---- Literaturverzeichnis
+-- Literaturverzeichnis
 Markdown aber keine Medien.
 **Last, First** (Hg.): The Title, City 2000
---- Literaturverzeichnis
+-- Literaturverzeichnis

@@ -1,26 +1,28 @@
 Nummer: 99
 Quartal: 2
+Jahr: 2018
 Titel: Erforderlich
 
 Cover: /Zeitschriften/Cover/99.jpg
 
-Kooperation: 
-Partner:
+Link zum Shop: http://derive.tictail.com/beispiel
+
+Kooperation:
 
 Schwerpunkte:
 - Beispielhafte Dinge
 
 Vergriffen: Nein
-Datum: 2020-12-31
+Erscheinungsdatum: 2020-12-31
 
 Tags:
 - Exempel
 - Vorlage
 
---- Beschreibung
+-- Beschreibung
 Die Beschreibung.
 Markdown aber keine Medien.
---- Beschreibung
+-- Beschreibung
 
 
 # Rubrik
@@ -36,7 +38,7 @@ Titel: Beispielhafte Rubrik
 
 ## Artikel
 Titel: Vorlagenhafter Beitrag
-Seite(n): 4-9
+Seite(n): 04-09
 
 ## Artikel
 Titel:  Beispielhafte Vorlage

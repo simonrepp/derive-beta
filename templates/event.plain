@@ -23,23 +23,23 @@ Urbanize: Wien 2018
 
 Adresse:
 
---- Abstract
+-- Abstract
 Die Kurzfassung.
 Markdown aber keine Medien.
---- Abstract
+-- Abstract
 
---- Zusatzinfo
+-- Zusatzinfo
 Das Addendum zur Kurzfassung.
 Markdown aber keine Medien.
---- Zusatzinfo
+-- Zusatzinfo
 
---- Text
+-- Text
 Langer Text ...
 
 Markdown und Medien unterstützt.
 
 ... ist lang.
---- Text
+-- Text
 
 # Termin
 Datum: 2018-12-30

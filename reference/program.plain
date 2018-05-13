@@ -25,15 +25,15 @@ Tags:
 > Jede Radiosendung muss einen einzigartigen Permalink besitzen
 Permalink: erforder-lich
 
---- Abstract
+-- Abstract
 Die Kurzfassung.
 Markdown aber keine Medien.
---- Abstract
+-- Abstract
 
---- Text
+-- Text
 Langer Text ...
 
 Markdown und Medien unterstützt.
 
 ... ist lang.
---- Text
+-- Text

@@ -4,6 +4,9 @@ const AdventureEmpty = require('./empty.js');
 const AdventureList = require('./list.js');
 const AdventureValue = require('./value.js');
 
+// TODO: Investigate .inspect() deprecation in node and switch 100% to .toString() ?
+//       Also make it more like { name => value } than "valor frfuru (text)" like now?
+
 class AdventureSection {
   constructor(context, instruction, parent) {
     this.context = context;

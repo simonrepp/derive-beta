@@ -1,6 +1,6 @@
 Titel: Erforderlich
 Untertitel:
-URL: 
+URL:
 
 Veranstalter:
 - Beispielgruppe
@@ -27,23 +27,23 @@ Urbanize: Wien 2018
 
 Adresse:
 
---- Abstract
+-- Abstract
 Die Kurzfassung.
 Markdown aber keine Medien.
---- Abstract
+-- Abstract
 
---- Zusatzinfo
+-- Zusatzinfo
 Das Addendum zur Kurzfassung.
 Markdown aber keine Medien.
---- Zusatzinfo
+-- Zusatzinfo
 
---- Text
+-- Text
 Langer Text ...
 
 Markdown und Medien unterstützt.
 
 ... ist lang.
---- Text
+-- Text
 
 > Es koennen beliebig
 # Termin
@@ -51,9 +51,9 @@ Markdown und Medien unterstützt.
 > Datumsangaben immer im Format YYYY-MM-DD
 Datum: 2018-12-30
 
-> Freitext, aber in der Regel HH:MM bzw. HH:MM - HH:MM
+> Freitext, aber in der Regel HH:MM bzw. HH:MM-HH:MM
 Zeit: 17:00
 
 # Termin
 Datum: 2018-12-31
-Zeit: 19:00 - 21:00
+Zeit: 19:00-21:00

@@ -54,7 +54,7 @@ Einkaufsliste:
 > 4. Mehrzeilige Texte als Wert
 > Wollen wir mehrere Zeilen als Wert zuweisen, gehen wir so vor:
 
---- Lange Beschreibung
+-- Lange Beschreibung
 Die vorherige Zeile markiert einen Textblock der in dieser Zeile beginnt.
 
 Bis die Zeile mit der der Textblock begonnen wird, ein weiteres Mal auftaucht,
@@ -63,12 +63,12 @@ können wir beliebige Inhalte verfassen, beliebig viele Leerzeilen einbauen ...
 
 ... usw. 
 
-Mit --- teilen wir Adventure mit, dass wir einen Textblock starten wollen,
+Mit -- teilen wir Adventure mit, dass wir einen Textblock starten wollen,
 und der Text danach (in diesem Fall "Lange Beschreibung") ist wiederum der 
 Schlüssel der dem Wert (dem Textblock) einen Namen gibt.
 
 In der nächsten Zeile endet der Textblock!
---- Lange Beschreibung
+-- Lange Beschreibung
 
 
 
@@ -113,10 +113,10 @@ Hobbys:
 - Fischerei
 - Reiten
 
---- Zitat
+-- Zitat
 Ich habe mir das Adventure Handbuch durchgelesen, alles war sehr schlüssig,
 bis auf diesen sinnfreien Beispieltext hier.
---- Zitat
+-- Zitat
 
 ## Freunde
 
