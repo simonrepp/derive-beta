@@ -1,4 +1,4 @@
-const { parse } = require('../../adventure.js');
+const { parse } = require('../../../adventure.js');
 
 const scenarios = {
 

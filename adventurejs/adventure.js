@@ -32,8 +32,8 @@ const parse = (input, locale = 'de', reporter = 'text') => {
   if(!locales.includes(locale)) {
     throw new RangeError(
       `The requested locale "${locale}" is not supported. Translation contributions are ` +
-      `very welcome and an easy thing to do - only a few easy messages need ` +
-      `to be translated!`
+      'very welcome and an easy thing to do - only a few easy messages need ' +
+      'to be translated!'
     );
   }
 

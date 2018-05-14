@@ -1,7 +1,7 @@
 // Note: Study this file from the bottom up
 
-const OPTIONAL = '(.+?)?';
-const REQUIRED = '(\\S.*?)';
+const OPTIONAL = '([\\s\\S]+?)?';
+const REQUIRED = '(\\S[\\s\\S]*?)';
 
 //
 const EMPTY = '()';
@@ -43,7 +43,7 @@ const SECTION_NAME_UNESCAPED = '(?!`)([^\\s<][^<]*?)';
 exports.SECTION_NAME_UNESCAPED_INDEX = 13;
 
 // # [Name of Section]
-const SECTION_NAME_ESCAPED = '(`+)\\s*(\\S.*?)\\s*\\14'; // TODO: Should this exclude the backreference inside the quotes? (as in ((?:(?!\\1).)+) ) here and elsewhere
+const SECTION_NAME_ESCAPED = '(`+)\\s*(\\S[\\s\\S]*?)\\s*\\14'; // TODO: Should this exclude the backreference inside the quotes? (as in ((?:(?!\\1).)+) ) here and elsewhere
 exports.SECTION_NAME_ESCAPED_QUOTES_INDEX = 14;
 exports.SECTION_NAME_ESCAPED_INDEX = 15;
 
@@ -64,7 +64,7 @@ exports.NAME_UNESCAPED_INDEX = 17;
 // "[Name of Dictionary/List/Field]":
 // '[Name of Field]': [Value of Field]
 // "[Name of Field]": [Value of Field]
-const NAME_ESCAPED = '(`+)\\s*(\\S.*?)\\s*\\18';
+const NAME_ESCAPED = '(`+)\\s*(\\S[\\s\\S]*?)\\s*\\18';
 exports.NAME_ESCAPED_QUOTES_INDEX = 18;
 exports.NAME_ESCAPED_INDEX = 19;
 
