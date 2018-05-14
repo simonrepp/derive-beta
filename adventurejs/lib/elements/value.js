@@ -13,7 +13,8 @@ class AdventureValue {
       for(let subinstruction of instruction.subinstructions) {
         subinstruction.element = this;
 
-        if(subinstruction.type === 'FIELD_APPEND') {
+        if(subinstruction.type === 'FIELD_APPEND' &&
+           subinstruction.value !== null) {
           if(this.value === null) {
             this.value = subinstruction.value;
           } else {
