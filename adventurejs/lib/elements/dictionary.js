@@ -90,12 +90,12 @@ class AdventureDictionary {
   }
 
   inspect(indentation = '') {
-    const results = [`${indentation}${this.context.messages.inspection.dictionary} ${this.name}`];
+    const results = [`${indentation}${this.name}`];
 
     indentation += '  ';
 
     for(let [name, value] of Object.entries(this.entries)) {
-      results.push(`${indentation}${this.context.messages.inspection.dictionaryEntry} ${name} = ${value.value}`);
+      results.push(`${indentation}${name} = ${value.value}`);
     }
 
     return results.join('\n');

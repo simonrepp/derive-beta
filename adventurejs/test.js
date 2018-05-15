@@ -2,11 +2,29 @@ const fs = require('fs');
 
 const { parse, AdventureParseError, AdventureValidationError } = require('./adventure.js');
 
-const input = fs.readFileSync('/home/simon/derive/derive-beta/adventure/latest-spec/essence_by_example.atxt', 'utf-8');
+// const input = fs.readFileSync('/home/simon/derive/derive-beta/adventure/latest-spec/essence_by_example.atxt', 'utf-8');
 
-let document;
+const input = `
+# default
+## a
+value_1: default
+## b
+value_1: default
+value_2: default
 
-document = parse(input, 'es', 'terminal');
+# shallow < default
+## b
+value_1: shallow
+
+# deep << default
+## a
+## b
+value_1: deep
+`;
+
+const doc = parse(input, 'de', 'terminal');
+
+console.log(doc.section('shallow').raw());
 
 // console.log(document);
 

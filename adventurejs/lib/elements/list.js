@@ -20,12 +20,12 @@ class AdventureList {
   }
 
   inspect(indentation = '') {
-    const results = [`${indentation}${this.context.messages.inspection.list} ${this.name}`];
+    const results = [`${indentation}${this.name}`];
 
     indentation += '  ';
 
     for(let value of this.values) {
-      results.push(`${indentation}${this.context.messages.inspection.listItem} ${value.value}`);
+      results.push(`${indentation}${value.value}`);
     }
 
     return results.join('\n');

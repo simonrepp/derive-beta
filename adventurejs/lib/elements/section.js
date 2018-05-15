@@ -10,6 +10,7 @@ const AdventureValue = require('./value.js');
 class AdventureSection {
   constructor(context, instruction, parent) {
     this.context = context;
+    this.depth = instruction.depth;
     this.instruction = instruction;
     this.name = instruction.name;
     this.parent = parent;
@@ -283,7 +284,7 @@ class AdventureSection {
     if(this.name === '<>#:=|\\_ADVENTURE_DOCUMENT') {
       results.push(`${indentation}${this.context.messages.inspection.document}`);
     } else {
-      results.push(`${indentation}${this.context.messages.inspection.section} ${this.name}`);
+      results.push(`${indentation}${'#'.repeat(this.depth)} ${this.name}`);
     }
 
     indentation += '  ';
@@ -295,7 +296,7 @@ class AdventureSection {
       }
 
       if(element instanceof AdventureValue) {
-        results.push(`${indentation}${this.context.messages.inspection.field} ${element.name}: ${element.value}`);
+        results.push(`${indentation}${element.name}: ${element.value}`);
         continue;
       }
 

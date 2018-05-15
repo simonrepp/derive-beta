@@ -49,43 +49,44 @@ exports.SECTION_NAME_ESCAPED_INDEX = 15;
 
 // # [Name of Section] < [Name of Inheritance]
 const SECTION_NAME = `(?:${SECTION_NAME_UNESCAPED}|${SECTION_NAME_ESCAPED})`;
-const SECTION_COPY = `(?:<\\s*${REQUIRED})?`;
-const SECTION = `${SECTION_HASHES}\\s*${SECTION_NAME}\\s*${SECTION_COPY}`;
-exports.SECTION_TEMPLATE_INDEX = 16;
+const SECTION_TEMPLATE = `(?:(<(?!<)|<<)\\s*${REQUIRED})?`;
+const SECTION = `${SECTION_HASHES}\\s*${SECTION_NAME}\\s*${SECTION_TEMPLATE}`;
+exports.SECTION_COPY_OPERATOR_INDEX = 16;
+exports.SECTION_TEMPLATE_INDEX = 17;
 
 const EARLY_DETERMINED = `${APPEND}|${COMMENT}|${LIST_ITEM}|${BLOCK}|${SECTION}`;
 
 // [Name of Dictionary/List/Field]:
 // [Name of Field]: [Value of Field]
 const NAME_UNESCAPED = '(?![>#\\-`\\\\|])([^\\s:=<][^:=<]*?)';
-exports.NAME_UNESCAPED_INDEX = 17;
+exports.NAME_UNESCAPED_INDEX = 18;
 
 // '[Name of Dictionary/List/Field]':
 // "[Name of Dictionary/List/Field]":
 // '[Name of Field]': [Value of Field]
 // "[Name of Field]": [Value of Field]
-const NAME_ESCAPED = '(`+)\\s*(\\S[\\s\\S]*?)\\s*\\18';
-exports.NAME_ESCAPED_QUOTES_INDEX = 18;
-exports.NAME_ESCAPED_INDEX = 19;
+const NAME_ESCAPED = '(`+)\\s*(\\S[\\s\\S]*?)\\s*\\19';
+exports.NAME_ESCAPED_QUOTES_INDEX = 19;
+exports.NAME_ESCAPED_INDEX = 20;
 
 const NAME = `(?:${NAME_UNESCAPED}|${NAME_ESCAPED})`;
 
 const FIELD_OR_NAME = `(:)\\s*${OPTIONAL}`;
-exports.NAME_OPERATOR_INDEX = 20;
-exports.FIELD_VALUE_INDEX = 21;
+exports.NAME_OPERATOR_INDEX = 21;
+exports.FIELD_VALUE_INDEX = 22;
 
 // [Name of Entry] = [Value of Entry]
 // '[Name of Entry]' = [Value of Entry]
 // "[Name of Entry]" = [Value of Entry]
 const DICTIONARY_ENTRY = `(=)\\s*${OPTIONAL}`;
-exports.DICTIONARY_ENTRY_EQUALS_INDEX = 22;
-exports.DICTIONARY_ENTRY_VALUE_INDEX = 23;
+exports.DICTIONARY_ENTRY_EQUALS_INDEX = 23;
+exports.DICTIONARY_ENTRY_VALUE_INDEX = 24;
 
 // [Name of Inheriting] < [Name of Inheritance]
 // '[Name of Inheriting]' < [Name of Inheritance]
 // "[Name of Inheriting]" < [Name of Inheritance]
 const COPY = `<\\s*${REQUIRED}`;
-exports.TEMPLATE_INDEX = 24;
+exports.TEMPLATE_INDEX = 25;
 
 const LATE_DETERMINED = `${NAME}\\s*(?:${FIELD_OR_NAME}|${DICTIONARY_ENTRY}|${COPY})`;
 

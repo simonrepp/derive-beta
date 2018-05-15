@@ -1,5 +1,10 @@
 # text/adventure
 
+## Name contenders!
+
+- elementary notation (.eno)
+- plain (.plain)
+
 ## File extension
 
 First candidate proposal: `.adv`

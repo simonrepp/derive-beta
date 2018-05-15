@@ -16,6 +16,7 @@ fileTypes: [
   'atex'
   'atxt'
   'plain'
+  'eno'
 ]
 
 patterns: [

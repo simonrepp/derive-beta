@@ -191,6 +191,7 @@ module.exports = context => {
         continue;
       }
 
+      // TODO: *operator range wording everywhere
 
       const sectionHashes = match[matcher.SECTION_HASHES_INDEX];
       if(sectionHashes) {
@@ -200,11 +201,11 @@ module.exports = context => {
 
         instruction.type = 'SECTION';
 
-        const hashesColumn = instruction.line.indexOf(blockDashes);
-        const nameColumn = instruction.line.indexOf(instruction.name, hashesColumn + sectionHashes.length);
+        const operatorColumn = instruction.line.indexOf(sectionHashes);
+        const nameColumn = instruction.line.indexOf(instruction.name, operatorColumn + sectionHashes.length);
 
         instruction.ranges = {
-          hashes: [hashesColumn, hashesColumn + sectionHashes.length],
+          sectionOperator: [operatorColumn, operatorColumn + sectionHashes.length],
           name: [nameColumn, nameColumn + instruction.name.length]
         };
 
@@ -212,10 +213,18 @@ module.exports = context => {
         if(template) {
           instruction.template = template;
 
-          const copyColumn = instruction.line.indexOf('<', nameColumn + instruction.name.length);
-          const templateColumn = instruction.line.indexOf(template, copyColumn + 1);
+          const copyOperator = match[matcher.SECTION_COPY_OPERATOR_INDEX];
+          const copyOperatorColumn = instruction.line.indexOf(copyOperator, nameColumn + instruction.name.length);
+          const templateColumn = instruction.line.indexOf(template, copyOperatorColumn + copyOperator.length);
 
-          instruction.ranges.copyOperator = [copyColumn, copyColumn + 1];
+          if(copyOperator === '<') {
+            instruction.deepCopy = false;
+            instruction.ranges.copyOperator = [copyOperatorColumn, copyOperatorColumn + copyOperator.length];
+          } else { // copyOperator === '<<'
+            instruction.deepCopy = true;
+            instruction.ranges.deepCopyOperator = [copyOperatorColumn, copyOperatorColumn + copyOperator.length];
+          }
+
           instruction.ranges.template = [templateColumn, templateColumn + template.length];
         }
 

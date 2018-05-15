@@ -111,14 +111,6 @@ const SCENARIOS = {
       },
       syntax: 'Name < Other Name',
       variants: space('Name', '<', 'Other Name')
-    },
-    {
-      captures: {
-        [matcher.NAME_UNESCAPED_INDEX]: 'The Name',
-        [matcher.TEMPLATE_INDEX]: 'Other Name'
-      },
-      syntax: 'The Name < Other Name',
-      variants: space('The Name', '<', 'Other Name')
     }
   ],
 
@@ -382,6 +374,7 @@ const SCENARIOS = {
       captures: {
         [matcher.SECTION_HASHES_INDEX]: '#',
         [matcher.SECTION_NAME_UNESCAPED_INDEX]: '#',
+        [matcher.SECTION_COPY_OPERATOR_INDEX]: '<',
         [matcher.SECTION_TEMPLATE_INDEX]: 'Other Name'
       },
       syntax: '# # < Other Name',
@@ -391,6 +384,7 @@ const SCENARIOS = {
       captures: {
         [matcher.SECTION_HASHES_INDEX]: '###',
         [matcher.SECTION_NAME_UNESCAPED_INDEX]: '##',
+        [matcher.SECTION_COPY_OPERATOR_INDEX]: '<',
         [matcher.SECTION_TEMPLATE_INDEX]: '###'
       },
       syntax: '### ## < ###',
@@ -401,6 +395,7 @@ const SCENARIOS = {
         [matcher.SECTION_HASHES_INDEX]: '#',
         [matcher.SECTION_NAME_ESCAPED_QUOTES_INDEX]: '`',
         [matcher.SECTION_NAME_ESCAPED_INDEX]: '<=:',
+        [matcher.SECTION_COPY_OPERATOR_INDEX]: '<',
         [matcher.SECTION_TEMPLATE_INDEX]: '`<=:`'
       },
       syntax: '# `<=:` < `<=:`',
@@ -411,10 +406,21 @@ const SCENARIOS = {
         [matcher.SECTION_HASHES_INDEX]: '#',
         [matcher.SECTION_NAME_ESCAPED_QUOTES_INDEX]: '```',
         [matcher.SECTION_NAME_ESCAPED_INDEX]: '<`=``:',
+        [matcher.SECTION_COPY_OPERATOR_INDEX]: '<',
         [matcher.SECTION_TEMPLATE_INDEX]: '```<`=``:```'
       },
       syntax: '# ```<`=``:``` < ```<`=``:```',
       variants: space('#', '```<`=``:```', '<', '```<`=``:```')
+    },
+    {
+      captures: {
+        [matcher.SECTION_HASHES_INDEX]: '#',
+        [matcher.SECTION_NAME_UNESCAPED_INDEX]: 'Name',
+        [matcher.SECTION_COPY_OPERATOR_INDEX]: '<<',
+        [matcher.SECTION_TEMPLATE_INDEX]: 'Other Name'
+      },
+      syntax: '# Name << Other Name',
+      variants: space('#', ' ', 'Name', '<<', 'Other Name')
     }
   ]
 

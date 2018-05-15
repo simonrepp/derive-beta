@@ -31,7 +31,7 @@ const consolidate = (context, instruction, template) => {
 
   if(instruction.type === 'SECTION') {
     if(template.type === 'SECTION') {
-      mergeSections(instruction, template);
+      mergeSections(instruction, template, instruction.deepCopy);
     }
 
     if(template.type === 'BLOCK') {
@@ -187,7 +187,7 @@ const mergeDictionaries = (instruction, template) => {
   }
 }
 
-const mergeSections = (instruction, template) => {
+const mergeSections = (instruction, template, deepMerge) => {
   const existingSubinstructionsNameIndex = {};
 
   for(let index = template.subinstructions.length - 1; index >= 0; index--) {
@@ -213,7 +213,7 @@ const mergeSections = (instruction, template) => {
       continue;
     }
 
-    if(existingSubinstructions.length > 1) {
+    if(!deepMerge || existingSubinstructions.length > 1) {
       continue;
     }
 
@@ -237,7 +237,7 @@ const mergeSections = (instruction, template) => {
       });
 
       if(templateSubinstructionsWithSameName.length === 1) {
-        mergeSections(existingSubinstructions[0], templateSubinstruction);
+        mergeSections(existingSubinstructions[0], templateSubinstruction, true);
       }
     }
   }

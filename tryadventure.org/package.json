@@ -21,6 +21,7 @@
     "url": "https://github.com/simonrepp/tryadventure.org"
   },
   "scripts": {
+    "build": "webpack",
     "serve": "http-server -a localhost -c-1",
     "watch": "webpack -w"
   },
