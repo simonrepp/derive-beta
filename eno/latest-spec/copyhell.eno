@@ -15,7 +15,7 @@ empty words:
 versions:
 - 1
 
-# staging < production
+# staging << production
 
 ## server a
 

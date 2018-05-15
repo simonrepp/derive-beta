@@ -1,4 +1,4 @@
-# text/adventure
+# eno
 
 ## Name contenders!
 
@@ -26,11 +26,11 @@ Second candidate proposal: `.atxt`
 > (except for .txt, for which - curiously - these mental rules
 > are often not applied, or less so anyhow)
 
-Other candidates: ` .at / .avt / .av / .ad / .txta `
-
 ## MIME Type
 
 `text/adventure`
+`text/eno`
+
 
 ## Website
 
