@@ -244,5 +244,10 @@ module.exports = context => {
       continue;
     }
 
+  } // ends for(let instruction of context.instructions)
+
+  if(unassignedIdleInstructions.length > 0) {
+    lastSectionInstruction.subinstructions.push(...unassignedIdleInstructions);
+    unassignedIdleInstructions = [];
   }
 }

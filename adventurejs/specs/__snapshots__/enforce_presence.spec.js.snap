@@ -50,6 +50,6 @@ exports[`Presence of elements enforced when requested 4`] = `
  >    6 | 
  >    7 | dictionary in section:
       8 | present = yes
-      9 | 
+ >    9 | 
 "
 `;
