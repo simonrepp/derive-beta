@@ -66,9 +66,19 @@ class AdventureValue {
     }
   }
 
-  // toString() {
-  //   return this.inspect();
-  // }
+  toString() {
+    let value = this.value.replace('\n', '\\n');
+
+    if(value.length > 14) {
+      value = value.substr(0, 11) + '...';
+    }
+
+    if(this.name) {
+      return `[Object EnoValue name="${this.name}" value="${value}"]`;
+    } else {
+      return `[Object EnoValue value="${value}"]`;
+    }
+  }
 
   touch() {
     this.touched = true;

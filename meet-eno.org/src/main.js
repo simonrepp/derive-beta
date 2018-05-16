@@ -24,7 +24,6 @@ const lookup = () => {
     const lookup = doc.lookup(editor.selectionStart);
 
     if(lookup) {
-      console.log(lookup.element)
       lookupLog.innerHTML = `<b>lookup(${editor.selectionStart})</b><br/><br/>Token: ${lookup.zone}<br/>Element: ${escape(lookup.element.toString())}`;
     }
   } catch(err) {
@@ -65,6 +64,9 @@ window.addEventListener('hashchange', () => {
   refresh();
 });
 
-editor.addEventListener('input', refresh);
+editor.addEventListener('input', () => {
+  refresh();
+  lookup();
+});
 
 refresh();

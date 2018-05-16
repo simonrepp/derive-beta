@@ -26,6 +26,10 @@ const consolidate = (context, instruction, template) => {
       copyGeneric(instruction, template);
     }
 
+    if(template.type === 'SECTION') {
+      errors.copyingSectionIntoName(context, instruction);
+    }
+
     return;
   }
 

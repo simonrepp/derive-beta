@@ -47,6 +47,7 @@ module.exports = {
     copyingSectionIntoField: lineNumber => `In Zeile ${lineNumber} wird eine Sektion in ein Feld kopiert.`,
     copyingSectionIntoDictionary: lineNumber => `In Zeile ${lineNumber} wird eine Sektion in ein Dictionary kopiert.`,
     copyingSectionIntoList: lineNumber => `In Zeile ${lineNumber} wird eine Sektion in eine Liste kopiert.`,
+    copyingSectionIntoName: lineNumber => `In Zeile ${lineNumber} wird eine Sektion in ein leeres Feld kopiert.`,
     cyclicDependency: (lineNumber, name) => `In Zeile ${lineNumber} wird "${name}" in sich selbst kopiert.`,
     multipleTemplatesFound: (lineNumber, name) => `In Zeile ${lineNumber} ist nicht klar welches Element mit dem Namen "${name}" kopiert werden soll.`,
     templateNotFound: (lineNumber, name) => `In Zeile ${lineNumber} soll das Element "${name}" kopiert werden, es wurde aber nicht gefunden.`

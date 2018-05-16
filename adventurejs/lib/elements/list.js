@@ -7,14 +7,14 @@ class AdventureList {
     this.name = instruction.name;
     this.parent = parent;
     this.touched = false;
-    this.values = [];
+    this.items = [];
 
     instruction.element = this;
 
     for(let subinstruction of instruction.subinstructions) {
       if(subinstruction.type === 'LIST_ITEM') {
         subinstruction.element = new AdventureValue(context, subinstruction, this);
-        this.values.push(subinstruction.element);
+        this.items.push(subinstruction.element);
       } else {
         subinstruction.element = this;
       }
@@ -30,26 +30,26 @@ class AdventureList {
 
     indentation += '  ';
 
-    for(let value of this.values) {
-      results.push(`${indentation}${value.value}`);
+    for(let item of this.items) {
+      results.push(`${indentation}${item.value}`);
     }
 
     return results.join('\n');
   }
 
   raw() {
-    return { [this.name]: this.values.map(value => value.get()) };
+    return { [this.name]: this.items.map(item => item.get()) };
   }
 
-  // toString() {
-  //   return this.inspect();
-  // }
+  toString() {
+    return `[Object EnoList name="${this.name}" length="${this.items.length}"]`;
+  }
 
   touch() {
     this.touched = true;
 
-    for(let value of this.values) {
-      value.touch();
+    for(let item of this.items) {
+      item.touch();
     }
   }
 }

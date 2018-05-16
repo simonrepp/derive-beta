@@ -47,6 +47,7 @@ module.exports = {
     copyingSectionIntoField: lineNumber => `In line ${lineNumber} a section is copied to a field.`,
     copyingSectionIntoDictionary: lineNumber => `In line ${lineNumber} a section is copied into a dictionary.`,
     copyingSectionIntoList: lineNumber => `A line is copied to a list in line ${lineNumber} .`,
+    copyingSectionIntoName: lineNumber => `In line ${lineNumber} a section is copied into an empty field.`,
     cyclicDependency: (lineNumber, name) => `In line ${lineNumber}" ${name} "is copied in itself.`,
     multipleTemplatesFound: (lineNumber, name) => `In line ${lineNumber} it is not clear what element with the name" ${name} "should be copied.`,
     templateNotFound: (lineNumber, name) => `In line ${lineNumber} the element" ${name} "should be copied, but it was not found.`

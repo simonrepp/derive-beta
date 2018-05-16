@@ -4,7 +4,6 @@ const AdventureEmpty = require('./empty.js');
 const AdventureList = require('./list.js');
 const AdventureValue = require('./value.js');
 
-// TODO: Improve .toString subtly (e.g. from "[Object EnoValue]" to "[Object EnoValue name="value"]")
 // TODO: Investigate and possibly follow .explain() public audience (translated) debug output track :)
 
 class AdventureSection {
@@ -357,7 +356,7 @@ class AdventureSection {
       if(element instanceof AdventureList ||
          element instanceof AdventureValue) {
 
-        const valueElements = element instanceof AdventureList ? element.values :
+        const valueElements = element instanceof AdventureList ? element.items :
                                                                  [element];
 
         for(let value of valueElements) {
@@ -560,6 +559,14 @@ class AdventureSection {
     this.elementsSequential.forEach(element => element.touch());
 
     return this.elementsSequential;
+  }
+
+  toString() {
+    if(this.name === '<>#:=|\\_ADVENTURE_DOCUMENT') {
+      return `[Object EnoDocument length="${this.elementsSequential.length}"]`;
+    } else {
+      return `[Object EnoSection name="${this.name}" length="${this.elementsSequential.length}"]`;
+    }
   }
 
   touch() {

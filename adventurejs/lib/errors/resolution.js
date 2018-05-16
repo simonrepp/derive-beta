@@ -108,6 +108,13 @@ module.exports = {
     throw new AdventureParseError(message, snippet);
   },
 
+  copyingSectionIntoName: (context, instruction) => {
+    const message = context.messages.resolution.copyingSectionIntoName(instruction.lineNumber);
+    const snippet = report(context, instruction);
+
+    throw new AdventureParseError(message, snippet);
+  },
+
   cyclicDependency: (context, instruction, instructionChain) => {
     const firstOccurrence = instructionChain.indexOf(instruction);
     const feedbackChain = instructionChain.slice(firstOccurrence);

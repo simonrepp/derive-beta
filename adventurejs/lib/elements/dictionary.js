@@ -117,9 +117,9 @@ class AdventureDictionary {
     return { [this.name]: entries };
   }
 
-  // toString() {
-  //   return this.inspect();
-  // }
+  toString() {
+    return `[Object EnoDictionary name="${this.name}" length="${Object.keys(this.entries).length}"]`;
+  }
 
   touch() {
     this.touched = true;

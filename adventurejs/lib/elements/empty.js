@@ -31,6 +31,10 @@ class AdventureEmpty {
     return { [this.name]: null };
   }
 
+  toString() {
+    return `[Object EnoEmpty name="${this.name}"]`;
+  }
+
   touch() {
     this.touched = true;
   }
