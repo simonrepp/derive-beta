@@ -1,8 +1,8 @@
 require_relative './scenarios.rb'
 
-RSpec.describe Adventure::Patterns do
-  Adventure::Patterns.constants.each do |constant|
-    pattern = Adventure::Patterns.const_get(constant)
+RSpec.describe Eno::Patterns do
+  Eno::Patterns.constants.each do |constant|
+    pattern = Eno::Patterns.const_get(constant)
 
     describe constant do
       SCENARIOS.each do |scenario|

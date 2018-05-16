@@ -94,7 +94,7 @@
               "command": "derive-beta:markdown-reference"
             },
             {
-              "label": "Adventure Handbuch",
+              "label": "Eno Handbuch",
               "command": "derive-beta:plain-reference"
             },
             {

@@ -1,5 +1,5 @@
-const { loadAdventure, statFile } = require('../util.js'),
-      { AdventureValidationError, AdventureParseError } = require('../../adventurejs/adventure.js'),
+const { loadEno, statFile } = require('../util.js'),
+      { EnoValidationError, EnoParseError } = require('../../enojs/eno.js'),
       validateDate = require('../validate/date.js'),
       { validateMarkdown, validateMarkdownWithMedia } = require('../validate/markdown.js'),
       validatePath = require('../validate/path.js'),
@@ -15,11 +15,11 @@ module.exports = async (data, plainPath) => {
     let doc;
 
     try {
-      doc = await loadAdventure(data.root, plainPath);
+      doc = await loadEno(data.root, plainPath);
     } catch(err) {
       data.cache.delete(plainPath);
 
-      if(err instanceof AdventureParseError) {
+      if(err instanceof EnoParseError) {
         data.warnings.push({
           files: [{ path: plainPath, selection: err.selection }],
           message: err.text,
@@ -61,7 +61,7 @@ module.exports = async (data, plainPath) => {
     } catch(err) {
       data.cache.delete(plainPath);
 
-      if(err instanceof AdventureValidationError) {
+      if(err instanceof EnoValidationError) {
         data.warnings.push({
           files: [{ path: plainPath, selection: err.selection }],
           message: err.text,

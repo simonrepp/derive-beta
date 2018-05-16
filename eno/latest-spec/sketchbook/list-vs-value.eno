@@ -5,7 +5,7 @@
 
 > LIST TYPES
 > intent: a listing of values
-> raw behaviour: always array, eg. list: [AdventureList] => [['foo']] 
+> raw behaviour: always array, eg. list: [EnoList] => [['foo']] 
 > errors: eg. "Section was expected but found a list"
 
 list:
@@ -13,7 +13,7 @@ list:
 
 > VALUE TYPES
 > intent: only a single value
-> raw behaviour: always single value, eg. key: [AdventureValue] => ['value']
+> raw behaviour: always single value, eg. key: [EnoValue] => ['value']
 > errors: eg. "Section was expected but found a value"
 >
 > (TODO: Could consider "multiline value found" as variant in error messages)
@@ -50,7 +50,7 @@ value
 
 > MULTIPLE VALUE TYPES
 > intent: alternative list-notation, optional additional values, readility considerations for lists with long items
-> raw behaviour: a list (at the top element level) of values: [AdventureValue, AdventureValue] => ['value', 'value']
+> raw behaviour: a list (at the top element level) of values: [EnoValue, EnoValue] => ['value', 'value']
 > errors: eg. "Section was expected but found multiple values"
 
 commands: ls
@@ -88,7 +88,7 @@ commands:
 
 -- commands
 sudo apt update
-sudo apt install plain
+sudo apt install eno
 -- commands
 
 -- commands 

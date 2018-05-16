@@ -1,4 +1,4 @@
-# For the biggest part the adventure language specification
+# For the biggest part the eno language specification
 # allows arbitrary whitespace before, between and after tokens.
 #
 # This helper generates multiple spacing variants for any given

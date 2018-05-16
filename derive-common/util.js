@@ -6,7 +6,7 @@ const fs = require('fs'),
 
 markdownIt.use(markdownItFootnote);
 
-const plain = require('../adventurejs/adventure.js');
+const eno = require('../enojs/eno.js');
 
 exports.URBANIZE_ENUM = [
   '2012',
@@ -32,13 +32,13 @@ exports.loadFile = filePath => new Promise((resolve, reject) =>
   fs.readFile(filePath, 'utf-8', (err, content) => err ? reject(err) : resolve(content))
 );
 
-exports.loadAdventure = (directory, plainPath) => new Promise((resolve, reject) =>
-  fs.readFile(path.join(directory, plainPath), 'utf-8', (err, content) => {
+exports.loadEno = (directory, enoPath) => new Promise((resolve, reject) =>
+  fs.readFile(path.join(directory, enoPath), 'utf-8', (err, content) => {
     if(err) {
       reject(err);
     } else {
       try {
-        resolve( plain.parse(content, 'de') );
+        resolve( eno.parse(content, 'de') );
       } catch(err) {
         reject(err);
       }

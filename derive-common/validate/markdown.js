@@ -76,5 +76,5 @@ const validate = ({ name, value }, mediaAllowed) => {
   };
 };
 
-exports.validateMarkdown = adventureValue => validate(adventureValue, false);
-exports.validateMarkdownWithMedia = adventureValue => validate(adventureValue, true);
+exports.validateMarkdown = enoValue => validate(enoValue, false);
+exports.validateMarkdownWithMedia = enoValue => validate(enoValue, true);

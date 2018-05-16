@@ -18,7 +18,10 @@ module Eno
         type: :block
       }
 
+      dashes = 1
+
       while next! == '-'
+        dashes += 1
         instruction[:ranges][:block_operator][1] += 1
       end
 
@@ -37,9 +40,69 @@ module Eno
 
       next!
 
-      # while !terminator_line read content line instruction
+      begin_index = @index
 
-      # read terminator instruction
+      loop do
+        begin_column = @column
+        begin_index = @index
+        end_column = @column
+        end_index = @index
+
+        terminator = block_terminator(dashes, token[:value])
+
+        if terminator || @char == nil
+          @instructions << terminator
+          break
+        else
+          while @char != "\n"
+            end_column = @column
+            end_index = @index
+            next!
+          end
+
+          @instructions << {
+            line: @line,
+            ranges: {
+              content: [begin_column, end_column]
+            },
+            type: :block_content,
+            value: @input[begin_index..end_index]
+          }
+
+          next!
+        end
+      end
+    end
+
+    def block_terminator(dashes_count, name)
+      whitespace
+      dashes_begin = @column
+
+      (1..dashes_count).each do
+        return nil if @char != '-'
+        next!
+      end
+
+      whitespace
+      name_begin = @column
+
+      name.each_char do |char|
+        return nil if @char != char
+        next!
+      end
+
+      whitespace
+
+      return nil if @char && @char != "\n"
+
+      {
+        line: @line,
+        ranges: {
+          block_operator: [dashes_begin, dashes_begin + dashes_count],
+          name: [name_begin, name_begin + name.length]
+        },
+        type: :block_terminator
+      }
     end
 
     def comment

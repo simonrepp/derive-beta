@@ -1,48 +1,42 @@
-const { parseRaw } = require('plain');
-
-const obj = parseRaw(plainDataString);
-
-// ....
-
 const manifest = {
-  'Titel': pd.value.required.dictionary('title'),
-  'Autoren': pd.list.dictionary('authors'),
-  'Datum': pd.value.dictionary('date').process(date => moment(date).format('YYYY'))
+  'Titel': eno.value.required.dictionary('title'),
+  'Autoren': eno.list.dictionary('authors'),
+  'Datum': eno.value.dictionary('date').process(date => moment(date).format('YYYY'))
 };
 
-const document = parse(plainDataString, manifest);
+const document = parse(enoString, manifest);
 
 // ...
 
-const { parse, AdventureValidationError } = require('plain');
+const { parse, EnoValidationError } = require('eno');
 
-const pd = parse(plainDataString);
+const doc = parse(enoString);
 
 try {
-  const title = pd.get('title', AdventureValidationError);
-  const authors = pd.get('authors', []);
-  const document = pd.get('subsection', {});
+  const title = doc.get('title', EnoValidationError);
+  const authors = doc.get('authors', []);
+  const document = doc.get('subsection', {});
 
   // alternate
 
-  const title = pd.get('title', pd.value.required);
-  const authors = pd.get('authors', pd.list.optional);
+  const title = doc.get('title', eno.value.required);
+  const authors = doc.get('authors', eno.list.optional);
 
   authors = authors.dictionary(author => {
     return author.get(...)
   });
 
-  const document = pd.get('subsection', pd.dict.required);
+  const document = doc.get('subsection', eno.dict.required);
 
-  const document = pd.get('subsection', pd.dict.required, (section) => {
-    section.name = section.get('name', pd.value.required, name => name.toLowerCase);
-    section.year = section.get('date', pd.value, date => moment(date).format('YYYY'));
-    section.friends = section.get('friends', pd.array.required, friend => friend.get(pd.value));
+  const document = doc.get('subsection', eno.dict.required, (section) => {
+    section.name = section.get('name', eno.value.required, name => name.toLowerCase);
+    section.year = section.get('date', eno.value, date => moment(date).format('YYYY'));
+    section.friends = section.get('friends', eno.array.required, friend => friend.get(eno.value));
   });
 
 } catch(err) {
   // handle
-  if(err instanceof AdventureValidationError) {
+  if(err instanceof EnoValidationError) {
     ...
   }
 }

@@ -1,4 +1,4 @@
-require_relative '../../lib/adventure.rb'
+require_relative '../../lib/eno.rb'
 require_relative './space.rb'
 
 GROUPED_SCENARIOS = {
@@ -6,25 +6,25 @@ GROUPED_SCENARIOS = {
   ANY_KEY_SCENARIOS: [
     {
       captures: { 1 => nil, 2 => 'Any Key' },
-      pattern: Adventure::Patterns::ANY_KEY,
+      pattern: Eno::Patterns::ANY_KEY,
       syntax: '== Any Key',
       variants: space('==', 'Any Key')
     },
     {
       captures: { 1 => '*', 2 => 'Any Key' },
-      pattern: Adventure::Patterns::ANY_KEY,
+      pattern: Eno::Patterns::ANY_KEY,
       syntax: '* == Any Key',
       variants: space('*', '==', 'Any Key')
     },
     {
       captures: { 1 => nil, 2 => '==' },
-      pattern: Adventure::Patterns::ANY_KEY,
+      pattern: Eno::Patterns::ANY_KEY,
       syntax: '== ==',
       variants: space('==', ' ', '==')
     },
     {
       captures: { 1 => '*', 2 => '==' },
-      pattern: Adventure::Patterns::ANY_KEY,
+      pattern: Eno::Patterns::ANY_KEY,
       syntax: '* == ==',
       variants: space('*', '==', ' ', '==')
     }
@@ -33,19 +33,19 @@ GROUPED_SCENARIOS = {
   APPEND_WITH_SPACE_SCENARIOS: [
     {
       captures: { 1 => nil },
-      pattern: Adventure::Patterns::APPEND_WITH_SPACE,
+      pattern: Eno::Patterns::APPEND_WITH_SPACE,
       syntax: '\\',
       variants: space('\\')
     },
     {
       captures: { 1 => 'Value' },
-      pattern: Adventure::Patterns::APPEND_WITH_SPACE,
+      pattern: Eno::Patterns::APPEND_WITH_SPACE,
       syntax: '\\ Value',
       variants: space('\\', 'Value')
     },
     {
       captures: { 1 => '\\' },
-      pattern: Adventure::Patterns::APPEND_WITH_SPACE,
+      pattern: Eno::Patterns::APPEND_WITH_SPACE,
       syntax: '\\ \\',
       variants: space('\\', '\\')
     }
@@ -54,19 +54,19 @@ GROUPED_SCENARIOS = {
   APPEND_WITH_NEWLINE_SCENARIOS: [
     {
       captures: { 1 => nil },
-      pattern: Adventure::Patterns::APPEND_WITH_NEWLINE,
+      pattern: Eno::Patterns::APPEND_WITH_NEWLINE,
       syntax: '|',
       variants: space('|')
     },
     {
       captures: { 1 => 'Value' },
-      pattern: Adventure::Patterns::APPEND_WITH_NEWLINE,
+      pattern: Eno::Patterns::APPEND_WITH_NEWLINE,
       syntax: '| Value',
       variants: space('|', 'Value')
     },
     {
       captures: { 1 => '|' },
-      pattern: Adventure::Patterns::APPEND_WITH_NEWLINE,
+      pattern: Eno::Patterns::APPEND_WITH_NEWLINE,
       syntax: '| |',
       variants: space('|', '|')
     }
@@ -75,7 +75,7 @@ GROUPED_SCENARIOS = {
   COMMENT_SCENARIOS: [
     {
       captures: { 1 => 'Comment line' },
-      pattern: Adventure::Patterns::COMMENT,
+      pattern: Eno::Patterns::COMMENT,
       syntax: '> Comment line',
       variants: space('>', 'Comment line')
     }
@@ -84,7 +84,7 @@ GROUPED_SCENARIOS = {
   EMPTY_LINE_SCENARIOS: [
     {
       captures: {},
-      pattern: Adventure::Patterns::EMPTY_LINE,
+      pattern: Eno::Patterns::EMPTY_LINE,
       syntax: '',
       variants: space('')
     }
@@ -93,37 +93,37 @@ GROUPED_SCENARIOS = {
   FIELD_SCENARIOS: [
     {
       captures: { 1 => nil, 2 => 'Key', 3 => 'Value' },
-      pattern: Adventure::Patterns::FIELD,
+      pattern: Eno::Patterns::FIELD,
       syntax: 'Key: Value',
       variants: space('Key', ':', 'Value')
     },
     {
       captures: { 1 => '*', 2 => 'Key', 3 => 'Value' },
-      pattern: Adventure::Patterns::FIELD,
+      pattern: Eno::Patterns::FIELD,
       syntax: '* Key: Value',
       variants: space('*', 'Key', ':', 'Value')
     },
     {
       captures: { 1 => nil, 2 => 'The Key', 3 => 'The Value' },
-      pattern: Adventure::Patterns::FIELD,
+      pattern: Eno::Patterns::FIELD,
       syntax: 'The Key: The Value',
       variants: space('The Key', ':', 'The Value')
     },
     {
       captures: { 1 => '*', 2 => 'The Key', 3 => 'The Value' },
-      pattern: Adventure::Patterns::FIELD,
+      pattern: Eno::Patterns::FIELD,
       syntax: '* The Key: The Value',
       variants: space('*', 'The Key', ':', 'The Value')
     },
     {
       captures: { 1 => nil, 2 => 'Key', 3 => ':' },
-      pattern: Adventure::Patterns::FIELD,
+      pattern: Eno::Patterns::FIELD,
       syntax: 'Key: :',
       variants: space('Key', ':', ' ', ':')
     },
     {
       captures: { 1 => '*', 2 => 'Key', 3 => ':' },
-      pattern: Adventure::Patterns::FIELD,
+      pattern: Eno::Patterns::FIELD,
       syntax: '* Key: :',
       variants: space('*', 'Key', ':', ' ', ':')
     }
@@ -132,7 +132,7 @@ GROUPED_SCENARIOS = {
   FIELD_MERGE_SCENARIOS: [
     {
       captures: { 1 => 'Key' },
-      pattern: Adventure::Patterns::FIELD_MERGE,
+      pattern: Eno::Patterns::FIELD_MERGE,
       syntax: '< Key',
       variants: space('<', 'Key')
     }
@@ -141,25 +141,25 @@ GROUPED_SCENARIOS = {
   KEY_SCENARIOS: [
     {
       captures: { 1 => nil, 2 => 'Key' },
-      pattern: Adventure::Patterns::KEY,
+      pattern: Eno::Patterns::KEY,
       syntax: 'Key:',
       variants: space('Key', ':')
     },
     {
       captures: { 1 => '*', 2 => 'Key' },
-      pattern: Adventure::Patterns::KEY,
+      pattern: Eno::Patterns::KEY,
       syntax: '* Key:',
       variants: space('*', 'Key', ':')
     },
     {
       captures: { 1 => nil, 2 => 'The Key' },
-      pattern: Adventure::Patterns::KEY,
+      pattern: Eno::Patterns::KEY,
       syntax: 'The Key:',
       variants: space('The Key', ':')
     },
     {
       captures: { 1 => '*', 2 => 'The Key'},
-      pattern: Adventure::Patterns::KEY,
+      pattern: Eno::Patterns::KEY,
       syntax: '* The Key:',
       variants: space('*', 'The Key', ':')
     }
@@ -168,25 +168,25 @@ GROUPED_SCENARIOS = {
   LIST_ITEM_SCENARIOS: [
     {
       captures: { 1 => nil },
-      pattern: Adventure::Patterns::LIST_ITEM,
+      pattern: Eno::Patterns::LIST_ITEM,
       syntax: '-',
       variants: space('-')
     },
     {
       captures: { 1 => 'Value' },
-      pattern: Adventure::Patterns::LIST_ITEM,
+      pattern: Eno::Patterns::LIST_ITEM,
       syntax: '- Value',
       variants: space('-', 'Value')
     },
     {
       captures: { 1 => 'The Value' },
-      pattern: Adventure::Patterns::LIST_ITEM,
+      pattern: Eno::Patterns::LIST_ITEM,
       syntax: '- The Value',
       variants: space('-', 'The Value')
     },
     {
       captures: { 1 => '-' },
-      pattern: Adventure::Patterns::LIST_ITEM,
+      pattern: Eno::Patterns::LIST_ITEM,
       syntax: '- -',
       variants: space('-', ' ', '-')
     }
@@ -195,25 +195,25 @@ GROUPED_SCENARIOS = {
   LIST_MERGE_SCENARIOS: [
     {
       captures: { 1 => 'Reference' },
-      pattern: Adventure::Patterns::LIST_MERGE,
+      pattern: Eno::Patterns::LIST_MERGE,
       syntax: '<- Reference',
       variants: space('<-', 'Reference')
     },
     {
       captures: { 1 => 'The Reference' },
-      pattern: Adventure::Patterns::LIST_MERGE,
+      pattern: Eno::Patterns::LIST_MERGE,
       syntax: '<- The Reference',
       variants: space('<-', 'The Reference')
     },
     {
       captures: { 1 => '<' },
-      pattern: Adventure::Patterns::LIST_MERGE,
+      pattern: Eno::Patterns::LIST_MERGE,
       syntax: '<- <',
       variants: space('<-', '<')
     },
     {
       captures: { 1 => '<-' },
-      pattern: Adventure::Patterns::LIST_MERGE,
+      pattern: Eno::Patterns::LIST_MERGE,
       syntax: '<- <-',
       variants: space('<-', '<-')
     },
@@ -222,25 +222,25 @@ GROUPED_SCENARIOS = {
   MAP_MERGE_SCENARIOS: [
     {
       captures: { 1 => 'Reference' },
-      pattern: Adventure::Patterns::MAP_MERGE,
+      pattern: Eno::Patterns::MAP_MERGE,
       syntax: '<= Reference',
       variants: space('<=', 'Reference')
     },
     {
       captures: { 1 => 'The Reference' },
-      pattern: Adventure::Patterns::MAP_MERGE,
+      pattern: Eno::Patterns::MAP_MERGE,
       syntax: '<= The Reference',
       variants: space('<=', 'The Reference')
     },
     {
       captures: { 1 => '<' },
-      pattern: Adventure::Patterns::MAP_MERGE,
+      pattern: Eno::Patterns::MAP_MERGE,
       syntax: '<= <',
       variants: space('<=', '<')
     },
     {
       captures: { 1 => '<=' },
-      pattern: Adventure::Patterns::MAP_MERGE,
+      pattern: Eno::Patterns::MAP_MERGE,
       syntax: '<= <=',
       variants: space('<=', '<=')
     },
@@ -249,25 +249,25 @@ GROUPED_SCENARIOS = {
   MAP_PAIR_SCENARIOS: [
     {
       captures: { 1 => 'Key', 2 => 'Value' },
-      pattern: Adventure::Patterns::MAP_PAIR,
+      pattern: Eno::Patterns::MAP_PAIR,
       syntax: 'Key = Value',
       variants: space('Key', '=', 'Value')
     },
     {
       captures: { 1 => 'The Key', 2 => 'The Value' },
-      pattern: Adventure::Patterns::MAP_PAIR,
+      pattern: Eno::Patterns::MAP_PAIR,
       syntax: 'The Key = The Value',
       variants: space('The Key', '=', 'The Value')
     },
     {
       captures: { 1 => 'Key', 2 => '=' },
-      pattern: Adventure::Patterns::MAP_PAIR,
+      pattern: Eno::Patterns::MAP_PAIR,
       syntax: 'Key = =',
       variants: space('Key', '=', ' ', '=')
     },
     {
       captures: { 1 => 'Key', 2 => ':' },
-      pattern: Adventure::Patterns::MAP_PAIR,
+      pattern: Eno::Patterns::MAP_PAIR,
       syntax: 'Key = :',
       variants: space('Key', '=', ' ', ':')
     }
@@ -276,25 +276,25 @@ GROUPED_SCENARIOS = {
   MULTILINE_FIELD_SCENARIOS: [
     {
       captures: { 1 => nil, 2 => '--', 3 => 'Key' },
-      pattern: Adventure::Patterns::MULTILINE_FIELD,
+      pattern: Eno::Patterns::MULTILINE_FIELD,
       syntax: '-- Key',
       variants: space('--', 'Key')
     },
     {
       captures: { 1 => '*', 2 => '--', 3 => 'Key' },
-      pattern: Adventure::Patterns::MULTILINE_FIELD,
+      pattern: Eno::Patterns::MULTILINE_FIELD,
       syntax: '* -- Key',
       variants: space('*', '--', 'Key')
     },
     {
       captures: { 1 => nil, 2 => '---', 3 => 'Key' },
-      pattern: Adventure::Patterns::MULTILINE_FIELD,
+      pattern: Eno::Patterns::MULTILINE_FIELD,
       syntax: '--- Key',
       variants: space('---', 'Key')
     },
     {
       captures: { 1 => '*', 2 => '---', 3 => 'Key' },
-      pattern: Adventure::Patterns::MULTILINE_FIELD,
+      pattern: Eno::Patterns::MULTILINE_FIELD,
       syntax: '* --- Key',
       variants: space('*', '---', 'Key')
     }
@@ -303,25 +303,25 @@ GROUPED_SCENARIOS = {
   SECTION_SCENARIOS: [
     {
       captures: { 1 => nil, 2 => '#', 3 => 'Key' },
-      pattern: Adventure::Patterns::SECTION,
+      pattern: Eno::Patterns::SECTION,
       syntax: '# Key',
       variants: space('#', 'Key')
     },
     {
       captures: { 1 => '*', 2 => '#', 3 => 'Key' },
-      pattern: Adventure::Patterns::SECTION,
+      pattern: Eno::Patterns::SECTION,
       syntax: '* # Key',
       variants: space('*', '#', 'Key')
     },
     {
       captures: { 1 => nil, 2 => '##', 3 => 'Key' },
-      pattern: Adventure::Patterns::SECTION,
+      pattern: Eno::Patterns::SECTION,
       syntax: '## Key',
       variants: space('##', 'Key')
     },
     {
       captures: { 1 => '*', 2 => '##', 3 => 'Key' },
-      pattern: Adventure::Patterns::SECTION,
+      pattern: Eno::Patterns::SECTION,
       syntax: '* ## Key',
       variants: space('*', '##', 'Key')
     }
@@ -330,25 +330,25 @@ GROUPED_SCENARIOS = {
   SECTION_MERGE_SCENARIOS: [
     {
       captures: { 1 => 'Reference' },
-      pattern: Adventure::Patterns::SECTION_MERGE,
+      pattern: Eno::Patterns::SECTION_MERGE,
       syntax: '<# Reference',
       variants: space('<#', 'Reference')
     },
     {
       captures: { 1 => 'The Reference' },
-      pattern: Adventure::Patterns::SECTION_MERGE,
+      pattern: Eno::Patterns::SECTION_MERGE,
       syntax: '<# The Reference',
       variants: space('<#', 'The Reference')
     },
     {
       captures: { 1 => '<' },
-      pattern: Adventure::Patterns::SECTION_MERGE,
+      pattern: Eno::Patterns::SECTION_MERGE,
       syntax: '<# <',
       variants: space('<#', '<')
     },
     {
       captures: { 1 => '<#' },
-      pattern: Adventure::Patterns::SECTION_MERGE,
+      pattern: Eno::Patterns::SECTION_MERGE,
       syntax: '<# <#',
       variants: space('<#', '<#')
     },

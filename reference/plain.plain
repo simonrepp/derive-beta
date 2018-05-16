@@ -1,4 +1,4 @@
-> Dies ist das Adventure Handbuch - es ist selbst als Adventure
+> Dies ist das Eno Handbuch - es ist selbst als Eno
 > Datei verfasst, erkennbar an der Dateiendung: ".plain".
 
 > In 5 Punkten und 5 Minuten Lesezeit erklärt dir dieses Handbuch alles was du 
@@ -9,13 +9,13 @@
 > 1. Kommentare
 > Jede Zeile die mit ">" startet (wie diese und die vorherigen) ist eine
 > Kommentarzeile, in der beliebiger Text stehen darf, beim einlesen eines
-> Adventure Dokuments werden diese Zeilen vom Computer ignoriert, sie dienen
+> Eno Dokuments werden diese Zeilen vom Computer ignoriert, sie dienen
 > also lediglich dazu, dass wir uns selbst Notizen machen können.
 
 
 
 > 2. Wertzuweisungen
-> Adventure dient zum notieren von Werten, die einfachste Form sieht so aus:
+> Eno dient zum notieren von Werten, die einfachste Form sieht so aus:
 
 Temperatur: Sehr angenehm
 
@@ -63,7 +63,7 @@ können wir beliebige Inhalte verfassen, beliebig viele Leerzeilen einbauen ...
 
 ... usw. 
 
-Mit -- teilen wir Adventure mit, dass wir einen Textblock starten wollen,
+Mit -- teilen wir Eno mit, dass wir einen Textblock starten wollen,
 und der Text danach (in diesem Fall "Lange Beschreibung") ist wiederum der 
 Schlüssel der dem Wert (dem Textblock) einen Namen gibt.
 
@@ -98,7 +98,7 @@ Mobil: +43 699 104734953
 Festnetz: +43 1 0468648
 Mobil: +43 699 104734953
 
-> Und damit weisst du auch schon alles was du brauchst um beliebige Adventure
+> Und damit weisst du auch schon alles was du brauchst um beliebige Eno
 > Dateien zu editieren! Zum Abschluss noch einmal eine Demonstration, die
 > alle der oben erklärten Möglichkeiten kombiniert.
 
@@ -114,7 +114,7 @@ Hobbys:
 - Reiten
 
 -- Zitat
-Ich habe mir das Adventure Handbuch durchgelesen, alles war sehr schlüssig,
+Ich habe mir das Eno Handbuch durchgelesen, alles war sehr schlüssig,
 bis auf diesen sinnfreien Beispieltext hier.
 -- Zitat
 

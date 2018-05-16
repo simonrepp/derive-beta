@@ -1,4 +1,4 @@
-import { parse, AdventureParseError } from '../../adventurejs/adventure.js';
+import { parse, EnoParseError } from '../../enojs/eno.js';
 
 const htmlEscape = {
   '&': '&amp;',
@@ -27,7 +27,7 @@ const lookup = () => {
       lookupLog.innerHTML = `<b>lookup(${editor.selectionStart})</b><br/><br/>Token: ${lookup.zone}<br/>Element: ${escape(lookup.element.toString())}`;
     }
   } catch(err) {
-    if(err instanceof AdventureParseError) {
+    if(err instanceof EnoParseError) {
       lookupLog.innerHTML = err;
     } else {
       lookupLog.innerHTML = err;
@@ -51,7 +51,7 @@ const refresh = () => {
 
     parseLog.innerHTML = `<b>raw()</b><br/><br/>${escape(JSON.stringify(doc.raw(), null, 2))}`;
   } catch(err) {
-    if(err instanceof AdventureParseError) {
+    if(err instanceof EnoParseError) {
       parseLog.innerHTML = err;
     } else {
       parseLog.innerHTML = err;
