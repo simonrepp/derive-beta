@@ -4,8 +4,8 @@ const AdventureEmpty = require('./empty.js');
 const AdventureList = require('./list.js');
 const AdventureValue = require('./value.js');
 
-// TODO: Investigate .inspect() deprecation in node and switch 100% to .toString() ?
-//       Also make it more like { name => value } than "valor frfuru (text)" like now?
+// TODO: Improve .toString subtly (e.g. from "[Object EnoValue]" to "[Object EnoValue name="value"]")
+// TODO: Investigate and possibly follow .explain() public audience (translated) debug output track :)
 
 class AdventureSection {
   constructor(context, instruction, parent) {
@@ -19,6 +19,8 @@ class AdventureSection {
     this.elementsSequential = [];
     this.enforcePresenceDefault = false;
     this.touched = false;
+
+    instruction.element = this;
 
     const append = element => {
       this.elementsSequential.push(element);
@@ -38,41 +40,39 @@ class AdventureSection {
       }
 
       if(subinstruction.type === 'NAME') {
-        subinstruction.element = new AdventureEmpty(context, subinstruction, this);
-        append(subinstruction.element);
+        append(new AdventureEmpty(context, subinstruction, this));
         continue;
       }
 
       if(subinstruction.type === 'FIELD') {
-        subinstruction.element = new AdventureValue(context, subinstruction, this);
-        append(subinstruction.element);
+        append(new AdventureValue(context, subinstruction, this));
         continue;
       }
 
       if(subinstruction.type === 'LIST') {
-        subinstruction.element = new AdventureList(context, subinstruction, this);
-        append(subinstruction.element);
+        append(new AdventureList(context, subinstruction, this));
         continue;
       }
 
       if(subinstruction.type === 'BLOCK') {
-        subinstruction.element = new AdventureValue(context, subinstruction, this);
-        append(subinstruction.element);
+        append(new AdventureValue(context, subinstruction, this));
         continue;
       }
 
       if(subinstruction.type === 'DICTIONARY') {
-        subinstruction.element = new AdventureDictionary(context, subinstruction, this);
-        append(subinstruction.element);
+        append(new AdventureDictionary(context, subinstruction, this));
         continue;
       }
 
       if(subinstruction.type === 'SECTION') {
-        subinstruction.element = new AdventureSection(context, subinstruction, this);
-        append(subinstruction.element);
+        append(new AdventureSection(context, subinstruction, this));
         continue;
       }
     }
+  }
+
+  get [Symbol.toStringTag]() {
+    return 'EnoSection';
   }
 
   // TODO: Configurable/overridable error message here
@@ -278,7 +278,7 @@ class AdventureSection {
     }
   }
 
-  inspect(indentation = '') {
+  explain(indentation = '') {
     const results = [];
 
     if(this.name === '<>#:=|\\_ADVENTURE_DOCUMENT') {
@@ -468,14 +468,13 @@ class AdventureSection {
   }
 
   raw() {
-    const exported = {};
+    const elements = this.elementsSequential.map(element => element.raw());
 
-    for(let name of Object.keys(this.elementsAssociative)) {
-      const elements = this.elementsAssociative[name];
-      exported[name] = elements.map(element => element.raw());
+    if(this.name === '<>#:=|\\_ADVENTURE_DOCUMENT') {
+      return elements;
+    } else {
+      return { [this.name]: elements };
     }
-
-    return exported;
   }
 
   section(name, ...optional) {

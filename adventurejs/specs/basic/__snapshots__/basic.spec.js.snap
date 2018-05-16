@@ -1,26 +1,30 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`A basic testrun succeeds 1`] = `
-Object {
-  "Section": Array [
-    Object {
-      "Section": Array [
-        Object {
-          "Section": Array [
-            Object {
-              "Key": Array [
-                "Value",
-                Array [
+Array [
+  Object {
+    "Section": Array [
+      Object {
+        "Section": Array [
+          Object {
+            "Section": Array [
+              Object {
+                "Key": "Value",
+              },
+              Object {
+                "Key": Array [
                   "Value",
                   "Value",
                 ],
-                "Value",
-              ],
-            },
-          ],
-        },
-      ],
-    },
-  ],
-}
+              },
+              Object {
+                "Key": "Value",
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+]
 `;

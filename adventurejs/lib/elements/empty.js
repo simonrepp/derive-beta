@@ -6,6 +6,12 @@ class AdventureEmpty {
     this.name = instruction.name;
     this.parent = parent;
     this.touched = false;
+
+    instruction.element = this;
+  }
+
+  get [Symbol.toStringTag]() {
+    return 'EnoEmpty';
   }
 
   getError(message) {
@@ -22,7 +28,7 @@ class AdventureEmpty {
   }
 
   raw() {
-    return null;
+    return { [this.name]: null };
   }
 
   touch() {

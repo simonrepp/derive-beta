@@ -9,6 +9,8 @@ class AdventureList {
     this.touched = false;
     this.values = [];
 
+    instruction.element = this;
+
     for(let subinstruction of instruction.subinstructions) {
       if(subinstruction.type === 'LIST_ITEM') {
         subinstruction.element = new AdventureValue(context, subinstruction, this);
@@ -19,7 +21,11 @@ class AdventureList {
     }
   }
 
-  inspect(indentation = '') {
+  get [Symbol.toStringTag]() {
+    return 'EnoList';
+  }
+
+  explain(indentation = '') {
     const results = [`${indentation}${this.name}`];
 
     indentation += '  ';
@@ -32,12 +38,12 @@ class AdventureList {
   }
 
   raw() {
-    return this.values.map(value => value.get());
+    return { [this.name]: this.values.map(value => value.get()) };
   }
 
-  toString() {
-    return this.inspect();
-  }
+  // toString() {
+  //   return this.inspect();
+  // }
 
   touch() {
     this.touched = true;

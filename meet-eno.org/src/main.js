@@ -24,7 +24,8 @@ const lookup = () => {
     const lookup = doc.lookup(editor.selectionStart);
 
     if(lookup) {
-      lookupLog.innerHTML = `<b>lookup()</b><br/><br/>=&gt; ${lookup.zone}<br/><br/>${escape(lookup.element.inspect())}`;
+      console.log(lookup.element)
+      lookupLog.innerHTML = `<b>lookup(${editor.selectionStart})</b><br/><br/>Token: ${lookup.zone}<br/>Element: ${escape(lookup.element.toString())}`;
     }
   } catch(err) {
     if(err instanceof AdventureParseError) {
@@ -49,7 +50,7 @@ const refresh = () => {
   try {
     doc = parse(input, locale, 'html');
 
-    parseLog.innerHTML = `<b>inspect()</b><br/><br/>${escape(doc.inspect())}<br/><br/><b>raw()</b><br/><br/>${escape(JSON.stringify(doc.raw(), null, 2))}`;
+    parseLog.innerHTML = `<b>raw()</b><br/><br/>${escape(JSON.stringify(doc.raw(), null, 2))}`;
   } catch(err) {
     if(err instanceof AdventureParseError) {
       parseLog.innerHTML = err;
@@ -62,7 +63,6 @@ const refresh = () => {
 window.addEventListener('hashchange', () => {
   locale = location.hash.length > 0 ? location.hash.substr(1) : 'en';
   refresh();
-  lookup();
 });
 
 editor.addEventListener('input', refresh);

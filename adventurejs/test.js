@@ -5,26 +5,17 @@ const { parse, AdventureParseError, AdventureValidationError } = require('./adve
 // const input = fs.readFileSync('/home/simon/derive/derive-beta/adventure/latest-spec/essence_by_example.atxt', 'utf-8');
 
 const input = `
-# default
-## a
-value_1: default
-## b
-value_1: default
-value_2: default
+empty:
 
-# shallow < default
-## b
-value_1: shallow
-
-# deep << default
-## a
-## b
-value_1: deep
+traits:
+eyes=blue
+collar=red
 `;
 
 const doc = parse(input, 'de', 'terminal');
 
-console.log(doc.section('shallow').raw());
+console.log(doc.raw());
+console.log(doc.field('empty').toString());
 
 // console.log(document);
 

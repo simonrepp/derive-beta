@@ -66,6 +66,8 @@ module.exports = context => {
         instruction.name = match[matcher.NAME_UNESCAPED_INDEX] ||
                            match[matcher.NAME_ESCAPED_INDEX];
 
+        // TODO: When escaped name capture escapeBeginOperator and escapeEndOperator
+
         const nameColumn = instruction.line.indexOf(instruction.name);
         const operatorColumn = instruction.line.indexOf(':', nameColumn + instruction.name.length);
 

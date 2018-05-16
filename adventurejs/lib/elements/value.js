@@ -9,6 +9,8 @@ class AdventureValue {
     this.value = instruction.value || null;
     this.touched = false;
 
+    instruction.element = this;
+
     if(instruction.subinstructions) {
       for(let subinstruction of instruction.subinstructions) {
         subinstruction.element = this;
@@ -35,6 +37,14 @@ class AdventureValue {
     }
   }
 
+  explain(indentation = '') {
+    return `${indentation}${this.context.messages.inspection.value} ${this.value} (${this.name})`;
+  }
+
+  get [Symbol.toStringTag]() {
+    return 'EnoValue';
+  }
+
   getError(message) {
     return errors.fabricateValueError(
       this.context,
@@ -48,17 +58,17 @@ class AdventureValue {
     return this.value;
   }
 
-  inspect(indentation = '') {
-    return `${indentation}${this.context.messages.inspection.value} ${this.value} (${this.name})`;
-  }
-
   raw() {
-    return this.value;
+    if(this.name) {
+      return { [this.name]: this.value };
+    } else {
+      return this.value;
+    }
   }
 
-  toString() {
-    return this.inspect();
-  }
+  // toString() {
+  //   return this.inspect();
+  // }
 
   touch() {
     this.touched = true;

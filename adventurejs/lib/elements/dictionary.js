@@ -12,6 +12,8 @@ class AdventureDictionary {
     this.enforcePresenceDefault = false;
     this.touched = false;
 
+    instruction.element = this;
+
     for(let subinstruction of instruction.subinstructions) {
       if(subinstruction.type === 'DICTIONARY_ENTRY') {
         subinstruction.element = new AdventureValue(context, subinstruction, this);
@@ -20,6 +22,10 @@ class AdventureDictionary {
         subinstruction.element = this;
       }
     }
+  }
+
+  get [Symbol.toStringTag]() {
+    return 'EnoDictionary';
   }
 
   entry(name, ...optional) {
@@ -89,7 +95,7 @@ class AdventureDictionary {
     this.enforcePresenceDefault = enforce === undefined ? true : enforce;
   }
 
-  inspect(indentation = '') {
+  explain(indentation = '') {
     const results = [`${indentation}${this.name}`];
 
     indentation += '  ';
@@ -102,18 +108,18 @@ class AdventureDictionary {
   }
 
   raw() {
-    const exported = {};
+    const entries = {};
 
     for(let name of Object.keys(this.entries)) {
-      exported[name] = this.entries[name].get();
+      entries[name] = this.entries[name].get();
     }
 
-    return exported;
+    return { [this.name]: entries };
   }
 
-  toString() {
-    return this.inspect();
-  }
+  // toString() {
+  //   return this.inspect();
+  // }
 
   touch() {
     this.touched = true;
