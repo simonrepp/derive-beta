@@ -161,14 +161,14 @@ module.exports = context => {
         instruction.type = 'FIELD_APPEND';
         instruction.value = match[matcher.APPEND_WITH_NEWLINE_VALUE_INDEX] || null;
 
-        const pipeColumn = instruction.line.indexOf('|');
-        instruction.ranges = { pipe: [pipeColumn, pipeColumn + 1] };
+        const operatorColumn = instruction.line.indexOf('|');
+        instruction.ranges = { appendWithNewlineOperator: [operatorColumn, operatorColumn + 1] };
 
         if(instruction.value) {
           const valueColumn = instruction.line.lastIndexOf(instruction.value);
           instruction.ranges.value = [valueColumn, valueColumn + instruction.value.length];
         } else {
-          instruction.ranges.value = [pipeColumn + 1, instruction.line.length];
+          instruction.ranges.value = [operatorColumn + 1, instruction.line.length];
         }
 
         continue;
@@ -180,20 +180,18 @@ module.exports = context => {
         instruction.type = 'FIELD_APPEND';
         instruction.value = match[matcher.APPEND_WITH_SPACE_VALUE_INDEX] || null;
 
-        const backslashColumn = instruction.line.indexOf('\\');
-        instruction.ranges = { backslash: [backslashColumn, backslashColumn + 1] };
+        const operatorColumn = instruction.line.indexOf('\\');
+        instruction.ranges = { appendWithSpaceOperator: [operatorColumn, operatorColumn + 1] };
 
         if(instruction.value) {
           const valueColumn = instruction.line.lastIndexOf(instruction.value);
           instruction.ranges.value = [valueColumn, valueColumn + instruction.value.length];
         } else {
-          instruction.ranges.value = [backslashColumn + 1, instruction.line.length];
+          instruction.ranges.value = [operatorColumn + 1, instruction.line.length];
         }
 
         continue;
       }
-
-      // TODO: *operator range wording everywhere
 
       const sectionHashes = match[matcher.SECTION_HASHES_INDEX];
       if(sectionHashes) {
