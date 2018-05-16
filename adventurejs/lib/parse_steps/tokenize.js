@@ -1,6 +1,9 @@
 const errors = require('../errors/tokenization.js');
 const matcher = require('../grammar_matcher.js');
 
+// TODO: Consider a reimplementation as a regex-free char-by-char tokenizer? (low priority though, more for speed and possibly cleanup of verbose column calculation code in here)
+//       (For the coming rust implementation this should be a top-priority though)
+
 module.exports = context => {
   let expectedBlockTerminator = null;
   let unterminatedBlock = null;
@@ -61,20 +64,36 @@ module.exports = context => {
         continue;
       }
 
-
       if(match[matcher.NAME_OPERATOR_INDEX]) {
-        instruction.name = match[matcher.NAME_UNESCAPED_INDEX] ||
-                           match[matcher.NAME_ESCAPED_INDEX];
+        const unescapedName = match[matcher.NAME_UNESCAPED_INDEX];
+        let nameOperatorColumn;
 
-        // TODO: When escaped name capture escapeBeginOperator and escapeEndOperator
+        if(unescapedName) {
+          instruction.name = unescapedName;
 
-        const nameColumn = instruction.line.indexOf(instruction.name);
-        const operatorColumn = instruction.line.indexOf(':', nameColumn + instruction.name.length);
+          const nameColumn = instruction.line.indexOf(instruction.name);
+          nameOperatorColumn = instruction.line.indexOf(':', nameColumn + instruction.name.length);
 
-        instruction.ranges = {
-          nameOperator: [operatorColumn, operatorColumn + 1],
-          name: [nameColumn, nameColumn + instruction.name.length]
-        };
+          instruction.ranges = {
+            nameOperator: [nameOperatorColumn, nameOperatorColumn + 1],
+            name: [nameColumn, nameColumn + instruction.name.length]
+          };
+        } else {
+          instruction.name = match[matcher.NAME_ESCAPED_INDEX];
+
+          const escapeOperator = match[matcher.NAME_ESCAPED_QUOTES_INDEX];
+          const escapeBeginOperatorColumn = instruction.line.indexOf(escapeOperator);
+          const nameColumn = instruction.line.indexOf(instruction.name, escapeBeginOperatorColumn + escapeOperator.length);
+          const escapeEndOperatorColumn = instruction.line.indexOf(escapeOperator, nameColumn + instruction.name.length);
+          nameOperatorColumn = instruction.line.indexOf(':', escapeEndOperatorColumn + escapeOperator.length);
+
+          instruction.ranges = {
+            escapeBeginOperator: [escapeBeginOperatorColumn, escapeBeginOperatorColumn, + escapeOperator.length],
+            escapeEndOperator: [escapeEndOperatorColumn, escapeEndOperatorColumn, + escapeOperator.length],
+            nameOperator: [nameOperatorColumn, nameOperatorColumn + 1],
+            name: [nameColumn, nameColumn + instruction.name.length]
+          };
+        }
 
         const value = match[matcher.FIELD_VALUE_INDEX];
         if(value) {
@@ -85,7 +104,7 @@ module.exports = context => {
           instruction.ranges.value = [valueColumn, valueColumn + value.length];
         } else {
           instruction.type = 'NAME';
-          instruction.ranges.value = [operatorColumn + 1, instruction.line.length];
+          instruction.ranges.value = [nameOperatorColumn + 1, instruction.line.length];
         }
 
         continue;
@@ -111,25 +130,44 @@ module.exports = context => {
 
 
       if(match[matcher.DICTIONARY_ENTRY_EQUALS_INDEX]) {
-        instruction.name = match[matcher.NAME_UNESCAPED_INDEX] ||
-                    match[matcher.NAME_ESCAPED_INDEX];
+        const unescapedName = match[matcher.NAME_UNESCAPED_INDEX];
+        let entryOperatorColumn;
+
+        if(unescapedName) {
+          instruction.name = unescapedName;
+
+          const nameColumn = instruction.line.indexOf(instruction.name);
+          entryOperatorColumn = instruction.line.indexOf('=', nameColumn + instruction.name.length);
+
+          instruction.ranges = {
+            entryOperator: [entryOperatorColumn, entryOperatorColumn + 1],
+            name: [nameColumn, nameColumn + instruction.name.length]
+          };
+        } else {
+          instruction.name = match[matcher.NAME_ESCAPED_INDEX];
+
+          const escapeOperator = match[matcher.NAME_ESCAPED_QUOTES_INDEX];
+          const escapeBeginOperatorColumn = instruction.line.indexOf(escapeOperator);
+          const nameColumn = instruction.line.indexOf(instruction.name, escapeBeginOperatorColumn + escapeOperator.length);
+          const escapeEndOperatorColumn = instruction.line.indexOf(escapeOperator, nameColumn + instruction.name.length);
+          entryOperatorColumn = instruction.line.indexOf('=', escapeEndOperatorColumn + escapeOperator.length);
+
+          instruction.ranges = {
+            escapeBeginOperator: [escapeBeginOperatorColumn, escapeBeginOperatorColumn, + escapeOperator.length],
+            escapeEndOperator: [escapeEndOperatorColumn, escapeEndOperatorColumn, + escapeOperator.length],
+            entryOperator: [entryOperatorColumn, entryOperatorColumn + 1],
+            name: [nameColumn, nameColumn + instruction.name.length]
+          };
+        }
 
         instruction.type = 'DICTIONARY_ENTRY';
         instruction.value = match[matcher.DICTIONARY_ENTRY_VALUE_INDEX] || null;
-
-        const nameColumn = instruction.line.indexOf(instruction.name); // TODO: Account for ``` `` ``` possibility ... :)
-        const operatorColumn = instruction.line.indexOf('=', nameColumn + instruction.name.length);
-
-        instruction.ranges = {
-          entryOperator: [operatorColumn, operatorColumn + 1],
-          name: [nameColumn, nameColumn + instruction.name.length]
-        };
 
         if(instruction.value) {
           const valueColumn = instruction.line.lastIndexOf(instruction.value);
           instruction.ranges.value = [valueColumn, valueColumn + instruction.value.length];
         } else {
-          instruction.ranges.value = [operatorColumn + 1, instruction.line.length];
+          instruction.ranges.value = [entryOperatorColumn + 1, instruction.line.length];
         }
 
         continue;
@@ -193,28 +231,48 @@ module.exports = context => {
         continue;
       }
 
-      const sectionHashes = match[matcher.SECTION_HASHES_INDEX];
-      if(sectionHashes) {
-        instruction.depth = sectionHashes.length;
-        instruction.name = match[matcher.SECTION_NAME_UNESCAPED_INDEX] ||
-                           match[matcher.SECTION_NAME_ESCAPED_INDEX];
-
+      const sectionOperator = match[matcher.SECTION_HASHES_INDEX];
+      if(sectionOperator) {
+        instruction.depth = sectionOperator.length;
         instruction.type = 'SECTION';
 
-        const operatorColumn = instruction.line.indexOf(sectionHashes);
-        const nameColumn = instruction.line.indexOf(instruction.name, operatorColumn + sectionHashes.length);
+        const sectionOperatorColumn = instruction.line.indexOf(sectionOperator);
+        const unescapedName = match[matcher.SECTION_NAME_UNESCAPED_INDEX];
+        let nameEndColumn;
 
-        instruction.ranges = {
-          sectionOperator: [operatorColumn, operatorColumn + sectionHashes.length],
-          name: [nameColumn, nameColumn + instruction.name.length]
-        };
+        if(unescapedName) {
+          instruction.name = unescapedName;
+
+          const nameColumn = instruction.line.indexOf(instruction.name, sectionOperatorColumn + sectionOperator.length);
+          nameEndColumn = nameColumn + unescapedName.length;
+
+          instruction.ranges = {
+            name: [nameColumn, nameColumn + unescapedName.length],
+            sectionOperator: [sectionOperatorColumn, sectionOperatorColumn + sectionOperator.length]
+          };
+        } else {
+          instruction.name = match[matcher.SECTION_NAME_ESCAPED_INDEX];
+
+          const escapeOperator = match[matcher.SECTION_NAME_ESCAPED_QUOTES_INDEX];
+          const escapeBeginOperatorColumn = instruction.line.indexOf(escapeOperator, sectionOperatorColumn + sectionOperator.length);
+          const nameColumn = instruction.line.indexOf(instruction.name, escapeBeginOperatorColumn + escapeOperator.length);
+          const escapeEndOperatorColumn = instruction.line.indexOf(escapeOperator, nameColumn + instruction.name.length);
+          nameEndColumn = escapeEndOperatorColumn + escapeOperator.length;
+
+          instruction.ranges = {
+            escapeBeginOperator: [escapeBeginOperatorColumn, escapeBeginOperatorColumn, + escapeOperator.length],
+            escapeEndOperator: [escapeEndOperatorColumn, escapeEndOperatorColumn, + escapeOperator.length],
+            name: [nameColumn, nameColumn + instruction.name.length],
+            sectionOperator: [sectionOperatorColumn, sectionOperatorColumn + sectionOperator.length]
+          };
+        }
 
         const template = match[matcher.SECTION_TEMPLATE_INDEX];
         if(template) {
           instruction.template = template;
 
           const copyOperator = match[matcher.SECTION_COPY_OPERATOR_INDEX];
-          const copyOperatorColumn = instruction.line.indexOf(copyOperator, nameColumn + instruction.name.length);
+          const copyOperatorColumn = instruction.line.indexOf(copyOperator, nameEndColumn);
           const templateColumn = instruction.line.indexOf(template, copyOperatorColumn + copyOperator.length);
 
           if(copyOperator === '<') {
@@ -234,21 +292,40 @@ module.exports = context => {
 
       const template = match[matcher.TEMPLATE_INDEX];
       if(template) {
-        instruction.name = match[matcher.NAME_UNESCAPED_INDEX] ||
-                           match[matcher.NAME_ESCAPED_INDEX];
+        const unescapedName = match[matcher.NAME_UNESCAPED_INDEX];
+
+        if(unescapedName) {
+          instruction.name = unescapedName;
+
+          const nameColumn = instruction.line.indexOf(instruction.name);
+          const copyOperatorColumn = instruction.line.indexOf('<', nameColumn + instruction.name.length);
+
+          instruction.ranges = {
+            copyOperator: [copyOperatorColumn, copyOperatorColumn + 1],
+            name: [nameColumn, nameColumn + instruction.name.length]
+          };
+        } else {
+          instruction.name = match[matcher.NAME_ESCAPED_INDEX];
+
+          const escapeOperator = match[matcher.NAME_ESCAPED_QUOTES_INDEX];
+          const escapeBeginOperatorColumn = instruction.line.indexOf(escapeOperator);
+          const nameColumn = instruction.line.indexOf(instruction.name, escapeBeginOperatorColumn + escapeOperator.length);
+          const escapeEndOperatorColumn = instruction.line.indexOf(escapeOperator, nameColumn + instruction.name.length);
+          const copyOperatorColumn = instruction.line.indexOf('<', escapeEndOperatorColumn + escapeOperator.length);
+
+          instruction.ranges = {
+            copyOperator: [copyOperatorColumn, copyOperatorColumn + 1],
+            escapeBeginOperator: [escapeBeginOperatorColumn, escapeBeginOperatorColumn, + escapeOperator.length],
+            escapeEndOperator: [escapeEndOperatorColumn, escapeEndOperatorColumn, + escapeOperator.length],
+            name: [nameColumn, nameColumn + instruction.name.length]
+          };
+        }
 
         instruction.template = template;
         instruction.type = 'NAME';
 
-        const nameColumn = instruction.line.indexOf(instruction.name);
-        const operatorColumn = instruction.line.indexOf('<', nameColumn + instruction.name.length);
-        const templateColumn = instruction.line.indexOf(template, operatorColumn + 1);
-
-        instruction.ranges = {
-          template: [templateColumn, templateColumn + template.length],
-          copyOperator: [operatorColumn, operatorColumn + 1],
-          name: [nameColumn, nameColumn + instruction.name.length]
-        };
+        const templateColumn = instruction.line.lastIndexOf(template);
+        instruction.ranges.template = [templateColumn, templateColumn + template.length];
 
         continue;
       }
