@@ -9,134 +9,213 @@ module Eno
       @instructions = []
     end
 
-    def block
-      instruction = {
-        line: @line,
-        ranges: {
-          block_operator: [@column, @column + 1]
-        },
-        type: :block
-      }
-
-      dashes = 1
-
-      while next! == '-'
-        dashes += 1
-        instruction[:ranges][:block_operator][1] += 1
+    def append
+      if @char == '|'
+        @instruction[:ranges] = { append_with_newline_operator: [@column, @column + 1] }
+        @instruction[:type] = :append_with_newline
+      else
+        @instruction[:ranges] = { append_with_space_operator: [@column, @column + 1] }
+        @instruction[:type] = :append_with_space
       end
 
+      next!
       whitespace
 
       token = last_token
 
       if token
-        instruction[:ranges][:name] = token[:range]
-        instruction[:name] = token[:value]
+        @instruction[:ranges][:value] = token[:range]
+        @instruction[:value] = token[:value]
       else
-        ERROR
-      end
-
-      @instructions << instruction
-
-      next!
-
-      begin_index = @index
-
-      loop do
-        begin_column = @column
-        begin_index = @index
-        end_column = @column
-        end_index = @index
-
-        terminator = block_terminator(dashes, token[:value])
-
-        if terminator || @char == nil
-          @instructions << terminator
-          break
-        else
-          while @char != "\n"
-            end_column = @column
-            end_index = @index
-            next!
-          end
-
-          @instructions << {
-            line: @line,
-            ranges: {
-              content: [begin_column, end_column]
-            },
-            type: :block_content,
-            value: @input[begin_index..end_index]
-          }
-
-          next!
-        end
+        @instruction[:value] = nil
       end
     end
 
-    def block_terminator(dashes_count, name)
+    def block
+      @instruction[:ranges] = { block_operator: [@column, @column + 1] }
+      @instruction[:type] = :block
+
+      @block_dashes = 1
+      while next! == '-'
+        @block_dashes += 1
+        @instruction[:ranges][:block_operator][1] += 1
+      end
+
+      whitespace
+      token = last_token
+
+      if token
+        @block_name = token[:value]
+        @instruction[:ranges][:name] = token[:range]
+        @instruction[:name] = token[:value]
+      else
+        raise 'ERROR'
+      end
+
+      @inside_block = true
+    end
+
+    def block_content
+      begin_column = @column
+      begin_index = @index
+
+      return if block_terminator
+
+      end_column = @column
+      end_index = @index
+
+      while @char != "\n"
+        end_column = @column
+        end_index = @index
+        next!
+      end
+
+      @instruction[:ranges] = { content: [begin_column, end_column] }
+      @instruction[:type] = :block_content
+      @instruction[:value] = @input[begin_index..end_index]
+    end
+
+    def block_terminator
       whitespace
       dashes_begin = @column
 
-      (1..dashes_count).each do
-        return nil if @char != '-'
+      (1..@block_dashes).each do
+        return false if @char != '-'
         next!
       end
 
       whitespace
       name_begin = @column
 
-      name.each_char do |char|
-        return nil if @char != char
+      @block_name.each_char do |char|
+        return false if @char != char
         next!
       end
 
       whitespace
 
-      return nil if @char && @char != "\n"
+      return false if @char && @char != "\n"
 
-      {
-        line: @line,
-        ranges: {
-          block_operator: [dashes_begin, dashes_begin + dashes_count],
-          name: [name_begin, name_begin + name.length]
-        },
-        type: :block_terminator
+      @instruction[:type] = :block_terminator
+      @instruction[:ranges] = {
+        block_operator: [dashes_begin, dashes_begin + @block_dashes],
+        name: [name_begin, name_begin + @block_name.length]
       }
+
+      return true
     end
 
     def comment
-      instruction = {
-        line: @line,
-        ranges: {
-          comment_operator: [@column, @column + 1]
-        },
-        type: :comment
-      }
+      @instruction[:ranges] = { comment_operator: [@column, @column + 1] }
+      @instruction[:type] = :comment
 
       next!
-
       whitespace
-
       token = last_token
 
       if token
-        instruction[:ranges][:text] = token[:range]
-        instruction[:text] = token[:value]
+        @instruction[:ranges][:text] = token[:range]
+        @instruction[:text] = token[:value]
       end
-
-      @instructions << instruction
     end
 
     def empty
-      @instructions << {
-        line: @line,
-        type: :empty
-      }
+      @instruction[:type] = :empty
+    end
+
+    def terminate_escape
+      (1..@escape_backticks).each do
+        return false if @char != '`'
+        next!
+      end
+
+      @instruction[:ranges][:escape_end_operator] = [@column - @escape_backticks, @column]
+
+      return true
+    end
+
+    def escaped_name
+      @instruction[:ranges] = { escape_begin_operator: [@column, @column + 1]}
+
+      @escape_backticks = 1
+      while next! == '`'
+        @escape_backticks += 1
+        @instruction[:ranges][:escape_begin_operator][1] += 1
+      end
+
+      begin_column = @column
+      begin_index = @index
+      end_column = @column
+      end_index = @index
+
+      loop do
+        break if terminate_escape
+        raise 'ERROR' if @char == "\n" || @char == nil
+        end_column = @column
+        end_index = @index
+        next!
+      end
+
+      @instruction[:name] = @input[begin_index..end_index]
+      @instruction[:ranges][:name] = [begin_column, end_column]
+
+      whitespace
+
+      case @char
+      when ":"
+        @instruction[:ranges][:name_operator] = [@column, @column + 1]
+
+        next!
+        whitespace
+
+        if @char == "\n"
+          @instruction[:type] = :name
+        else
+          field
+        end
+      when "="
+        @instruction[:ranges][:entry_operator] = [@column, @column + 1]
+        @instruction[:type] = :dictionary_entry
+
+        next!
+        whitespace
+
+        if @char == "\n"
+          @instruction[:value] = nil
+        else
+          token = last_token
+
+          @instruction[:ranges][:value] = token[:range]
+          @instruction[:value] = token[:value]
+        end
+      when "<"
+        @instruction[:ranges][:copy_operator] = [@column, @column + 1]
+
+        next!
+        whitespace
+        token = last_token
+
+        if token
+          @instruction[:ranges][:template] = token[:range]
+          @instruction[:template] = token[:value]
+        else
+          raise 'ERROR'
+        end
+      else
+        raise 'ERROR'
+      end
+
+      next! while @char != "\n"
     end
 
     def field
-      next! while @char != "\n"
+      token = last_token
+
+      if token
+        @instruction[:ranges][:value] = token[:range]
+        @instruction[:value] = token[:value]
+        @instruction[:type] = :field
+      end
     end
 
     def last_token
@@ -164,14 +243,19 @@ module Eno
     end
 
     def list_item
-      next! while @char != "\n"
+      @instruction[:ranges] = { item_operator: [@column, @column + 1] }
+      @instruction[:type] = :list_item
+
+      next!
+      token = last_token
+
+      if token
+        @instruction[:ranges][:value] = token[:range]
+        @instruction[:value] = token[:value]
+      end
     end
 
     def name
-      instruction = {
-        ranges: {}
-      }
-
       begin_column = @column
       begin_index = @index
       end_column = @column
@@ -188,26 +272,29 @@ module Eno
         end
       end while next!
 
+      @instruction[:name] = @input[begin_index..end_index]
+      @instruction[:ranges] = { name: [begin_column, end_column] }
+
       case @char
       when ":"
-        instruction[:ranges][:name] = [begin_column, end_column]
-        instruction[:ranges][:name_operator] = [@column, @column + 1]
+        @instruction[:ranges][:name_operator] = [@column, @column + 1]
 
+        next!
         whitespace
 
         if @char == "\n"
-          instruction[:type] = :name
+          @instruction[:type] = :name
         else
           field
         end
       when "="
-        instruction[:ranges][:name] = [begin_column, end_column]
-        instruction[:ranges][:entry_operator] = [@column, @column + 1]
+        @instruction[:ranges][:entry_operator] = [@column, @column + 1]
 
+        next!
         whitespace
 
         if @char == "\n"
-          instruction[:type] = :name
+          @instruction[:type] = :dictionary_entry
         else
           field
         end
@@ -225,69 +312,66 @@ module Eno
       end
 
       @index += 1
-
-      putc @input[@index] unless @input[@index] == nil
-
       @char = @input[@index]
+
+      # putc @char if @char
     end
 
     def section
-      instruction = {
-        depth: 1,
-        line: @line,
-        ranges: {
-          section_operator: [@column, @column + 1]
-        },
-        type: :section
-      }
+      @instruction[:depth] = 1
+      @instruction[:ranges] = { section_operator: [@column, @column + 1] }
+      @instruction[:type] = :section
 
       while next! == '#'
-        instruction[:depth] += 1
-        instruction[:ranges][:section_operator][1] += 1
+        @instruction[:depth] += 1
+        @instruction[:ranges][:section_operator][1] += 1
       end
 
       whitespace
 
       case @char
-      when "\n"
-        raise 'ERROR'
-      when '`'
-        escaped_name
+      when "\n" then raise 'ERROR'
+      when '`' then escaped_name
       else
         token = last_token
 
-        instruction[:name] = token[:value]
-        instruction[:ranges][:name] = token[:range]
+        @instruction[:name] = token[:value]
+        @instruction[:ranges][:name] = token[:range]
       end
-
-      @instructions << instruction
     end
 
     def tokenize
       begin
+        # TODO: Store begin/end index and/or copy line content into instruction
+        @instruction = { line: @line }
+        @instructions.push(@instruction)
+
         whitespace
 
+        if @inside_block
+          block_content
+          next
+        end
+
         case @char
-        when "\n"
-          empty
-        when '>'
-          comment
-        when '`'
-          escaped_name
-        when '#'
-          section
+        when "\n" then empty
+        when '>' then comment
+        when '`' then escaped_name
         when '-'
           if @input[@index + 1] == '-'
             block
           else
             list_item
           end
+        when '#' then section
+        when '|' then append
+        when '\\' then append
         else
           name
         end
       end while next!
 
-      puts @instructions
+      return @instructions
     end
 
     def whitespace
