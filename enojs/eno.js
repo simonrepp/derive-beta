@@ -9,6 +9,8 @@ const locales = ['de', 'en', 'es'];
 // TODO: - Pass default loaders to parse(..), which are always run when getting any values from the resulting document (e.g. ERB default loader to interpolate things)
 //       - Generally enable possiblity to run multiple loaders in order (then you can also pass multiple loaders to the individual getters e.g.)
 
+// TODO: Possibility to pass file label to parser context, which is then used to enrich error messages with file name :) Use this in simonrepp.com usecase then
+
 const build = object => {
 
   if(typeof object !== 'object') {

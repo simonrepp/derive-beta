@@ -44,10 +44,10 @@ class EnoDictionary {
       }
     }
 
-    const value = this.entries[name];
+    const element = this.entries[name];
 
-    if(value === undefined) {
-      if(options.enforcePresence) {
+    if(element === undefined) {
+      if(options.required || options.enforcePresence) {
         errors.missingDictionaryEntry(this.context, name, this.instruction);
       }
 
@@ -58,7 +58,7 @@ class EnoDictionary {
       }
     }
 
-    if(value.value === null) {
+    if(element.value === null) {
       if(options.required) {
         errors.missingDictionaryEntry(this.context, name, this.instruction);
       }
@@ -72,10 +72,10 @@ class EnoDictionary {
 
     if(process) {
       try {
-        const processed = process(value);
+        const processed = process(element);
 
         if(options.withTrace) {
-          return { trace: value, value: processed };
+          return { trace: element, value: processed };
         } else {
           return processed;
         }
@@ -85,9 +85,9 @@ class EnoDictionary {
     }
 
     if(options.withTrace) {
-      return { trace: value, value: value.get() };
+      return { trace: element, value: element.get() };
     } else {
-      return value.get();
+      return element.get();
     }
   }
 

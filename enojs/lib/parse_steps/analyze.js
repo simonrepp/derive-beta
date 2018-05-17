@@ -6,7 +6,7 @@ module.exports = context => {
     lineNumber: 1,
     name: '<>#:=|\\_ENO_DOCUMENT',
     ranges: {
-      hashes: [0, 0],
+      sectionOperator: [0, 0],
       name: [0, 0]
     },
     subinstructions: []

@@ -69,7 +69,7 @@ repository:
   }
   dictionaryEntry: {
     comment: 'key = value'
-    match: '^\\s*(?![>\\-#\\\\|`])([^<=:]+?)\\s*(=)\\s*(\\S.*?)\\s*$'
+    match: '^\\s*(?![>\\-#\\\\|`])([^<=:]+?)\\s*(=)\\s*(.+?)?\\s*$'
     captures:
       1: name: 'variable.other.key.attribute.eno'
       2: name: 'punctuation.separator.key.attribute.eno'
@@ -80,7 +80,7 @@ repository:
   }
   escapedDictionaryEntry: {
     comment: '`name` = value'
-    match: '^\\s*(`+)\\s*((?:(?!\\1).)+)\\s*(\\1)\\s*(=)\\s*(\\S.*?)\\s*$'
+    match: '^\\s*(`+)\\s*((?:(?!\\1).)+)\\s*(\\1)\\s*(=)\\s*(.+?)?\\s*$'
     captures:
       1: name: 'punctuation.definition.string.begin.eno'
       2: name: 'variable.other.key.attribute.eno'
@@ -134,7 +134,7 @@ repository:
     captures:
       1: name: 'punctuation.definition.section.second-level.key.eno'
       2: name: 'punctuation.definition.string.begin.eno'
-      3: name: 'variable.other.section.first-level.key.eno'
+      3: name: 'variable.other.section.second-level.key.eno'
       4: name: 'punctuation.definition.string.end.eno'
       5: name: 'punctuation.separator.key.eno'
       6: name: 'variable.other.section.reference.eno'
@@ -145,7 +145,7 @@ repository:
     captures:
       1: name: 'punctuation.definition.section.third-level-plus.key.eno'
       2: name: 'punctuation.definition.string.begin.eno'
-      3: name: 'variable.other.section.first-level.key.eno'
+      3: name: 'variable.other.section.third-level-plus.key.eno'
       4: name: 'punctuation.definition.string.end.eno'
       5: name: 'punctuation.separator.key.eno'
       6: name: 'variable.other.section.reference.eno'
