@@ -718,7 +718,7 @@ module.exports = {
       [valueInstruction.lineNumber, valueInstruction.ranges.name[1]]  // .name is a temporal workaround, but not what we want. TODO
     ];
 
-    return new EnoValidationError(messageProcessed, snippet, selection);
+    throw new EnoValidationError(messageProcessed, snippet, selection);
 
     // As seen in section
     // throw new EnoValidationError(this.context, {

@@ -108,7 +108,13 @@ class EnoSection {
   }
 
   dictionary(name, ...optional) {
-    let options = { enforcePresence: this.enforcePresenceDefault };
+    let options = {
+      enforcePresence: this.enforcePresenceDefault,
+      required: true
+    };
+
+    // TODO: Consider enforcePresence vs. required for the different types,
+    //       e.g. what does it mean for dictionary? section? field? spicy details.
 
     for(let argument of optional) {
       if(typeof argument === 'object') {
@@ -119,7 +125,7 @@ class EnoSection {
     const elements = this.elementsAssociative[name];
 
     if(elements === undefined) {
-      if(options.enforcePresence) {
+      if(options.required || options.enforcePresence) {
         errors.missingDictionary(this.context, name, this);
       }
 
@@ -199,7 +205,7 @@ class EnoSection {
     const elements = this.elementsAssociative[name];
 
     if(elements === undefined) {
-      if(options.enforcePresence) {
+      if(options.required || options.enforcePresence) {
         errors.missingField(this.context, name, this.instruction);
       }
 
@@ -477,7 +483,10 @@ class EnoSection {
   }
 
   section(name, ...optional) {
-    let options = { enforcePresence: this.enforcePresenceDefault };
+    let options = {
+      enforcePresence: this.enforcePresenceDefault,
+      required: true
+    };
 
     for(let argument of optional) {
       if(typeof argument === 'object') {
@@ -488,7 +497,7 @@ class EnoSection {
     const elements = this.elementsAssociative[name];
 
     if(elements === undefined) {
-      if(options.enforcePresence) {
+      if(options.required || options.enforcePresence) {
         errors.missingSection(this.context, name, this);
       }
 
