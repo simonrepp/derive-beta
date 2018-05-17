@@ -3,12 +3,11 @@ require_relative 'lib/eno.rb'
 
 # file = '/home/simon/derive/derive-beta/eno/latest-spec/baseline.eno'
 # file = '/home/simon/derive/derive-beta/eno/latest-spec/sketchbook/complex.eno'
-file = '/home/simon/derive/derive-beta/eno/latest-spec/extended.eno'
+file = '/home/simon/derive/derive-beta/eno/latest-spec/essence_by_example.eno'
 
 input = File.read(file)
 
-tokenizer = Eno::Tokenizer.new(input)
-pp tokenizer.tokenize
+puts Eno::parse(input)
 #
 # lexer = Eno::Lexer.new(input)
 # pp lexer.run()

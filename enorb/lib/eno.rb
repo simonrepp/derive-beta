@@ -1,5 +1,7 @@
 # new track
-require_relative 'eno/tokenize.rb'
+require_relative 'eno/analyzer.rb'
+require_relative 'eno/parse.rb'
+require_relative 'eno/tokenizer.rb'
 
 # legacy track
 require_relative 'eno/errors.rb'

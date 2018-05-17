@@ -1,21 +1,25 @@
 module Eno
   class Tokenizer
-    def initialize(input)
-      @input = input
-      @char = input[0]
+    def initialize(context)
+      @input = context[:input]
+      @char = @input[0]
       @column = 1
       @line = 1
       @index = 0
       @instructions = []
+
+      context[:instructions] = @instructions
     end
 
     def append
       if @char == '|'
         @instruction[:ranges] = { append_with_newline_operator: [@column, @column + 1] }
-        @instruction[:type] = :append_with_newline
+        @instruction[:separator] = "\n"
+        @instruction[:type] = :field_append
       else
         @instruction[:ranges] = { append_with_space_operator: [@column, @column + 1] }
-        @instruction[:type] = :append_with_space
+        @instruction[:separator] = ' '
+        @instruction[:type] = :field_append
       end
 
       next!
@@ -101,6 +105,8 @@ module Eno
         block_operator: [dashes_begin, dashes_begin + @block_dashes],
         name: [name_begin, name_begin + @block_name.length]
       }
+
+      @inside_block = false
 
       return true
     end
@@ -219,6 +225,8 @@ module Eno
     end
 
     def last_token
+      whitespace
+
       begin_column = @column
       begin_index = @index
       end_column = @column
@@ -288,15 +296,31 @@ module Eno
           field
         end
       when "="
+        @instruction[:type] = :dictionary_entry
         @instruction[:ranges][:entry_operator] = [@column, @column + 1]
 
         next!
         whitespace
 
         if @char == "\n"
-          @instruction[:type] = :dictionary_entry
+          @instruction[:value] = nil
         else
-          field
+          token = last_token
+          @instruction[:value] = token[:value]
+          @instruction[:ranges][:value] = token[:range]
+        end
+      when "<"
+        @instruction[:ranges][:copy_operator] = [@column, @column + 1]
+
+        next!
+        whitespace
+        token = last_token
+
+        if token
+          @instruction[:ranges][:template] = token[:range]
+          @instruction[:template] = token[:value]
+        else
+          raise 'ERROR'
         end
       end
 
@@ -328,6 +352,8 @@ module Eno
       end
 
       whitespace
+
+      # TODO: section copy implementation
 
       case @char
       when "\n" then raise 'ERROR'
