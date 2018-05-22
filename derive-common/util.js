@@ -6,7 +6,7 @@ const fs = require('fs'),
 
 markdownIt.use(markdownItFootnote);
 
-const eno = require('../enojs/eno.js');
+const eno = require('enojs');
 
 exports.URBANIZE_ENUM = [
   '2012',

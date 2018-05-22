@@ -1,10 +1,10 @@
 const { loadEno, statFile } = require('../util.js'),
-      { EnoValidationError, EnoParseError } = require('../../enojs/eno.js'),
+      { EnoValidationError, EnoParseError } = require('enojs'),
       { validateMarkdown } = require('../validate/markdown.js');
 
-module.exports = async (data, plainPath) => {
-  const cached = data.cache.get(plainPath);
-  const stats = await statFile(data.root, plainPath);
+module.exports = async (data, enoPath) => {
+  const cached = data.cache.get(enoPath);
+  const stats = await statFile(data.root, enoPath);
 
   if(cached && stats.size === cached.stats.size && stats.mTimeMs === cached.stats.mTimeMs) {
     data.radio = cached.radio;
@@ -12,13 +12,13 @@ module.exports = async (data, plainPath) => {
     let doc;
 
     try {
-      doc = await loadEno(data.root, plainPath);
+      doc = await loadEno(data.root, enoPath);
     } catch(err) {
-      data.cache.delete(plainPath);
+      data.cache.delete(enoPath);
 
       if(err instanceof EnoParseError) {
         data.errors.push({
-          files: [{ path: plainPath, selection: err.selection }],
+          files: [{ path: enoPath, selection: err.selection }],
           message: err.text,
           snippet: err.snippet
         });
@@ -29,7 +29,7 @@ module.exports = async (data, plainPath) => {
       }
     }
 
-    const radio = { sourceFile: plainPath };
+    const radio = { sourceFile: enoPath };
 
     doc.enforcePresence(true);
 
@@ -40,11 +40,11 @@ module.exports = async (data, plainPath) => {
 
       doc.assertAllTouched();
     } catch(err) {
-      data.cache.delete(plainPath);
+      data.cache.delete(enoPath);
 
       if(err instanceof EnoValidationError) {
         data.errors.push({
-          files: [{ path: plainPath, selection: err.selection }],
+          files: [{ path: enoPath, selection: err.selection }],
           message: err.text,
           snippet: err.snippet
         });
@@ -55,7 +55,7 @@ module.exports = async (data, plainPath) => {
       }
     }
 
-    data.cache.set(plainPath, { radio: radio, stats: stats });
+    data.cache.set(enoPath, { radio: radio, stats: stats });
     data.radio = radio;
   }
 };

@@ -1,6 +1,0 @@
-{
-  "name": "benchmark",
-  "dependencies": {
-    "js-yaml": "^3.11.0"
-  }
-}

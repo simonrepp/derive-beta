@@ -1,8 +1,8 @@
-> Dies ist das Eno Handbuch - es ist selbst als Eno
-> Datei verfasst, erkennbar an der Dateiendung: ".plain".
+> Dies ist das eno Handbuch - es ist selbst als eno
+> Datei verfasst, erkennbar an der Dateiendung: ".eno".
 
 > In 5 Punkten und 5 Minuten Lesezeit erklärt dir dieses Handbuch alles was du 
-> wissen musst um jede beliebige .plain Datei verstehen und editieren zu können!
+> wissen musst um jede beliebige .eno Datei verstehen und editieren zu können!
 
 
 
@@ -19,8 +19,8 @@
 
 Temperatur: Sehr angenehm
 
-> Damit legen wir ein Schlüssel-Wert-Paar mit dem Schlüssel "Temperatur" und 
-> dem Wert "Sehr angenehm" fest, wobei der Schlüssel (in diesem Fall 
+> Damit legen wir ein Name-Wert-Paar mit dem Namen "Temperatur" und 
+> dem Wert "Sehr angenehm" fest, wobei der Name (in diesem Fall 
 > "Temperatur") stets von der Vorlage kommt, wir müssen uns immer nur mit dem 
 > Wert (in diesem Fall "Angenehm") befassen. Ein paar weitere Beispiele:
 
@@ -38,7 +38,7 @@ Mehr Informationen:
 
 
 > 3. Listen von Werten
-> Wollen wir einem Schlüssel mehrere Werte zuweisen, sieht das so aus:
+> Wollen wir einem Name mehrere Werte zuweisen, sieht das so aus:
 
 Einkaufsliste:
 - Brot
@@ -63,9 +63,9 @@ können wir beliebige Inhalte verfassen, beliebig viele Leerzeilen einbauen ...
 
 ... usw. 
 
-Mit -- teilen wir Eno mit, dass wir einen Textblock starten wollen,
+Mit -- teilen wir in eno mit, dass wir einen Textblock starten wollen,
 und der Text danach (in diesem Fall "Lange Beschreibung") ist wiederum der 
-Schlüssel der dem Wert (dem Textblock) einen Namen gibt.
+Name der dem Wert einen Kontext gibt.
 
 In der nächsten Zeile endet der Textblock!
 -- Lange Beschreibung
@@ -80,7 +80,7 @@ In der nächsten Zeile endet der Textblock!
 Telefon: +43 699 104734953
 Email: anna.schneider@anna-schneider.de
 
-> Hier werden sämtliche Schlüssel-Wert-Paare die nach dem Beginn der
+> Hier werden sämtliche Name-Wert-Paare die nach dem Beginn der
 > Untersektion "Kontaktdaten" folgen, dieser untergeordnet.
 > Man kann auch beliebige Unter-Unter-usw.-sektionen definieren:
 
@@ -98,7 +98,7 @@ Mobil: +43 699 104734953
 Festnetz: +43 1 0468648
 Mobil: +43 699 104734953
 
-> Und damit weisst du auch schon alles was du brauchst um beliebige Eno
+> Und damit weisst du auch schon alles was du brauchst um beliebige eno
 > Dateien zu editieren! Zum Abschluss noch einmal eine Demonstration, die
 > alle der oben erklärten Möglichkeiten kombiniert.
 
@@ -114,7 +114,7 @@ Hobbys:
 - Reiten
 
 -- Zitat
-Ich habe mir das Eno Handbuch durchgelesen, alles war sehr schlüssig,
+Ich habe mir das eno Handbuch durchgelesen, alles war sehr schlüssig,
 bis auf diesen sinnfreien Beispieltext hier.
 -- Zitat
 

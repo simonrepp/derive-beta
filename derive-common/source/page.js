@@ -1,26 +1,26 @@
 const { loadEno, statFile, URBANIZE_ENUM } = require('../util.js'),
-      { EnoValidationError, EnoParseError } = require('../../enojs/eno.js'),
+      { EnoValidationError, EnoParseError } = require('enojs'),
       validateEnum = require('../validate/enum.js'),
       { validateMarkdownWithMedia } = require('../validate/markdown.js'),
       validatePermalink = require('../validate/permalink.js');
 
-module.exports = async (data, plainPath) => {
-  const cached = data.cache.get(plainPath);
-  const stats = await statFile(data.root, plainPath);
+module.exports = async (data, enoPath) => {
+  const cached = data.cache.get(enoPath);
+  const stats = await statFile(data.root, enoPath);
 
   if(cached && stats.size === cached.stats.size && stats.mTimeMs === cached.stats.mTimeMs) {
-    data.pages.set(plainPath, cached.page);
+    data.pages.set(enoPath, cached.page);
   } else {
     let doc;
 
     try {
-      doc = await loadEno(data.root, plainPath);
+      doc = await loadEno(data.root, enoPath);
     } catch(err) {
-      data.cache.delete(plainPath);
+      data.cache.delete(enoPath);
 
       if(err instanceof EnoParseError) {
         data.warnings.push({
-          files: [{ path: plainPath, selection: err.selection }],
+          files: [{ path: enoPath, selection: err.selection }],
           message: err.text,
           snippet: err.snippet
         });
@@ -32,8 +32,8 @@ module.exports = async (data, plainPath) => {
     }
 
     const page = {
-      draft: plainPath.match(/\.entwurf\.plain$/),
-      sourceFile: plainPath
+      draft: enoPath.match(/\.entwurf\.eno$/),
+      sourceFile: enoPath
     };
 
     doc.enforcePresence(true);
@@ -50,11 +50,11 @@ module.exports = async (data, plainPath) => {
 
       doc.assertAllTouched();
     } catch(err) {
-      data.cache.delete(plainPath);
+      data.cache.delete(enoPath);
 
       if(err instanceof EnoValidationError) {
         data.warnings.push({
-          files: [{ path: plainPath, selection: err.selection }],
+          files: [{ path: enoPath, selection: err.selection }],
           message: err.text,
           snippet: err.snippet
         });
@@ -65,7 +65,7 @@ module.exports = async (data, plainPath) => {
       }
     }
 
-    data.cache.set(plainPath, { page: page, stats: stats });
-    data.pages.set(plainPath, page);
+    data.cache.set(enoPath, { page: page, stats: stats });
+    data.pages.set(enoPath, page);
   }
 };

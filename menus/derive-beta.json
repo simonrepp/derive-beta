@@ -95,7 +95,7 @@
             },
             {
               "label": "Eno Handbuch",
-              "command": "derive-beta:plain-reference"
+              "command": "derive-beta:eno-reference"
             },
             {
               "type": "separator"

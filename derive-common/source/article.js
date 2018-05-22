@@ -1,5 +1,5 @@
 const { loadEno, statFile, URBANIZE_ENUM } = require('../util.js'),
-      { EnoValidationError, EnoParseError } = require('../../enojs/eno.js'),
+      { EnoValidationError, EnoParseError } = require('enojs'),
       validateBoolean = require('../validate/boolean.js'),
       validateDate = require('../validate/date.js'),
       validateEnum = require('../validate/enum.js'),
@@ -8,23 +8,23 @@ const { loadEno, statFile, URBANIZE_ENUM } = require('../util.js'),
       validatePath = require('../validate/path.js'),
       validatePermalink = require('../validate/permalink.js');
 
-module.exports = async (data, plainPath) => {
-  const cached = data.cache.get(plainPath);
-  const stats = await statFile(data.root, plainPath);
+module.exports = async (data, enoPath) => {
+  const cached = data.cache.get(enoPath);
+  const stats = await statFile(data.root, enoPath);
 
   if(cached && stats.size === cached.stats.size && stats.mTimeMs === cached.stats.mTimeMs) {
-    data.articles.set(plainPath, cached.article);
+    data.articles.set(enoPath, cached.article);
   } else {
     let doc;
 
     try {
-      doc = await loadEno(data.root, plainPath);
+      doc = await loadEno(data.root, enoPath);
     } catch(err) {
-      data.cache.delete(plainPath);
+      data.cache.delete(enoPath);
 
       if(err instanceof EnoParseError) {
         data.warnings.push({
-          files: [{ path: plainPath, selection: err.selection }],
+          files: [{ path: enoPath, selection: err.selection }],
           message: err.text,
           snippet: err.snippet
         });
@@ -36,8 +36,8 @@ module.exports = async (data, plainPath) => {
     }
 
     const article = {
-      draft: plainPath.match(/\.entwurf\.plain$/),
-      sourceFile: plainPath
+      draft: enoPath.match(/\.entwurf\.eno$/),
+      sourceFile: enoPath
     };
 
     doc.enforcePresence(true);
@@ -67,11 +67,11 @@ module.exports = async (data, plainPath) => {
 
       doc.assertAllTouched();
     } catch(err) {
-      data.cache.delete(plainPath);
+      data.cache.delete(enoPath);
 
       if(err instanceof EnoValidationError) {
         data.warnings.push({
-          files: [{ path: plainPath, selection: err.selection }],
+          files: [{ path: enoPath, selection: err.selection }],
           message: err.text,
           snippet: err.snippet
         });
@@ -82,7 +82,7 @@ module.exports = async (data, plainPath) => {
       }
     }
 
-    data.cache.set(plainPath, { article: article, stats: stats });
-    data.articles.set(plainPath, article);
+    data.cache.set(enoPath, { article: article, stats: stats });
+    data.articles.set(enoPath, article);
   }
 };

@@ -38,13 +38,13 @@ module.exports = async data => {
         message: 'Im Namen der Datei bzw. des Ordners wurde eines der nicht erlaubten Zeichen  / \\ ? * : | " < > vorgefunden; Die nicht erlaubten Zeichen sollten entfernt bzw. durch Leerzeichen oder alternative Zeichen wie "_" oder "-" ersetzt werden.',
       });
 
-    } else if(path.extname(normalizedPath) === '.plain') {
+    } else if(path.extname(normalizedPath) === '.eno') {
 
-      if(normalizedPath === 'Festival/Festival.plain') {
+      if(normalizedPath === 'Festival/Festival.eno') {
 
         await sourceFestival(data, localFilesystemPath);
 
-      } else if(normalizedPath === 'Radio/Radio.plain') {
+      } else if(normalizedPath === 'Radio/Radio.eno') {
 
         await sourceRadio(data, localFilesystemPath);
 

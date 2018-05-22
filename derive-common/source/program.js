@@ -1,27 +1,27 @@
 const { loadEno, statFile } = require('../util.js'),
-      { EnoValidationError, EnoParseError } = require('../../enojs/eno.js'),
+      { EnoValidationError, EnoParseError } = require('enojs'),
       validateDate = require('../validate/date.js'),
       { validateMarkdown, validateMarkdownWithMedia } = require('../validate/markdown.js'),
       validatePath = require('../validate/path.js'),
       validatePermalink = require('../validate/permalink.js');
 
-module.exports = async (data, plainPath) => {
-  const cached = data.cache.get(plainPath);
-  const stats = await statFile(data.root, plainPath);
+module.exports = async (data, enoPath) => {
+  const cached = data.cache.get(enoPath);
+  const stats = await statFile(data.root, enoPath);
 
   if(cached && stats.size === cached.stats.size && stats.mTimeMs === cached.stats.mTimeMs) {
-    data.programs.set(plainPath, cached.program);
+    data.programs.set(enoPath, cached.program);
   } else {
     let doc;
 
     try {
-      doc = await loadEno(data.root, plainPath);
+      doc = await loadEno(data.root, enoPath);
     } catch(err) {
-      data.cache.delete(plainPath);
+      data.cache.delete(enoPath);
 
       if(err instanceof EnoParseError) {
         data.warnings.push({
-          files: [{ path: plainPath, selection: err.selection }],
+          files: [{ path: enoPath, selection: err.selection }],
           message: err.text,
           snippet: err.snippet
         });
@@ -33,8 +33,8 @@ module.exports = async (data, plainPath) => {
     }
 
     const program = {
-      draft: plainPath.match(/\.entwurf\.plain$/),
-      sourceFile: plainPath
+      draft: enoPath.match(/\.entwurf\.eno$/),
+      sourceFile: enoPath
     };
 
     doc.enforcePresence(true);
@@ -59,11 +59,11 @@ module.exports = async (data, plainPath) => {
 
       doc.assertAllTouched();
     } catch(err) {
-      data.cache.delete(plainPath);
+      data.cache.delete(enoPath);
 
       if(err instanceof EnoValidationError) {
         data.warnings.push({
-          files: [{ path: plainPath, selection: err.selection }],
+          files: [{ path: enoPath, selection: err.selection }],
           message: err.text,
           snippet: err.snippet
         });
@@ -74,7 +74,7 @@ module.exports = async (data, plainPath) => {
       }
     }
 
-    data.cache.set(plainPath, { program: program, stats: stats });
-    data.programs.set(plainPath, program);
+    data.cache.set(enoPath, { program: program, stats: stats });
+    data.programs.set(enoPath, program);
   }
 };
