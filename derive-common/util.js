@@ -38,7 +38,7 @@ exports.loadEno = (directory, enoPath) => new Promise((resolve, reject) =>
       reject(err);
     } else {
       try {
-        resolve( eno.parse(content, 'de') );
+        resolve( eno.parse(content, { locale: 'de' }) );
       } catch(err) {
         reject(err);
       }
