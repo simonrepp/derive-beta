@@ -17,7 +17,7 @@
     }
   },
   "dependencies": {
-    "enojs": "^0.4.2",
+    "enojs": "^0.4.4",
     "fs-extra": "^6.0.1",
     "glob": "^7.1.2",
     "http-server": "^0.11.1",
