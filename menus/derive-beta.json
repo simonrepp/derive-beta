@@ -94,7 +94,7 @@
               "command": "derive-beta:markdown-reference"
             },
             {
-              "label": "Eno Handbuch",
+              "label": "eno Website",
               "command": "derive-beta:eno-reference"
             },
             {

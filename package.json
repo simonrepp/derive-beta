@@ -1,22 +1,7 @@
 {
-  "name": "derive-beta",
-  "main": "./lib/main",
-  "version": "1.7.3",
-  "description": "Derive Publishing Plugin Prototyp",
-  "repository": "https://github.com/simonrepp/derive-beta",
   "author": "Simon Repp <simon@fdpl.io> (https://simonrepp.com)",
-  "license": "MIT",
-  "engines": {
-    "atom": ">=1.15.0 <2.0.0"
-  },
-  "providedServices": {
-    "autocomplete.provider": {
-      "versions": {
-        "2.0.0": "getProvider"
-      }
-    }
-  },
   "dependencies": {
+    "atom-package-deps": "^4.6.2",
     "enojs": "^0.4.6",
     "fs-extra": "^6.0.1",
     "glob": "^7.1.2",
@@ -29,5 +14,25 @@
     "speakingurl": "^14.0.1",
     "striptags": "^3.1.1",
     "uglify-es": "^3.3.9"
-  }
+  },
+  "description": "dérive Atom Plugin Beta",
+  "engines": {
+    "atom": ">=1.15.0 <2.0.0"
+  },
+  "license": "MIT",
+  "main": "./lib/main",
+  "name": "derive-beta",
+  "package-deps": ["language-eno:0.1.0"],
+  "providedServices": {
+    "autocomplete.provider": {
+      "versions": {
+        "2.0.0": "getProvider"
+      }
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/simonrepp/derive-beta.git"
+  },
+  "version": "1.7.3"
 }
