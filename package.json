@@ -23,7 +23,7 @@
   "main": "./lib/main",
   "name": "derive-beta",
   "package-deps": [
-    "language-eno:0.1.0"
+    "language-eno:0.2.0"
   ],
   "providedServices": {
     "autocomplete.provider": {
