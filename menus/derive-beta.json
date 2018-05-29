@@ -20,7 +20,7 @@
         },
         {
           "label": "Neues Buch",
-          "command": "derive-beta:new-player"
+          "command": "derive-beta:new-book"
         },
         {
           "label": "Neues Feature",
