@@ -11,6 +11,13 @@
           "type": "separator"
         },
         {
+          "label": "Pfad zu Mediendatei einfügen",
+          "command": "derive-beta:insert-media"
+        },
+        {
+          "type": "separator"
+        },
+        {
           "label": "Neuer Artikel",
           "command": "derive-beta:new-article"
         },
