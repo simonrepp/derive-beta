@@ -1,3 +1,3 @@
 # derive-beta
 
-dérive Publishing Plugin **Prototyp**.
+dérive Atom Plugin Beta
