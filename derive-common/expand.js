@@ -105,11 +105,12 @@ const paginateAuthors = data => {
   }
 
   for(let author of data.authors) {
-    const firstLetter = author.name.charAt(0)
-                                   .normalize('NFD')
-                                   .replace(/[\u0300-\u036f]/g, '')
-                                   .toUpperCase()
-                                   .replace('Ł', 'L');
+    const relevantName = author.lastName || author.name;
+    const firstLetter = relevantName.charAt(0)
+                                    .normalize('NFD')
+                                    .replace(/[\u0300-\u036f]/g, '')
+                                    .toUpperCase()
+                                    .replace('Ł', 'L');
 
     let pagination = paginations.get(firstLetter);
     if(!pagination) {
