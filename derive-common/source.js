@@ -13,6 +13,7 @@ const { globFiles } = require('./util.js'),
       sourceRadio = require('./source/radio.js');
 
 const forbiddenFilenameCharacters = /[\\?*:|"<>]/;
+const noExtension = /[^.]{8,}\s*$/;
 
 module.exports = async data => {
   data.articles.clear();
@@ -31,7 +32,14 @@ module.exports = async data => {
   for(let localFilesystemPath of globPaths) {
     const normalizedPath = localFilesystemPath.normalize();
 
-    if(normalizedPath.match(forbiddenFilenameCharacters)) {
+    if(normalizedPath.match(noExtension)) {
+
+      data.warnings.push({
+        files: [{ path: localFilesystemPath }],
+        message: `Die Datei ${normalizedPath} hat keine Dateiendung.`,
+      });
+
+    } else if(normalizedPath.match(forbiddenFilenameCharacters)) {
 
       data.warnings.push({
         files: [{ path: localFilesystemPath }],
