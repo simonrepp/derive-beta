@@ -47,8 +47,8 @@ module.exports = async (data, enoPath) => {
       player.permalink = permalink.value;
       player.permalinkTrace = permalink.trace;
 
-      player.firstName = doc.field('Vorname', { enforcePresence: false });
-      player.lastName = doc.field('Nachname', { enforcePresence: false });
+      player.firstName = doc.field('Vorname');
+      player.lastName = doc.field('Nachname');
       player.country = doc.field('Land');
       player.city = doc.field('Stadt');
       player.tagsDisconnected = doc.list('Tags');
