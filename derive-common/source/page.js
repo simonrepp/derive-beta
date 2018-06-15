@@ -36,14 +36,14 @@ module.exports = async (data, enoPath) => {
       sourceFile: enoPath
     };
 
-    doc.enforcePresence(true);
+    doc.enforceAllElements();
 
     try {
       page.title = doc.field('Titel', { required: true });
 
-      const permalink = doc.field('Permalink', validatePermalink, { required: true, withTrace: true });
+      const permalink = doc.field('Permalink', validatePermalink, { required: true, withElement: true });
       page.permalink = permalink.value;
-      page.permalinkTrace = permalink.trace;
+      page.permalinkElement = permalink.element;
 
       page.urbanize = doc.field('Urbanize', validateEnum(URBANIZE_ENUM));
       page.text = doc.field('Text', validateMarkdownWithMedia);

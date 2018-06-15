@@ -31,12 +31,12 @@ module.exports = async (data, enoPath) => {
 
     const radio = { sourceFile: enoPath };
 
-    doc.enforcePresence(true);
+    doc.enforceAllElements();
 
     try {
       radio.title = doc.field('Titel', { required: true });
       radio.info = doc.field('Allgemeine Info', validateMarkdown, { required: true });
-      radio.editorReferences = doc.list('Redaktion', { withTrace: true });
+      radio.editorReferences = doc.list('Redaktion', { withElements: true });
 
       doc.assertAllTouched();
     } catch(err) {

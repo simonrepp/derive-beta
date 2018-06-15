@@ -39,19 +39,19 @@ module.exports = async (data, enoPath) => {
       sourceFile: enoPath
     };
 
-    doc.enforcePresence(true);
+    doc.enforceAllElements();
 
     try {
       event.title = doc.field('Titel', { required: true });
 
-      const permalink = doc.field('Permalink', validatePermalink, { required: true, withTrace: true });
+      const permalink = doc.field('Permalink', validatePermalink, { required: true, withElement: true });
       event.permalink = permalink.value;
-      event.permalinkTrace = permalink.trace;
+      event.permalinkElement = permalink.element;
 
       event.subtitle = doc.field('Untertitel');
       event.url = doc.field('URL', validateAbsoluteUrl);
-      event.hostReferences = doc.list('Veranstalter', { withTrace: true });
-      event.participantReferences = doc.list('Teilnehmer', { withTrace: true });
+      event.hostReferences = doc.list('Veranstalter', { withElements: true });
+      event.participantReferences = doc.list('Teilnehmer', { withElements: true });
       event.categoriesDisconnected = doc.list('Kategorien');
       event.tagsDisconnected = doc.list('Tags');
       event.image = doc.field('Bild', validatePath);

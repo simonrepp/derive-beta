@@ -38,12 +38,12 @@ module.exports = async (data, enoPath) => {
       sourceFile: enoPath
     };
 
-    doc.enforcePresence(true);
+    doc.enforceAllElements();
 
     try {
-      const number = doc.field('Nummer', validateInteger, { required: true, withTrace: true });
+      const number = doc.field('Nummer', validateInteger, { required: true, withElement: true });
       issue.number = number.value;
-      issue.numberTrace = number.trace;
+      issue.numberElement = number.element;
 
       issue.title = doc.field('Titel', { required: true });
       issue.year = doc.field('Jahr', validateInteger, { required: true });
@@ -60,12 +60,12 @@ module.exports = async (data, enoPath) => {
       issue.sections = doc.sections('Rubrik').map(section => ({
         title: section.field('Titel', { required: true }),
         articleReferences: section.sections('Artikel').map(reference => {
-          const title = reference.field('Titel', { required: true, withTrace: true });
+          const title = reference.field('Titel', { required: true, withElement: true });
 
           return {
             pages: reference.field('Seite(n)', { required: true }),
             title: title.value,
-            titleTrace: title.trace
+            titleElement: title.element
           };
         })
       }));

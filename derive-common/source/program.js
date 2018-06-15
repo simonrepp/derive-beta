@@ -37,20 +37,20 @@ module.exports = async (data, enoPath) => {
       sourceFile: enoPath
     };
 
-    doc.enforcePresence(true);
+    doc.enforceAllElements();
 
     try {
       program.title = doc.field('Titel', { required: true });
 
-      const permalink = doc.field('Permalink', validatePermalink, { required: true, withTrace: true });
+      const permalink = doc.field('Permalink', validatePermalink, { required: true, withElement: true });
       program.permalink = permalink.value;
-      program.permalinkTrace = permalink.trace;
+      program.permalinkElement = permalink.element;
 
       program.firstBroadcast = doc.field('Erstausstrahlung', validateDate, { required: true });
       program.subtitle = doc.field('Untertitel');
       program.image = doc.field('Bild', validatePath);
       program.soundfile = doc.field('Soundfile', validatePath);
-      program.editorReferences = doc.list('Redaktion', { withTrace: true });
+      program.editorReferences = doc.list('Redaktion', { withElements: true });
       program.language = doc.field('Sprache');
       program.categoriesDisconnected = doc.list('Kategorien');
       program.tagsDisconnected = doc.list('Tags');

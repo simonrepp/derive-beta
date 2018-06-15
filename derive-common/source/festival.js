@@ -33,7 +33,7 @@ module.exports = async (data, enoPath) => {
 
     const festival = { sourceFile: enoPath };
 
-    doc.enforcePresence(true);
+    doc.enforceAllElements();
 
     try {
       festival.title = doc.field('Titel', { required: true });

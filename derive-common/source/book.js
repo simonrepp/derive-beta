@@ -38,16 +38,16 @@ module.exports = async (data, enoPath) => {
       sourceFile: enoPath
     };
 
-    doc.enforcePresence(true);
+    doc.enforceAllElements();
 
     try {
-      const title = doc.field('Titel', { required: true, withTrace: true });
+      const title = doc.field('Titel', { required: true, withElement: true });
       book.title = title.value;
-      book.titleTrace = title.trace;
+      book.titleElement = title.element;
 
-      const permalink = doc.field('Permalink', validatePermalink, { required: true, withTrace: true });
+      const permalink = doc.field('Permalink', validatePermalink, { required: true, withElement: true });
       book.permalink = permalink.value;
-      book.permalinkTrace = permalink.trace;
+      book.permalinkElement = permalink.element;
 
       book.yearOfPublication = doc.field('Erscheinungsjahr', validateInteger, { required: true });
       book.isxn = doc.field('ISBN/ISSN');
@@ -55,8 +55,8 @@ module.exports = async (data, enoPath) => {
       book.placeOfPublication = doc.field('Erscheinungsort');
       book.numberOfPages = doc.field('Seitenanzahl', validateInteger);
       book.price = doc.field('Preis');
-      book.authorReferences = doc.list('Autoren/Herausgeber', { withTrace: true });
-      book.publisherReferences = doc.list('Verleger', { withTrace: true });
+      book.authorReferences = doc.list('Autoren/Herausgeber', { withElements: true });
+      book.publisherReferences = doc.list('Verleger', { withElements: true });
       book.tagsDisconnected = doc.list('Tags');
       book.cover = doc.field('Cover', validatePath);
       book.description = doc.field('Verlagstext', validateMarkdown);

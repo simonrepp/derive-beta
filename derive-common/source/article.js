@@ -40,25 +40,25 @@ module.exports = async (data, enoPath) => {
       sourceFile: enoPath
     };
 
-    doc.enforcePresence(true);
+    doc.enforceAllElements();
 
     try {
-      const title = doc.field('Titel', { required: true, withTrace: true });
+      const title = doc.field('Titel', { required: true, withElement: true });
       article.title = title.value;
-      article.titleTrace = title.trace;
+      article.titleElement = title.element;
 
-      const permalink = doc.field('Permalink', validatePermalink, { required: true, withTrace: true });
+      const permalink = doc.field('Permalink', validatePermalink, { required: true, withElement: true });
       article.permalink = permalink.value;
-      article.permalinkTrace = permalink.trace;
+      article.permalinkElement = permalink.element;
 
       article.subtitle = doc.field('Untertitel');
       article.image = doc.field('Bild', validatePath);
-      article.authorReferences = doc.list('Autoren', { withTrace: true });
+      article.authorReferences = doc.list('Autoren', { withElements: true });
       article.date = doc.field('Datum');
       article.language = doc.field('Sprache');
       article.categoriesDisconnected = doc.list('Kategorien');
       article.tagsDisconnected = doc.list('Tags');
-      article.reviewedBookReferences = doc.list('Buchbesprechungen', { withTrace: true });
+      article.reviewedBookReferences = doc.list('Buchbesprechungen', { withElements: true });
       article.readable = doc.field('Lesbar', validateBoolean);
       article.urbanize = doc.field('Urbanize', validateEnum(URBANIZE_ENUM));
       article.abstract = doc.field('Abstract', validateMarkdown);

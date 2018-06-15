@@ -1,7 +1,7 @@
 const connectBookReviews = data => {
   data.articles.forEach(article => {
     article.reviewedBooks = [];
-    article.reviewedBookReferences.forEach(({ trace, value }) => {
+    article.reviewedBookReferences.forEach(({ element, value }) => {
       const book = data.booksByTitle.get(value);
 
       if(book) {
@@ -10,7 +10,7 @@ const connectBookReviews = data => {
           book.reviews.push(document);
         }
       } else {
-        const error = trace.getError(`Im Artikel "${article.title}" wird das Buch "${value}" besprochen, allerdings wurde kein Buch mit diesem Titel gefunden.`);
+        const error = element.error(`Im Artikel "${article.title}" wird das Buch "${value}" besprochen, allerdings wurde kein Buch mit diesem Titel gefunden.`);
 
         data.warnings.push({
           files: [{ path: article.sourceFile, selection: error.selection }],
@@ -25,7 +25,7 @@ const connectBookReviews = data => {
 const connectPlayers = (data, collection, referencesField, instancesField, backReferenceField) => {
   data[collection].forEach(document => {
     document[instancesField] = [];
-    document[referencesField].forEach(({ trace, value }) => {
+    document[referencesField].forEach(({ element, value }) => {
       const instance = data.playersByName.get(value);
 
       if(instance) {
@@ -34,7 +34,7 @@ const connectPlayers = (data, collection, referencesField, instancesField, backR
           instance[backReferenceField].push(document);
         }
       } else {
-        const error = trace.getError(`Im Feld "${trace.name}" wird die AkteurIn "${value}" angegeben, es wurde aber keine AkteurIn mit diesem Namen gefunden.`);
+        const error = element.error(`Im Feld "${element.name}" wird die AkteurIn "${value}" angegeben, es wurde aber keine AkteurIn mit diesem Namen gefunden.`);
 
         data.warnings.push({
           files: [{ path: document.sourceFile, selection: error.selection }],
@@ -83,7 +83,7 @@ const connectIssuesWithArticles = data => {
             article.inIssueOnPages = article.pages;
           }
         } else {
-          const error = reference.titleTrace.getError(`In Zeitschrift N° ${issue.number} wird in der Rubrik "${section.title}" der Artikel "${reference.title}" referenziert, es wurde aber kein Artikel mit diesem Titel gefunden.`);
+          const error = reference.titleElement.error(`In Zeitschrift N° ${issue.number} wird in der Rubrik "${section.title}" der Artikel "${reference.title}" referenziert, es wurde aber kein Artikel mit diesem Titel gefunden.`);
 
           data.warnings.push({
             files: [{ path: issue.sourceFile, selection: error.selection }],
@@ -99,7 +99,7 @@ const connectIssuesWithArticles = data => {
 const connectRadioEditors = data => {
   if(data.radio) {
     data.radio.editors = [];
-    data.radio.editorReferences.forEach(({ trace, value }) => {
+    data.radio.editorReferences.forEach(({ element, value }) => {
       const player = data.playersByName.get(value);
 
       if(player) {
@@ -107,7 +107,7 @@ const connectRadioEditors = data => {
           data.radio.editors.push(player);
         }
       } else {
-        const error = trace.getError(({ value }) => `Die AkteurIn "${value}", angegeben als Teil der allgemeinen Radio Redaktion, wurde nicht gefunden.`);
+        const error = element.error(`Die AkteurIn "${value}", angegeben als Teil der allgemeinen Radio Redaktion, wurde nicht gefunden.`);
 
         data.errors.push({
           files: [{ path: data.radio.sourceFile, selection: error.selection }],

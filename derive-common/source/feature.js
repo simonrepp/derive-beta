@@ -38,7 +38,7 @@ module.exports = async (data, enoPath) => {
       sourceFile: enoPath
     };
 
-    doc.enforcePresence(true);
+    doc.enforceAllElements();
 
     try {
       feature.title = doc.field('Titel', { required: true });

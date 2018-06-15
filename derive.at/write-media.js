@@ -2,8 +2,6 @@ const fsExtra = require('fs-extra'),
       path = require('path'),
       sharp = require('sharp');
 
-// TODO: Rewrite .tiff images to .png, etc. (correction: batch convert them and then ban them)
-
 module.exports = async (data, preview) => {
 
   const copy = (fromRelative, toRelative) => {

@@ -36,16 +36,16 @@ module.exports = async (data, enoPath) => {
       sourceFile: enoPath
     };
 
-    doc.enforcePresence(true);
+    doc.enforceAllElements();
 
     try {
-      const name = doc.field('Name', { required: true, withTrace: true });
+      const name = doc.field('Name', { required: true, withElement: true });
       player.name = name.value;
-      player.nameTrace = name.trace;
+      player.nameElement = name.element;
 
-      const permalink = doc.field('Permalink', validatePermalink, { required: true, withTrace: true });
+      const permalink = doc.field('Permalink', validatePermalink, { required: true, withElement: true });
       player.permalink = permalink.value;
-      player.permalinkTrace = permalink.trace;
+      player.permalinkElement = permalink.element;
 
       player.firstName = doc.field('Vorname');
       player.lastName = doc.field('Nachname');
