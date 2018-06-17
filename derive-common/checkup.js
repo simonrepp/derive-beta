@@ -19,7 +19,7 @@ module.exports = data => {
     if(!media.used) {
       data.warnings.push({
         files: [{ path: media.localFilesystemPath }],
-        message: `Die Mediendatei ${media.localFilesystemPath} wird in keinerlei Texten oder Dateifeldern genutzt - dies kann ein Hinweis darauf sein, dass der Pfad zu der Datei in einem Markdown oder Dateifeld inkorrekt ist. Falls ein Dokument dass diese Mediendatei referenziert einen Fehler enhält, erscheint die Mediendatei für das System allerdings auch (in diesem Fall fälschlich) als ungenutzt.`
+        message: `Die Mediendatei ${media.localFilesystemPath} wird in keinerlei Texten oder Dateifeldern genutzt.<br/><br/>Dies kann ein Hinweis darauf sein, dass der Pfad zu der Datei in einem Markdown oder Dateifeld inkorrekt ist. Falls ein Dokument dass diese Mediendatei referenziert einen Fehler enhält, erscheint die Mediendatei für das System allerdings auch (in diesem Fall fälschlich) als ungenutzt.`
       });
     }
   });
