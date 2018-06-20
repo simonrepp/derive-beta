@@ -49,7 +49,7 @@ module.exports = async (data, enoPath) => {
       issue.year = doc.field('Jahr', validateInteger, { required: true });
       issue.quarter = doc.field('Quartal', validateInteger, { required: true });
       issue.cover = doc.field('Cover', validatePath, { required: true });
-      issue.shopLink = doc.field('Link zum Shop');
+      issue.shopLink = doc.field('Link zum Shop', { required: true });
       issue.cooperation = doc.field('Kooperation');
       issue.features = doc.list('Schwerpunkte');
       issue.outOfPrint = doc.field('Vergriffen', validateBoolean);

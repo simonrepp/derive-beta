@@ -2,15 +2,15 @@
   "author": "Simon Repp <simon@fdpl.io> (https://simonrepp.com)",
   "dependencies": {
     "atom-package-deps": "^4.6.2",
-    "enojs": "^0.10.1",
+    "enojs": "^0.10.4",
     "fs-extra": "^6.0.1",
     "glob": "^7.1.2",
     "http-server": "^0.11.1",
     "markdown-it": "^8.4.1",
     "markdown-it-footnote": "^3.0.1",
     "moment": "^2.22.2",
-    "sass": "^1.6.1",
-    "sharp": "^0.20.3",
+    "sass": "^1.6.2",
+    "sharp": "^0.20.4",
     "speakingurl": "^14.0.1",
     "striptags": "^3.1.1",
     "uglify-es": "^3.3.9"
