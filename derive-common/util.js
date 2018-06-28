@@ -1,8 +1,9 @@
-const fs = require('fs'),
-      glob = require('glob'),
-      markdownIt = require('markdown-it')({ html: true }),
-      markdownItFootnote = require('markdown-it-footnote'),
-      path = require('path');
+const fs = require('fs');
+const glob = require('glob');
+const markdownIt = require('markdown-it')({ html: true });
+const markdownItFootnote = require('markdown-it-footnote');
+const path = require('path');
+const striptags = require('striptags');
 
 markdownIt.use(markdownItFootnote);
 
@@ -55,6 +56,16 @@ exports.renderMarkdown = markdown => {
 exports.statFile = (directory, filePath) => new Promise((resolve, reject) =>
   fs.stat(path.join(directory, filePath), (err, stat) => err ? reject(err) : resolve(stat))
 );
+
+exports.stripAndTruncateHtml = (html, length) => {
+  const stripped = striptags(html);
+
+  if(stripped.length > length) {
+    return stripped.substr(0, length - 3) + '...';
+  } else {
+    return stripped;
+  }
+};
 
 exports.writeFile = (directory, filePath, content) => new Promise((resolve, reject) =>
   fs.writeFile(path.join(directory, filePath), content, err => err ? reject(err) : resolve())
