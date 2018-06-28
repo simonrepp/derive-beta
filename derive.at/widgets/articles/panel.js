@@ -1,5 +1,6 @@
-const authors = require('../authors.js'),
-      tags = require('../tags.js');
+const authors = require('../authors.js');
+const tags = require('../tags.js');
+const { stripAndTruncateHtml } = require('../../../derive-common/util.js');
 
 const infoDetails = article => `
   <strong>Autor*innen</strong><br/>

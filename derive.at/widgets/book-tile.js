@@ -11,14 +11,14 @@ module.exports = book => `
       </a>
     </div>
 
-    <div class="book_tile_split">
-      <div class="book_tile_split__cover">
+    <div class="tile_image_split">
+      <div class="tile_image_split__image">
         ${book.cover ? `
           <img src="${book.cover.written}" />
         `:''}
       </div>
 
-      <div class="book_tile_split__meta">
+      <div class="tile_image_split__meta">
         ${authors(book.authors)}
 
         <div class="generic__margin-vertical">
