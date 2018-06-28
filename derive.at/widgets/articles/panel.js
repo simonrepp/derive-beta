@@ -63,7 +63,7 @@ module.exports = article => `
     </div>
 
     <div class="article-panel__abstract">
-      ${article.abstract ? article.abstract.converted : ''}
+      ${article.abstract ? article.abstract.converted : (article.text ? stripAndTruncateHtml(article.text.converted, 250) : '')}
     </div>
   </div>
 `;

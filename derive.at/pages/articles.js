@@ -1,10 +1,12 @@
 const moment = require('moment');
 
-const authors = require('../widgets/authors.js'),
-      { fullIssueTitle } = require('../widgets/issues/labeling.js'),
-      layout = require('./layout.js'),
-      panel = require('../widgets/articles/panel.js'),
-      tags = require('../widgets/tags.js');
+const authors = require('../widgets/authors.js');
+const layout = require('./layout.js');
+const panel = require('../widgets/articles/panel.js');
+const tags = require('../widgets/tags.js');
+
+const { fullIssueTitle } = require('../widgets/issues/labeling.js');
+const { stripAndTruncateHtml } = require('../../derive-common/util.js');
 
 module.exports = (data, pagination) => {
   const { articles, featured } = pagination;
@@ -33,7 +35,7 @@ module.exports = (data, pagination) => {
 
         ${featured.issue ? fullIssueTitle(featured.issue) : ''}<br/><br/>
 
-        ${featured.abstract ? featured.abstract.converted : ''}
+        ${featured.abstract ? featured.abstract.converted : (featured.text ? stripAndTruncateHtml(featured.text.converted, 250) : '')}
 
         ${tags(featured.tags)}
 

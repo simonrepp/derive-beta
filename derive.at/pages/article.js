@@ -1,7 +1,9 @@
-const authors = require('../widgets/authors.js'),
-      layout = require('./layout.js'),
-      share = require('../widgets/share.js'),
-      tags = require('../widgets/tags.js');
+const authors = require('../widgets/authors.js');
+const layout = require('./layout.js');
+const share = require('../widgets/share.js');
+const tags = require('../widgets/tags.js');
+
+const { stripAndTruncateHtml } = require('../../derive-common/util.js');
 
 module.exports = (data, article) => {
   const html = `
@@ -39,6 +41,10 @@ module.exports = (data, article) => {
 
       ${article.text ? article.text.written : 'Kein Text vorhanden'}
     `:`
+      ${article.abstract ? article.abstract.converted : (article.text ? stripAndTruncateHtml(article.text.converted, 250) : '')}
+
+      <br/><br/>
+
       Die Zeitschrift mit dem gesamten Artikel kann online im Shop erworben werden!
     `}
 
