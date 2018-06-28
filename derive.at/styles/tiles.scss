@@ -48,3 +48,32 @@
     display: block;
   }
 }
+
+.tile_header {
+  font-family: "FunctionPro-Medium";
+  font-size: 1.65em;
+  word-wrap: break-word;
+
+  a {
+    text-decoration: none;
+  }
+
+  a:hover {
+    border-bottom: 1px solid #000;
+  }
+
+  margin-bottom: 1em;
+}
+
+.tile_image_split {
+  display: flex;
+  justify-content: space-between;
+}
+
+.tile_image_split__image {
+  width: 30%;
+}
+
+.tile_image_split__meta {
+  width: 65%;
+}

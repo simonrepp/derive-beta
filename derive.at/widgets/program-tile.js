@@ -3,22 +3,32 @@ const editors = require('../widgets/editors.js'),
 
 module.exports = program => `
   <div class="tile">
-    <h1>
+    <div class="tile_header">
       <a href="/radio/${program.permalink}/">
         ${program.title}
       </a>
-    </h1>
+    </div>
 
-    ${program.subtitle ? `
-      <h2>
-        <a href="/radio/${program.permalink}/">
-          ${program.subtitle}
-        </a>
-      </h2>
-    `:''}
+    <div class="tile_image_split">
+      <div class="tile_image_split__image">
+        ${program.image ? `
+          <img src="${program.image.written}" />
+        `:''}
+      </div>
 
-    ${editors(program.editors)}
+      <div class="tile_image_split__meta">
+        ${program.subtitle ? `
+          <strong>
+            <a href="/radio/${program.permalink}/">
+              ${program.subtitle}
+            </a>
+          </strong>
+        `:''}
 
-    ${firstBroadcast(program.firstBroadcast)}
+        ${editors(program.editors)}
+
+        ${firstBroadcast(program.firstBroadcast)}
+      </div>
+    </div>
   </div>
 `;

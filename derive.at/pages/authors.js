@@ -1,4 +1,5 @@
 const layout = require('./layout.js');
+const { stripAndTruncateHtml } = require('../../derive-common/util.js');
 
 module.exports = (data, pagination) => {
   let authors;
@@ -23,15 +24,15 @@ module.exports = (data, pagination) => {
     <div class="tiles">
       ${authors.map(author => `
         <div class="tile">
-          <h1>
+          <div class="tile_header">
             <a href="/autoren/${author.permalink}/">
               ${author.name}
             </a>
-          </h1>
+          </div>
 
-          ${author.biography ? `<strong>${author.biography.converted}</strong>` : ''}
+          ${author.biography ? `<strong>${author.biography.converted}</strong>` : '' /* TODO: biography maybe does not have to be markdown? less is more. */}
 
-          ${author.text ? author.text.converted : ''}
+          ${author.text ? stripAndTruncateHtml(author.text.converted, author.biography ? 250 : 500) : ''}
         </div>
       `).join('')}
     </div>
