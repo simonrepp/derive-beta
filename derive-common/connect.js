@@ -80,7 +80,7 @@ const connectIssuesWithArticles = data => {
             section.articles.push(article);
 
             article.issue = issue;
-            article.inIssueOnPages = article.pages;
+            article.inIssueOnPages = reference.pages;
           }
         } else {
           const error = reference.titleElement.error(`In Zeitschrift N° ${issue.number} wird in der Rubrik "${section.title}" der Artikel "${reference.title}" referenziert, es wurde aber kein Artikel mit diesem Titel gefunden.`);
