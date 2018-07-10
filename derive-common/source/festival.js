@@ -1,6 +1,5 @@
 const { loadEno, statFile } = require('../util.js'),
       { EnoValidationError, EnoParseError } = require('enojs'),
-      validateAbsoluteUrl = require('../validate/absolute-url.js'),
       { validateMarkdown } = require('../validate/markdown.js'),
       validatePath = require('../validate/path.js');
 
@@ -41,7 +40,7 @@ module.exports = async (data, enoPath) => {
       festival.description = doc.field('Beschreibung', validateMarkdown, { required: true });
       festival.editions = doc.sections('Edition').map(edition => ({
         image: edition.field('Bild', validatePath, { required: true }),
-        url: edition.field('URL', validateAbsoluteUrl, { required: true })
+        url: edition.url('URL', { required: true })
       }));
 
       doc.assertAllTouched();

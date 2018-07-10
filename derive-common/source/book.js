@@ -1,7 +1,5 @@
 const { loadEno, statFile } = require('../util.js'),
       { EnoValidationError, EnoParseError } = require('enojs'),
-      validateAbsoluteUrl = require('../validate/absolute-url.js'),
-      validateInteger = require('../validate/integer.js'),
       { validateMarkdown } = require('../validate/markdown.js'),
       validatePath = require('../validate/path.js'),
       validatePermalink = require('../validate/permalink.js');
@@ -49,11 +47,11 @@ module.exports = async (data, enoPath) => {
       book.permalink = permalink.value;
       book.permalinkElement = permalink.element;
 
-      book.yearOfPublication = doc.field('Erscheinungsjahr', validateInteger, { required: true });
+      book.yearOfPublication = doc.number('Erscheinungsjahr', { required: true });
       book.isxn = doc.field('ISBN/ISSN');
-      book.url = doc.field('URL', validateAbsoluteUrl);
+      book.url = doc.url('URL');
       book.placeOfPublication = doc.field('Erscheinungsort');
-      book.numberOfPages = doc.field('Seitenanzahl', validateInteger);
+      book.numberOfPages = doc.number('Seitenanzahl');
       book.price = doc.field('Preis');
       book.authorReferences = doc.list('Autoren/Herausgeber', { withElements: true });
       book.publisherReferences = doc.list('Verleger', { withElements: true });

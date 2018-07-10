@@ -1,6 +1,5 @@
 const { loadEno, statFile } = require('../util.js'),
       { EnoValidationError, EnoParseError } = require('enojs'),
-      validateDate = require('../validate/date.js'),
       { validateMarkdown, validateMarkdownWithMedia } = require('../validate/markdown.js'),
       validatePath = require('../validate/path.js'),
       validatePermalink = require('../validate/permalink.js');
@@ -46,7 +45,7 @@ module.exports = async (data, enoPath) => {
       program.permalink = permalink.value;
       program.permalinkElement = permalink.element;
 
-      program.firstBroadcast = doc.field('Erstausstrahlung', validateDate, { required: true });
+      program.firstBroadcast = doc.datetime('Erstausstrahlung', { required: true });  // TODO: doc.date() as soon as available
       program.subtitle = doc.field('Untertitel');
       program.image = doc.field('Bild', validatePath);
       program.soundfile = doc.field('Soundfile', validatePath);

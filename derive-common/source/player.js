@@ -1,6 +1,5 @@
 const { loadEno, statFile } = require('../util.js'),
       { EnoValidationError, EnoParseError } = require('enojs'),
-      validateAbsoluteUrl = require('../validate/absolute-url.js'),
       { validateMarkdown } = require('../validate/markdown.js'),
       validatePermalink = require('../validate/permalink.js');
 
@@ -52,7 +51,7 @@ module.exports = async (data, enoPath) => {
       player.country = doc.field('Land');
       player.city = doc.field('Stadt');
       player.tagsDisconnected = doc.list('Tags');
-      player.website = doc.field('Website', validateAbsoluteUrl);
+      player.website = doc.url('Website');
       player.biography = doc.field('Biographie', validateMarkdown);
       player.text = doc.field('Text', validateMarkdown);
 

@@ -1,7 +1,5 @@
 const { loadEno, statFile, URBANIZE_ENUM } = require('../util.js'),
       { EnoValidationError, EnoParseError } = require('enojs'),
-      validateAbsoluteUrl = require('../validate/absolute-url.js'),
-      validateDate = require('../validate/date.js'),
       validateEnum = require('../validate/enum.js'),
       { validateMarkdown, validateMarkdownWithMedia } = require('../validate/markdown.js'),
       validatePath = require('../validate/path.js'),
@@ -49,7 +47,7 @@ module.exports = async (data, enoPath) => {
       event.permalinkElement = permalink.element;
 
       event.subtitle = doc.field('Untertitel');
-      event.url = doc.field('URL', validateAbsoluteUrl);
+      event.url = doc.url('URL');
       event.hostReferences = doc.list('Veranstalter', { withElements: true });
       event.participantReferences = doc.list('Teilnehmer', { withElements: true });
       event.categoriesDisconnected = doc.list('Kategorien');
@@ -62,7 +60,7 @@ module.exports = async (data, enoPath) => {
       event.text = doc.field('Text', validateMarkdownWithMedia);
 
       event.dates = doc.sections('Termin').map(date => ({
-        date: date.field('Datum', { process: validateDate }),
+        date: date.datetime('Datum'),
         time: date.field('Zeit')
       }));
 

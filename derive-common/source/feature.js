@@ -1,8 +1,6 @@
 const { loadEno, statFile } = require('../util.js'),
       { EnoValidationError, EnoParseError } = require('enojs'),
-      validateAbsoluteUrl = require('../validate/absolute-url.js'),
       validateBoolean = require('../validate/boolean.js'),
-      validateInteger = require('../validate/integer.js'),
       { validateMarkdown } = require('../validate/markdown.js'),
       validatePath = require('../validate/path.js');
 
@@ -44,9 +42,9 @@ module.exports = async (data, enoPath) => {
       feature.title = doc.field('Titel', { required: true });
       feature.header = doc.field('Header');
       feature.image = doc.field('Bild', validatePath);
-      feature.position = doc.field('Position', validateInteger);
+      feature.position = doc.number('Position');
       feature.biggerBox = doc.field('Größere Box', validateBoolean);
-      feature.url = doc.field('URL', validateAbsoluteUrl);
+      feature.url = doc.url('URL');
       feature.text = doc.field('Text', validateMarkdown);
 
       doc.assertAllTouched();

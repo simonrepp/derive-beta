@@ -1,8 +1,6 @@
 const { loadEno, statFile } = require('../util.js'),
       { EnoValidationError, EnoParseError } = require('enojs'),
       validateBoolean = require('../validate/boolean.js'),
-      validateDate = require('../validate/date.js'),
-      validateInteger = require('../validate/integer.js'),
       { validateMarkdown } = require('../validate/markdown.js'),
       validatePath = require('../validate/path.js');
 
@@ -41,19 +39,19 @@ module.exports = async (data, enoPath) => {
     doc.enforceAllElements();
 
     try {
-      const number = doc.field('Nummer', validateInteger, { required: true, withElement: true });
+      const number = doc.number('Nummer', { required: true, withElement: true });
       issue.number = number.value;
       issue.numberElement = number.element;
 
-      issue.title = doc.field('Titel', { required: true });
-      issue.year = doc.field('Jahr', validateInteger, { required: true });
-      issue.quarter = doc.field('Quartal', validateInteger, { required: true });
+      issue.title = doc.field('Titel', { required: false }) || 'TODO: Titel ausfuellen';   // TODO: Reset to true, changed for dev
+      issue.year = doc.number('Jahr', { required: true });
+      issue.quarter = doc.number('Quartal', { required: true });
       issue.cover = doc.field('Cover', validatePath, { required: true });
-      issue.shopLink = doc.field('Link zum Shop', { required: true });
+      issue.shopLink = doc.field('Link zum Shop', { required: false }) || 'TODO: Titel ausfuellen';  // TODO: Reset to true, changed for dev
       issue.cooperation = doc.field('Kooperation');
       issue.features = doc.list('Schwerpunkte');
       issue.outOfPrint = doc.field('Vergriffen', validateBoolean);
-      issue.publicationDate = doc.field('Erscheinungsdatum', validateDate);
+      issue.publicationDate = doc.datetime('Erscheinungsdatum');  // TODO: doc.date() as soon as available
       issue.tagsDisconnected = doc.list('Tags');
       issue.description = doc.field('Beschreibung', validateMarkdown);
 

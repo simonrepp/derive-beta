@@ -1,9 +1,7 @@
 const { loadEno, statFile, URBANIZE_ENUM } = require('../util.js'),
       { EnoValidationError, EnoParseError } = require('enojs'),
       validateBoolean = require('../validate/boolean.js'),
-      validateDate = require('../validate/date.js'),
       validateEnum = require('../validate/enum.js'),
-      validateInteger = require('../validate/integer.js'),
       { validateMarkdown, validateMarkdownWithMedia } = require('../validate/markdown.js'),
       validatePath = require('../validate/path.js'),
       validatePermalink = require('../validate/permalink.js');
@@ -54,7 +52,7 @@ module.exports = async (data, enoPath) => {
       article.subtitle = doc.field('Untertitel');
       article.image = doc.field('Bild', validatePath);
       article.authorReferences = doc.list('Autoren', { withElements: true });
-      article.date = doc.field('Datum');
+      article.date = doc.datetime('Datum');  // TODO: User doc.date() only loader as soon as available from enojs
       article.language = doc.field('Sprache');
       article.categoriesDisconnected = doc.list('Kategorien');
       article.tagsDisconnected = doc.list('Tags');
