@@ -1,7 +1,8 @@
-const fsExtra = require('fs-extra'),
-      path = require('path'),
-      sass = require('sass'),
-      uglifyEs = require('uglify-es');
+const fsExtra = require('fs-extra');
+const path = require('path');
+const sass = require('sass');   // TODO: sass update from 1.6.2 to 1.9.0 breaks building, check back later with even higher version step if problem gone again
+                                //       (For the time being the version has been locked to 1.6.2 in package.json)
+const uglifyEs = require('uglify-es');
 
 const { loadFile, writeFile } = require('../derive-common/util.js'),
       index = require('./index.js'),
