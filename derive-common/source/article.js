@@ -52,7 +52,7 @@ module.exports = async (data, enoPath) => {
       article.subtitle = doc.field('Untertitel');
       article.image = doc.field('Bild', validatePath);
       article.authorReferences = doc.list('Autoren', { withElements: true });
-      article.date = doc.datetime('Datum');  // TODO: User doc.date() only loader as soon as available from enojs
+      article.date = doc.date('Datum');
       article.language = doc.field('Sprache');
       article.categoriesDisconnected = doc.list('Kategorien');
       article.tagsDisconnected = doc.list('Tags');

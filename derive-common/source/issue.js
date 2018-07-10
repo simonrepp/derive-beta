@@ -51,7 +51,7 @@ module.exports = async (data, enoPath) => {
       issue.cooperation = doc.field('Kooperation');
       issue.features = doc.list('Schwerpunkte');
       issue.outOfPrint = doc.field('Vergriffen', validateBoolean);
-      issue.publicationDate = doc.datetime('Erscheinungsdatum');  // TODO: doc.date() as soon as available
+      issue.publicationDate = doc.date('Erscheinungsdatum');
       issue.tagsDisconnected = doc.list('Tags');
       issue.description = doc.field('Beschreibung', validateMarkdown);
 

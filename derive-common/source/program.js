@@ -45,7 +45,7 @@ module.exports = async (data, enoPath) => {
       program.permalink = permalink.value;
       program.permalinkElement = permalink.element;
 
-      program.firstBroadcast = doc.datetime('Erstausstrahlung', { required: true });  // TODO: doc.date() as soon as available
+      program.firstBroadcast = doc.date('Erstausstrahlung', { required: true });
       program.subtitle = doc.field('Untertitel');
       program.image = doc.field('Bild', validatePath);
       program.soundfile = doc.field('Soundfile', validatePath);
