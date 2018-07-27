@@ -1,5 +1,5 @@
 const { loadEno, statFile } = require('../util.js'),
-      { EnoValidationError, EnoParseError } = require('enojs'),
+      { ValidationError, ParseError } = require('enojs'),
       { validateMarkdown } = require('../validate/markdown.js');
 
 module.exports = async (data, enoPath) => {
@@ -16,7 +16,7 @@ module.exports = async (data, enoPath) => {
     } catch(err) {
       data.cache.delete(enoPath);
 
-      if(err instanceof EnoParseError) {
+      if(err instanceof ParseError) {
         data.errors.push({
           files: [{ path: enoPath, selection: err.selection }],
           message: err.text,
@@ -42,7 +42,7 @@ module.exports = async (data, enoPath) => {
     } catch(err) {
       data.cache.delete(enoPath);
 
-      if(err instanceof EnoValidationError) {
+      if(err instanceof ValidationError) {
         data.errors.push({
           files: [{ path: enoPath, selection: err.selection }],
           message: err.text,
