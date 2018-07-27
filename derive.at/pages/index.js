@@ -3,19 +3,25 @@ const layout = require('./layout.js');
 module.exports = data => {
   const html = `
     ${Array.from(data.features.values()).map(feature => `
-      <div class="feature-large">
-        ${feature.image ? `
-          <img src="${feature.image.written}"/>
-        `:''}
+      <div class="feature_split">
+        <div class="feature_image">
+          ${feature.image ? `
+            <img src="${feature.image.written}"/>
+          `:''}
+        </div>
 
-        <div>
-          ${feature.header ? feature.header : ''}
+        <div class="feature_text">
+          ${feature.header ? `
+            <div class="generic__serif">
+              ${feature.header}
+            </div>
+          `:''}
 
-          <h1>
+          <div class="generic__heading">
             <a href="${feature.url}">
               ${feature.title}
             </a>
-          </h1>
+          </div>
 
           ${feature.text ? feature.text.converted : ''}
         </div>

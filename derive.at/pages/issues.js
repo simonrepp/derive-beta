@@ -28,27 +28,30 @@ module.exports = data => {
 
   const html = `
     <div>
-      <div class="feature">
-        <div class="feature__image">
+      <div class="featured">
+        <div class="featured__image_wide">
           <img src="${latest.cover.written}"/>
         </div>
 
-        <div class="feature__text">
-          ${fullIssueTitle(latest)}
+        <div class="featured__text">
 
-          <h1>
+          <div class="generic__subheading">
+            ${fullIssueTitle(latest)}
+          </div>
+
+          <div class="generic__big_heading">
             <a href="/zeitschrift/${latest.number}">
               ${latest.title}
             </a>
-          </h1>
+          </div>
 
           ${latest.description ? `
-            <div class="generic__margin-vertical">
+            <div class="generic__margin-vertical generic__serif">
               ${latest.description.converted}
             </div>
           `:''}
 
-          Mit Beiträgen von:<br/>
+          <strong>Mit Beiträgen von:</strong><br/>
           ${authors([...latestAuthors])}<br/><br/>
 
           ${tags(latest.tags)}

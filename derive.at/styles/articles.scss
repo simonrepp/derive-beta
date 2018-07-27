@@ -18,4 +18,13 @@
 
 .article-panel__info-split {
   display: flex;
+  justify-content: space-between;  
+}
+
+.article-panel__info-cover {
+  width: 45%;
+}
+
+.article-panel__info-details {
+  width: 50%;
 }

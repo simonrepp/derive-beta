@@ -12,9 +12,9 @@ module.exports = (data, pagination) => {
   const { articles, featured } = pagination;
 
   const html = `
-    <div class="feature">
+    <div class="featured">
 
-      <div class="feature__image">
+      <div class="featured__image">
         ${featured.image ? `
           <img src="${featured.image.written}" />
         ` : `
@@ -24,7 +24,7 @@ module.exports = (data, pagination) => {
         `}
       </div>
 
-      <div class="feature__text">
+      <div class="featured__text">
         ${authors(featured.authors)}
 
         <h1>${featured.title}</h1>
@@ -35,7 +35,11 @@ module.exports = (data, pagination) => {
 
         ${featured.issue ? fullIssueTitle(featured.issue) : ''}<br/><br/>
 
-        ${featured.abstract ? featured.abstract.converted : (featured.text ? stripAndTruncateHtml(featured.text.converted, 250) : '')}
+        <div class="generic__serif">
+          ${featured.abstract ? featured.abstract.converted :
+                                (featured.text ? stripAndTruncateHtml(featured.text.converted, 500) :
+                                                 '')}
+        </div>
 
         ${tags(featured.tags)}
 

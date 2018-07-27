@@ -10,7 +10,8 @@ const infoDetails = article => `
 
   ${article.issue ? `
     <strong>Ausgabe</strong><br/>
-    <a href="/zeitschrift/${article.issue.number}">
+    <a class="generic__smaller_text"
+       href="/zeitschrift/${article.issue.number}">
       N°${article.issue.number} (Seite ${article.inIssueOnPages})
     </a>
 
@@ -29,18 +30,18 @@ const infoDetails = article => `
 `;
 
 const info = article => `
-  <h1>
+  <div class="generic__heading">
     <a href="/texte/${article.permalink}/">
       ${article.title}
     </a>
-  </h1>
+  </div>
 
   ${article.subtitle ? `
-    <strong>
+    <div class="generic__subheading">
       <a href="/texte/${article.permalink}/">
         ${article.subtitle}
       </a>
-    </strong>
+    </div>
   `:''}
 
   <div class="article-panel__info-split">
@@ -63,8 +64,10 @@ module.exports = article => `
       ${info(article)}
     </div>
 
-    <div class="article-panel__abstract">
-      ${article.abstract ? article.abstract.converted : (article.text ? stripAndTruncateHtml(article.text.converted, 250) : '')}
+    <div class="article-panel__abstract generic__serif">
+      ${article.abstract ? article.abstract.converted :
+                           (article.text ? stripAndTruncateHtml(article.text.converted, 500) :
+                                           '')}
     </div>
   </div>
 `;

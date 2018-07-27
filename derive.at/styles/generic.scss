@@ -14,6 +14,58 @@
   text-align: right;
 }
 
-.generic__smaller-text {
+.generic__smaller_text {
   font-size: 0.9em;
+}
+
+.generic__big_heading {
+  font-family: "FunctionPro-Medium";
+  font-size: 2.65em;
+  word-wrap: break-word;
+
+  a {
+    text-decoration: none;
+  }
+
+  a:hover {
+    border-bottom: 1px solid #000;
+  }
+
+  margin: 1em 0;
+}
+
+.generic__heading {
+  font-family: "FunctionPro-Medium";
+  font-size: 1.65em;
+  word-wrap: break-word;
+
+  a {
+    text-decoration: none;
+  }
+
+  a:hover {
+    border-bottom: 1px solid #000;
+  }
+
+  margin-bottom: 1em;
+}
+
+.generic__serif {
+  font-family: 'Crimson Text';
+}
+
+.generic__subheading {
+  font-family: "FunctionPro-Medium";
+  font-size: 1.33em;
+  word-wrap: break-word;
+
+  a {
+    text-decoration: none;
+  }
+
+  a:hover {
+    border-bottom: 1px solid #000;
+  }
+
+  margin-bottom: .75em;
 }

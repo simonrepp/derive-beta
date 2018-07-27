@@ -8,13 +8,13 @@ module.exports = (data, pagination) => {
   const { books, featured } = pagination;
 
   const html = `
-    <div class="feature">
+    <div class="featured">
 
-      <div class="feature__image">
+      <div class="featured__image">
         ${featured.cover ? `<img src="${featured.cover.written}" />` : ''}
       </div>
 
-      <div class="feature__text">
+      <div class="featured__text">
         ${authors(featured.authors)}
 
         <h1>${featured.title}</h1>

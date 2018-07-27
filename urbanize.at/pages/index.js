@@ -2,7 +2,7 @@ const layout = require('./layout.js');
 
 module.exports = urbanize => {
   const html = `
-    <div class="feature-large">
+    <div class="featured-large">
       Urbanize 2018<br/><br/>
 
       TODO Gestaltung Index mit Elke<br/><br/>

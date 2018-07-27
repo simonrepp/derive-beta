@@ -1,9 +1,28 @@
-.feature {
+.featured {
   display: flex;
   position: relative;
 }
 
-.feature__image {
+.featured__image {
   margin-right: 3em;
   width: 33%;
+}
+
+.featured__image_wide {
+  margin-right: 2em;
+  width: 50%
+}
+
+.feature_split {
+  background-color: $color-almost-white;
+  display: flex;
+  position: relative;
+}
+
+.feature_image {
+  width: 50%;
+}
+
+.feature_text {
+  width: 50%;
 }

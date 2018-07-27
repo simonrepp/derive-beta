@@ -6,13 +6,13 @@ const authors = require('../widgets/authors.js'),
 
 module.exports = (data, program) => {
   const html = `
-    <div class="feature">
+    <div class="featured">
 
-      <div class="feature__image">
+      <div class="featured__image">
         ${program.image ? `<img src="${program.image.written}" />` : ''}
       </div>
 
-      <div class="feature__text">
+      <div class="featured__text">
         ${authors(program.editors)}
 
         <h1>${program.title}</h1>
@@ -23,7 +23,7 @@ module.exports = (data, program) => {
 
         ${firstBroadcast(program.firstBroadcast)}
 
-        <div class="feature__radio">
+        <div class="featured__radio">
           <audio controls
                  data-title="${program.title}"
                  src="${program.soundfile.written}">
