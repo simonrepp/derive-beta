@@ -8,9 +8,7 @@ module.exports = issue => `
         <div class="quarter">${formattedQuarter[issue.quarter]}</div>
         <div class="title">${issue.title}</div>
         <a class="view" href="/zeitschrift/${issue.number}/">Ansehen</a>
-        ${issue.shopLink ? `
-          <a class="buy" href="${issue.shopLink}">Kaufen</a>
-        `:''}
+        <a class="buy" href="${issue.shopLink}" target="_blank">Kaufen</a>
       </div>
 
       <img src="${issue.cover.written}"/>

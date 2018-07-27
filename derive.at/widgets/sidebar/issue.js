@@ -5,12 +5,10 @@ module.exports = issue => `
 
   <a href="/zeitschrift/${issue.number}/">${issue.title}</a>
 
-  ${issue.shopLink ? `
-    <br/><br/><br/>
+  <br/><br/><br/>
 
-    <a href="${issue.shopLink}"
-       target="_blank">
-      Heft kaufen
-    </a>
-  `:''}
+  <a href="${issue.shopLink}"
+     target="_blank">
+    Heft kaufen
+  </a>
 `;

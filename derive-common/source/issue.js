@@ -43,12 +43,12 @@ module.exports = async (data, enoPath) => {
       issue.number = number.value;
       issue.numberElement = number.element;
 
-      issue.title = doc.field('Titel', { required: false }) || 'TODO: Titel ausfuellen';   // TODO: Reset to true, changed for dev
+      issue.title = doc.string('Titel', { required: true });
       issue.year = doc.number('Jahr', { required: true });
       issue.quarter = doc.number('Quartal', { required: true });
       issue.cover = doc.field('Cover', validatePath, { required: true });
-      issue.shopLink = doc.field('Link zum Shop', { required: false }) || 'TODO: Titel ausfuellen';  // TODO: Reset to true, changed for dev
-      issue.cooperation = doc.field('Kooperation');
+      issue.shopLink = doc.url('Link zum Shop', { required: true });
+      issue.cooperation = doc.string('Kooperation');
       issue.features = doc.list('Schwerpunkte');
       issue.outOfPrint = doc.field('Vergriffen', validateBoolean);
       issue.publicationDate = doc.date('Erscheinungsdatum');
@@ -56,12 +56,12 @@ module.exports = async (data, enoPath) => {
       issue.description = doc.field('Beschreibung', validateMarkdown);
 
       issue.sections = doc.sections('Rubrik').map(section => ({
-        title: section.field('Titel', { required: true }),
+        title: section.string('Titel', { required: true }),
         articleReferences: section.sections('Artikel').map(reference => {
-          const title = reference.field('Titel', { required: true, withElement: true });
+          const title = reference.string('Titel', { required: true, withElement: true });
 
           return {
-            pages: reference.field('Seite(n)', { required: true }),
+            pages: reference.string('Seite(n)', { required: true }),
             title: title.value,
             titleElement: title.element
           };
