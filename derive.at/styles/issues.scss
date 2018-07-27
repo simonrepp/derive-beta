@@ -1,30 +1,48 @@
 @import './colors.scss';
 
-.issue-tile {
-  background-color: $color-almost-white;
-  display: inline-block;
+.tiles__magazine {
+  display: -ms-grid;
+  display: grid;
+  grid-gap: 0.66em;
   margin-bottom: 1.33em;
-  transition: box-shadow 0.25s;
-  width: 100%;
-
-  &:hover {
-    box-shadow: 0 0 2.66em rgba($color-shadow, 0.66);
-  }
 
   @media (min-width: 540px) {
-    width: calc((100% - 1.33em) / 2);
-
-    &:nth-child(even) {
-      margin-left: 1.33em;
-    }
+    -ms-grid-columns: 1fr 1.33em 1fr;
+    grid-template-columns: 1fr 1fr;
   }
 
   @media (min-width: 980px) {
-    width: calc((100% - 3.99em) / 4);
+    -ms-grid-columns: 1fr 1.33em 1fr 1.33em 1fr 1.33em 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
 
-    &:not(:first-child) {
-      margin-left: 1.33em;
-    }
+  &:nth-child(1) {
+    -ms-grid-row: 1;
+    -ms-grid-column: 1;
+  }
+
+  &:nth-child(1) {
+    -ms-grid-row: 1;
+    -ms-grid-column: 3;
+  }
+
+  &:nth-child(1) {
+    -ms-grid-row: 1;
+    -ms-grid-column: 5;
+  }
+
+  &:nth-child(1) {
+    -ms-grid-row: 1;
+    -ms-grid-column: 7;
+  }
+}
+
+.issue-tile {
+  background-color: $color-almost-white;
+  transition: box-shadow 0.25s;
+
+  &:hover {
+    box-shadow: 0 0 2.66em rgba($color-shadow, 0.66);
   }
 }
 
