@@ -1,8 +1,8 @@
-const authors = require('../widgets/authors.js'),
-      layout = require('./layout.js'),
-      share = require('../widgets/share.js'),
-      reviews = require('../widgets/reviews.js'),
-      tags = require('../widgets/tags.js');
+const authors = require('../widgets/authors.js');
+const layout = require('./layout.js');
+const share = require('../widgets/share.js');
+const reviews = require('../widgets/reviews.js');
+const tags = require('../widgets/tags.js');
 
 module.exports = (data, book) => {
   const html = `
@@ -17,7 +17,7 @@ module.exports = (data, book) => {
 
         <h1>${book.title}</h1>
 
-        Aufgrund schlechter Transportbedingungen und vor allem der wenigen und technisch nicht ausgereiften Konservierungsmöglichkeiten waren der Anbau von Obst und Gemüse sowie die Haltung von Vieh notwendigerweise städtische Praktiken (Stierand 2008): Überwiegend (urban)landwirtschaftlich genutzte Freiflächen bestimmten das Stadtbild, Märkte bildeten einen räumlichen und sozialen Mittelpunkt.
+        ${book.description ? `<div class="generic__serif">${book.description.converted}</div>` : ''}
 
         <div class="generic__margin-vertical">
           ${[
@@ -43,7 +43,7 @@ module.exports = (data, book) => {
 
     <h2>Verlagsinformationen</h2>
 
-    Verlagsinformationen: Seit einigen Jahren ist die Auseinandersetzung mit der Theorie der Produktion des Raumes in eine neue Phase getreten. Während in den 1970er und 1980er Jahren. "Wäschezetteltext" Seit einigen Jahren ist die Auseinandersetzung mit der Theorie der Produktion des Raumes in eine neue Phase getreten. Während in den 1970er und 1980er Jahren.
+    TODO: Wo kommt dieser Datensatz her?
 
     <hr/>
   `;

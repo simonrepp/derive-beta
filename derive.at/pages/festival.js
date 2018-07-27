@@ -13,7 +13,7 @@ module.exports = data => {
         <h1>${data.festival.title}</h1>
         <h2>${data.festival.subtitle}</h2>
 
-        <span>
+        <span class="generic__serif">
           ${data.festival.description.converted}
         </span>
 

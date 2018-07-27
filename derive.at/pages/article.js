@@ -36,17 +36,19 @@ module.exports = (data, article) => {
       `:''}<br/><br/>
     `).join('')}
 
-    ${article.readable ? `
-      <hr/>
+    <div class="generic__serif">
+      ${article.readable ? `
+        <hr/>
 
-      ${article.text ? article.text.written : 'Kein Text vorhanden'}
-    `:`
-      ${article.abstract ? article.abstract.converted : (article.text ? stripAndTruncateHtml(article.text.converted, 250) : '')}
+        ${article.text ? article.text.written : 'Kein Text vorhanden'}
+      `:`
+        ${article.abstract ? article.abstract.converted : (article.text ? stripAndTruncateHtml(article.text.converted, 250) : '')}
 
-      <br/><br/>
+        <br/><br/>
 
-      Die Zeitschrift mit dem gesamten Artikel kann online im Shop erworben werden!
-    `}
+        Die Zeitschrift mit dem gesamten Artikel kann online im Shop erworben werden!
+      `}
+    </div>
 
     <hr/>
 
