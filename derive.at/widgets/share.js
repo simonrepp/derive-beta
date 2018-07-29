@@ -1,7 +1,7 @@
 // TODO: Revisit share.js data aquisition (what to pass, how to get url (dynamically?))
 // TODO: footer.js share icons are similiar to share.js icons -> clarify differences or non-differences and implement both finalized
 
-module.exports = (title, url) => `
+module.exports = (title, url, options = { print: false }) => `
   <a class="a__no-underline"
      id="share-on-facebook"
      title="Auf Facebook teilen">
@@ -20,11 +20,13 @@ module.exports = (title, url) => `
     <span class="icon-mail"></span>
   </a>
 
-  <a class="a__no-underline"
-     href="${url}druckversion/"
-     title="Seite drucken">
-    <span class="icon-print"></span>
-  </a>
+  ${options.print ? `
+    <a class="a__no-underline"
+       href="${url}druckversion/"
+       title="Seite drucken">
+      <span class="icon-print"></span>
+    </a>
+  `:''}
 
   <script type="text/javascript">
 

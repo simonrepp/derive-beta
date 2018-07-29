@@ -1,3 +1,4 @@
+const articleFeature = require('../widgets/articles/feature.js');
 const authors = require('../widgets/authors.js');
 const layout = require('./layout.js');
 const share = require('../widgets/share.js');
@@ -7,23 +8,7 @@ const { stripAndTruncateHtml } = require('../../derive-common/util.js');
 
 module.exports = (data, article) => {
   const html = `
-    <div class="article-single">
-
-      ${article.image ? `<img src="${article.image.written}" />` : ''}
-
-      ${authors(article.authors)}
-
-      <h1>${article.title}</h1>
-      ${article.subtitle ? `<strong>${article.subtitle}</strong>` : ''}
-
-      ${article.abstract ? article.abstract.converted : ''}
-
-      ${article.issue && article.issue.shopLink ? `
-        <a href="${article.issue.shopLink}">Heft kaufen</a>
-      `:''}
-
-      ${share(article.title, `https://derive.at/texte/${article.permalink}/`)}
-    </div>
+    ${articleFeature(article)}
 
     <hr/>
 
