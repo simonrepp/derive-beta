@@ -39,11 +39,11 @@ module.exports = async (data, enoPath) => {
     doc.enforceAllElements();
 
     try {
-      feature.title = doc.field('Titel', { required: true });
-      feature.header = doc.field('Header');
+      feature.title = doc.string('Titel', { required: true });
+      feature.header = doc.string('Header');
       feature.image = doc.field('Bild', validatePath);
       feature.position = doc.number('Position');
-      feature.biggerBox = doc.field('Größere Box', validateBoolean);
+      feature.type = doc.string('Typ', { enforceElement: false }) || 'card'; // TODO: Make required as soon as there
       feature.url = doc.url('URL');
       feature.text = doc.field('Text', validateMarkdown);
 
