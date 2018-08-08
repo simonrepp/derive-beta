@@ -48,7 +48,7 @@ module.exports = () => `
 
         <br/>
 
-        <a href="http://eepurl.com/fmHIo">
+        <a href="http://eepurl.com/fmHIo" target="_blank">
           Newsletter bestellen
         </a>
 
