@@ -37,6 +37,11 @@ module.exports = data => {
         </form>
       </div>
 
+      <div class="search__info">
+        Suchergebnisse für:<br/>
+        <h2 class="search__query"></h2>
+      </div>
+
       <div class="search__results tiles">
         Suche läuft ...
       </div>

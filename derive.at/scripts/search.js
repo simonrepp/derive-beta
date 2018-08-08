@@ -181,10 +181,9 @@ const renderSearch = function() {
 
   if(results) {
     if(search.results) {
-      let html = '';
+      document.querySelector('.search__query').innerHTML = search.query;
 
-      html += 'Suchergebnisse für:<br/>';
-      html += '<h2>' + search.query + '</h2>';
+      let html = '';
 
       search.results.forEach(function(result) {
         if(result.hasOwnProperty('article')) {
