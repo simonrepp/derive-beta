@@ -1,4 +1,4 @@
-const bookTile = require('../widgets/book-tile.js'),
+const bookTile = require('../widgets/books/tile.js'),
       layout = require('./layout.js'),
       tags = require('../widgets/tags.js');
 

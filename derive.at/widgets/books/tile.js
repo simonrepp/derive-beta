@@ -1,7 +1,7 @@
 const moment = require('moment');
 
-const authors = require('./authors.js'),
-      reviews = require('./reviews.js');
+const authors = require('../authors.js');
+const reviews = require('./reviews.js');
 
 module.exports = book => `
   <div class="tile">

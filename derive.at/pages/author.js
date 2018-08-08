@@ -1,6 +1,6 @@
 const layout = require('./layout.js'),
       articleTile = require('../widgets/articles/tile.js'),
-      bookTile = require('../widgets/book-tile.js'),
+      bookTile = require('../widgets/books/tile.js'),
       eventTile = require('../widgets/event-tile.js'),
       programTile = require('../widgets/program-tile.js'),
       tags = require('../widgets/tags.js');
