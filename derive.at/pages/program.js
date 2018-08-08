@@ -6,13 +6,13 @@ const authors = require('../widgets/authors.js'),
 
 module.exports = (data, program) => {
   const html = `
-    <div class="featured">
+    <div class="generic__featured">
 
-      <div class="featured__image">
+      <div class="generic__featured_image">
         ${program.image ? `<img src="${program.image.written}" />` : ''}
       </div>
 
-      <div class="featured__text">
+      <div class="generic__featured_text">
         ${authors(program.editors)}
 
         <h1>${program.title}</h1>

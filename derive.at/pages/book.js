@@ -6,13 +6,13 @@ const tags = require('../widgets/tags.js');
 
 module.exports = (data, book) => {
   const html = `
-    <div class="featured">
+    <div class="generic__featured">
 
-      <div class="featured__image">
+      <div class="generic__featured_image">
         ${book.cover ? `<img src="${book.cover.written}" />` : ''}
       </div>
 
-      <div class="featured__text">
+      <div class="generic__featured_text">
         ${authors(book.authors)}
 
         <h1>${book.title}</h1>

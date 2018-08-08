@@ -1,3 +1,22 @@
+.generic__featured {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2em;
+}
+
+.generic__featured_image {
+  width: calc(33% - 2em);
+}
+
+.generic__featured_image_wide {
+  margin-right: 2em;
+  width: calc(50% - 2em);
+}
+
+.generic__featured_text {
+  width: 66%;
+}
+
 .generic__margin-vertical {
   margin: 1.5em 0;
 }

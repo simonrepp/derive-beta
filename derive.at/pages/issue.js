@@ -15,12 +15,12 @@ module.exports = (data, issue) => {
 
   const html = `
     <div>
-      <div class="featured">
-        <div class="featured__image">
+      <div class="generic__featured">
+        <div class="generic__featured_image">
           <img src="${issue.cover.written}"/>
         </div>
 
-        <div class="featured__text">
+        <div class="generic__featured_text">
           ${fullIssueTitle(issue)}
 
           <h1>

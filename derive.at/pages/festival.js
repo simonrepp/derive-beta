@@ -3,13 +3,13 @@ const layout = require('./layout.js'),
 
 module.exports = data => {
   const html = `
-    <div class="featured">
+    <div class="generic__featured">
 
-      <div class="featured__image">
+      <div class="generic__featured_image">
         <img src="${data.festival.editions[0].image.written}"/>
       </div>
 
-      <div class="featured__text">
+      <div class="generic__featured_text">
         <h1>${data.festival.title}</h1>
         <h2>${data.festival.subtitle}</h2>
 

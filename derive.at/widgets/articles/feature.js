@@ -7,8 +7,8 @@ const { fullIssueTitle } = require('../issues/labeling.js');
 const { stripAndTruncateHtml } = require('../../../derive-common/util.js');
 
 module.exports = article => `
-  <div class="featured">
-    <div class="featured__image">
+  <div class="generic__featured">
+    <div class="generic__featured_image">
       ${article.image ? `
         <img src="${article.image.written}" />
       ` : `
@@ -18,7 +18,7 @@ module.exports = article => `
       `}
     </div>
 
-    <div class="featured__text">
+    <div class="generic__featured_text">
       ${authors(article.authors)}
 
       <h1>${article.title}</h1>

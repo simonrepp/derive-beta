@@ -10,13 +10,13 @@ module.exports = (data, pagination) => {
   const firstWithImage = pagination.programs.find(program => program.image);
 
   const html = `
-    <div class="featured">
+    <div class="generic__featured">
 
-      <div class="featured__image">
+      <div class="generic__featured_image">
         ${firstWithImage ? `<img src="${firstWithImage.image.written}" />` : ''}
       </div>
 
-      <div class="featured__text">
+      <div class="generic__featured_text">
         <h1>${data.radio.title}</h1>
 
         <div class="generic__margin-vertical">

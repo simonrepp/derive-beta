@@ -28,12 +28,12 @@ module.exports = data => {
 
   const html = `
     <div>
-      <div class="featured">
-        <div class="featured__image_wide">
+      <div class="generic__featured">
+        <div class="generic__featured_image_wide">
           <img src="${latest.cover.written}"/>
         </div>
 
-        <div class="featured__text">
+        <div class="generic__featured_text">
 
           <div class="generic__subheading">
             ${fullIssueTitle(latest)}
