@@ -23,7 +23,7 @@ const indexArticles = data => {
         image: article.image ? { written: article.image.written } : null,
         inIssueOnPages: article.inIssueOnPages,
         issue: article.issue ? {
-          cover: { written: article.issue.cover },
+          cover: { written: article.issue.cover.written },
           number: article.issue.number,
           quarter: article.issue.quarter,
           year: article.issue.year

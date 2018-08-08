@@ -15,9 +15,28 @@ const articleResult = function(article) {
   let html = '';
 
   html += '<div class="tile">';
-  html += '  <h1>';
+  html +=    article.authors.map(function(author) {
+               return '<a class="generic__smaller_text" href="/autoren/' + author.permalink + '/">' + author.name + '</a>';
+             }).join(', ');
+  html += '  <div class="tile_header">';
   html += '    <a href="/texte/' + article.permalink + '/">' + article.title + '</a>';
-  html += '  </h1>';
+  html += '  </div>';
+  if(article.subtitle) {
+    html += '  <div class="generic__subheading">';
+    html += '    <a href="/texte/' + article.permalink + '/">' + article.subtitle + '</a>';
+    html += '  </div>';
+  }
+  if(article.issue) {
+    html += '  <div class="tile_image_split">';
+    html += '    <div class="tile_image_split__image">';
+    html += '      <img src="' + article.issue.cover.written +'" />';
+    html += '    </div>';
+    html += '    <div class="tile_image_split__meta">';
+    html += '      <a href="/zeitschrift/' + article.issue.number + '/">dérive N°' + article.issue.number + '</a><br/>';
+    html += '      Seiten: ' + article.inIssueOnPages;
+    html += '    </div>';
+    html += '  </div>';
+  }
   html += '</div>';
 
   return html;
