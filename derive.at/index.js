@@ -1,6 +1,7 @@
-const fsExtra = require('fs-extra'),
-      path = require('path'),
-      striptags = require('striptags');
+const fsExtra = require('fs-extra');
+const moment = require('moment');
+const path = require('path');
+const striptags = require('striptags');
 
 const { writeFile } = require('../derive-common/util.js');
 
@@ -143,7 +144,7 @@ const indexPrograms = data => {
           name: editor.name,
           permalink: editor.permalink
         })),
-        firstBroadcast: program.firstBroadcast,
+        firstBroadcast: moment(program.firstBroadcast).locale('de').format('Do MMMMM YYYY'),
         permalink: program.permalink,
         subtitle: program.subtitle,
         title: program.title

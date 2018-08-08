@@ -135,7 +135,7 @@ const programResult = function(program) {
 
   html += '      <div class="generic__margin-vertical">';
   html += '        <strong>Erstaustrahlung</strong><br/>';
-  html +=          "TODO moment(program.firstBroadcast).locale('de').format('Do MMMMM YYYY')";
+  html +=          program.firstBroadcast;
   html += '      </div>';
   html += '    </div>';
   html += '  </div>';
