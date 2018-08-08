@@ -15,12 +15,10 @@ const indexArticles = data => {
 
     return {
       article: {
-        authors: {
-          connected: article.authors.map(author => ({
-            name: author.name,
-            permalink: author.permalink
-          }))
-        },
+        authors: article.authors.map(author => ({
+          name: author.name,
+          permalink: author.permalink
+        })),
         image: article.image ? { written: article.image.written } : null,
         inIssueOnPages: article.inIssueOnPages,
         issue: article.issue ? {
@@ -77,21 +75,17 @@ const indexBooks = data => {
 
     return {
       book: {
-        authors: {
-          connected: book.authors.map(author => ({
+        authors: book.authors.map(author => ({
             name: author.name,
             permalink: author.permalink
-          }))
-        },
+        })),
         cover: book.cover ? { written: book.cover.written } : null,
         permalink: book.permalink,
         placeOfPublication: book.placeOfPublication,
-        publishers: {
-          connected: book.publishers.map(publisher => ({
+        publishers: book.publishers.map(publisher => ({
             name: publisher.name,
             permalink: publisher.permalink
-          }))
-        },
+        })),
         reviews: book.reviews.map(review => ({
           permalink: review.permalink
         })),
@@ -118,7 +112,7 @@ const indexIssues = data => {
 
     return {
       issue: {
-        cover: { written: issue.cover },
+        cover: { written: issue.cover.written },
         number: issue.number,
         outOfPrint: issue.outOfPrint,
         pages: issue.pages,
@@ -145,12 +139,10 @@ const indexPrograms = data => {
 
     return {
       program: {
-        editors: {
-          connected: program.editors.map(editor => ({
-            name: editor.name,
-            permalink: editor.permalink
-          }))
-        },
+        editors: program.editors.map(editor => ({
+          name: editor.name,
+          permalink: editor.permalink
+        })),
         firstBroadcast: program.firstBroadcast,
         permalink: program.permalink,
         subtitle: program.subtitle,
