@@ -42,8 +42,6 @@ module.exports = (data, program) => {
 
         ${tags(program.tags)}
 
-        <hr class="hr__light" />
-
         ${share(program.title, `/radio/${program.permalink}/`)}
       </div>
     </div>

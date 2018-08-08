@@ -25,8 +25,6 @@ module.exports = (data, pagination) => {
 
         ${editors(data.radio.editors)}
 
-        <hr class="hr__light" />
-
         ${share(data.radio.title, '/radio/')}
       </div>
     </div>
