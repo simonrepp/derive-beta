@@ -117,7 +117,6 @@ const indexIssues = data => {
         cover: { written: issue.cover.written },
         number: issue.number,
         outOfPrint: issue.outOfPrint,
-        pages: issue.pages,
         permalink: issue.permalink,
         quarter: issue.quarter,
         title: issue.title,
