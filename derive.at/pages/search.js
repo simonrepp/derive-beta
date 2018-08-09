@@ -4,36 +4,26 @@ module.exports = data => {
   const html = `
     <div>
       <div class="pagination TODO-dontusepaginationbutgenericthing">
-        <form action="/suche/">
-          <span class="icon-search"></span>
-
-          <input name="begriff" placeholder="Ihr Suchbegriff" type="search" />
-
+        <form action="/suche/" class="search__searchform">
           <div>
-            Zeitschrift <span class="icon-checkbox-checked" data-section="issues"/>
+            <span class="icon-search"></span>
+
+            <input name="query" placeholder="Ihr Suchbegriff" type="search" />
+
+            <button>
+              Suchen
+            </button>
           </div>
 
-          <div>
-            Autoren <span class="icon-checkbox-checked" data-section="authors"/>
-          </div>
-
-          <div>
-            Bücher <span class="icon-checkbox-checked" data-section="books"/>
-          </div>
-
-          <div>
-            Radio <span class="icon-checkbox-checked" data-section="programs"/>
-          </div>
-
-          <div>
-            Texte <span class="icon-checkbox-checked" data-section="articles"/>
+          <div class="search__filters">
+            <div class="search__filter"><span class="icon-checkbox-checked" data-section="issues"></span> Zeitschrift</div>
+            <div class="search__filter"><span class="icon-checkbox-checked" data-section="authors"></span> Autoren</div>
+            <div class="search__filter"><span class="icon-checkbox-checked" data-section="books"></span> Bücher</div>
+            <div class="search__filter"><span class="icon-checkbox-checked" data-section="programs"></span> Radio</div>
+            <div class="search__filter"><span class="icon-checkbox-checked" data-section="articles"></span> Texte</div>
           </div>
 
           <!-- TODO: Restore up there ^^^^^^^ the correct checkbox state based on global search.sections data on turbolinks:render -->
-
-          <button>
-            Suche starten
-          </button>
         </form>
       </div>
 
