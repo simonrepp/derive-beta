@@ -95,7 +95,7 @@ document.addEventListener('submit', function(event) {
 
     search.error = null;
     search.pending = false;
-    search.query = document.querySelector('input[name="query"]').value;
+    search.query = event.target.querySelector('input[name="query"]').value;
     search.results = null;
 
     if(!location.hostname.match(/derive\.at|urbanize\.at/)) {
