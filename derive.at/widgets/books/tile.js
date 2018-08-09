@@ -21,7 +21,7 @@ module.exports = book => `
       <div class="tile_image_split__meta">
         ${authors(book.authors)}
 
-        <div class="generic__margin-vertical">
+        <div class="generic__margin_vertical">
           ${[
             book.placeOfPublication ? `${book.placeOfPublication}:` : '',
             book.publishers.map(publisher => `<a href="/verlage/${publisher.permalink}/">${publisher.name}</a>`).join(', '),

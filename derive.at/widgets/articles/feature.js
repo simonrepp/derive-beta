@@ -29,7 +29,7 @@ module.exports = article => `
 
       ${article.issue ? fullIssueTitle(article.issue) : ''}<br/><br/>
 
-      <div class="generic__serif">
+      <div class="generic__margin_vertical generic__serif">
         ${article.abstract ? article.abstract.converted :
                               (article.text ? stripAndTruncateHtml(article.text.converted, 500) :
                                                '')}

@@ -17,7 +17,7 @@ module.exports = data => {
           ${data.festival.description.converted}
         </span>
 
-        <div class="generic__margin-vertical">
+        <div class="generic__margin_vertical">
           <a href="https://urbanize.at">urbanize.at</a>
         </div>
 

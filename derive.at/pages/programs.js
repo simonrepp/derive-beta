@@ -19,7 +19,7 @@ module.exports = (data, pagination) => {
       <div class="generic__featured_text">
         <h1>${data.radio.title}</h1>
 
-        <div class="generic__margin-vertical">
+        <div class="generic__margin_vertical">
           ${data.radio.info.converted}
         </div>
 

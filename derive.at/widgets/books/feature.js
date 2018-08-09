@@ -17,7 +17,7 @@ module.exports = book => `
 
       ${book.description ? `<div class="generic__serif">${book.description.converted}</div>` : ''}
 
-      <div class="generic__margin-vertical">
+      <div class="generic__margin_vertical">
         ${[
           book.placeOfPublication ? `${book.placeOfPublication}:` : '',
           book.publishers.map(publisher => `<a href="/verlage/${publisher.permalink}/">${publisher.name}</a>`).join(', '),

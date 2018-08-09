@@ -75,7 +75,7 @@ const bookResult = function(book) {
                    return '<a class="generic__smaller_text" href="/autoren/' + author.permalink + '/">' + author.name + '</a>';
                  }).join(', ');
 
-  html += '      <div class="generic__margin-vertical">';
+  html += '      <div class="generic__margin_vertical">';
   html += [
     book.placeOfPublication ? book.placeOfPublication + ':' : '',
     book.publishers.map(function(publisher) { return '<a href="/verlage/' + publisher.permalink + '/">' + publisher.name + '</a>'; }).join(', '),
@@ -145,14 +145,14 @@ const programResult = function(program) {
   if(program.subtitle) {
   html += '<strong><a href="/radio/' + program.permalink + '/">' + program.subtitle + '</a></strong>'
   }
-  html += '      <div class="generic__margin-vertical">';
+  html += '      <div class="generic__margin_vertical">';
   html += '      <strong>Redaktion</strong><br/>';
   html +=        program.editors.map(function(editor) {
                    return '<a href="/autoren/' + editor.permalink + '/">' + editor.name + '</a>';
                  }).join(', ');
   html += '      </div>';
 
-  html += '      <div class="generic__margin-vertical">';
+  html += '      <div class="generic__margin_vertical">';
   html += '        <strong>Erstaustrahlung</strong><br/>';
   html +=          program.firstBroadcast;
   html += '      </div>';

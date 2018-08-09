@@ -30,7 +30,7 @@ module.exports = (data, issue) => {
           </h1>
 
           ${issue.description ? `
-            <div class="generic__margin-vertical">
+            <div class="generic__margin_vertical">
               ${issue.description.converted}
             </div>
           `:''}

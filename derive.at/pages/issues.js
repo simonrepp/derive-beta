@@ -46,7 +46,7 @@ module.exports = data => {
           </div>
 
           ${latest.description ? `
-            <div class="generic__margin-vertical generic__serif">
+            <div class="generic__margin_vertical generic__serif">
               ${latest.description.converted}
             </div>
           `:''}
