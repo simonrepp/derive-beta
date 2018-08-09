@@ -25,6 +25,7 @@ module.exports = (data, program) => {
 
         <div class="featured__radio">
           <audio controls
+                 controlsList="nodownload"
                  data-title="${program.title}"
                  src="${program.soundfile.written}">
           </audio>

@@ -29,6 +29,8 @@ module.exports = (data, content, options = {}) => `
     </head>
 
     <body>
+      <div id="persistent_audio" data-turbolinks-permanent></div>
+      
       <div class="layout__split">
         <div class="layout__content">
           <div class="layout__scroll">

@@ -138,8 +138,6 @@ document.addEventListener('submit', function(event) {
     }
 
     Turbolinks.visit('/suche/');
-
-    return;
   }
 });
 
@@ -191,14 +189,13 @@ document.addEventListener('ended', function(event) {
 
 document.addEventListener('turbolinks:click', function(event) {
   if(audio) {
-    document.querySelector('.sidebar__link__playback')
-            .append(audio);
+    document.querySelector('#persistent_audio').append(audio);
   }
 });
 
 document.addEventListener('turbolinks:before-render', function(event) {
   if(audio) {
-    const radio = event.data.newBody.querySelector('.feature__radio audio');
+    const radio = event.data.newBody.querySelector('.featured__radio audio');
 
     if(radio && radio.src === audio.src) {
       radio.parentNode.replaceChild(audio, radio);
