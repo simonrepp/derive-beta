@@ -32,7 +32,7 @@ const articleResult = function(article) {
     html += '      <img src="' + article.issue.cover.written +'" />';
     html += '    </div>';
     html += '    <div class="tile_image_split__meta">';
-    html += '      <a href="/zeitschrift/' + article.issue.number + '/">dérive N°' + article.issue.number + '</a><br/>';
+    html += '      <a href="/zeitschrift/' + article.issue.permalink + '/">dérive N°' + article.issue.number + '</a><br/>';
     html += '      Seiten: ' + article.inIssueOnPages;
     html += '    </div>';
     html += '  </div>';
@@ -107,10 +107,10 @@ const issueResult = function(issue) {
 
   html += '<div class="tile">';
   html += '  <div class="tile_header">';
-  html += '    <a href="/zeitschrift/' + issue.number + '/">dérive N°' + issue.number + '</a>';
+  html += '    <a href="/zeitschrift/' + issue.permalink + '/">dérive N°' + issue.number + '</a>';
   html += '  </div>';
   html += '  <div class="generic__subheading">';
-  html += '    <a href="/zeitschrift/' + issue.number + '/">' + issue.title + '</a>';
+  html += '    <a href="/zeitschrift/' + issue.permalink + '/">' + issue.title + '</a>';
   html += '  </div>';
   html += '  <div class="tile_image_split">';
   html += '    <div class="tile_image_split__image">';

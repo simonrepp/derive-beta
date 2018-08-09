@@ -147,7 +147,7 @@ module.exports = async (data, preview) => {
       if(preview) {
         issue.cover.written = `${data.rootServerUrl}/${issue.cover.localFilesystemPath}`;
       } else {
-        issue.cover.written = path.join('/zeitschrift', issue.number.toString(), `cover${path.extname(issue.cover.normalizedPath)}`);
+        issue.cover.written = path.join('/zeitschrift', issue.permalink, `cover${path.extname(issue.cover.normalizedPath)}`);
         concurrentWrites.push( copyResized(issue.cover.localFilesystemPath, issue.cover.written) );
       }
     }

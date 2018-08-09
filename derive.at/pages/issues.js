@@ -40,7 +40,7 @@ module.exports = data => {
           </div>
 
           <div class="generic__big_heading">
-            <a href="/zeitschrift/${latest.number}">
+            <a href="/zeitschrift/${latest.permalink}">
               ${latest.title}
             </a>
           </div>
@@ -56,7 +56,7 @@ module.exports = data => {
 
           ${tags(latest.tags)}
 
-          ${share(latest.title, `https://derive.at/zeitschrift/${latest.number}/`)}
+          ${share(latest.title, `https://derive.at/zeitschrift/${latest.permalink}/`)}
         </div>
       </div>
 

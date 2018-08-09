@@ -24,7 +24,7 @@ module.exports = (data, issue) => {
           ${fullIssueTitle(issue)}
 
           <h1>
-            <a href="/zeitschrift/${issue.number}">
+            <a href="/zeitschrift/${issue.permalink}/">
               ${issue.title}
             </a>
           </h1>
@@ -40,7 +40,7 @@ module.exports = (data, issue) => {
 
           ${tags(issue.tags)}
 
-          ${share(issue.title, `https://derive.at/zeitschrift/${issue.number}/`)}
+          ${share(issue.title, `https://derive.at/zeitschrift/${issue.permalink}/`)}
         </div>
       </div>
 

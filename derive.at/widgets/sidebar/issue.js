@@ -3,7 +3,7 @@ module.exports = issue => `
 
   <br/><br/>
 
-  <a href="/zeitschrift/${issue.number}/">${issue.title}</a>
+  <a href="/zeitschrift/${issue.permalink}/">${issue.title}</a>
 
   <br/><br/><br/>
 

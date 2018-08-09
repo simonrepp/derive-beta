@@ -62,7 +62,7 @@ module.exports = async data => {
   }
 
   for(let issue of data.issues.values()) {
-    await writeFile(data.buildDir, `zeitschrift/${issue.number}/index.html`, issuePage(data, issue));
+    await writeFile(data.buildDir, `zeitschrift/${issue.permalink}/index.html`, issuePage(data, issue));
   }
 
   for(let publisher of data.publishers) {

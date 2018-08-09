@@ -7,7 +7,7 @@ module.exports = issue => `
         <div class="number">dérive N° ${issue.number}</div>
         <div class="quarter">${formattedQuarter[issue.quarter]}</div>
         <div class="title">${issue.title}</div>
-        <a class="view" href="/zeitschrift/${issue.number}/">Ansehen</a>
+        <a class="view" href="/zeitschrift/${issue.permalink}/">Ansehen</a>
         <a class="buy" href="${issue.shopLink}" target="_blank">Kaufen</a>
       </div>
 
@@ -15,8 +15,8 @@ module.exports = issue => `
     </div>
 
     <div class="issue-tile__label">
-      <a href="/zeitschrift/${issue.number}/"><strong>N° ${issue.number}</strong></a><br/>
-      <a href="/zeitschrift/${issue.number}/">${issue.title}</a>
+      <a href="/zeitschrift/${issue.permalink}/"><strong>N° ${issue.number}</strong></a><br/>
+      <a href="/zeitschrift/${issue.permalink}/">${issue.title}</a>
     </div>
   </div>
 `.trim();

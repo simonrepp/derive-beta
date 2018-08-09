@@ -29,7 +29,7 @@ module.exports = data => {
     }
   });
 
-  data.issuesByNumber.clear();
+  data.issuesByNumber.clear();  // TODO: Clarify why this is cleared as a whole, while 3 lines later we delete from it specifically? (also elsewhere here)
   data.issues.forEach(issue => {
     if(issue.draft) {
       data.issues.delete(issue.sourceFile);

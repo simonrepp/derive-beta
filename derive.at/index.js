@@ -25,6 +25,7 @@ const indexArticles = data => {
         issue: article.issue ? {
           cover: { written: article.issue.cover.written },
           number: article.issue.number,
+          permalink: article.issue.permalink,
           quarter: article.issue.quarter,
           year: article.issue.year
         } : null,
@@ -117,6 +118,7 @@ const indexIssues = data => {
         number: issue.number,
         outOfPrint: issue.outOfPrint,
         pages: issue.pages,
+        permalink: issue.permalink,
         quarter: issue.quarter,
         title: issue.title,
         year: issue.year

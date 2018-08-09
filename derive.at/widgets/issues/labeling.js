@@ -8,7 +8,7 @@ const formattedQuarter = {
 exports.formattedQuarter = formattedQuarter;
 
 exports.fullIssueTitle = issue => `
-  <a href="/zeitschrift/${issue.number}/">
+  <a href="/zeitschrift/${issue.permalink}/">
     dérive N° ${issue.number} (${formattedQuarter[issue.quarter]} / ${issue.year})
   </a>
 `.trim();

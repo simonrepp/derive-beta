@@ -11,7 +11,7 @@ const infoDetails = article => `
   ${article.issue ? `
     <strong>Ausgabe</strong><br/>
     <a class="generic__smaller_text"
-       href="/zeitschrift/${article.issue.number}">
+       href="/zeitschrift/${article.issue.permalink}">
       N°${article.issue.number} (Seite ${article.inIssueOnPages})
     </a>
 

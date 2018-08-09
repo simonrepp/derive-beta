@@ -4,6 +4,16 @@ const validateBoolean = require('../validate/boolean.js');
 const { validateMarkdown } = require('../validate/markdown.js');
 const validatePath = require('../validate/path.js');
 
+const ISSUE_REGEXP = /^\d+(?:\/\d+)?$/;
+
+const validateIssueNumber = ({ name, value }) => {
+  if(!value.match(ISSUE_REGEXP)) {
+    throw `${name} muss eine Ganzzahl, bzw. bei Doppelausgaben zwei durch '/' getrennte Ganzzahlen enthalten, zum Beispiel '13' oder '40/41'`;
+  }
+
+  return value;
+};
+
 module.exports = async (data, enoPath) => {
   const cached = data.cache.get(enoPath);
   const stats = await statFile(data.root, enoPath);
@@ -39,9 +49,10 @@ module.exports = async (data, enoPath) => {
     doc.enforceAllElements();
 
     try {
-      const number = doc.number('Nummer', { required: true, withElement: true });
+      const number = doc.field('Nummer', validateIssueNumber, { required: true, withElement: true });
       issue.number = number.value;
       issue.numberElement = number.element;
+      issue.permalink = number.value.replace('/', '-');
 
       issue.title = doc.string('Titel', { required: true });
       issue.year = doc.number('Jahr', { required: true });

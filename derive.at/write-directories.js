@@ -36,7 +36,7 @@ module.exports = async data => {
   data.books.forEach(book => midDirectories.add(`bücher/${book.permalink}`));
   data.booksPaginated.forEach(pagination => midDirectories.add(`bücher/${pagination.label}`));
   data.events.forEach(event => midDirectories.add(`veranstaltungen/${event.permalink}`));
-  data.issues.forEach(issue => midDirectories.add(`zeitschrift/${issue.number}`));
+  data.issues.forEach(issue => midDirectories.add(`zeitschrift/${issue.permalink}`));
   data.pages.forEach(page => midDirectories.add(`seiten/${page.permalink}`));
   data.programs.forEach(program => midDirectories.add(`radio/${program.permalink}`));
   data.programsPaginated.forEach(pagination => midDirectories.add(`radio/${pagination.label}`));

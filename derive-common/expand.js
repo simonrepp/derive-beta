@@ -205,7 +205,7 @@ module.exports = data => {
 
   data.readableArticles = Array.from(data.articles.values()).filter(article => article.readable);
 
-  data.issuesDescending = Array.from(data.issues.values()).sort((a, b) => b.number - a.number);
+  data.issuesDescending = Array.from(data.issues.values()).sort((a, b) => b.number.localeCompare(a.number, undefined, { numeric: true }));
 
   paginateArticles(data);
   paginateAuthors(data);
