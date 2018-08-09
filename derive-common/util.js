@@ -9,6 +9,12 @@ markdownIt.use(markdownItFootnote);
 
 const eno = require('enojs');
 
+exports.FEATURE_TYPE_ENUM = [
+  'landscape',
+  'portrait',
+  'card'
+];
+
 exports.URBANIZE_ENUM = [
   '2012',
   '2013',

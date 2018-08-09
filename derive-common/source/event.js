@@ -1,9 +1,9 @@
-const { loadEno, statFile, URBANIZE_ENUM } = require('../util.js'),
-      { ValidationError, ParseError } = require('enojs'),
-      validateEnum = require('../validate/enum.js'),
-      { validateMarkdown, validateMarkdownWithMedia } = require('../validate/markdown.js'),
-      validatePath = require('../validate/path.js'),
-      validatePermalink = require('../validate/permalink.js');
+const { loadEno, statFile, URBANIZE_ENUM } = require('../util.js');
+const { ValidationError, ParseError } = require('enojs');
+const validateEnum = require('../validate/enum.js');
+const { validateMarkdown, validateMarkdownWithMedia } = require('../validate/markdown.js');
+const validatePath = require('../validate/path.js');
+const validatePermalink = require('../validate/permalink.js');
 
 module.exports = async (data, enoPath) => {
   const cached = data.cache.get(enoPath);

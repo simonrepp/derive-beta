@@ -1,6 +1,6 @@
-const { loadEno, statFile } = require('../util.js'),
-      { ValidationError, ParseError } = require('enojs'),
-      { validateMarkdown } = require('../validate/markdown.js');
+const { loadEno, statFile } = require('../util.js');
+const { ValidationError, ParseError } = require('enojs');
+const { validateMarkdown } = require('../validate/markdown.js');
 
 module.exports = async (data, enoPath) => {
   const cached = data.cache.get(enoPath);

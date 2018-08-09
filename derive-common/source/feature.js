@@ -1,8 +1,8 @@
-const { loadEno, statFile } = require('../util.js'),
-      { ValidationError, ParseError } = require('enojs'),
-      validateBoolean = require('../validate/boolean.js'),
-      { validateMarkdown } = require('../validate/markdown.js'),
-      validatePath = require('../validate/path.js');
+const { FEATURE_TYPE_ENUM, loadEno, statFile } = require('../util.js');
+const { ValidationError, ParseError } = require('enojs');
+const validateEnum = require('../validate/enum.js');
+const { validateMarkdown } = require('../validate/markdown.js');
+const validatePath = require('../validate/path.js');
 
 module.exports = async (data, enoPath) => {
   const cached = data.cache.get(enoPath);
@@ -43,7 +43,7 @@ module.exports = async (data, enoPath) => {
       feature.header = doc.string('Header');
       feature.image = doc.field('Bild', validatePath);
       feature.position = doc.number('Position');
-      feature.type = doc.string('Typ', { enforceElement: false }) || 'card'; // TODO: Make required as soon as there
+      feature.type = doc.field('Typ', validateEnum(FEATURE_TYPE_ENUM), { required: true });
       feature.url = doc.url('URL');
       feature.text = doc.field('Text', validateMarkdown);
 
