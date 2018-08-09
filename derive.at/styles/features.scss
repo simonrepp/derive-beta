@@ -46,6 +46,14 @@
   }
 }
 
+.feature__landscape:nth-child(even) {
+  @media (min-width: 960px) {
+    .feature_image {
+      order: 1;
+    }
+  }
+}
+
 .feature__portrait {
   .feature_image {
     padding-top: 403.15px / (308.5px * 2) * 100%;
