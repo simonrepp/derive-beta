@@ -2,24 +2,30 @@ const authors = require('../authors.js');
 
 module.exports = article => `
   <div class="tile">
-    <h1>
+    <div class="tile_header">
       <a href="/texte/${article.permalink}/">
         ${article.title}
       </a>
-    </h1>
+    </div>
+
     ${article.subtitle ? `
-      <h2>
+      <div class="generic__subheading">
         <a href="/texte/${article.permalink}/">
           ${article.subtitle}
         </a>
-      </h2>
+      </div>
     `:''}
 
-    ${article.image ? `
-      <img src="${article.image.written}" /><br/><br/>
+    ${article.issue ? `
+      <div class="tile_image_split">
+        <div class="tile_image_split__image">
+          <img src="${article.issue.cover.written}" />
+        </div>
+        <div class="tile_image_split__meta">
+        <a href="/zeitschrift/${article.issue.permalink}/">dérive N°${article.issue.number}</a><br/>
+          Seite ${article.inIssueOnPages}
+        </div>
+      </div>
     `:''}
-
-    ${article.issue ? `Ausgabe ${article.issue.year} / ${article.issue.quarter}<br/><br/>` : ''}
-    ${article.inIssueOnPages ? `Seiten: ${article.inIssueOnPages}<br/><br/>` : ''}
   </div>
 `;
