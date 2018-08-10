@@ -38,13 +38,20 @@ module.exports = (data, program) => {
           Seitenleiste hinzugefügt und ist jederzeit verfügbar.
         </div>
 
-        <br/><br/>
-
+        <div class="generic__margin_vertical">
+          ${program.abstract ? program.abstract.converted : ''}
+        </div>
 
         ${tags(program.tags)}
 
         ${share(program.title, `/radio/${program.permalink}/`)}
       </div>
+    </div>
+
+    <hr/>
+
+    <div class="generic__serif">
+      ${program.text ? program.text.written : ''}
     </div>
   `;
 
