@@ -8,11 +8,11 @@ const articlePage = require('./pages/article.js'),
       bookPage = require('./pages/book.js'),
       booksPage = require('./pages/books.js'),
       festivalPage = require('./pages/festival.js'),
-      imprintPage = require('./pages/imprint.js'),
       indexPage = require('./pages/index.js'),
       issuePage = require('./pages/issue.js'),
       issuesPage = require('./pages/issues.js'),
-      notFoundPage = require('./pages/404.js'),
+      siteNotFoundPage = require('./pages/site-not-found.js'),
+      pagePage = require('./pages/page.js'),
       publisherPage = require('./pages/publisher.js'),
       programPage = require('./pages/program.js'),
       programsPage = require('./pages/programs.js'),
@@ -25,10 +25,9 @@ module.exports = async data => {
     writeFile(data.buildDir, 'autoren/index.html', authorsPage(data)),
     writeFile(data.buildDir, 'bücher/index.html', booksPage(data, data.booksPaginated[0])),
     writeFile(data.buildDir, 'festival/index.html', festivalPage(data)),
-    writeFile(data.buildDir, 'imprint.html', imprintPage(data)),
     writeFile(data.buildDir, 'index.html', indexPage(data)),
     writeFile(data.buildDir, 'zeitschrift/index.html', issuesPage(data)),
-    writeFile(data.buildDir, 'seite-nicht-gefunden/index.html', notFoundPage(data)),
+    writeFile(data.buildDir, 'seite-nicht-gefunden/index.html', siteNotFoundPage(data)),
     writeFile(data.buildDir, 'radio/index.html', programsPage(data, data.programsPaginated[0])),
     writeFile(data.buildDir, 'suche/index.html', searchPage(data))
   ]);
@@ -63,6 +62,10 @@ module.exports = async data => {
 
   for(let issue of data.issues.values()) {
     await writeFile(data.buildDir, `zeitschrift/${issue.permalink}/index.html`, issuePage(data, issue));
+  }
+
+  for(let page of data.derivePages) {
+    await writeFile(data.buildDir, `${page.permalink}/index.html`, pagePage(data, page));
   }
 
   for(let publisher of data.publishers) {

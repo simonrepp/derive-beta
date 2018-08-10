@@ -4,6 +4,17 @@ const validateEnum = require('../validate/enum.js');
 const { validateMarkdownWithMedia } = require('../validate/markdown.js');
 const validatePermalink = require('../validate/permalink.js');
 
+const WHITELISTED_PERMALINKS = [
+  'abo',
+  'agb',
+  'impressum',
+  'kontakt',
+  'kooperationen',
+  'medieninformationen',
+  'partner',
+  'ueber-derive'
+];
+
 module.exports = async (data, enoPath) => {
   const cached = data.cache.get(enoPath);
   const stats = await statFile(data.root, enoPath);
@@ -39,14 +50,20 @@ module.exports = async (data, enoPath) => {
     doc.enforceAllElements();
 
     try {
-      page.title = doc.field('Titel', { required: true });
+      page.title = doc.string('Titel', { required: true });
 
       const permalink = doc.field('Permalink', validatePermalink, { required: true, withElement: true });
       page.permalink = permalink.value;
       page.permalinkElement = permalink.element;
 
       page.urbanize = doc.field('Urbanize', validateEnum(URBANIZE_ENUM));
-      page.text = doc.field('Text', validateMarkdownWithMedia);
+
+      // TODO: Move this permalink whitelist check into crossvalidate step instead
+      if(page.urbanize === null && !WHITELISTED_PERMALINKS.includes(page.permalink)) {
+        throw page.permalinkElement.error(`Für die derive.at Seiten sind nur die folgenden Permalinks explizit vorgesehen: ${WHITELISTED_PERMALINKS.map(permalink => `'${permalink}'`).join(', ')}`);
+      }
+
+      page.text = doc.field('Text', validateMarkdownWithMedia, { required: true });
 
       doc.assertAllTouched();
     } catch(err) {

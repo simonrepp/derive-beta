@@ -153,41 +153,36 @@ module.exports = async (data, preview) => {
     }
   }
 
-  // TODO: Also consider urls - maybe have this be unprefixed (no seiten/)
-  //       but directly - dynamically - in root scope, the allowed permalinks
-  //       are then enforced by a WHITELIST written by me, enforced on crossvalidate
-  for(let page of data.pages.values()) {
-    if(page.urbanize === null && page.text) {
-      let text = page.text.converted;
+  for(let page of data.derivePages) {
+    let text = page.text.converted;
 
-      if(preview) {
-        for(let download of page.text.downloads) {
-          download.written = `${data.rootServerUrl}/${download.localFilesystemPath}`;
-          text = text.replace(download.placeholder, download.written);
-        }
-
-        for(let embed of page.text.embeds) {
-          embed.written = `${data.rootServerUrl}/${embed.localFilesystemPath}`;
-          text = text.replace(embed.placeholder, embed.written);
-        }
-      } else {
-        for(let download of page.text.downloads) {
-          download.written = path.join('/seiten', page.permalink, `text-${download.virtualFilename}`);
-          concurrentWrites.push( copy(download.localFilesystemPath, download.written) );
-
-          text = text.replace(download.placeholder, download.written);
-        }
-
-        for(let embed of page.text.embeds) {
-          embed.written = path.join('/seiten', page.permalink, `text-${embed.virtualFilename}`);
-          concurrentWrites.push( copyResized(embed.localFilesystemPath, embed.written) );
-
-          text = text.replace(embed.placeholder, embed.written);
-        }
+    if(preview) {
+      for(let download of page.text.downloads) {
+        download.written = `${data.rootServerUrl}/${download.localFilesystemPath}`;
+        text = text.replace(download.placeholder, download.written);
       }
 
-      page.text.written = text;
+      for(let embed of page.text.embeds) {
+        embed.written = `${data.rootServerUrl}/${embed.localFilesystemPath}`;
+        text = text.replace(embed.placeholder, embed.written);
+      }
+    } else {
+      for(let download of page.text.downloads) {
+        download.written = path.join(page.permalink, `text-${download.virtualFilename}`);
+        concurrentWrites.push( copy(download.localFilesystemPath, download.written) );
+
+        text = text.replace(download.placeholder, download.written);
+      }
+
+      for(let embed of page.text.embeds) {
+        embed.written = path.join(page.permalink, `text-${embed.virtualFilename}`);
+        concurrentWrites.push( copyResized(embed.localFilesystemPath, embed.written) );
+
+        text = text.replace(embed.placeholder, embed.written);
+      }
     }
+
+    page.text.written = text;
   }
 
   for(let program of data.programs.values()) {

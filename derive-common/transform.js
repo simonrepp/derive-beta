@@ -1,11 +1,12 @@
-const checkup = require('./checkup.js'),
-      connect = require('./connect.js'),
-      connectMedia = require('./connect-media.js'),
-      crossvalidate = require('./crossvalidate.js'),
-      expand = require('./expand.js'),
-      removeDrafts = require('./remove-drafts.js'),
-      source = require('./source.js'),
-      urbanize = require('./urbanize.js');
+const checkup = require('./checkup.js');
+const connect = require('./connect.js');
+const connectMedia = require('./connect-media.js');
+const crossvalidate = require('./crossvalidate.js');
+const derive = require('./derive.js');
+const expand = require('./expand.js');
+const removeDrafts = require('./remove-drafts.js');
+const source = require('./source.js');
+const urbanize = require('./urbanize.js');
 
 module.exports = async data => {
   console.time('transform');
@@ -44,6 +45,11 @@ module.exports = async data => {
                 // Create paginated collections: booksPaginated, programsPaginated
 
   console.timeEnd('expand');
+  console.time('derive');
+
+  derive(data); // Create refined collections for derive (currently only derive specific pages)
+
+  console.timeEnd('derive');
   console.time('urbanize');
 
   urbanize(data); // Create refined collections for current urbanize festival(s)

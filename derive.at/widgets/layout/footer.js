@@ -5,7 +5,7 @@ module.exports = () => `
 
     <footer class="footer">
       <div>
-        <a href="/impressum/">Über dérive</a><br/>
+        <a href="/ueber-derive/">Über dérive</a><br/>
         <a href="/medieninformationen/">Medieninformationen</a><br/>
         <a href="/kooperationen/">Kooperationen</a><br/>
         <a href="/impressum/">Kontakt / Impressum</a><br/>
