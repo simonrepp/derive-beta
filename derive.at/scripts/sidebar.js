@@ -89,8 +89,9 @@ document.addEventListener('click', function(event) {
 });
 
 document.addEventListener('submit', function(event) {
+  const pageSearchform = document.querySelector('.search__searchform');
   const sidebarSearchform = document.querySelector('.sidebar__searchform');
-  if(event.target === sidebarSearchform) {
+  if(event.target === sidebarSearchform || event.target === pageSearchform) {
     event.preventDefault();
 
     search.error = null;
