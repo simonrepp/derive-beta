@@ -21,11 +21,15 @@
   margin: 1.5em 0;
 }
 
-.generic__no-top-margin {
-  margin-top: 0;
+.generic__margin_vertical_slight {
+  margin: 0.5em 0;
 }
 
-.generic__center-aligned {
+.generic__no_margin {
+  margin: 0;
+}
+
+.generic__center_aligned {
   text-align: center;
 }
 

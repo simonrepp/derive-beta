@@ -11,13 +11,13 @@ const article = article => `
     </div>
 
     <div class="section-article__title">
-      <h2 class="generic__no-top-margin">
+      <h2 class="generic__no_margin">
         <a href="/texte/${article.permalink}/">
           ${article.title}
         </a>
       </h2>
       ${article.subtitle ? `
-        <h3>
+        <h3 class="generic__margin_vertical_slight">
           <a href="/texte/${article.permalink}/">
             ${article.subtitle}
           </a>

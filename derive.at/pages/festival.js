@@ -25,7 +25,7 @@ module.exports = data => {
       </div>
     </div>
 
-    <h2 class="generic__center-aligned">
+    <h2 class="generic__center_aligned">
       Festivals der letzten Jahre
     </h2>
 
