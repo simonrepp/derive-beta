@@ -23,7 +23,7 @@ module.exports = (data, author) => {
       ${tags(author.tags)}
     </div>
 
-    ${author.articles ? `
+    ${author.articles && author.articles.length > 0 ? `
       <h1>Artikel</h1>
 
       <div class="tiles">
@@ -31,7 +31,7 @@ module.exports = (data, author) => {
       </div>
     `:''}
 
-    ${author.books ? `
+    ${author.books && author.books.length > 0 ? `
       <h1>Bücher</h1>
 
       <div class="tiles">
@@ -39,7 +39,7 @@ module.exports = (data, author) => {
       </div>
     `:''}
 
-    ${author.programs ? `
+    ${author.programs && author.programs.length > 0 ? `
       <h1>Radio</h1>
 
       <div class="tiles">
@@ -48,7 +48,7 @@ module.exports = (data, author) => {
 
     `:''}
 
-    ${author.events ? `
+    ${author.events && author.events.length > 0 ? `
       <h1>Veranstaltungen</h1>
 
       <div class="tiles">
