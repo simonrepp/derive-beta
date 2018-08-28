@@ -36,6 +36,8 @@
 
 ![Bildbeschreibung für Screenreader](/Pfad/eines/bildes.jpg "Hover Text")
 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Für eine erzwungene Einrückung des Beginns einer einzelnen Zeile kann man eine beliebige Anzahl von "&nbsp;" (Non-breaking space HTML Entity) verwenden.
+
 Ein Stern im Text der nicht als Beginn eines kursiven Textes interpretiert
 werden soll muss mit einem Backslash davor versehen werden: \*
 
