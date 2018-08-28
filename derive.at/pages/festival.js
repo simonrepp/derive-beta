@@ -6,7 +6,7 @@ module.exports = data => {
     <div class="generic__featured">
 
       <div class="generic__featured_image">
-        <img src="${data.festival.editions[0].image.written}"/>
+        <img src="${data.festival.image.written}"/>
       </div>
 
       <div class="generic__featured_text">

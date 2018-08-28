@@ -133,6 +133,12 @@ module.exports = async (data, preview) => {
   }
 
   let festivalNumber = 0;
+  if(preview) {
+    data.festival.image.written = `${data.rootServerUrl}/${data.festival.image.localFilesystemPath}`;
+  } else {
+    data.festival.image.written = path.join('/festival', `bild-${festivalNumber++}${path.extname(data.festival.image.normalizedPath)}`);
+    concurrentWrites.push( copyResized(data.festival.image.localFilesystemPath, data.festival.image.written) );
+  }
   for(let edition of data.festival.editions) {
     if(preview) {
       edition.image.written = `${data.rootServerUrl}/${edition.image.localFilesystemPath}`;

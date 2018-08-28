@@ -37,6 +37,7 @@ module.exports = async (data, enoPath) => {
     try {
       festival.title = doc.field('Titel', { required: true });
       festival.subtitle = doc.field('Untertitel', { required: true });
+      festival.image = doc.field('Bild', validatePath, { required: true });
       festival.description = doc.field('Beschreibung', validateMarkdown, { required: true });
       festival.editions = doc.sections('Edition').map(edition => ({
         image: edition.field('Bild', validatePath, { required: true }),

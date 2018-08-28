@@ -113,6 +113,15 @@ module.exports = data => {
   });
 
   if(data.festival) {
+    if(!connectMedia(data, data.festival.image)) {
+      data.errors.push({
+        files: [{ path: data.festival.sourceFile }],
+        message: `Das Bild "${data.festival.image.normalizedPath}", dass als Headerbild der Festivalseite referenziert wird, wurde nicht gefunden.`
+      });
+
+      data.festival = null;
+    }
+
     data.festival.editions.forEach(edition => {
       if(!connectMedia(data, edition.image)) {
         data.errors.push({
