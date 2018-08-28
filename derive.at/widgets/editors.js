@@ -3,6 +3,6 @@ module.exports = editors => editors.length > 0 ? `
     <strong>Redaktion</strong><br/>
     ${editors.map(editor => `
       <a href="/autoren/${editor.permalink}/">${editor.name}</a>
-    `).join(', ')}
+    `.trim()).join(', ')}
   </div>
 `:'';

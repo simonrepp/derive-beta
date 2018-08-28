@@ -3,6 +3,6 @@ module.exports = tags => tags.length > 0 ? `
     <strong>Tags</strong><br/>
     ${tags.map(tag => `
       <a class="generic__smaller_text" href="/tags/${tag.permalink}/">${tag.name}</a>
-    `)}
+    `.trim()).join(', ')}
   </div>
 `:'';
