@@ -12,7 +12,7 @@ const infoDetails = article => `
     <strong>Ausgabe</strong><br/>
     <a class="generic__smaller_text"
        href="/zeitschrift/${article.issue.permalink}">
-      N°${article.issue.number} (Seite ${article.inIssueOnPages})
+      N°${article.issue.number} (${article.inIssueOnPages === 'Nur online' ? 'Nur online' : `Seite ${article.inIssueOnPages}`})
     </a>
 
     <br/><br/>

@@ -5,10 +5,19 @@ const { validateMarkdown } = require('../validate/markdown.js');
 const validatePath = require('../validate/path.js');
 
 const ISSUE_REGEXP = /^\d+(?:\/\d+)?$/;
+const PAGES_REGEXP = /^\d{2,3}(?:-\d{2,3})?(?:, \d{2,3}(?:-\d{2,3})?)?$|^Nur online$/;
 
 const validateIssueNumber = ({ name, value }) => {
   if(!value.match(ISSUE_REGEXP)) {
     throw `${name} muss eine Ganzzahl, bzw. bei Doppelausgaben zwei durch '/' getrennte Ganzzahlen enthalten, zum Beispiel '13' oder '40/41'`;
+  }
+
+  return value;
+};
+
+const validatePages = ({ name, value }) => {
+  if(!value.match(PAGES_REGEXP)) {
+    throw `Erlaubte Formate für Seitenangaben sind: "01" / "13-14" / "23-42, 57-89" / "Nur online" `;
   }
 
   return value;
@@ -72,7 +81,7 @@ module.exports = async (data, enoPath) => {
           const title = reference.string('Titel', { required: true, withElement: true });
 
           return {
-            pages: reference.string('Seite(n)', { required: true }),
+            pages: reference.field('Seite(n)', validatePages, { required: true }),
             title: title.value,
             titleElement: title.element
           };
