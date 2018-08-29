@@ -12,28 +12,17 @@ module.exports = (data, article) => {
 
     <hr/>
 
-    ${tags(article.tags)}
-
     ${article.authors.map(author => `
       <strong>${author.name}</strong><br/>
-      ${author.biography ? `
-        ${author.biography.converted}
-      `:''}<br/><br/>
+      ${author.biography ? author.biography.converted : '<br/>'}
     `).join('')}
 
-    <div class="generic__serif">
-      ${article.readable ? `
-        <hr/>
-
-        ${article.text ? article.text.written : 'Kein Text vorhanden'}
-      `:`
-        ${article.abstract ? article.abstract.converted : (article.text ? stripAndTruncateHtml(article.text.converted, 250) : '')}
-
-        <br/><br/>
-
-        Die Zeitschrift mit dem gesamten Artikel kann online im Shop erworben werden!
-      `}
-    </div>
+    ${article.readable ?
+      (article.text ? `<hr/><div class="generic__serif">${article.text.written}</div>` :
+                      '<div class="generic__margin_vertical">Kein Text vorhanden</div>')
+     :
+     '<div class="generic__margin_vertical">Die Zeitschrift mit dem gesamten Artikel kann online im Shop erworben werden!</div>'
+    }
 
     <hr/>
 
@@ -43,7 +32,7 @@ module.exports = (data, article) => {
 
     ${share(article.title, `https://derive.at/texte/${article.permalink}/`)}
 
-    ${article.bibliography ? `
+    ${article.readable && article.bibliography ? `
       <hr/>
 
       <strong>Literaturliste</strong><br/>
