@@ -32,7 +32,7 @@ module.exports = async (data, enoPath) => {
     }
 
     const program = {
-      draft: enoPath.match(/\.entwurf\.eno$/),
+      draft: /\.entwurf\.eno$/.test(enoPath),
       sourceFile: enoPath
     };
 

@@ -31,7 +31,7 @@ module.exports = async (data, enoPath) => {
     }
 
     const player = {
-      draft: enoPath.match(/\.entwurf\.eno$/),
+      draft: /\.entwurf\.eno$/.test(enoPath),
       sourceFile: enoPath
     };
 
