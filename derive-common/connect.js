@@ -7,7 +7,7 @@ const connectBookReviews = data => {
       if(book) {
         if(!article.draft && !book.draft) {
           article.reviewedBooks.push(book);
-          book.reviews.push(document);
+          book.reviews.push(article);
         }
       } else {
         const error = element.error(`Im Artikel "${article.title}" wird das Buch "${value}" besprochen, allerdings wurde kein Buch mit diesem Titel gefunden.`);

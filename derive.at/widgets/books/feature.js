@@ -25,7 +25,7 @@ module.exports = book => `
         ].join(' ').trim()}
       </div>
 
-      ${book.reviews.length > 1 ? `<strong>${reviews(book.reviews)}</strong>` : ''}
+      ${book.reviews.length > 0 ? `<strong>${reviews(book.reviews)}</strong>` : ''}
 
       ${tags(book.tags)}
 

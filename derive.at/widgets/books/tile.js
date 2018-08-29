@@ -29,7 +29,7 @@ module.exports = book => `
           ].join(' ').trim()}
         </div>
 
-        ${book.reviews.length > 1 ? reviews(book.reviews) : ''}
+        ${book.reviews.length > 0 ? reviews(book.reviews) : ''}
       </div>
     </div>
   </div>
