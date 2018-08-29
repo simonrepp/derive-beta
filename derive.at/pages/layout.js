@@ -14,6 +14,7 @@ module.exports = (data, content, options = {}) => `
 
       <meta charset="utf-8">
       <meta name="description" content="dérive">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
 
       <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
       <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -30,7 +31,7 @@ module.exports = (data, content, options = {}) => `
 
     <body>
       <div id="persistent_audio" data-turbolinks-permanent></div>
-      
+
       <div class="layout__split">
         <div class="layout__content">
           <div class="layout__scroll">
