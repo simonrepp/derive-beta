@@ -7,13 +7,11 @@ const editors = require('../widgets/editors.js'),
       tags = require('../widgets/tags.js');
 
 module.exports = (data, pagination) => {
-  const firstWithImage = pagination.programs.find(program => program.image);
-
   const html = `
     <div class="generic__featured">
 
       <div class="generic__featured_image">
-        ${firstWithImage ? `<img src="${firstWithImage.image.written}" />` : ''}
+        <img src="${data.radio.image.written}" />
       </div>
 
       <div class="generic__featured_text">

@@ -1,6 +1,7 @@
 const { loadEno, statFile } = require('../util.js');
 const { ValidationError, ParseError } = require('enojs');
 const { validateMarkdown } = require('../validate/markdown.js');
+const validatePath = require('../validate/path.js');
 
 module.exports = async (data, enoPath) => {
   const cached = data.cache.get(enoPath);
@@ -35,6 +36,7 @@ module.exports = async (data, enoPath) => {
 
     try {
       radio.title = doc.field('Titel', { required: true });
+      radio.image = doc.field('Bild', validatePath, { required: true });
       radio.info = doc.field('Allgemeine Info', validateMarkdown, { required: true });
       radio.editorReferences = doc.list('Redaktion', { withElements: true });
 

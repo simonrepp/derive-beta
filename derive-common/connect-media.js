@@ -164,6 +164,15 @@ module.exports = data => {
     }
   });
 
+  if(!connectMedia(data, data.radio.image)) {
+    data.errors.push({
+      files: [{ path: data.radio.sourceFile }],
+      message: `Das Bild "${data.radio.image.normalizedPath}", dass als Headerbild der Radioseite referenziert wird, wurde nicht gefunden.`
+    });
+
+    data.radio = null;
+  }
+
   data.programs.forEach(program => {
     if(program.image && !connectMedia(data, program.image)) {
       data.warnings.push({

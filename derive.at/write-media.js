@@ -191,6 +191,15 @@ module.exports = async (data, preview) => {
     page.text.written = text;
   }
 
+  // Radio
+
+  if(preview) {
+    data.radio.image.written = `${data.rootServerUrl}/${data.radio.image.localFilesystemPath}`;
+  } else {
+    data.radio.image.written = path.join('/radio', `header${path.extname(data.radio.image.normalizedPath)}`);
+    concurrentWrites.push( copyResized(data.radio.image.localFilesystemPath, data.radio.image.written) );
+  }
+
   for(let program of data.programs.values()) {
     if(program.image) {
       if(preview) {
