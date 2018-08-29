@@ -132,9 +132,6 @@ const paginateBooks = data => {
   const booksSorted = Array.from(data.books.values()).sort((a, b) => {
     if(a.featuredRank) {
       if(b.featuredRank) {
-        console.log(a, a.featuredRank);
-        console.log(b, b.featuredRank);
-        console.log(a.featuredRank - b.featuredRank);
         return a.featuredRank - b.featuredRank;
       } else {
         return -1;
