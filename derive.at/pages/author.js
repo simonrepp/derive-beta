@@ -10,11 +10,9 @@ module.exports = (data, author) => {
     <div>
       <h1>${author.name}</h1>
 
-      ${author.biography ? `<strong>${author.biography.converted}</strong>` : ''}
-
-      ${author.text ? `
-        ${author.text.converted}
-      `:''}
+      ${author.text ?
+        author.text.converted :
+        (author.biography ? author.biography.converted : '')}
 
       ${author.website ? `
         <a href="${author.website}">Zur Website von ${author.name}</a>

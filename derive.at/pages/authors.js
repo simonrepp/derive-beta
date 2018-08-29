@@ -30,9 +30,11 @@ module.exports = (data, pagination) => {
             </a>
           </div>
 
-          ${author.biography ? `<strong>${author.biography.converted}</strong>` : '' /* TODO: biography maybe does not have to be markdown? less is more. */}
 
-          ${author.text ? stripAndTruncateHtml(author.text.converted, author.biography ? 250 : 500) : ''}
+
+          ${author.biography ?
+            author.biography.converted :
+            (author.text ? stripAndTruncateHtml(author.text.converted, author.biography ? 250 : 500) : '')}
         </div>
       `).join('')}
     </div>
