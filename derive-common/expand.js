@@ -104,7 +104,11 @@ const paginateAuthors = data => {
     });
   }
 
-  for(let author of data.authors) {
+  const authorsSorted = data.authors.sort((a, b) =>
+    (a.lastName || a.name).localeCompare(b.lastName || b.name)
+  );
+
+  for(let author of authorsSorted) {
     const relevantName = author.lastName || author.name;
     const firstLetter = relevantName.charAt(0)
                                     .normalize('NFD')
