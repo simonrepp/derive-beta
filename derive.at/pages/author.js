@@ -5,6 +5,20 @@ const layout = require('./layout.js'),
       programTile = require('../widgets/program-tile.js'),
       tags = require('../widgets/tags.js');
 
+const eventSort = (a, b) => {
+  if(a.dates && a.dates.length > 0) {
+    if(b.dates && b.dates.length > 0) {
+      return b.dates[b.dates.length - 1].date - a.dates[a.dates.length - 1].date;
+    } else {
+      return -1;
+    }
+  } else if(b.dates && b.dates.length > 0) {
+    return 1;
+  } else {
+    return 0;
+  }
+};
+
 module.exports = (data, author) => {
   const html = `
     <div>
@@ -25,7 +39,7 @@ module.exports = (data, author) => {
       <h1>Artikel</h1>
 
       <div class="tiles">
-        ${author.articles.map(articleTile).join('')}
+        ${author.articles.sort((a, b) => b.date - a.date).map(articleTile).join('')}
       </div>
     `:''}
 
@@ -33,7 +47,7 @@ module.exports = (data, author) => {
       <h1>Bücher</h1>
 
       <div class="tiles">
-        ${author.books.map(bookTile).join('')}
+        ${author.books.sort((a, b) => b.yearOfPublication - a.yearOfPublication).map(bookTile).join('')}
       </div>
     `:''}
 
@@ -41,16 +55,16 @@ module.exports = (data, author) => {
       <h1>Radio</h1>
 
       <div class="tiles">
-        ${author.programs.map(programTile).join('')}
+        ${author.programs.sort((a, b) => b.firstBroadcast - a.firstBroadcast).map(programTile).join('')}
       </div>
 
     `:''}
 
-    ${author.events && author.events.length > 0 ? `
+    ${author.eventParticipations && author.eventParticipations.length > 0 ? `
       <h1>Veranstaltungen</h1>
 
       <div class="tiles">
-        ${author.events.map(eventTile).join('')}
+        ${author.eventParticipations.sort(eventSort).map(eventTile).join('')}
       </div>
     `:''}
   `;
