@@ -129,7 +129,22 @@ const paginateAuthors = data => {
 
 const paginateBooks = data => {
   data.booksPaginated = [];
-  const booksSorted = Array.from(data.books.values()).sort((a, b) => b.yearOfPublication - a.yearOfPublication);
+  const booksSorted = Array.from(data.books.values()).sort((a, b) => {
+    if(a.featuredRank) {
+      if(b.featuredRank) {
+        console.log(a, a.featuredRank);
+        console.log(b, b.featuredRank);
+        console.log(a.featuredRank - b.featuredRank);
+        return a.featuredRank - b.featuredRank;
+      } else {
+        return -1;
+      }
+    } else if(b.featuredRank) {
+      return 1;
+    } else {
+      return b.yearOfPublication - a.yearOfPublication;
+    }
+  });
 
   for(let index = 0; index < booksSorted.length; index += 100) {
     const pagination = {

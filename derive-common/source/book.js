@@ -53,6 +53,7 @@ module.exports = async (data, enoPath) => {
       book.placeOfPublication = doc.field('Erscheinungsort');
       book.numberOfPages = doc.number('Seitenanzahl');
       book.price = doc.field('Preis');
+      book.featuredRank = doc.number('Featured (Position)');
       book.authorReferences = doc.list('Autoren/Herausgeber', { withElements: true });
       book.publisherReferences = doc.list('Verleger', { withElements: true });
       book.tagsDisconnected = doc.list('Tags');
