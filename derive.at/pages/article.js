@@ -4,8 +4,6 @@ const layout = require('./layout.js');
 const share = require('../widgets/share.js');
 const tags = require('../widgets/tags.js');
 
-const { stripAndTruncateHtml } = require('../../derive-common/util.js');
-
 module.exports = (data, article) => {
   const html = `
     ${articleFeature(article)}

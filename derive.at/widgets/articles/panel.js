@@ -66,8 +66,7 @@ module.exports = article => `
 
     <div class="article-panel__abstract generic__serif">
       ${article.abstract ? article.abstract.converted :
-                           (article.text ? stripAndTruncateHtml(article.text.converted, 500) :
-                                           '')}
+                           (article.text ? stripAndTruncateHtml(article.text.converted, 500, `/texte/${article.permalink}/`) : 'Kein Text vorhanden.')}
     </div>
   </div>
 `;

@@ -21,7 +21,7 @@ module.exports = article => `
     <div class="generic__featured_text">
       ${authors(article.authors)}
 
-      <h1>${article.title}</h1>
+      <h1><a href="/texte/${article.permalink}/">${article.title}</a></h1>
 
       ${article.subtitle ? `
         <strong>${article.subtitle}</strong><br/><br/>
@@ -31,8 +31,7 @@ module.exports = article => `
 
       <div class="generic__margin_vertical generic__serif">
         ${article.abstract ? article.abstract.converted :
-                              (article.text ? stripAndTruncateHtml(article.text.converted, 500) :
-                                               '')}
+                             (article.text ? stripAndTruncateHtml(article.text.converted, 500, `/texte/${article.permalink}/`) : 'Kein Text vorhanden.')}
       </div>
 
       ${tags(article.tags)}

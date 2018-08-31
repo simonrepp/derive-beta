@@ -63,11 +63,18 @@ exports.statFile = (directory, filePath) => new Promise((resolve, reject) =>
   fs.stat(path.join(directory, filePath), (err, stat) => err ? reject(err) : resolve(stat))
 );
 
-exports.stripAndTruncateHtml = (html, length) => {
+exports.stripAndTruncateHtml = (html, length, link) => {
   const stripped = striptags(html);
 
   if(stripped.length > length) {
-    return stripped.substr(0, length - 3) + '...';
+    const boundary = stripped.lastIndexOf(' ', length - 3);
+    const truncated = boundary === -1 ? stripped.substr(0, length - 3) : stripped.substr(0, boundary);
+
+    if(link) {
+      return `${truncated} <a href="${link}">…</a>`;
+    } else {
+      return `${truncated} …`;
+    }
   } else {
     return stripped;
   }

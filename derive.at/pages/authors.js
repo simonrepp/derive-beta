@@ -34,7 +34,7 @@ module.exports = (data, pagination) => {
 
           ${author.biography ?
             author.biography.converted :
-            (author.text ? stripAndTruncateHtml(author.text.converted, author.biography ? 250 : 500) : '')}
+            (author.text ? stripAndTruncateHtml(author.text.converted, 500, `/autoren/${author.permalink}/`) : '')}
         </div>
       `).join('')}
     </div>
