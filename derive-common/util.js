@@ -1,4 +1,5 @@
 const fs = require('fs');
+const eno = require('enojs');
 const glob = require('glob');
 const markdownIt = require('markdown-it')({ html: true });
 const markdownItFootnote = require('markdown-it-footnote');
@@ -6,8 +7,22 @@ const path = require('path');
 const striptags = require('striptags');
 
 markdownIt.use(markdownItFootnote);
+markdownIt.renderer.rules.image = (tokens, idx, options, env, self) => {
+  const token = tokens[idx];
+  const srcIndex = token.attrIndex('src');
+  const url = token.attrs[srcIndex][1];
+  const caption = token.content;
 
-const eno = require('enojs');
+  let title = null;
+  if(token.attrIndex('title') !== -1) {
+    title = token.attrs[token.attrIndex('title')][1];
+  }
+
+  return `
+    <div><img class="generic__image_restraint" src="${url}" alt="${caption}"></div>
+    ${title ? `<small>${title}</small>` : ''}
+  `.trim();
+}
 
 exports.FEATURE_TYPE_ENUM = [
   'landscape',
