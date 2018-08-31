@@ -9,7 +9,11 @@ module.exports = (data, program) => {
     <div class="generic__featured">
 
       <div class="generic__featured_image">
-        ${program.image ? `<img src="${program.image.written}" />` : ''}
+        ${program.image ?
+          `<img src="${program.image.written}"
+                ${program.imageCaption ? `alt=${program.imageCaption}" title="${program.imageCaption}"` : ''} />`
+        :''}
+        ${program.imageCaption ? `<small>${program.imageCaption}</small>` : ''}
       </div>
 
       <div class="generic__featured_text">

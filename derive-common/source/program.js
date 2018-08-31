@@ -48,6 +48,7 @@ module.exports = async (data, enoPath) => {
       program.firstBroadcast = doc.date('Erstausstrahlung', { required: true });
       program.subtitle = doc.field('Untertitel');
       program.image = doc.field('Bild', validatePath);
+      program.imageCaption = doc.string('Bilduntertitel');
       program.soundfile = doc.field('Soundfile', validatePath);
       program.editorReferences = doc.list('Redaktion', { withElements: true });
       program.language = doc.field('Sprache');

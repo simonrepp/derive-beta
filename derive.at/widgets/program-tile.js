@@ -12,7 +12,8 @@ module.exports = program => `
     <div class="tile_image_split">
       <div class="tile_image_split__image">
         ${program.image ? `
-          <img src="${program.image.written}" />
+          <img src="${program.image.written}"
+               ${program.imageCaption ? `alt=${program.imageCaption}" title="${program.imageCaption}"` : ''} />
         `:''}
       </div>
 
