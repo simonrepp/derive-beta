@@ -51,6 +51,7 @@ module.exports = async (data, enoPath) => {
 
       article.subtitle = doc.field('Untertitel');
       article.image = doc.field('Bild', validatePath);
+      article.imageCaption = doc.string('Bilduntertitel');
       article.authorReferences = doc.list('Autoren', { withElements: true });
       article.date = doc.date('Datum');
       article.language = doc.field('Sprache');

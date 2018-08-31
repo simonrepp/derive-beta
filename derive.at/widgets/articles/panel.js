@@ -47,9 +47,9 @@ const info = article => `
   <div class="article-panel__info-split">
 
     <div class="article-panel__info-cover">
-      ${article.issue ? `
-        <img src="${article.issue.cover.written}">
-      `:''}
+      ${article.image ?
+        `<img src="${article.image.written}" ${article.imageCaption ? `alt=${article.imageCaption}" title="${article.imageCaption}"` : ''} >` :
+        (article.issue ? `<img src="${article.issue.cover.written}">` : '')}
     </div>
 
     <div class="article-panel__info-details">

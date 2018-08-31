@@ -9,13 +9,10 @@ const { stripAndTruncateHtml } = require('../../../derive-common/util.js');
 module.exports = article => `
   <div class="generic__featured">
     <div class="generic__featured_image">
-      ${article.image ? `
-        <img src="${article.image.written}" />
-      ` : `
-        ${article.issue ? `
-          <img src="${article.issue.cover.written}" />
-        `:''}
-      `}
+      ${article.image ?
+        `<img src="${article.image.written}">` :
+        (article.issue ? `<img src="${article.issue.cover.written}">`: '')}
+      ${article.image && article.imageCaption ? `<small>${article.imageCaption}</small>` : ''}
     </div>
 
     <div class="generic__featured_text">
