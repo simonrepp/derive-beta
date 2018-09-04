@@ -14,7 +14,7 @@ module.exports = book => `
     <div class="tile_image_split">
       <div class="tile_image_split__image">
         ${book.cover ? `
-          <img src="${book.cover.written}" />
+          <img src="${book.cover.written}">
         `:''}
       </div>
 

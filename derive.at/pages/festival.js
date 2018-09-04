@@ -6,7 +6,7 @@ module.exports = data => {
     <div class="generic__featured">
 
       <div class="generic__featured_image">
-        <img src="${data.festival.image.written}"/>
+        <img src="${data.festival.image.written}">
       </div>
 
       <div class="generic__featured_text">
@@ -33,7 +33,7 @@ module.exports = data => {
       ${data.festival.editions.map(edition => `
         <div class="tile tile--festival">
           <a href="${edition.url}" target="_blank">
-            <img src="${edition.image.written}" />
+            <img src="${edition.image.written}">
           </a>
         </div>
       `).join('')}

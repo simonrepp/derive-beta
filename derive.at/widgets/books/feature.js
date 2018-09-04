@@ -7,7 +7,7 @@ module.exports = book => `
   <div class="generic__featured">
 
     <div class="generic__featured_image">
-      ${book.cover ? `<img src="${book.cover.written}" />` : ''}
+      ${book.cover ? `<img src="${book.cover.written}">` : ''}
     </div>
 
     <div class="generic__featured_text">

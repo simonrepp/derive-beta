@@ -11,7 +11,7 @@ module.exports = issue => `
         <a class="buy" href="${issue.shopLink}" target="_blank">Kaufen</a>
       </div>
 
-      <img src="${issue.cover.written}"/>
+      <img src="${issue.cover.written}">
     </div>
 
     <div class="issue-tile__label">

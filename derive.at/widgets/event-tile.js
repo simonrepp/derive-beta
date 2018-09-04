@@ -15,7 +15,7 @@ module.exports = event => `
     ).join('<br/>')}
 
     ${event.image ? `
-      <img src="${event.image.written}" />
+      <img src="${event.image.written}">
     `:''}
 
     ${authors(event.hosts)}

@@ -30,7 +30,7 @@ module.exports = data => {
     <div>
       <div class="generic__featured">
         <div class="generic__featured_image_wide">
-          <img src="${latest.cover.written}"/>
+          <img src="${latest.cover.written}">
         </div>
 
         <div class="generic__featured_text">

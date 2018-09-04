@@ -29,7 +29,7 @@ const articleResult = function(article) {
   if(article.issue) {
     html += '  <div class="tile_image_split">';
     html += '    <div class="tile_image_split__image">';
-    html += '      <img src="' + article.issue.cover.written +'" />';
+    html += '      <img src="' + article.issue.cover.written +'">';
     html += '    </div>';
     html += '    <div class="tile_image_split__meta">';
     html += '      <a href="/zeitschrift/' + article.issue.permalink + '/">dérive N°' + article.issue.number + '</a><br/>';
@@ -67,7 +67,7 @@ const bookResult = function(book) {
   html += '  <div class="tile_image_split">';
   html += '    <div class="tile_image_split__image">';
   if(book.cover) {
-  html += '      <img src="' + book.cover.written +'" />';
+  html += '      <img src="' + book.cover.written +'">';
   }
   html += '    </div>';
   html += '    <div class="tile_image_split__meta">';
@@ -114,7 +114,7 @@ const issueResult = function(issue) {
   html += '  </div>';
   html += '  <div class="tile_image_split">';
   html += '    <div class="tile_image_split__image">';
-  html += '      <img src="' + issue.cover.written +'" />';
+  html += '      <img src="' + issue.cover.written +'">';
   html += '    </div>';
   html += '    <div class="tile_image_split__meta">';
   html +=        formattedQuarter[issue.quarter] + ' / ' + issue.year + '<br/>';
@@ -138,7 +138,7 @@ const programResult = function(program) {
   html += '  <div class="tile_image_split">';
   html += '    <div class="tile_image_split__image">';
   if(program.image) {
-  html += '      <img src="' + program.image.written +'" />';
+  html += '      <img src="' + program.image.written +'">';
   }
   html += '    </div>';
   html += '    <div class="tile_image_split__meta">';

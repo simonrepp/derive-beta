@@ -19,7 +19,7 @@ module.exports = article => `
     ${article.issue ? `
       <div class="tile_image_split">
         <div class="tile_image_split__image">
-          <img src="${article.issue.cover.written}" />
+          <img src="${article.issue.cover.written}">
         </div>
         <div class="tile_image_split__meta">
         <a href="/zeitschrift/${article.issue.permalink}/">dérive N°${article.issue.number}</a><br/>

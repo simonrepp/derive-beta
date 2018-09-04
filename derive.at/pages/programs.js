@@ -11,7 +11,7 @@ module.exports = (data, pagination) => {
     <div class="generic__featured">
 
       <div class="generic__featured_image">
-        <img src="${data.radio.image.written}" />
+        <img src="${data.radio.image.written}">
       </div>
 
       <div class="generic__featured_text">

@@ -15,9 +15,7 @@ module.exports = () =>
 
     <a class="background link"
           href="/page/about/">
-      <img alt="ur6anize! - Do It Together"
-             src={sujet}
-             class="sujet" />
+      <img alt="ur6anize! - Do It Together" src={sujet} className="sujet">
     </a>
   </div>
 ;
