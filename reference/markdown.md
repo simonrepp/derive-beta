@@ -32,9 +32,9 @@
 
 <email.link@beispiel.com>
 
-[Link Beschreibung](www.beispiel.com)
+[Linktext](www.beispiel.com)
 
-![Bildbeschreibung für Screenreader](/Pfad/eines/bildes.jpg "Hover Text")
+![Bilduntertitel](/Pfad/eines/bildes.jpg)
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Für eine erzwungene Einrückung des Beginns einer einzelnen Zeile kann man eine beliebige Anzahl von "&nbsp;" (Non-breaking space HTML Entity) verwenden.
 
