@@ -20,6 +20,13 @@ module.exports = (data, event) => {
           <strong>${event.subtitle}</strong>
         `:''}
 
+        ${event.urbanize ? `
+          <div class="generic__margin_vertical">
+            <strong>Urbanize Festival</strong><br/>
+            ${event.urbanize}
+          </div>
+        `:''}
+
         ${hosts(event.hosts)}
         ${participants(event.participants)}
 
