@@ -5,7 +5,7 @@ module.exports = `
   <a href="/texte/">Texte</a><br/>
   <a href="/radio/">Radio</a><br/>
   <a href="/festival/">Festival</a><br/>
-  <a href="/bücher/">Bücher</a><br/>
+  <a href="/buecher/">Bücher</a><br/>
   <a href="/autoren/">Autoren</a><br/>
   <a href="https://derive.tictail.com" target="_blank">Kiosk</a><br/>
   <a href="/ueber-derive/">Über dérive</a><br/>

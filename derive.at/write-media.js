@@ -71,7 +71,7 @@ module.exports = async (data, preview) => {
       if(preview) {
         book.cover.written = `${data.rootServerUrl}/${book.cover.localFilesystemPath}`;
       } else {
-        book.cover.written = path.join('/bücher', book.permalink, `cover${path.extname(book.cover.normalizedPath)}`);
+        book.cover.written = path.join('/buecher', book.permalink, `cover${path.extname(book.cover.normalizedPath)}`);
         concurrentWrites.push( copyResized(book.cover.localFilesystemPath, book.cover.written) );
       }
     }

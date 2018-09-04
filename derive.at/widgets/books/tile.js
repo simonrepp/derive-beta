@@ -6,7 +6,7 @@ const reviews = require('./reviews.js');
 module.exports = book => `
   <div class="tile">
     <div class="tile_header">
-      <a href="/bücher/${book.permalink}/">
+      <a href="/buecher/${book.permalink}/">
         ${book.title}
       </a>
     </div>

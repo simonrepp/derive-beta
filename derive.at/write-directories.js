@@ -8,7 +8,7 @@ module.exports = async data => {
   const topDirectories = [
     'api',
     'autoren',
-    'bücher',
+    'buecher',
     'features',
     'festival',
     'radio',
@@ -34,8 +34,8 @@ module.exports = async data => {
   data.authors.forEach(author => midDirectories.add(`autoren/${author.permalink}`));
   data.authorsPaginated.forEach(pagination => midDirectories.add(`autoren/${pagination.label}`));
   data.bookAuthors.forEach(author => midDirectories.add(`autoren/${author.permalink}`));
-  data.books.forEach(book => midDirectories.add(`bücher/${book.permalink}`));
-  data.booksPaginated.forEach(pagination => midDirectories.add(`bücher/${pagination.label}`));
+  data.books.forEach(book => midDirectories.add(`buecher/${book.permalink}`));
+  data.booksPaginated.forEach(pagination => midDirectories.add(`buecher/${pagination.label}`));
   data.events.forEach(event => midDirectories.add(`veranstaltungen/${event.permalink}`));
   data.issues.forEach(issue => midDirectories.add(`zeitschrift/${issue.permalink}`));
   data.programs.forEach(program => midDirectories.add(`radio/${program.permalink}`));

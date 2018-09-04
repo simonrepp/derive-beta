@@ -29,7 +29,7 @@ module.exports = book => `
 
       ${tags(book.tags)}
 
-      ${share(book.title, `/bücher/${book.permalink}/`)}
+      ${share(book.title, `/buecher/${book.permalink}/`)}
     </div>
   </div>
 `.trim();

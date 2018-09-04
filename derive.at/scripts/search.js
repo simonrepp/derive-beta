@@ -62,7 +62,7 @@ const bookResult = function(book) {
 
   html += '<div class="tile">';
   html += '  <div class="tile_header">';
-  html += '    <a href="/bücher/' + book.permalink + '/">' + book.title + '</a>';
+  html += '    <a href="/buecher/' + book.permalink + '/">' + book.title + '</a>';
   html += '  </div>';
   html += '  <div class="tile_image_split">';
   html += '    <div class="tile_image_split__image">';

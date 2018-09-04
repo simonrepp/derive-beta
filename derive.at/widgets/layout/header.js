@@ -5,7 +5,7 @@ const sections = [
   { name: 'Texte', route: '/texte/' },
   { name: 'Radio', route: '/radio/' },
   { name: 'Festival', route: '/festival/' },
-  { name: 'Bücher', route: '/bücher/' },
+  { name: 'Bücher', route: '/buecher/' },
   { name: 'Autoren', route: '/autoren/' },
   { name: 'Kiosk', route: 'https://derive.tictail.com/', tab: true }
 ];

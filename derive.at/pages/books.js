@@ -10,7 +10,7 @@ module.exports = (data, pagination) => {
 
     <div class="pagination">
       ${data.booksPaginated.map(paginationIterated => `
-        <a ${paginationIterated === pagination ? 'class="pagination--active"' : ''} href="/bücher/${paginationIterated.label}/">${paginationIterated.label}</a>
+        <a ${paginationIterated === pagination ? 'class="pagination--active"' : ''} href="/buecher/${paginationIterated.label}/">${paginationIterated.label}</a>
       `).join(' / ')}
     </div>
 
