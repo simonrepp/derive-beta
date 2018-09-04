@@ -1,23 +1,24 @@
 const { writeFile } = require('../derive-common/util.js');
 
-const articlePage = require('./pages/article.js'),
-      articlePrintPage = require('./pages/article-print.js'),
-      articlesPage = require('./pages/articles.js'),
-      authorPage = require('./pages/author.js'),
-      authorsPage = require('./pages/authors.js'),
-      bookPage = require('./pages/book.js'),
-      booksPage = require('./pages/books.js'),
-      festivalPage = require('./pages/festival.js'),
-      indexPage = require('./pages/index.js'),
-      issuePage = require('./pages/issue.js'),
-      issuesPage = require('./pages/issues.js'),
-      siteNotFoundPage = require('./pages/site-not-found.js'),
-      pagePage = require('./pages/page.js'),
-      publisherPage = require('./pages/publisher.js'),
-      programPage = require('./pages/program.js'),
-      programsPage = require('./pages/programs.js'),
-      searchPage = require('./pages/search.js'),
-      tagPage = require('./pages/tag.js');
+const articlePage = require('./pages/article.js');
+const articlePrintPage = require('./pages/article-print.js');
+const articlesPage = require('./pages/articles.js');
+const authorPage = require('./pages/author.js');
+const authorsPage = require('./pages/authors.js');
+const bookPage = require('./pages/book.js');
+const eventPage = require('./pages/event.js');
+const booksPage = require('./pages/books.js');
+const festivalPage = require('./pages/festival.js');
+const indexPage = require('./pages/index.js');
+const issuePage = require('./pages/issue.js');
+const issuesPage = require('./pages/issues.js');
+const siteNotFoundPage = require('./pages/site-not-found.js');
+const pagePage = require('./pages/page.js');
+const publisherPage = require('./pages/publisher.js');
+const programPage = require('./pages/program.js');
+const programsPage = require('./pages/programs.js');
+const searchPage = require('./pages/search.js');
+const tagPage = require('./pages/tag.js');
 
 module.exports = async data => {
   await Promise.all([
@@ -58,6 +59,10 @@ module.exports = async data => {
 
   for(let author of data.bookAuthors) {
     await writeFile(data.buildDir, `autoren/${author.permalink}/index.html`, authorPage(data, author));
+  }
+
+  for(let event of data.events.values()) {
+    await writeFile(data.buildDir, `veranstaltungen/${event.permalink}/index.html`, eventPage(data, event));
   }
 
   for(let issue of data.issues.values()) {

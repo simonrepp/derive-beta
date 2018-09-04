@@ -1,8 +1,8 @@
-const authors = require('../widgets/authors.js'),
-      firstBroadcast = require('../widgets/first-broadcast.js'),
-      layout = require('./layout.js'),
-      share = require('../widgets/share.js'),
-      tags = require('../widgets/tags.js');
+const authors = require('../widgets/authors.js');
+const firstBroadcast = require('../widgets/first-broadcast.js');
+const layout = require('./layout.js');
+const share = require('../widgets/share.js');
+const tags = require('../widgets/tags.js');
 
 module.exports = (data, program) => {
   const html = `
