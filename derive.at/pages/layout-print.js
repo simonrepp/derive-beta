@@ -1,11 +1,8 @@
-const footer = require('../widgets/layout/footer.js'),
-      header = require('../widgets/layout/header.js'),
-      sidebar = require('../widgets/sidebar/sidebar.js');
+const footer = require('../widgets/layout/footer.js');
+const header = require('../widgets/layout/header.js');
+const sidebar = require('../widgets/sidebar/sidebar.js');
 
 const DEFAULT_TITLE = 'dérive | Zeitschrift für Stadtforschung';
-
-// TODO: Refine print layout and print views (decide what collections need print views)
-//       Also refactor share widget to (conditionally and optimally) integrate print button
 
 module.exports = (content, options = {}) => `
   <!DOCTYPE html>
