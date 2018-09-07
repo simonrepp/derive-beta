@@ -1,6 +1,6 @@
 module.exports = data => {
-  data.articlesByPermalink.clear();
-  data.articlesByTitle.clear();
+  const articlesByPermalink = new Map();
+  data.articlesByTitle = new Map();
   data.articles.forEach(article => {
     let existingArticle = data.articlesByTitle.get(article.title);
 
@@ -22,7 +22,7 @@ module.exports = data => {
       return;
     }
 
-    existingArticle = data.articlesByPermalink.get(article.permalink);
+    existingArticle = articlesByPermalink.get(article.permalink);
 
     if(existingArticle) {
       const existingError = existingArticle.permalinkElement.error();
@@ -41,12 +41,12 @@ module.exports = data => {
       return;
     }
 
-    data.articlesByPermalink.set(article.permalink, article);
+    articlesByPermalink.set(article.permalink, article);
     data.articlesByTitle.set(article.title, article);
   });
 
-  data.booksByPermalink.clear();
-  data.booksByTitle.clear();
+  const booksByPermalink = new Map();
+  data.booksByTitle = new Map();
   data.books.forEach(book => {
     let existingBook = data.booksByTitle.get(book.title);
 
@@ -67,7 +67,7 @@ module.exports = data => {
       return;
     }
 
-    existingBook = data.booksByPermalink.get(book.permalink);
+    existingBook = booksByPermalink.get(book.permalink);
 
     if(existingBook) {
       const existingError = existingBook.permalinkElement.error();
@@ -86,13 +86,13 @@ module.exports = data => {
       return;
     }
 
-    data.booksByPermalink.set(book.permalink, book);
+    booksByPermalink.set(book.permalink, book);
     data.booksByTitle.set(book.title, book);
   });
 
-  data.eventsByPermalink.clear();
+  const eventsByPermalink = new Map();
   data.events.forEach(event => {
-    const existingEvent = data.eventsByPermalink.get(event.permalink);
+    const existingEvent = eventsByPermalink.get(event.permalink);
 
     if(existingEvent) {
       const existingError = existingEvent.permalinkElement.error();
@@ -109,13 +109,13 @@ module.exports = data => {
 
       data.events.delete(event.sourceFile);
     } else {
-      data.eventsByPermalink.set(event.permalink, event);
+      eventsByPermalink.set(event.permalink, event);
     }
   });
 
-  data.issuesByNumber.clear();
+  const issuesByNumber = new Map();
   data.issues.forEach(issue => {
-    const existingIssue = data.issuesByNumber.get(issue.number);
+    const existingIssue = issuesByNumber.get(issue.number);
 
     if(existingIssue) {
       const existingError = existingIssue.numberElement.error();
@@ -132,12 +132,12 @@ module.exports = data => {
 
       data.issues.delete(issue.sourceFile);
     } else {
-      data.issuesByNumber.set(issue.number, issue);
+      issuesByNumber.set(issue.number, issue);
     }
   });
 
-  data.playersByName.clear();
-  data.playersByPermalink.clear();
+  data.playersByName = new Map();
+  const playersByPermalink = new Map();
   data.players.forEach(player => {
     let existingPlayer = data.playersByName.get(player.name);
 
@@ -158,7 +158,7 @@ module.exports = data => {
       return;
     }
 
-    existingPlayer = data.playersByPermalink.get(player.permalink);
+    existingPlayer = playersByPermalink.get(player.permalink);
 
     if(existingPlayer) {
       const existingError = existingPlayer.permalinkElement.error();
@@ -178,13 +178,13 @@ module.exports = data => {
     }
 
     data.playersByName.set(player.name, player);
-    data.playersByPermalink.set(player.permalink, player);
+    playersByPermalink.set(player.permalink, player);
   });
 
-  data.pagesByPermalink.clear();
+  const pagesByPermalink = new Map();
   data.pages.forEach(page => {
-    const permalinkInContext = [page.permalink, page.urbanize].filter(Boolean).join('-');
-    const existingPage = data.pagesByPermalink.get(permalinkInContext); // TODO: We check for permalink In Context but set permalink without context? Check again
+    const contextualizedPermalink = `${page.urbanize || 'derive'}-${page.permalink}`;
+    const existingPage = pagesByPermalink.get(contextualizedPermalink);
 
     if(existingPage) {
       const existingError = existingPage.permalinkElement.error();
@@ -195,19 +195,19 @@ module.exports = data => {
           { path: existingPage.sourceFile, selection: existingError.selection },
           { path: page.sourceFile, selection: discardedError.selection }
         ],
-        message: `Es existieren zwei Seiten mit dem Permalink "${page.permalink}" im selben Kontext (z.b. Urbanize Festival)`,
+        message: `Es existieren zwei Seiten mit dem Permalink "${page.permalink}" im selben Kontext (z.b. für das selbe Urbanize Festival)`,
         snippet: discardedError.snippet
       });
 
       data.pages.delete(page.sourceFile);
     } else {
-      data.pagesByPermalink.set(page.permalink, page);
+      pagesByPermalink.set(contextualizedPermalink, page);
     }
   });
 
-  data.programsByPermalink.clear();
+  const programsByPermalink = new Map();
   data.programs.forEach(program => {
-    const existingProgram = data.programsByPermalink.get(program.permalink);
+    const existingProgram = programsByPermalink.get(program.permalink);
 
     if(existingProgram) {
       const existingError = existingProgram.permalinkElement.error();
@@ -224,7 +224,7 @@ module.exports = data => {
 
       data.programs.delete(program.sourceFile);
     } else {
-      data.programsByPermalink.set(program.permalink, program);
+      programsByPermalink.set(program.permalink, program);
     }
   });
 };

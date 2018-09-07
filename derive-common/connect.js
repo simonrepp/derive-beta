@@ -1,3 +1,29 @@
+const clearBackReferences = data => {
+  data.articles.forEach(article => {
+    article.issue = null;
+    article.inIssueOnPages = null;
+  });
+
+  data.books.forEach(book => {
+    book.reviews = [];
+  });
+
+  data.players.forEach(player => {
+    player.articles = [];
+    player.authoredBooks = [];
+    player.publishedBooks = [];
+    player.hostedEvents = [];
+    player.eventParticipations = [];
+    player.programs = [];
+  });
+};
+
+const clearLookupStructures = data => {
+  delete data.articlesByTitle;
+  delete data.booksByTitle;
+  delete data.playersByName;
+};
+
 const connectBookReviews = data => {
   data.articles.forEach(article => {
     article.reviewedBooks = [];
@@ -43,26 +69,6 @@ const connectPlayers = (data, collection, referencesField, instancesField, backR
         });
       }
     });
-  });
-};
-
-const clearBackReferences = data => {
-  data.articles.forEach(article => {
-    article.issue = null;
-    article.inIssueOnPages = null;
-  });
-
-  data.books.forEach(book => {
-    book.reviews = [];
-  });
-
-  data.players.forEach(player => {
-    player.articles = [];
-    player.authoredBooks = [];
-    player.publishedBooks = [];
-    player.hostedEvents = [];
-    player.eventParticipations = [];
-    player.programs = [];
   });
 };
 
@@ -134,6 +140,8 @@ module.exports = data => {
   connectIssuesWithArticles(data);
 
   connectRadioEditors(data);
+
+  clearLookupStructures(data);
 
   return;
 };
