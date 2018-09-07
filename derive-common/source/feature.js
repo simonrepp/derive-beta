@@ -1,4 +1,4 @@
-const { FEATURE_TYPE_ENUM, loadEno, statFile } = require('../util.js');
+const { FEATURE_TYPE_ENUM, loadEno, statFile, URBANIZE_ENUM } = require('../util.js');
 const { ValidationError, ParseError } = require('enojs');
 const validateEnum = require('../validate/enum.js');
 const { validateMarkdown } = require('../validate/markdown.js');
@@ -46,6 +46,7 @@ module.exports = async (data, enoPath) => {
       feature.type = doc.field('Typ', validateEnum(FEATURE_TYPE_ENUM), { required: true });
       feature.url = doc.url('URL');
       feature.text = doc.field('Text', validateMarkdown);
+      feature.urbanize = doc.field('Urbanize', validateEnum(URBANIZE_ENUM));
 
       doc.assertAllTouched();
     } catch(err) {

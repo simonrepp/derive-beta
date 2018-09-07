@@ -20,6 +20,7 @@ module.exports = async data => {
   data.books.clear();
   data.errors = [];
   data.events.clear();
+  data.features.clear();
   data.issues.clear();
   data.media.clear();
   data.pages.clear();
