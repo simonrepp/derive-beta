@@ -15,9 +15,6 @@ Schwerpunkte:
 > Ja oder Nein
 Vergriffen: Nein
 
-> Datumsangaben immer im Format YYYY-MM-DD
-Erscheinungsdatum: 2020-12-31
-
 Tags:
 - Exempel
 - Vorlage
@@ -39,7 +36,7 @@ Titel: Editorial
 > Dieser Titel muss mit einem Artikeltitel übereinstimmen
 Titel: Editorial dérive 99
 
-> Freitext, aber in der Regel NN oder NN-MM
+> Eines der Formate "NN", "NN-MM", NNN-MMM", "NN-MM, NN-MM"
 Seite(n): 01
 
 

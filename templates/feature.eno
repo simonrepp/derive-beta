@@ -3,13 +3,13 @@ Titel: Erforderlich
 
 Bild: Features/Bilder/Beispiel.jpg
 
-> Reihung auf der Startseite (kleinere Nummer = weiter oben)
 Position: 42
 
 URL: https://derive.at/beispiel
 
-> Ja oder Nein
-Größere Box: "Ja"
+Typ: card
+
+Urbanize:
 
 -- Text
 Markdown unterstützt aber keine Medien.

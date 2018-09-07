@@ -8,6 +8,11 @@ Seitenanzahl:
 > Freitext, kein spezielles Format erforderlich.
 Preis: 
 
+> Ausfüllen um das Buch in der Bücherübersicht zu featuren/vorzureihen.
+> Angegeben wird eine Nummer (z.b. 1), bei mehreren Buchfeatures werden die mit
+> kleinerer Nummer vorgereiht. (sprich 1 ist an erster Stelle, dann 2 ...)
+Featured (Position):
+
 Autoren/Herausgeber:
 - Jean Doe
 

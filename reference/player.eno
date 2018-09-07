@@ -1,5 +1,8 @@
+> Name enthält immer den vollen Namen, egal ob Person oder Institution
 Name: Erforderlich
+> Der Vorname dient nur zur Sortierung, nur ausfüllen bei natürlichen Personen
 Vorname:
+> Der Nachname dient nur zur Sortierung, nur ausfüllen bei natürlichen Personen
 Nachname:
 Land: 
 Stadt: 

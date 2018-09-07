@@ -8,8 +8,15 @@ Position: 42
 
 URL: https://derive.at/beispiel
 
-> Ja oder Nein
-Größere Box: "Ja"
+> Muss ausgefüllt sein, mögliche Werte:
+> "landscape" (volle breite/4 felder mit breitformat bild)
+> "portrait" (halbe breite/2 felder mit hochformat bild)
+> "card" (1 feld mit quadratischerem breitformat bild) 
+Typ: card
+
+> Aktuell für das urbanize Festival 2018 sind die Werte "Wien 2018"
+> und "Berlin 2018" vorgesehen.
+Urbanize:
 
 -- Text
 Markdown unterstützt aber keine Medien.
