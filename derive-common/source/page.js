@@ -4,14 +4,10 @@ const validateEnum = require('../validate/enum.js');
 const { validateMarkdownWithMedia } = require('../validate/markdown.js');
 const validatePermalink = require('../validate/permalink.js');
 
-const WHITELISTED_PERMALINKS = [
-  'abo',
-  'agb',
+const WHITELISTED_DERIVE_PERMALINKS = [
   'impressum',
-  'kontakt',
   'kooperationen',
   'medieninformationen',
-  'partner',
   'ueber-derive'
 ];
 
@@ -58,9 +54,8 @@ module.exports = async (data, enoPath) => {
 
       page.urbanize = doc.field('Urbanize', validateEnum(URBANIZE_ENUM));
 
-      // TODO: Move this permalink whitelist check into crossvalidate step instead
-      if(page.urbanize === null && !WHITELISTED_PERMALINKS.includes(page.permalink)) {
-        throw page.permalinkElement.error(`Für die derive.at Seiten sind nur die folgenden Permalinks explizit vorgesehen: ${WHITELISTED_PERMALINKS.map(permalink => `'${permalink}'`).join(', ')}`);
+      if(page.urbanize === null && !WHITELISTED_DERIVE_PERMALINKS.includes(page.permalink)) {
+        throw page.permalinkElement.error(`Für die derive.at Seiten sind nur die folgenden Permalinks explizit vorgesehen: ${WHITELISTED_DERIVE_PERMALINKS.map(permalink => `'${permalink}'`).join(', ')}`);
       }
 
       page.text = doc.field('Text', validateMarkdownWithMedia, { required: true });
