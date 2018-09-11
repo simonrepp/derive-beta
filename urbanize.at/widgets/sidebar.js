@@ -3,10 +3,8 @@ const moment = require('moment');
 module.exports = urbanize => `
   <div class="sidebar">
 
-    <p>SUCHE</p>
-
     <form action="/suche/" class="search">
-      <input name="begriff" type="text" />
+      <input name="begriff" placeholder="Suche" type="text" />
       <button>Go</button>
     </form>
 
@@ -75,6 +73,7 @@ module.exports = urbanize => `
     </a>
 
     <a href="https://derive.at">dérive – Verein für Stadtforschung</a>
+    <a href="https://2017.urbanize.at">ur8anize! 2017</a>
     <a href="https://2016.urbanize.at">urbani7e! 2016</a>
     <a href="https://2015.urbanize.at">ur6anize! 2015</a>
     <a href="https://2014.urbanize.at">ur5anize! 2014</a>

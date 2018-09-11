@@ -1,13 +1,13 @@
-const fsExtra = require('fs-extra'),
-      path = require('path'),
-      sass = require('sass'),
-      uglifyEs = require('uglify-es');
+const fsExtra = require('fs-extra');
+const path = require('path');
+const sass = require('sass');
+const uglifyEs = require('uglify-es');
 
-const index = require('./index.js'),
-      { loadFile, writeFile } = require('../derive-common/util.js'),
-      writeDirectories = require('./write-directories.js'),
-      writeMedia = require('./write-media.js'),
-      writePages = require('./write-pages.js');
+const index = require('./index.js');
+const { loadFile, writeFile } = require('../derive-common/util.js');
+const writeDirectories = require('./write-directories.js');
+const writeMedia = require('./write-media.js');
+const writePages = require('./write-pages.js');
 
 const compileJs = async data => {
   const fuse = await loadFile(path.join(__dirname, 'scripts/fuse.min.js'));

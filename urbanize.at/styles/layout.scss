@@ -1,14 +1,18 @@
 body {
+	background-attachment: fixed;
 	background-color: #fff;
+	background-position: center;
+	background-size: cover;
 	color: #333;
-	font-family: 'Sanchez';
-	font-size: 0.88em;
+	font-family: 'FunctionPro-Book';
+	font-size: 18px;
 	line-height: 22px;
 	margin: 0;
+	max-height: 100vh;
 }
 
 a {
-	color:#b30014;
+	color: #009fe3;
 	text-decoration: none;
 }
 
@@ -29,13 +33,24 @@ a {
 	margin-bottom: 10px;
 }
 
+.brand {
+	color: #fff;
+	font-family: 'Fredoka One';
+	font-size: 2.4em;
+	line-height: 1em;
+}
+
 .breadcrumb {
 	margin-bottom: 30px;
 }
 
 .content {
+	background-color: #fff;
+	border: 2px solid #009fe3;
+	box-sizing: border-box;
 	flex-grow: 1;
 	max-width: 620px;
+	padding: 1em;
 
 	img {
 		max-width: 100%;
@@ -47,20 +62,22 @@ a {
 }
 
 .footer {
-	padding: 10px;
+	background-color: #009fe3;
+	border: 2px solid #fff;
+	color: #fff;
+	padding: 1em;
 	font-size: 0.8em;
-	margin: 30px 0;
 	text-align: center;
 }
 
 .header {
+	align-items: center;
+	background-color: #009fe3;
+	border: 2px solid #fff;
+	display: flex;
+	justify-content: space-between;
 	margin-bottom: 24px;
-	text-align: center;
-
-	img {
-		height: 300px;
-		width: auto;
-	}
+	padding: 1em;
 }
 
 .indented {
@@ -72,14 +89,14 @@ a {
   clear:both;
 }
 
+.offset {
+	margin-bottom: 1.33em;
+}
+
 .restraint {
-	background-color: rgba(#fff, 0.9);
-	border: 1px dashed #c0c0c0;
-	border-bottom:none;
   max-width: 960px;
   margin: 0 auto;
-	padding: 0 10px;
-	padding-top: 10px;
+	padding: 1.33em;
 }
 
 .search {
@@ -94,10 +111,13 @@ a {
 
 .sidebar {
   align-items: flex-start;
+	background-color: #fff;
+	border: 2px solid #009fe3;
+	box-sizing: border-box;
   display: flex;
   flex-direction: column;
-	margin-left: 2em;
-	min-width: 250px;
+	min-width: 316px;
+	padding: 1em;
 	width: 250px;
 
 	@media (max-width: 770px) {

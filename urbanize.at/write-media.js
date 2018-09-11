@@ -1,6 +1,6 @@
-const fsExtra = require('fs-extra'),
-      path = require('path'),
-      sharp = require('sharp');
+const fsExtra = require('fs-extra');
+const path = require('path');
+const sharp = require('sharp');
 
 module.exports = async (data, urbanize, preview) => {
 

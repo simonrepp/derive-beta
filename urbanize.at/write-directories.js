@@ -1,5 +1,5 @@
-const fsExtra = require('fs-extra'),
-      moment = require('moment');
+const fsExtra = require('fs-extra');
+const moment = require('moment');
 
 const { createDir } = require('../derive-common/util.js');
 

@@ -10,9 +10,7 @@ module.exports = participants => `
           ${participant.text ? participant.text.converted : ''}
         </div>
 
-        <a href="${participant.website}">
-          ${participant.website}
-        </a>
+        ${participant.website ? `<a href="${participant.website}">${participant.website}</a>` : ''}
       </div>
     `).join('')}
   </div>

@@ -14,6 +14,7 @@ module.exports = (content, urbanize, options = {}) => `
 
       <meta charset="utf-8">
       <meta name="description" content="dérive">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
 
       <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
       <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -28,21 +29,19 @@ module.exports = (content, urbanize, options = {}) => `
       <script defer src="/bundle.js"></script>
     </head>
 
-    <body>
-      <div>
+    <body style="background-image: url(${urbanize.background});">
+      <div class="restraint">
         ${header}
 
-        <div class="restraint">
-          <div class="split">
-            <div class="content">
-              ${content}
-            </div>
-
-            ${sidebar(urbanize)}
+        <div class="offset split">
+          <div class="content">
+            ${content}
           </div>
 
-          ${footer}
+          ${sidebar(urbanize)}
         </div>
+
+        ${footer(urbanize)}
       </div>
     </body>
   </html>

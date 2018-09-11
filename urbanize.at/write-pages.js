@@ -2,15 +2,15 @@ const moment = require('moment');
 
 const { writeFile } = require('../derive-common/util.js');
 
-const categoryPage = require('./pages/category.js'),
-      indexPage = require('./pages/index.js'),
-      notFoundPage = require('./pages/404.js'),
-      eventPage = require('./pages/event.js'),
-      eventsPage = require('./pages/events.js'),
-      pagePage = require('./pages/page.js'),
-      participantsPage = require('./pages/participants.js'),
-      searchPage = require('./pages/search.js'),
-      tagPage = require('./pages/tag.js');
+const categoryPage = require('./pages/category.js');
+const indexPage = require('./pages/index.js');
+const notFoundPage = require('./pages/site-not-found.js');
+const eventPage = require('./pages/event.js');
+const eventsPage = require('./pages/events.js');
+const pagePage = require('./pages/page.js');
+const participantsPage = require('./pages/participants.js');
+const searchPage = require('./pages/search.js');
+const tagPage = require('./pages/tag.js');
 
 module.exports = async (data, urbanize) => {
   await Promise.all([
