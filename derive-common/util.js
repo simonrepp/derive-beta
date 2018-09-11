@@ -13,14 +13,9 @@ markdownIt.renderer.rules.image = (tokens, idx, options, env, self) => {
   const url = token.attrs[srcIndex][1];
   const caption = token.content;
 
-  let title = null;
-  if(token.attrIndex('title') !== -1) {
-    title = token.attrs[token.attrIndex('title')][1];
-  }
-
   return `
     <div><img class="generic__image_restraint" src="${url}" alt="${caption}"></div>
-    ${title ? `<small>${title}</small>` : ''}
+    ${caption ? `<small>${caption}</small>` : ''}
   `.trim();
 }
 
