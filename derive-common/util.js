@@ -46,6 +46,25 @@ exports.createDir = (base, directory) => new Promise((resolve, reject) =>
   fs.mkdir(path.join(base, directory), err => err ? reject(err) : resolve())
 );
 
+exports.featureSort = (a, b) => {
+  if(a.type === 'landscape' && b.type !== 'landscape')
+    return -1;
+  if(b.type === 'landscape' && a.type !== 'landscape')
+    return 1;
+
+  if(a.type === 'portrait' && b.type !== 'portrait')
+    return -1;
+  if(b.type === 'portrait' && a.type !== 'portrait')
+    return 1;
+
+  if(a.type === 'card' && b.type !== 'card')
+    return -1;
+  if(b.type === 'card' && a.type !== 'card')
+    return 1;
+
+  return a.position - b.position;
+};
+
 exports.globFiles = (directory, pattern) => new Promise((resolve, reject) =>
   glob(pattern, { cwd: directory, nodir: true }, (err, files) => err ? reject(err) : resolve(files))
 );

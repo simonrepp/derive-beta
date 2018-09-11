@@ -1,26 +1,8 @@
+const { featureSort } = require('../../derive-common/util.js');
 const layout = require('./layout.js');
 
-const featureSort = (a, b) => {
-  if(a.type === 'landscape' && b.type !== 'landscape')
-    return -1;
-  if(b.type === 'landscape' && a.type !== 'landscape')
-    return 1;
-
-  if(a.type === 'portrait' && b.type !== 'portrait')
-    return -1;
-  if(b.type === 'portrait' && a.type !== 'portrait')
-    return 1;
-
-  if(a.type === 'card' && b.type !== 'card')
-    return -1;
-  if(b.type === 'card' && a.type !== 'card')
-    return 1;
-
-  return a.position - b.position
-};
-
 module.exports = data => {
-  const sortedFeatures = Array.from(data.features.values()).sort(featureSort);
+  const sortedFeatures = Array.from(data.features.values()).filter(feature => feature.urbanize === null).sort(featureSort);
 
   const html = `
     <div class="features">
