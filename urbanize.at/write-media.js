@@ -75,7 +75,6 @@ module.exports = async (data, urbanize, preview) => {
     }
   }
 
-  // TODO: Here and elsewhere - german permalinks for pages!
 
   for(let page of urbanize.pages) {
     if(page.text) {
@@ -93,14 +92,14 @@ module.exports = async (data, urbanize, preview) => {
         }
       } else {
         for(let download of page.text.downloads) {
-          download.written = path.join('/seiten', page.permalink, `text-${download.virtualFilename}`);
+          download.written = path.join(page.permalink, `text-${download.virtualFilename}`);
           concurrentWrites.push( copy(download.localFilesystemPath, download.written) );
 
           text = text.replace(download.placeholder, download.written);
         }
 
         for(let embed of page.text.embeds) {
-          embed.written = path.join('/seiten', page.permalink, `text-${embed.virtualFilename}`);
+          embed.written = path.join(page.permalink, `text-${embed.virtualFilename}`);
           concurrentWrites.push( copyResized(embed.localFilesystemPath, embed.written) );
 
           text = text.replace(embed.placeholder, embed.written);

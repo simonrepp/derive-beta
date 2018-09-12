@@ -8,7 +8,6 @@ module.exports = async (data, urbanize) => {
 
   const topDirectories = new Set([
     'kategorien',
-    'seiten',
     'seite-nicht-gefunden',
     'suche',
     'tags',
@@ -19,13 +18,14 @@ module.exports = async (data, urbanize) => {
   urbanize.eventsByDate.forEach((events, date) =>
     topDirectories.add(moment(date).locale('de').format('D-MMMM-YYYY'))
   );
+  
+  urbanize.pages.forEach(page => topDirectories.add(`${page.permalink}`));
 
   await Promise.all([...topDirectories].map(dir => createDir(data.buildDir, dir)));
 
   const midDirectories = [];
 
   urbanize.events.forEach(event => midDirectories.push(`veranstaltungen/${event.permalink}`));
-  urbanize.pages.forEach(page => midDirectories.push(`seiten/${page.permalink}`));
   urbanize.categories.forEach(category => midDirectories.push(`kategorien/${category.permalink}`));
   urbanize.tags.forEach(tag => midDirectories.push(`tags/${tag.permalink}`));
 

@@ -30,7 +30,7 @@ module.exports = async (data, urbanize) => {
   }
 
   for(let page of urbanize.pages) {
-    await writeFile(data.buildDir, `seiten/${page.permalink}/index.html`, pagePage(urbanize, page));
+    await writeFile(data.buildDir, `${page.permalink}/index.html`, pagePage(urbanize, page));
   }
 
   for(let category of urbanize.categories.values()) {

@@ -11,6 +11,18 @@ const WHITELISTED_DERIVE_PERMALINKS = [
   'ueber-derive'
 ];
 
+const WHITELISTED_URBANIZE_PERMALINKS = [
+  'festival',
+  'festivalpartnerinnen',
+  'festivalzentrale',
+  'impressum',
+  'kontakt',
+  'presse',
+  'radio',
+  'verein',
+  'zeitschrift'
+];
+
 module.exports = async (data, enoPath) => {
   const cached = data.cache.get(enoPath);
   const stats = await statFile(data.root, enoPath);
@@ -56,6 +68,10 @@ module.exports = async (data, enoPath) => {
 
       if(page.urbanize === null && !WHITELISTED_DERIVE_PERMALINKS.includes(page.permalink)) {
         throw page.permalinkElement.error(`Für die derive.at Seiten sind nur die folgenden Permalinks explizit vorgesehen: ${WHITELISTED_DERIVE_PERMALINKS.map(permalink => `'${permalink}'`).join(', ')}`);
+      }
+
+      if(page.urbanize !== null && !WHITELISTED_URBANIZE_PERMALINKS.includes(page.permalink)) {
+        throw page.permalinkElement.error(`Für die urbanize.at Seiten sind nur die folgenden Permalinks explizit vorgesehen: ${WHITELISTED_URBANIZE_PERMALINKS.map(permalink => `'${permalink}'`).join(', ')}`);
       }
 
       page.text = doc.field('Text', validateMarkdownWithMedia, { required: true });
