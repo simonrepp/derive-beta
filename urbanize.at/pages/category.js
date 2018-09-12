@@ -12,5 +12,5 @@ module.exports = (urbanize, category) => {
     </div>
   `;
 
-  return layout(html, urbanize, { title: category });
+  return layout(html, urbanize, { title: category.name });
 };

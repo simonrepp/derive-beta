@@ -12,5 +12,5 @@ module.exports = (urbanize, tag) => {
     </div>
   `;
 
-  return layout(html, urbanize, { title: tag });
+  return layout(html, urbanize, { title: tag.name });
 };
