@@ -6,18 +6,6 @@ const addThis = require('../widgets/add-this.js'),
 module.exports = (urbanize, event) => {
   const html = `
     <div>
-      <div class="breadcrumb">
-        <a href="/">
-          Home
-        </a>
-        <span> › </span>
-        <a href="/events/">
-          Programm
-        </a>
-        <span> › </span>
-        ${event.title}
-      </div>
-
       <div class="title">
         ${event.title}
       </div>

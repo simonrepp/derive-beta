@@ -5,17 +5,9 @@ const eventListing = require('../widgets/event-listing.js'),
 
 module.exports = (urbanize, date, events) => {
   const timeframe = date instanceof Date ? `am ${moment(date).format('D.MM.YYYY')}` : date;
-  
+
   const html = `
     <div>
-      <div class="breadcrumb">
-        <a href="/">
-          Home
-        </a>
-        <span> › </span>
-        Programm
-      </div>
-
       <div class="title">
         Alle Termine ${timeframe}
       </div>
