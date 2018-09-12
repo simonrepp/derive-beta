@@ -1,84 +1,107 @@
 const moment = require('moment');
 
 module.exports = urbanize => `
-  <div class="sidebar">
-
+  <div class="sidebar offset">
     <form action="/suche/" class="search">
-      <input name="begriff" placeholder="Suche" type="text" />
+      <input name="begriff" placeholder="Suche" type="text">&nbsp;
       <button>Go</button>
     </form>
 
-    <p>MENÜ</p>
-
-    <a href="/">
-      Start
-    </a>
-
-    <a href="/veranstaltungen/">
-      Programm
-    </a>
+    <p>Programm</p>
 
     <div class="indented">
+      <div>
+        <a href="/veranstaltungen/">
+          Alle Tage
+        </a>
+      </div>
+
       ${Array.from(urbanize.eventsByDate.keys()).sort().map(date => `
         <div>
           <a href="/${moment(date).locale('de').format('D-MMMM-YYYY')}/">
-            ${moment(date).locale('de').format('D. M. YYYY')}
+            ${moment(date).locale('de').format('ddd, D. M. YYYY')}
           </a>
         </div>
       `).join('')}
     </div>
 
-    <p>KATEGORIEN</p>
+    <p>Kategorien</p>
 
-    ${Array.from(urbanize.categories.values()).map(category => `
+    <div class="indented">
+      ${Array.from(urbanize.categories.values()).map(category => `
+        <div>
+          <a href="/kategorien/${category.permalink}/">
+            ${category.name}
+          </a>
+        </div>
+      `).join('')}
+    </div>
+
+    <p>Festival</p>
+
+    <div class="indented">
       <div>
-        <a href="/kategorien/${category.permalink}/">
-          ${category.name}
+        <a href="/">
+          Startseite
         </a>
       </div>
-    `).join('')}
+      <div>
+        <a href="/festival/">
+          Das Festival
+        </a>
+      </div>
+      <div>
+        <a href="/festivalzentrale/">
+          Festivalzentrale
+        </a>
+      </div>
+      <div>
+        <a href="/teilnehmerinnen/">
+          TeilnehmerInnen
+        </a>
+      </div>
+      <div>
+        <a href="/festivalpartnerinnen/">
+          FestivalpartnerInnen
+        </a>
+      </div>
+      <div>
+        <a href="/presse/">
+          Presse
+        </a>
+      </div>
+      <div>
+        <a href="/kontakt/">
+          Kontakt
+        </a>
+      </div>
+    </div>
 
-    <p></p>
+    <p>dérive – Stadtforschung</p>
 
-    <a href="/seiten/about/">
-      About
-    </a>
-    <a href="/seiten/festivalzentrale/">
-      Festivalzentrale
-    </a>
-    <a href="/teilnehmerinnen/">
-      TeilnehmerInnen
-    </a>
-    <a href="/seiten/partners/">
-      FestivalpartnerInnen
-    </a>
-    <a href="/seiten/presse/">
-      Presse
-    </a>
-    <a href="/seiten/kontakt/">
-      Kontakt
-    </a>
+    <div class="indented">
+      <div><a href="http://derive.at" target="_blank">Website</a></div> ${''/* TODO: https link as soon as we migrated */}
+      <div><a href="/radio/">Radio</a></div>
+      <div><a href="/zeitschrift/">Zeitschrift</a></div>
+      <div><a href="/verein/">Verein</a></div>
+      <div><a href="/impressum/">Impressum</a></div>
+      <div>
+        <a href="http://derive.us2.list-manage1.com/subscribe?u=a173854ec3f34090566a9475c&amp;id=99617a522a" target="_blank">
+          Newsletter
+        </a>
+      </div>
+    </div>
 
-    <p></p>
+    <p>Vorherige Festivals</p>
 
-    <a href="/seiten/about-radio/">dérive - Radio</a>
-    <a href="/seiten/about-magazine/">dérive - Zeitschrift</a>
-    <a href="/seiten/verein/">dérive - Verein</a>
-    <a href="/seiten/impressum/">Impressum</a>
-
-    <p></p>
-
-    <a href="http://derive.us2.list-manage1.com/subscribe?u=a173854ec3f34090566a9475c&amp;id=99617a522a">
-      Anmelden für Newsletter
-    </a>
-
-    <a href="https://derive.at">dérive – Verein für Stadtforschung</a>
-    <a href="https://2017.urbanize.at">ur8anize! 2017</a>
-    <a href="https://2016.urbanize.at">urbani7e! 2016</a>
-    <a href="https://2015.urbanize.at">ur6anize! 2015</a>
-    <a href="https://2014.urbanize.at">ur5anize! 2014</a>
-    <a href="https://2013.urbanize.at">ur4anize! 2013</a>
-    <a href="https://2012.urbanize.at">ur3anize! 2012</a>
-    <a href="http://2011.urbanize.at">urbani2e! 2011</a>
+    <div class="indented">
+      <div><a href="https://2017.urbanize.at">ur8anize! 2017</a></div>
+      <div><a href="https://2016.urbanize.at">urbani7e! 2016</a></div>
+      <div><a href="https://2015.urbanize.at">ur6anize! 2015</a></div>
+      <div><a href="https://2014.urbanize.at">ur5anize! 2014</a></div>
+      <div><a href="https://2013.urbanize.at">ur4anize! 2013</a></div>
+      <div><a href="https://2012.urbanize.at">ur3anize! 2012</a></div>
+      <div><a href="http://2011.urbanize.at">urbani2e! 2011</a></div>
+    </div>
   </div>
 `;
