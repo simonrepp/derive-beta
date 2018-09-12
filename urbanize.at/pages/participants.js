@@ -4,7 +4,7 @@ const layout = require('./layout.js'),
 module.exports = urbanize => {
   const html = `
     <div>
-      <div class="title">
+      <div class="generic__heading">
         TeilnehmerInnen
       </div>
 

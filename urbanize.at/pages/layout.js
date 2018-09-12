@@ -33,8 +33,8 @@ module.exports = (content, urbanize, options = {}) => `
       <div class="restraint">
         ${header}
 
-        <div class="offset split">
-          <div class="content">
+        <div class="split">
+          <div class="${options.tiles ? 'tiles' : 'content'} offset">
             ${content}
           </div>
 

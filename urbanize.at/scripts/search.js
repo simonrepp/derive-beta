@@ -5,9 +5,9 @@ const eventResult = function(event) {
   if(event.image) {
     html += '<img class="teaser-image" src="' + event.image.written + '">';
   }
-  html += '  <div class="emphasized">';
+  html += '  <strong>';
   html += '    <a href="/veranstaltungen/' + event.permalink + '">' + event.title + '</a>';
-  html += '  </div>';
+  html += '  </strong>';
   html += '  <div class="additional">';
   html += '    <span>';
   for(let date of event.dates) {
@@ -29,9 +29,9 @@ const pageResult = function(page) {
   let html = '';
 
   html += '<div class="list-item">';
-  html += '  <div class="emphasized">';
+  html += '  <strong>';
   html += '    <a href="/seiten/' + page.permalink + '">' + page.title + '</a>';
-  html += '  </div>';
+  html += '  </strong>';
   html += '</div>';
 
   return html;
@@ -44,7 +44,7 @@ const search = function(target) {
 
   const showError = function(message) {
     let html = '';
-    html += '<div class="title">Suchresultate für "' + query + '"</div>'
+    html += '<div class="generic__heading">Suchresultate für "' + query + '"</div>'
     html += '<div class="message">' + message + '</div>'
 
     document.querySelector('.results').innerHTML = html;
@@ -68,7 +68,7 @@ const search = function(target) {
     const result = fuse.search(query);
 
     let html = '';
-    html += '<div class="title">Suchresultate für "' + query + '"</div>';
+    html += '<div class="generic__heading">Suchresultate für "' + query + '"</div>';
 
     for(let item of result) {
       if(item.hasOwnProperty('event')) {

@@ -7,6 +7,7 @@ module.exports = async (data, urbanize) => {
   await fsExtra.emptyDir(data.buildDir);
 
   const topDirectories = new Set([
+    'features',
     'kategorien',
     'seite-nicht-gefunden',
     'suche',

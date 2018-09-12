@@ -3,7 +3,7 @@ const layout = require('./layout.js');
 module.exports = (urbanize, page) => {
   const html = `
     <div>
-      <div class="title">
+      <div class="generic__heading">
         ${page.title}
       </div>
 

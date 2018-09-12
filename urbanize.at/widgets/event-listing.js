@@ -8,18 +8,19 @@ module.exports = events => `
           <img class="teaser-image" src="${event.image.written}">
         `:''}
 
-        <div class="emphasized">
+        <strong>
           <a href="/veranstaltungen/${event.permalink}/">
             ${event.title}
           </a>
-        </div>
+        </strong>
 
         <div class="additional">
           ${timeframe(event)}
           &nbsp;
           ${event.address}
         </div>
-        <div>
+
+        <div class="generic__serif">
           ${event.abstract ? event.abstract.converted : ''}
         </div>
       </div>

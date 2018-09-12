@@ -2,11 +2,11 @@ module.exports = participants => `
   <div>
     ${[...participants].map(participant => `
       <div class="list-item">
-        <strong class="emphasized">
+        <strong>
           ${participant.name}
         </strong>
 
-        <div>
+        <div class="generic__serif">
           ${participant.text ? participant.text.converted : ''}
         </div>
 

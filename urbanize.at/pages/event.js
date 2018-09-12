@@ -6,7 +6,7 @@ const addThis = require('../widgets/add-this.js'),
 module.exports = (urbanize, event) => {
   const html = `
     <div>
-      <div class="title">
+      <div class="generic__heading">
         ${event.title}
       </div>
 
@@ -27,16 +27,16 @@ module.exports = (urbanize, event) => {
       </div>
 
       ${event.abstract ? `
-        <p>
+        <div class="generic__serif">
           ${event.abstract.converted}
-        </p>
+        </div>
       `:''}
 
 
       ${event.text ? `
         <hr/>
 
-        <div>
+        <div class="generic__serif">
            ${event.text.written}
         </div>
       `:''}

@@ -1,0 +1,29 @@
+body,
+button,
+input,
+select,
+textarea {
+  font-family: 'FunctionPro-Book';
+	font-size: 18px;
+}
+
+body {
+	background-attachment: fixed;
+	background-color: #fff;
+	background-position: center;
+  background-repeat: no-repeat;
+	background-size: contain;
+	color: #333;
+	margin: 0;
+	max-height: 100vh;
+}
+
+a {
+	color: #009fe3;
+	text-decoration: none;
+}
+
+strong {
+  font-family: 'FunctionPro-Medium';
+  font-weight: 400;
+}

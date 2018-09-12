@@ -75,6 +75,17 @@ module.exports = async (data, urbanize, preview) => {
     }
   }
 
+  let featureNumber = 0;
+  for(let feature of urbanize.features) {
+    if(feature.image) {
+      if(preview) {
+        feature.image.written = `${data.rootServerUrl}/${feature.image.localFilesystemPath}`;
+      } else {
+        feature.image.written = path.join('/features', `bild-${featureNumber++}${path.extname(feature.image.normalizedPath)}`);
+        concurrentWrites.push( copyResized(feature.image.localFilesystemPath, feature.image.written) );
+      }
+    }
+  }
 
   for(let page of urbanize.pages) {
     if(page.text) {

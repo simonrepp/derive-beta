@@ -4,7 +4,7 @@ const eventListing = require('../widgets/event-listing.js'),
 module.exports = (urbanize, category) => {
   const html = `
     <div>
-      <div class="title">
+      <div class="generic__heading">
         Kategorie: ${category.name}
       </div>
 

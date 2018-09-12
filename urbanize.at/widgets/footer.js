@@ -1,1 +1,1 @@
-module.exports = urbanize => `<div class="footer offset">${urbanize.footer}</div>`;
+module.exports = urbanize => `<div class="footer">${urbanize.footer}</div>`;

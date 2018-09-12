@@ -8,7 +8,7 @@ module.exports = (urbanize, date, events) => {
 
   const html = `
     <div>
-      <div class="title">
+      <div class="generic__heading">
         Alle Termine ${timeframe}
       </div>
 
