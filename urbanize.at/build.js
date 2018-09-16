@@ -11,11 +11,13 @@ const writePages = require('./write-pages.js');
 
 const compileJs = async data => {
   const fuse = await loadFile(path.join(__dirname, 'scripts/fuse.min.js'));
+  const moment = await loadFile(path.join(__dirname, 'scripts/moment-with-locales.js'));
   const search = await loadFile(path.join(__dirname, 'scripts/search.js'));
   const turbolinks = await loadFile(path.join(__dirname, 'scripts/turbolinks.js'));
 
   const result = uglifyEs.minify({
     'fuse.min.js': fuse,
+    'moment-with-locales.js': moment,
     'search.js': search,
     'turbolinks.js': turbolinks
   });

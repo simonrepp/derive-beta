@@ -11,7 +11,7 @@ const eventResult = function(event) {
   html += '  <div class="additional">';
   html += '    <span>';
   for(let date of event.dates) {
-    html +=      date.date + '<br/>';
+    html +=      moment(date.date).locale('de').format('dddd, D.M.YYYY') + '<br/>';
   }
   html += '    </span>';
   html +=      event.address;
