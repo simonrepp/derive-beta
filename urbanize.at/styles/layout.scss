@@ -16,10 +16,9 @@
 }
 
 .brand {
-	color: #fff;
 	font-family: 'Fredoka One';
 	font-size: 2.4em;
-	line-height: 1em;
+	line-height: 1.2em;
 }
 
 .breadcrumb {
@@ -45,9 +44,8 @@
 }
 
 .footer {
-	background-color: #009fe3;
-	border: 2px solid #fff;
-	color: #fff;
+	background-color: #fff;
+	border: 2px solid #009fe3;
 	font-size: 0.8em;
 	margin-bottom: 100vh;
 	padding: 1em;
@@ -55,12 +53,12 @@
 }
 
 .header {
-	color: #fff;
+	color: #009fe3;
 	font-family: 'Fredoka One';
 
 	align-items: center;
-	background-color: #009fe3;
-	border: 2px solid #fff;
+	background-color: #fff;
+	border: 2px solid #009fe3;
 	display: flex;
 	justify-content: space-between;
 	margin-bottom: 24px;
