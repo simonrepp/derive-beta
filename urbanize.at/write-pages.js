@@ -18,7 +18,7 @@ module.exports = async (data, urbanize) => {
     writeFile(data.buildDir, 'seite-nicht-gefunden/index.html', notFoundPage(urbanize)),
     writeFile(data.buildDir, '/suche/index.html', searchPage(urbanize)),
     writeFile(data.buildDir, '/teilnehmerinnen/index.html', participantsPage(urbanize)),
-    writeFile(data.buildDir, '/veranstaltungen/index.html', eventsPage(urbanize, '2018', urbanize.events))
+    writeFile(data.buildDir, '/veranstaltungen/index.html', eventsPage(urbanize, null, urbanize.events))
   ]);
 
   for(let [date, events] of urbanize.eventsByDate.entries()) {
