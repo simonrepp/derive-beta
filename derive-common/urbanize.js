@@ -7,6 +7,7 @@ module.exports = data => {
       eventsByDate: new Map(),
       features: [],
       footer: '2018 URBANIZE! INTERNATIONALES FESTIVAL FÜR URBANE ERKUNDUNGEN BERLIN',
+      hosts: new Set(),
       pages: [],
       participants: new Set(),
       tags: new Map(),
@@ -19,6 +20,7 @@ module.exports = data => {
       eventsByDate: new Map(),
       features: [],
       footer: '2018 UR9ANIZE! INTERNATIONALES FESTIVAL FÜR URBANE ERKUNDUNGEN WIEN',
+      hosts: new Set(),
       pages: [],
       participants: new Set(),
       tags: new Map(),
@@ -66,7 +68,7 @@ module.exports = data => {
         });
 
         event.hosts.forEach(host =>
-          data.urbanize[city].participants.add(host)
+          data.urbanize[city].hosts.add(host)
         );
 
         event.participants.forEach(participant =>

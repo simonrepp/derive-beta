@@ -5,7 +5,13 @@ module.exports = urbanize => {
   const html = `
     <div>
       <div class="generic__heading">
-        Beteiligte
+        VeranstalterInnen
+      </div>
+
+      ${participantListing(urbanize.hosts)}
+
+      <div class="generic__heading">
+        Gäste
       </div>
 
       ${participantListing(urbanize.participants)}
