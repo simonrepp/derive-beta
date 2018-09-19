@@ -13,6 +13,8 @@ const searchPage = require('./pages/search.js');
 const tagPage = require('./pages/tag.js');
 
 module.exports = async (data, urbanize) => {
+  urbanize.assetHash = (new Date()).getTime().toString();
+
   await Promise.all([
     writeFile(data.buildDir, 'index.html', indexPage(urbanize)),
     writeFile(data.buildDir, 'seite-nicht-gefunden/index.html', notFoundPage(urbanize)),

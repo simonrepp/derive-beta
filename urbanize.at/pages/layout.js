@@ -24,9 +24,9 @@ module.exports = (content, urbanize, options = {}) => `
       <meta name="msapplication-TileColor" content="#da532c">
       <meta name="theme-color" content="#ffffff">
 
-      <link rel="stylesheet" href="/styles.css">
+      <link rel="stylesheet" href="/styles.css?${urbanize.assetHash}">
 
-      <script defer src="/bundle.js"></script>
+      <script defer src="/bundle.js?${urbanize.assetHash}"></script>
     </head>
 
     <body style="background-image: url(${urbanize.background});">
