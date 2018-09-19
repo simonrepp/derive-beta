@@ -25,7 +25,7 @@ module.exports = urbanize => {
               </a>
             </div>
 
-            ${feature.text ? feature.text.converted : ''}
+            ${feature.text ? `<div class="generic__serif">${feature.text.converted}</div>` : ''}
           </div>
         </div>
       `).join('')}
