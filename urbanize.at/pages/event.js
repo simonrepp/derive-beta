@@ -11,14 +11,13 @@ module.exports = (urbanize, event) => {
       </div>
 
       ${event.subtitle ? `
-        <div class="subtitle">
+        <strong class="generic__subheading generic__heading_addendum">
           ${event.subtitle}
-        </div>
+        </strong>
       `:''}
 
       <div class="additional">
-        ${timeframe(event)}
-        &nbsp;
+        ${timeframe(event)}<br/>
         ${event.address}
       </div>
 

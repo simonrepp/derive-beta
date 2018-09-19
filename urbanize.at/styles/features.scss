@@ -9,7 +9,7 @@
 
 .feature__landscape {
   background-color: #fff;
-  border: 2px solid #009fe3;
+  box-shadow: 0 0 0.5em rgba(146, 146, 146, 0.8);
   box-sizing: border-box;
   flex-direction: column;
 
@@ -29,7 +29,7 @@
 
 .feature__portrait {
   background-color: #fff;
-  border: 2px solid #009fe3;
+  box-shadow: 0 0 0.5em rgba(146, 146, 146, 0.8);
   box-sizing: border-box;
 
   .feature_image {
@@ -56,7 +56,7 @@
 
 .feature__card {
   background-color: #fff;
-  border: 2px solid #009fe3;
+  box-shadow: 0 0 0.5em rgba(146, 146, 146, 0.8);
   box-sizing: border-box;
   flex-direction: column;
   grid-column: span 1;

@@ -8,7 +8,7 @@ module.exports = events => `
           <img class="teaser-image" src="${event.image.written}">
         `:''}
 
-        <strong>
+        <strong class="generic__subheading">
           <a href="/veranstaltungen/${event.permalink}/">
             ${event.title}
           </a>

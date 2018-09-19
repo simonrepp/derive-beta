@@ -1,7 +1,7 @@
 module.exports = data => {
   data.urbanize = {
     berlin: {
-      background: '/images/bewegung_macht_stadt.jpg',
+      background: '/images/bewegung_macht_stadt_double_offset.jpg',
       categories: new Map(),
       events: [],
       eventsByDate: new Map(),

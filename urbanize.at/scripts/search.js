@@ -5,7 +5,7 @@ const eventResult = function(event) {
   if(event.image) {
     html += '<img class="teaser-image" src="' + event.image.written + '">';
   }
-  html += '  <strong>';
+  html += '  <strong class="generic__subheading">';
   html += '    <a href="/veranstaltungen/' + event.permalink + '">' + event.title + '</a>';
   html += '  </strong>';
   html += '  <div class="additional">';

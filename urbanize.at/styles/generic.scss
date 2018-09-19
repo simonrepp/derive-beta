@@ -1,4 +1,5 @@
 .generic__heading {
+  color: #c90c0f;
   font-family: 'FunctionPro-Medium';
   font-size: 1.65em;
   word-wrap: break-word;
@@ -8,10 +9,29 @@
   }
 
   a:hover {
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid #c90c0f;
   }
 
   margin-bottom: 1em;
+}
+
+.generic__heading_addendum {
+  margin-top: -1.3em;
+  margin-bottom: 1em !important;
+}
+
+.generic__subheading {
+  font-size: 1.2em;
+  margin-bottom: 0.1em;
+  display: block;
+}
+
+.generic__primary {
+  color: #c90c0f;
+}
+
+.generic__secondary {
+  color: #009fe3;
 }
 
 .generic__serif {

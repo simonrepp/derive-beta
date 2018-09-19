@@ -14,7 +14,7 @@ module.exports = urbanize => {
 
           <div class="feature_text">
             ${feature.header ? `
-              <div class="generic__serif">
+              <div class="generic__secondary">
                 ${feature.header}
               </div>
             `:''}
