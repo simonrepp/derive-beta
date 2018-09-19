@@ -12,9 +12,9 @@ const WHITELISTED_DERIVE_PERMALINKS = [
 ];
 
 const WHITELISTED_URBANIZE_PERMALINKS = [
-  'festival',
+  'about',
   'festivalpartnerinnen',
-  'festivalzentrale',
+  'festivalorte',
   'impressum',
   'kontakt',
   'presse',

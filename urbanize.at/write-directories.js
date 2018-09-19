@@ -7,19 +7,19 @@ module.exports = async (data, urbanize) => {
   await fsExtra.emptyDir(data.buildDir);
 
   const topDirectories = new Set([
+    'beteiligte',
     'features',
     'kategorien',
     'seite-nicht-gefunden',
     'suche',
     'tags',
-    'teilnehmerinnen',
     'veranstaltungen'
   ]);
 
   urbanize.eventsByDate.forEach((events, date) =>
     topDirectories.add(moment(date).locale('de').format('D-MMMM-YYYY'))
   );
-  
+
   urbanize.pages.forEach(page => topDirectories.add(`${page.permalink}`));
 
   await Promise.all([...topDirectories].map(dir => createDir(data.buildDir, dir)));

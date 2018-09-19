@@ -19,7 +19,7 @@ module.exports = async (data, urbanize) => {
     writeFile(data.buildDir, 'index.html', indexPage(urbanize)),
     writeFile(data.buildDir, 'seite-nicht-gefunden/index.html', notFoundPage(urbanize)),
     writeFile(data.buildDir, '/suche/index.html', searchPage(urbanize)),
-    writeFile(data.buildDir, '/teilnehmerinnen/index.html', participantsPage(urbanize)),
+    writeFile(data.buildDir, '/beteiligte/index.html', participantsPage(urbanize)),
     writeFile(data.buildDir, '/veranstaltungen/index.html', eventsPage(urbanize, null, urbanize.events))
   ]);
 

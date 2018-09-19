@@ -46,18 +46,18 @@ module.exports = urbanize => `
         </a>
       </div>
       <div>
-        <a href="/festival/">
-          Das Festival
+        <a href="/about/">
+          About
         </a>
       </div>
       <div>
-        <a href="/festivalzentrale/">
-          Festivalzentrale
+        <a href="/festivalorte/">
+          Festivalorte
         </a>
       </div>
       <div>
-        <a href="/teilnehmerinnen/">
-          TeilnehmerInnen
+        <a href="/beteiligte/">
+          Beteiligte
         </a>
       </div>
       <div>
