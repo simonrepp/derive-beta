@@ -7,7 +7,7 @@ module.exports = participants => `
         </strong>
 
         <div class="generic__serif">
-          ${participant.text ? participant.text.converted : ''}
+          ${participant.text ? participant.text.converted : (participant.biography ? participant.biography.converted : '')}
         </div>
 
         ${participant.website ? `<a href="${participant.website}">${participant.website}</a>` : ''}
