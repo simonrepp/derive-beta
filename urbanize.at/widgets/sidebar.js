@@ -12,7 +12,7 @@ module.exports = urbanize => `
     <div class="indented">
       <div>
         <a href="/veranstaltungen/">
-          Alle Tage
+          Programm
         </a>
       </div>
 
@@ -28,13 +28,26 @@ module.exports = urbanize => `
     <p>Kategorien</p>
 
     <div class="indented">
-      ${Array.from(urbanize.categories.values()).map(category => `
-        <div>
-          <a href="/kategorien/${category.permalink}/">
-            ${category.name}
-          </a>
-        </div>
-      `).join('')}
+      <div>
+        <a href="/kategorien/vortrag-or-diskussion/">
+          Vortrag | Diskussion
+        </a>
+      </div>
+      <div>
+        <a href="/kategorien/workshop/">
+          Workshop
+        </a>
+      </div>
+      <div>
+        <a href="/kategorien/stadt-praxis/">
+          Stadt-Praxis
+        </a>
+      </div>
+      <div>
+        <a href="/kategorien/film-kunst-musik/">
+          Film-Kunst-Musik
+        </a>
+      </div>
     </div>
 
     <p>Festival</p>
@@ -42,7 +55,7 @@ module.exports = urbanize => `
     <div class="indented">
       <div>
         <a href="/">
-          Startseite
+          Home
         </a>
       </div>
       <div>
@@ -51,8 +64,8 @@ module.exports = urbanize => `
         </a>
       </div>
       <div>
-        <a href="/festivalorte/">
-          Festivalorte
+        <a href="/orte/">
+          Orte
         </a>
       </div>
       <div>
@@ -61,8 +74,8 @@ module.exports = urbanize => `
         </a>
       </div>
       <div>
-        <a href="/festivalpartnerinnen/">
-          FestivalpartnerInnen
+        <a href="/partnerinnen/">
+          Partner*innen
         </a>
       </div>
       <div>
@@ -81,8 +94,8 @@ module.exports = urbanize => `
 
     <div class="indented">
       <div><a href="http://derive.at" target="_blank">Website</a></div> ${''/* TODO: https link as soon as we migrated */}
-      <div><a href="/radio/">Radio</a></div>
       <div><a href="/zeitschrift/">Zeitschrift</a></div>
+      <div><a href="/radio/">Radio</a></div>
       <div><a href="/verein/">Verein</a></div>
       <div><a href="/impressum/">Impressum</a></div>
       <div>
