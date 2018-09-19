@@ -10,6 +10,9 @@ const markdownMediaRegex = /(!|)\[(?:(?!\[.*\]).)*\]\((?!https?:\/\/|\/\/)(\S(?:
 // match(/!\[((?!!\[.*\]\(.*\)).)*\]\(((?!!\[.*\]\(.*\)).)*\)/g); (possibly resuse to improve regexes later, missing ](https?: NEGATIVE LOOKAHEAD THINGY)
 
 const validate = ({ name, value }, mediaAllowed) => {
+  if(value.trim().length === 0)
+    return null;
+
   const downloads = [];
   const embeds = [];
 
