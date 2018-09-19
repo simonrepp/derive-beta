@@ -45,7 +45,7 @@ module.exports = (urbanize, event) => {
       ${categories(event.categories)}
       ${tags(event.tags)}
 
-      ${addThis(`/veranstaltungen/${event.permalink}/`)}
+      ${addThis(`https://berlin.urbanize.at/veranstaltungen/${event.permalink}/`)}
     </div>
   `;
 
