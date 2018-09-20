@@ -15,18 +15,6 @@
 	margin-bottom: 10px;
 }
 
-.brand {
-	font-family: 'Fredoka One';
-	font-size: 2.4em;
-	line-height: 1.2em;
-
-	@media (max-width: 500px) {
-		font-size: 1.4em;
-		line-height: 1em;
-		margin-bottom: 1em;
-	}
-}
-
 .breadcrumb {
 	margin-bottom: 30px;
 }
@@ -67,35 +55,12 @@
 }
 
 .header {
-	align-items: center;
 	background-color: #fff;
 	box-shadow: 0 0 0.5em rgba(146, 146, 146, 0.8);
-	display: flex;
-	font-family: 'FunctionPro-Medium';
-	justify-content: space-between;
-	margin-bottom: 24px;
-	padding: 1em;
 
-	@media (max-width: 500px) {
-		align-items: flex-start;
-		flex-direction: column;
+	img {
+		display: block;
 		max-width: 100%;
-	}
-}
-
-.header_info {
-	text-align: right;
-
-	@media (max-width: 500px) {
-		text-align: left;
-	}
-}
-
-.header_urbanize {
-	font-size: 1.65em;
-
-	@media (max-width: 500px) {
-		font-size: 1.2em;
 	}
 }
 
