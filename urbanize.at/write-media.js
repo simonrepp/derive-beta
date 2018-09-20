@@ -35,7 +35,7 @@ module.exports = async (data, urbanize, preview) => {
   for(let event of urbanize.events) {
     if(event.image) {
       if(preview) {
-        event.image.written = `${data.rootServerUrl}/${event.image.localFilesystemPath}`;
+        event.image.written = encodeURI(`${data.rootServerUrl}/${event.image.localFilesystemPath}`);
       } else {
         event.image.written = path.join('/veranstaltungen', event.permalink, `bild${path.extname(event.image.normalizedPath)}`);
         concurrentWrites.push( copyCropped(event.image.localFilesystemPath, event.image.written) );
@@ -47,12 +47,12 @@ module.exports = async (data, urbanize, preview) => {
 
       if(preview) {
         for(let download of event.text.downloads) {
-          download.written = `${data.rootServerUrl}/${download.localFilesystemPath}`;
+          download.written = encodeURI(`${data.rootServerUrl}/${download.localFilesystemPath}`);
           text = text.replace(download.placeholder, download.written);
         }
 
         for(let embed of event.text.embeds) {
-          embed.written = `${data.rootServerUrl}/${embed.localFilesystemPath}`;
+          embed.written = encodeURI(`${data.rootServerUrl}/${embed.localFilesystemPath}`);
           text = text.replace(embed.placeholder, embed.written);
         }
       } else {
@@ -79,7 +79,7 @@ module.exports = async (data, urbanize, preview) => {
   for(let feature of urbanize.features) {
     if(feature.image) {
       if(preview) {
-        feature.image.written = `${data.rootServerUrl}/${feature.image.localFilesystemPath}`;
+        feature.image.written = encodeURI(`${data.rootServerUrl}/${feature.image.localFilesystemPath}`);
       } else {
         feature.image.written = path.join('/features', `bild-${featureNumber++}${path.extname(feature.image.normalizedPath)}`);
         concurrentWrites.push( copyResized(feature.image.localFilesystemPath, feature.image.written) );
@@ -93,12 +93,12 @@ module.exports = async (data, urbanize, preview) => {
 
       if(preview) {
         for(let download of page.text.downloads) {
-          download.written = `${data.rootServerUrl}/${download.localFilesystemPath}`;
+          download.written = encodeURI(`${data.rootServerUrl}/${download.localFilesystemPath}`);
           text = text.replace(download.placeholder, download.written);
         }
 
         for(let embed of page.text.embeds) {
-          embed.written = `${data.rootServerUrl}/${embed.localFilesystemPath}`;
+          embed.written = encodeURI(`${data.rootServerUrl}/${embed.localFilesystemPath}`);
           text = text.replace(embed.placeholder, embed.written);
         }
       } else {
