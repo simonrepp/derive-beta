@@ -1,6 +1,6 @@
 module.exports = participants => `
   <div>
-    ${[...participants].map(participant => `
+    ${[...participants].sort((a, b) => a.name.localeCompare(b.name)).map(participant => `
       <div class="list-item">
         <strong>
           ${participant.name}
