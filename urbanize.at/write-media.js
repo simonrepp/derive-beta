@@ -39,6 +39,7 @@ module.exports = async (data, urbanize, preview) => {
       } else {
         event.image.written = path.join('/veranstaltungen', event.permalink, `bild${path.extname(event.image.normalizedPath)}`);
         concurrentWrites.push( copyCropped(event.image.localFilesystemPath, event.image.written) );
+        event.image.written += `?${urbanize.assetHash}`;
       }
     }
 
@@ -59,6 +60,7 @@ module.exports = async (data, urbanize, preview) => {
         for(let download of event.text.downloads) {
           download.written = path.join('/veranstaltungen', event.permalink, `text-${download.virtualFilename}`);
           concurrentWrites.push( copy(download.localFilesystemPath, download.written) );
+          download.written += `?${urbanize.assetHash}`;
 
           text = text.replace(download.placeholder, download.written);
         }
@@ -66,6 +68,7 @@ module.exports = async (data, urbanize, preview) => {
         for(let embed of event.text.embeds) {
           embed.written = path.join('/veranstaltungen', event.permalink, `text-${embed.virtualFilename}`);
           concurrentWrites.push( copyResized(embed.localFilesystemPath, embed.written) );
+          embed.written += `?${urbanize.assetHash}`;
 
           text = text.replace(embed.placeholder, embed.written);
         }
@@ -83,6 +86,7 @@ module.exports = async (data, urbanize, preview) => {
       } else {
         feature.image.written = path.join('/features', `bild-${featureNumber++}${path.extname(feature.image.normalizedPath)}`);
         concurrentWrites.push( copyResized(feature.image.localFilesystemPath, feature.image.written) );
+        feature.image.written += `?${urbanize.assetHash}`;
       }
     }
   }
@@ -105,6 +109,7 @@ module.exports = async (data, urbanize, preview) => {
         for(let download of page.text.downloads) {
           download.written = path.join('/', page.permalink, `text-${download.virtualFilename}`);
           concurrentWrites.push( copy(download.localFilesystemPath, download.written) );
+          download.written += `?${urbanize.assetHash}`;
 
           text = text.replace(download.placeholder, download.written);
         }
@@ -112,6 +117,7 @@ module.exports = async (data, urbanize, preview) => {
         for(let embed of page.text.embeds) {
           embed.written = path.join('/', page.permalink, `text-${embed.virtualFilename}`);
           concurrentWrites.push( copyResized(embed.localFilesystemPath, embed.written) );
+          embed.written += `?${urbanize.assetHash}`;
 
           text = text.replace(embed.placeholder, embed.written);
         }

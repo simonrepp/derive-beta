@@ -48,6 +48,8 @@ module.exports = async (data, city, options = { preview: false }) => {
   console.time('build');
 
   const urbanize = data.urbanize[city];
+  
+  urbanize.assetHash = (new Date()).getTime().toString();
 
   console.time('writeDirectories');
   await writeDirectories(data, urbanize);
