@@ -24,8 +24,6 @@ const eventSort = (a, b) => {
       bTime = b.dates[0].time;
     }
 
-    console.log(aTime, bTime, aTime > bTime ? 1 : -1);
-
     return aTime > bTime ? 1 : -1;
   } else {
     return dateDifference;
