@@ -3,6 +3,7 @@ module.exports = participants => `
     ${[...participants].sort((a, b) => a.name.localeCompare(b.name)).map(participant => `
       <div class="list-item">
         <strong>
+          <a id="${participant.permalink}"></a>
           ${participant.name}
         </strong>
 

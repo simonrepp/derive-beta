@@ -1,7 +1,8 @@
-const addThis = require('../widgets/add-this.js'),
-      categories = require('../widgets/categories.js'),
-      tags = require('../widgets/tags.js'),
-      timeframe = require('../widgets/timeframe.js');
+const addThis = require('../widgets/add-this.js');
+const categories = require('../widgets/categories.js');
+const participants = require('../widgets/participants.js');
+const tags = require('../widgets/tags.js');
+const timeframe = require('../widgets/timeframe.js');
 
 module.exports = (urbanize, event) => {
   const html = `
@@ -42,6 +43,7 @@ module.exports = (urbanize, event) => {
 
       <hr/>
 
+      ${participants(event.participants)}
       ${categories(event.categories)}
       ${tags(event.tags)}
 
