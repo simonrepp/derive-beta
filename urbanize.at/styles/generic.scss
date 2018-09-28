@@ -1,5 +1,5 @@
 .generic__heading {
-  color: #c90c0f;
+  color: $primary_color;
   font-family: 'FunctionPro-Medium';
   font-size: 1.65em;
   word-wrap: break-word;
@@ -9,7 +9,7 @@
   }
 
   a:hover {
-    border-bottom: 1px solid #c90c0f;
+    border-bottom: 1px solid $primary_color;
   }
 
   margin-bottom: 1em;
@@ -27,11 +27,11 @@
 }
 
 .generic__primary {
-  color: #c90c0f;
+  color: $primary_color;
 }
 
 .generic__secondary {
-  color: #009fe3;
+  color: $secondary_color;
 }
 
 .generic__serif {

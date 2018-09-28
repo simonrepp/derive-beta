@@ -29,10 +29,10 @@ const compileJs = async data => {
   }
 };
 
-const compileSass = data => {
+const compileSass = (data, urbanize) => {
   return new Promise((resolve, reject) => {
     sass.render({
-      file: path.join(__dirname, 'styles/main.scss'),
+      file: path.join(__dirname, `styles/${urbanize.edition}.scss`),
       outputStyle: 'compressed',
     }, (err, result) => {
       if(err) {
@@ -48,7 +48,7 @@ module.exports = async (data, city, options = { preview: false }) => {
   console.time('build');
 
   const urbanize = data.urbanize[city];
-  
+
   urbanize.assetHash = (new Date()).getTime().toString();
 
   console.time('writeDirectories');
@@ -62,7 +62,7 @@ module.exports = async (data, city, options = { preview: false }) => {
   console.time('writePages');
   await Promise.all([
     compileJs(data),
-    compileSass(data),
+    compileSass(data, urbanize),
     fsExtra.copy(path.join(__dirname, 'static/'), data.buildDir),
     writePages(data, urbanize)
   ]);

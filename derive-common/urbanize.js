@@ -3,6 +3,7 @@ module.exports = data => {
     berlin: {
       background: '/images/bewegung_macht_stadt_double_offset.jpg',
       categories: new Map(),
+      edition: 'berlin',
       events: [],
       eventsByDate: new Map(),
       features: [],
@@ -16,6 +17,7 @@ module.exports = data => {
     wien: {
       background: '/images/graetzelhood.jpg',
       categories: new Map(),
+      edition: 'wien',
       events: [],
       eventsByDate: new Map(),
       features: [],

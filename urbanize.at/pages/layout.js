@@ -1,6 +1,6 @@
-const footer = require('../widgets/footer.js'),
-      header = require('../widgets/header.js'),
-      sidebar = require('../widgets/sidebar.js');
+const footer = require('../widgets/footer.js');
+const header = require('../widgets/header.js');
+const sidebar = require('../widgets/sidebar.js');
 
 const DEFAULT_TITLE = 'Ur9anize 2018';
 
@@ -32,7 +32,7 @@ module.exports = (content, urbanize, options = {}) => `
 
     <body style="background-image: url(${urbanize.background});">
       <div class="restraint">
-        ${header}
+        ${header(urbanize)}
 
         <div class="split">
           <div class="${options.tiles ? 'tiles' : 'content'} offset">
