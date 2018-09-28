@@ -20,7 +20,7 @@
 }
 
 .content {
-	background-color: #fff;
+	background-color: $panel_color;
 	box-shadow: 0 0 0.5em rgba(146, 146, 146, 0.8);
 	box-sizing: border-box;
 	flex-grow: 1;
@@ -46,7 +46,7 @@
 }
 
 .footer {
-	background-color: #fff;
+	background-color: $panel_color;
 	box-shadow: 0 0 0.5em rgba(146, 146, 146, 0.8);
 	font-size: 0.8em;
 	margin-bottom: 100vh;
@@ -55,7 +55,7 @@
 }
 
 .header {
-	background-color: #fff;
+	background-color: $panel_color;
 	box-shadow: 0 0 0.5em rgba(146, 146, 146, 0.8);
 
 	img {
@@ -96,7 +96,7 @@
 .sidebar {
   align-items: flex-start;
 	align-self: flex-start;
-	background-color: #fff;
+	background-color: $panel_color;
 	box-shadow: 0 0 0.5em rgba(146, 146, 146, 0.8);
 	box-sizing: border-box;
   display: flex;

@@ -8,7 +8,7 @@
 }
 
 .feature__landscape {
-  background-color: #fff;
+  background-color: $panel_color;
   box-shadow: 0 0 0.5em rgba(146, 146, 146, 0.8);
   box-sizing: border-box;
   flex-direction: column;
@@ -28,7 +28,7 @@
 }
 
 .feature__portrait {
-  background-color: #fff;
+  background-color: $panel_color;
   box-shadow: 0 0 0.5em rgba(146, 146, 146, 0.8);
   box-sizing: border-box;
 
@@ -55,7 +55,7 @@
 }
 
 .feature__card {
-  background-color: #fff;
+  background-color: $panel_color;
   box-shadow: 0 0 0.5em rgba(146, 146, 146, 0.8);
   box-sizing: border-box;
   flex-direction: column;

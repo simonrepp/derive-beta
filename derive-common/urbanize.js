@@ -15,7 +15,7 @@ module.exports = data => {
       title: 'urbanize! 2018 - Bewegung macht Stadt'
     },
     wien: {
-      background: '/images/graetzelhood.jpg',
+      background: '/images/graetzelhood.png',
       categories: new Map(),
       edition: 'wien',
       events: [],

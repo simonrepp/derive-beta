@@ -8,14 +8,28 @@ textarea {
 }
 
 body {
-	background-attachment: fixed;
-	background-color: #fff;
-	background-position: 25% 25%;
-	background-size: 100vmin;
-	color: #333;
-	margin: 0;
-	max-height: 100vh;
+  color: #333;
+  margin: 0;
+  max-height: 100vh;
 }
+
+@if $urbanize == 'wien' {
+  body {
+   	background-attachment: fixed;
+    background-color: #eee;
+   	background-position: center center;
+    background-repeat: no-repeat;
+   	background-size: 60vmin;
+  }
+} @else {
+  body {
+   	background-attachment: fixed;
+   	background-color: #fff;
+   	background-position: 25% 25%;
+   	background-size: 100vmin;
+  }
+}
+
 
 a {
   color: $primary_color;
