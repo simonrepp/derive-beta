@@ -43,11 +43,13 @@ module.exports = (data, author) => {
       </div>
     `:''}
 
-    ${author.books && author.books.length > 0 ? `
+    ${author.authoredBooks && author.authoredBooks.length > 0 ||
+      author.publishedBooks && author.publishedBooks.length > 0 ? `
       <h1>Bücher</h1>
 
       <div class="tiles">
-        ${author.books.sort((a, b) => b.yearOfPublication - a.yearOfPublication).map(bookTile).join('')}
+        ${author.authoredBooks ? author.authoredBooks.sort((a, b) => b.yearOfPublication - a.yearOfPublication).map(bookTile).join('') : ''}
+        ${author.publishedBooks ? author.publishedBooks.sort((a, b) => b.yearOfPublication - a.yearOfPublication).map(bookTile).join('') : ''}
       </div>
     `:''}
 
