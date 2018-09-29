@@ -109,6 +109,12 @@ const paginateAuthors = data => {
   );
 
   for(let author of authorsSorted) {
+    if((!author.articles || author.articles.length === 0) &&
+       (!author.programs || author.programs.length === 0) &&
+       (!author.authoredBooks || author.authoredBooks.length === 0) &&
+       (!author.eventParticipations || author.eventParticipations.length === 0))
+      continue;
+
     const relevantName = author.lastName || author.name;
     const firstLetter = relevantName.charAt(0)
                                     .normalize('NFD')
