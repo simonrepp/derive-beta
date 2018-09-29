@@ -52,7 +52,7 @@ module.exports = data => {
           `:''}
 
           <strong>Mit Beiträgen von:</strong><br/>
-          ${authors([...latestAuthors])}<br/><br/>
+          ${authors([...latestAuthors].sort((a, b) => a.name.localeCompare(b.name)))}<br/><br/>
 
           ${tags(latest.tags)}
 

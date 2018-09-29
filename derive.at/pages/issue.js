@@ -36,7 +36,7 @@ module.exports = (data, issue) => {
           `:''}
 
           Mit Beiträgen von:<br/>
-          ${authors([...issueAuthors])}<br/><br/>
+          ${authors([...issueAuthors].sort((a, b) => a.name.localeCompare(b.name)))}<br/><br/>
 
           ${tags(issue.tags)}
 
