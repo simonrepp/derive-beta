@@ -6,10 +6,6 @@ document.addEventListener('click', function(event) {
     return;
   }
 
-  // TODO: Make the No69 widget toggle into a direct link to issue page when
-  //       vertical height on device is too small to display the widget
-  //       possible solve by having two links and blending with css media queries instead
-
   const widgetToggles = document.querySelectorAll('.sidebar__widget-toggle');
   for(let toggleLink of widgetToggles) {
     if(toggleLink.contains(event.target)) {

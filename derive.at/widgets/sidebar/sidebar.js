@@ -1,6 +1,5 @@
-const issue = require('./issue.js'),
-      navigation = require('./navigation.js'),
-      search = require('./search.js');
+const navigation = require('./navigation.js');
+const search = require('./search.js');
 
 module.exports = data => `
   <div class="sidebar">
@@ -36,16 +35,11 @@ module.exports = data => `
       <span class="icon-mail"></span>
     </a>
 
-    <div class="sidebar__item">
-      <a class="sidebar__link sidebar__link__edition sidebar__widget-toggle">
-        N°<br/>
-        ${data.issuesDescending[0].number}
-      </a>
-
-      <div class="sidebar__widget">
-        ${issue(data.issuesDescending[0])}
-      </div>
-    </div>
+    <a class="sidebar__link sidebar__link__edition"
+       href="/zeitschrift/${data.issuesDescending[0].number}">
+      N°<br/>
+      ${data.issuesDescending[0].number}
+    </a>
 
     <a class="sidebar__link sidebar__link__playback sidebar__link--disabled"
        data-turbolinks-permanent
