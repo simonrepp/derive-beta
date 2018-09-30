@@ -30,6 +30,7 @@ module.exports = async (data, preview) => {
       } else {
         article.image.written = path.join('/texte', article.permalink, `bild${path.extname(article.image.normalizedPath)}`);
         concurrentWrites.push( copyResized(article.image.localFilesystemPath, article.image.written) );
+        article.image.written += `?${data.assetHash}`;
       }
     }
 
@@ -50,6 +51,7 @@ module.exports = async (data, preview) => {
         for(let download of article.text.downloads) {
           download.written = path.join('/texte', article.permalink, `text-${download.virtualFilename}`);
           concurrentWrites.push( copy(download.localFilesystemPath, download.written) );
+          download.written += `?${data.assetHash}`;
 
           text = text.replace(download.placeholder, download.written);
         }
@@ -57,6 +59,7 @@ module.exports = async (data, preview) => {
         for(let embed of article.text.embeds) {
           embed.written = path.join('/texte', article.permalink, `text-${embed.virtualFilename}`);
           concurrentWrites.push( copyResized(embed.localFilesystemPath, embed.written) );
+          embed.written += `?${data.assetHash}`;
 
           text = text.replace(embed.placeholder, embed.written);
         }
@@ -73,6 +76,7 @@ module.exports = async (data, preview) => {
       } else {
         book.cover.written = path.join('/buecher', book.permalink, `cover${path.extname(book.cover.normalizedPath)}`);
         concurrentWrites.push( copyResized(book.cover.localFilesystemPath, book.cover.written) );
+        book.cover.written += `?${data.assetHash}`;
       }
     }
   }
@@ -84,6 +88,7 @@ module.exports = async (data, preview) => {
       } else {
         event.image.written = path.join('/veranstaltungen', event.permalink, `bild${path.extname(event.image.normalizedPath)}`);
         concurrentWrites.push( copyResized(event.image.localFilesystemPath, event.image.written) );
+        event.image.written += `?${data.assetHash}`;
       }
     }
 
@@ -104,6 +109,7 @@ module.exports = async (data, preview) => {
         for(let download of event.text.downloads) {
           download.written = path.join('/veranstaltungen', event.permalink, `text-${download.virtualFilename}`);
           concurrentWrites.push( copy(download.localFilesystemPath, download.written) );
+          download.written += `?${data.assetHash}`;
 
           text = text.replace(download.placeholder, download.written);
         }
@@ -111,6 +117,7 @@ module.exports = async (data, preview) => {
         for(let embed of event.text.embeds) {
           embed.written = path.join('/veranstaltungen', event.permalink, `text-${embed.virtualFilename}`);
           concurrentWrites.push( copyResized(embed.localFilesystemPath, embed.written) );
+          embed.written += `?${data.assetHash}`;
 
           text = text.replace(embed.placeholder, embed.written);
         }
@@ -128,6 +135,7 @@ module.exports = async (data, preview) => {
       } else {
         feature.image.written = path.join('/features', `bild-${featureNumber++}${path.extname(feature.image.normalizedPath)}`);
         concurrentWrites.push( copyResized(feature.image.localFilesystemPath, feature.image.written) );
+        feature.image.written += `?${data.assetHash}`;
       }
     }
   }
@@ -138,6 +146,7 @@ module.exports = async (data, preview) => {
   } else {
     data.festival.image.written = path.join('/festival', `bild-${festivalNumber++}${path.extname(data.festival.image.normalizedPath)}`);
     concurrentWrites.push( copyResized(data.festival.image.localFilesystemPath, data.festival.image.written) );
+    data.festival.image.written += `?${data.assetHash}`;
   }
   for(let edition of data.festival.editions) {
     if(preview) {
@@ -145,6 +154,7 @@ module.exports = async (data, preview) => {
     } else {
       edition.image.written = path.join('/festival', `bild-${festivalNumber++}${path.extname(edition.image.normalizedPath)}`);
       concurrentWrites.push( copyResized(edition.image.localFilesystemPath, edition.image.written) );
+      edition.image.written += `?${data.assetHash}`;
     }
   }
 
@@ -155,6 +165,7 @@ module.exports = async (data, preview) => {
       } else {
         issue.cover.written = path.join('/zeitschrift', issue.permalink, `cover${path.extname(issue.cover.normalizedPath)}`);
         concurrentWrites.push( copyResized(issue.cover.localFilesystemPath, issue.cover.written) );
+        issue.cover.written += `?${data.assetHash}`;
       }
     }
   }
@@ -176,6 +187,7 @@ module.exports = async (data, preview) => {
       for(let download of page.text.downloads) {
         download.written = path.join('/', page.permalink, `text-${download.virtualFilename}`);
         concurrentWrites.push( copy(download.localFilesystemPath, download.written) );
+        download.written += `?${data.assetHash}`;
 
         text = text.replace(download.placeholder, download.written);
       }
@@ -183,6 +195,7 @@ module.exports = async (data, preview) => {
       for(let embed of page.text.embeds) {
         embed.written = path.join('/', page.permalink, `text-${embed.virtualFilename}`);
         concurrentWrites.push( copyResized(embed.localFilesystemPath, embed.written) );
+        embed.written += `?${data.assetHash}`;
 
         text = text.replace(embed.placeholder, embed.written);
       }
@@ -198,6 +211,7 @@ module.exports = async (data, preview) => {
   } else {
     data.radio.image.written = path.join('/radio', `header${path.extname(data.radio.image.normalizedPath)}`);
     concurrentWrites.push( copyResized(data.radio.image.localFilesystemPath, data.radio.image.written) );
+    data.radio.image.written += `?${data.assetHash}`;
   }
 
   for(let program of data.programs.values()) {
@@ -207,6 +221,7 @@ module.exports = async (data, preview) => {
       } else {
         program.image.written = path.join('/radio', program.permalink, `bild${path.extname(program.image.normalizedPath)}`);
         concurrentWrites.push( copyResized(program.image.localFilesystemPath, program.image.written) );
+        program.image.written += `?${data.assetHash}`;
       }
     }
 
@@ -216,6 +231,7 @@ module.exports = async (data, preview) => {
       } else {
         program.soundfile.written = path.join('/radio', program.permalink, `aufnahme${path.extname(program.soundfile.normalizedPath)}`);
         concurrentWrites.push( copy(program.soundfile.localFilesystemPath, program.soundfile.written) );
+        program.soundfile.written += `?${data.assetHash}`;
       }
     }
 
@@ -236,6 +252,7 @@ module.exports = async (data, preview) => {
         for(let download of program.text.downloads) {
           download.written = path.join('/radio', program.permalink, `text-${download.virtualFilename}`);
           concurrentWrites.push( copy(download.localFilesystemPath, download.written) );
+          download.written += `?${data.assetHash}`;
 
           text = text.replace(download.placeholder, download.written);
         }
@@ -243,6 +260,7 @@ module.exports = async (data, preview) => {
         for(let embed of program.text.embeds) {
           embed.written = path.join('/radio', program.permalink, `text-${embed.virtualFilename}`);
           concurrentWrites.push( copyResized(embed.localFilesystemPath, embed.written) );
+          embed.written += `?${data.assetHash}`;
 
           text = text.replace(embed.placeholder, embed.written);
         }

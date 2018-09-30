@@ -48,6 +48,8 @@ const compileSass = data => {
 module.exports = async (data, options = { preview: false }) => {
   console.time('build');
 
+  data.assetHash = (new Date()).getTime().toString();
+
   console.time('writeDirectories');
   await writeDirectories(data);
   console.timeEnd('writeDirectories');
