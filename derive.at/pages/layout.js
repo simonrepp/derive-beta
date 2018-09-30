@@ -1,6 +1,6 @@
-const footer = require('../widgets/layout/footer.js'),
-      header = require('../widgets/layout/header.js'),
-      sidebar = require('../widgets/sidebar/sidebar.js');
+const footer = require('../widgets/layout/footer.js');
+const header = require('../widgets/layout/header.js');
+const sidebar = require('../widgets/sidebar/sidebar.js');
 
 const DEFAULT_TITLE = 'dérive | Zeitschrift für Stadtforschung';
 
@@ -24,9 +24,9 @@ module.exports = (data, content, options = {}) => `
       <meta name="msapplication-TileColor" content="#da532c">
       <meta name="theme-color" content="#ffffff">
 
-      <link rel="stylesheet" href="/styles.css">
+      <link rel="stylesheet" href="/styles.css?${data.assetHash}">
 
-      <script defer src="/bundle.js"></script>
+      <script defer src="/bundle.js?${data.assetHash}"></script>
     </head>
 
     <body>
