@@ -21,7 +21,6 @@ const eventResult = function(event) {
   html += '  </div>';
   html += '</div>';
 
-  // TODO: Dates in searchresult
   return html;
 }
 
