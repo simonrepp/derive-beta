@@ -26,7 +26,7 @@ module.exports = async (data, preview) => {
   for(let article of data.readableArticles) {
     if(article.image) {
       if(preview) {
-        article.image.written = `${data.rootServerUrl}/${article.image.localFilesystemPath}`;
+        article.image.written = encodeURI(`${data.rootServerUrl}/${article.image.localFilesystemPath}`);
       } else {
         article.image.written = path.join('/texte', article.permalink, `bild${path.extname(article.image.normalizedPath)}`);
         concurrentWrites.push( copyResized(article.image.localFilesystemPath, article.image.written) );
@@ -38,12 +38,12 @@ module.exports = async (data, preview) => {
 
       if(preview) {
         for(let download of article.text.downloads) {
-          download.written = `${data.rootServerUrl}/${download.localFilesystemPath}`;
+          download.written = encodeURI(`${data.rootServerUrl}/${download.localFilesystemPath}`);
           text = text.replace(download.placeholder, download.written);
         }
 
         for(let embed of article.text.embeds) {
-          embed.written = `${data.rootServerUrl}/${embed.localFilesystemPath}`;
+          embed.written = encodeURI(`${data.rootServerUrl}/${embed.localFilesystemPath}`);
           text = text.replace(embed.placeholder, embed.written);
         }
       } else {
@@ -69,7 +69,7 @@ module.exports = async (data, preview) => {
   for(let book of data.books.values()) {
     if(book.cover) {
       if(preview) {
-        book.cover.written = `${data.rootServerUrl}/${book.cover.localFilesystemPath}`;
+        book.cover.written = encodeURI(`${data.rootServerUrl}/${book.cover.localFilesystemPath}`);
       } else {
         book.cover.written = path.join('/buecher', book.permalink, `cover${path.extname(book.cover.normalizedPath)}`);
         concurrentWrites.push( copyResized(book.cover.localFilesystemPath, book.cover.written) );
@@ -80,7 +80,7 @@ module.exports = async (data, preview) => {
   for(let event of data.events.values()) {
     if(event.image) {
       if(preview) {
-        event.image.written = `${data.rootServerUrl}/${event.image.localFilesystemPath}`;
+        event.image.written = encodeURI(`${data.rootServerUrl}/${event.image.localFilesystemPath}`);
       } else {
         event.image.written = path.join('/veranstaltungen', event.permalink, `bild${path.extname(event.image.normalizedPath)}`);
         concurrentWrites.push( copyResized(event.image.localFilesystemPath, event.image.written) );
@@ -92,12 +92,12 @@ module.exports = async (data, preview) => {
 
       if(preview) {
         for(let download of event.text.downloads) {
-          download.written = `${data.rootServerUrl}/${download.localFilesystemPath}`;
+          download.written = encodeURI(`${data.rootServerUrl}/${download.localFilesystemPath}`);
           text = text.replace(download.placeholder, download.written);
         }
 
         for(let embed of event.text.embeds) {
-          embed.written = `${data.rootServerUrl}/${embed.localFilesystemPath}`;
+          embed.written = encodeURI(`${data.rootServerUrl}/${embed.localFilesystemPath}`);
           text = text.replace(embed.placeholder, embed.written);
         }
       } else {
@@ -124,7 +124,7 @@ module.exports = async (data, preview) => {
   for(let feature of data.features.values()) {
     if(feature.image) {
       if(preview) {
-        feature.image.written = `${data.rootServerUrl}/${feature.image.localFilesystemPath}`;
+        feature.image.written = encodeURI(`${data.rootServerUrl}/${feature.image.localFilesystemPath}`);
       } else {
         feature.image.written = path.join('/features', `bild-${featureNumber++}${path.extname(feature.image.normalizedPath)}`);
         concurrentWrites.push( copyResized(feature.image.localFilesystemPath, feature.image.written) );
@@ -134,14 +134,14 @@ module.exports = async (data, preview) => {
 
   let festivalNumber = 0;
   if(preview) {
-    data.festival.image.written = `${data.rootServerUrl}/${data.festival.image.localFilesystemPath}`;
+    data.festival.image.written = encodeURI(`${data.rootServerUrl}/${data.festival.image.localFilesystemPath}`);
   } else {
     data.festival.image.written = path.join('/festival', `bild-${festivalNumber++}${path.extname(data.festival.image.normalizedPath)}`);
     concurrentWrites.push( copyResized(data.festival.image.localFilesystemPath, data.festival.image.written) );
   }
   for(let edition of data.festival.editions) {
     if(preview) {
-      edition.image.written = `${data.rootServerUrl}/${edition.image.localFilesystemPath}`;
+      edition.image.written = encodeURI(`${data.rootServerUrl}/${edition.image.localFilesystemPath}`);
     } else {
       edition.image.written = path.join('/festival', `bild-${festivalNumber++}${path.extname(edition.image.normalizedPath)}`);
       concurrentWrites.push( copyResized(edition.image.localFilesystemPath, edition.image.written) );
@@ -151,7 +151,7 @@ module.exports = async (data, preview) => {
   for(let issue of data.issues.values()) {
     if(issue.cover) {
       if(preview) {
-        issue.cover.written = `${data.rootServerUrl}/${issue.cover.localFilesystemPath}`;
+        issue.cover.written = encodeURI(`${data.rootServerUrl}/${issue.cover.localFilesystemPath}`);
       } else {
         issue.cover.written = path.join('/zeitschrift', issue.permalink, `cover${path.extname(issue.cover.normalizedPath)}`);
         concurrentWrites.push( copyResized(issue.cover.localFilesystemPath, issue.cover.written) );
@@ -164,12 +164,12 @@ module.exports = async (data, preview) => {
 
     if(preview) {
       for(let download of page.text.downloads) {
-        download.written = `${data.rootServerUrl}/${download.localFilesystemPath}`;
+        download.written = encodeURI(`${data.rootServerUrl}/${download.localFilesystemPath}`);
         text = text.replace(download.placeholder, download.written);
       }
 
       for(let embed of page.text.embeds) {
-        embed.written = `${data.rootServerUrl}/${embed.localFilesystemPath}`;
+        embed.written = encodeURI(`${data.rootServerUrl}/${embed.localFilesystemPath}`);
         text = text.replace(embed.placeholder, embed.written);
       }
     } else {
@@ -194,7 +194,7 @@ module.exports = async (data, preview) => {
   // Radio
 
   if(preview) {
-    data.radio.image.written = `${data.rootServerUrl}/${data.radio.image.localFilesystemPath}`;
+    data.radio.image.written = encodeURI(`${data.rootServerUrl}/${data.radio.image.localFilesystemPath}`);
   } else {
     data.radio.image.written = path.join('/radio', `header${path.extname(data.radio.image.normalizedPath)}`);
     concurrentWrites.push( copyResized(data.radio.image.localFilesystemPath, data.radio.image.written) );
@@ -203,7 +203,7 @@ module.exports = async (data, preview) => {
   for(let program of data.programs.values()) {
     if(program.image) {
       if(preview) {
-        program.image.written = `${data.rootServerUrl}/${program.image.localFilesystemPath}`;
+        program.image.written = encodeURI(`${data.rootServerUrl}/${program.image.localFilesystemPath}`);
       } else {
         program.image.written = path.join('/radio', program.permalink, `bild${path.extname(program.image.normalizedPath)}`);
         concurrentWrites.push( copyResized(program.image.localFilesystemPath, program.image.written) );
@@ -212,7 +212,7 @@ module.exports = async (data, preview) => {
 
     if(program.soundfile) {
       if(preview) {
-        program.soundfile.written = `${data.rootServerUrl}/${program.soundfile.localFilesystemPath}`;
+        program.soundfile.written = encodeURI(`${data.rootServerUrl}/${program.soundfile.localFilesystemPath}`);
       } else {
         program.soundfile.written = path.join('/radio', program.permalink, `aufnahme${path.extname(program.soundfile.normalizedPath)}`);
         concurrentWrites.push( copy(program.soundfile.localFilesystemPath, program.soundfile.written) );
@@ -224,12 +224,12 @@ module.exports = async (data, preview) => {
 
       if(preview) {
         for(let download of program.text.downloads) {
-          download.written = `${data.rootServerUrl}/${download.localFilesystemPath}`;
+          download.written = encodeURI(`${data.rootServerUrl}/${download.localFilesystemPath}`);
           text = text.replace(download.placeholder, download.written);
         }
 
         for(let embed of program.text.embeds) {
-          embed.written = `${data.rootServerUrl}/${embed.localFilesystemPath}`;
+          embed.written = encodeURI(`${data.rootServerUrl}/${embed.localFilesystemPath}`);
           text = text.replace(embed.placeholder, embed.written);
         }
       } else {
