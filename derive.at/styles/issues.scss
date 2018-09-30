@@ -115,3 +115,18 @@
 .section-article__title {
   width: 65%;
 }
+
+@media (max-width: 740px) {
+  .section-article__split {
+    flex-direction: column-reverse;
+  }
+
+  .section-article__info {
+    text-align: left;
+    width: 100%;
+  }
+
+  .section-article__title {
+    width: 100%;
+  }
+}

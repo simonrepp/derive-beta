@@ -17,6 +17,23 @@
   width: 66%;
 }
 
+@media (max-width: 600px) {
+  .generic__featured {
+    flex-direction: column;
+  }
+
+  .generic__featured_image,
+  .generic__featured_image_wide {
+    margin-bottom: 1.33em;
+    margin-right: 0;
+    width: 100%;
+  }
+
+  .generic__featured_text {
+    width: 100%;
+  }
+}
+
 .generic__image_restraint {
   max-height: 640px;
 }

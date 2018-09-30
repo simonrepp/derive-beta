@@ -1,9 +1,9 @@
-const authors = require('../widgets/authors.js'),
-      { fullIssueTitle } = require('../widgets/issues/labeling.js'),
-      layout = require('./layout.js'),
-      section = require('../widgets/issues/section.js'),
-      share = require('../widgets/share.js'),
-      tags = require('../widgets/tags.js');
+const authors = require('../widgets/authors.js');
+const { fullIssueTitle } = require('../widgets/issues/labeling.js');
+const layout = require('./layout.js');
+const section = require('../widgets/issues/section.js');
+const share = require('../widgets/share.js');
+const tags = require('../widgets/tags.js');
 
 module.exports = (data, issue) => {
   const issueAuthors = new Set();
