@@ -20,9 +20,7 @@ module.exports = data => {
             `:''}
 
             <div class="generic__heading">
-              <a href="${feature.url}">
-                ${feature.title}
-              </a>
+              ${feature.url ? `<a href="${feature.url}">${feature.title}</a>` : feature.title}
             </div>
 
             ${feature.text ? `<div class="generic__serif">${feature.text.converted}</div>` : ''}
