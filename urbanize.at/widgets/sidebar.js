@@ -93,7 +93,7 @@ module.exports = urbanize => `
     <p>dérive – Stadtforschung</p>
 
     <div class="indented">
-      <div><a href="http://derive.at" target="_blank">Website</a></div> ${''/* TODO: https link as soon as we migrated */}
+      <div><a href="https://derive.at" target="_blank">Website</a></div>
       <div><a href="/zeitschrift/">Zeitschrift</a></div>
       <div><a href="/radio/">Radio</a></div>
       <div><a href="/verein/">Verein</a></div>
