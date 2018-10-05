@@ -1,5 +1,6 @@
 const addThis = require('../widgets/add-this.js');
 const categories = require('../widgets/categories.js');
+const hosts = require('../widgets/hosts.js');
 const participants = require('../widgets/participants.js');
 const tags = require('../widgets/tags.js');
 const timeframe = require('../widgets/timeframe.js');
@@ -43,6 +44,7 @@ module.exports = (urbanize, event) => {
 
       <hr/>
 
+      ${hosts(event.hosts)}
       ${participants(event.participants)}
       ${categories(event.categories)}
       ${tags(event.tags)}
