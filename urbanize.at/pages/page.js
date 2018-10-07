@@ -7,7 +7,7 @@ module.exports = (urbanize, page) => {
         ${page.title}
       </div>
 
-      <div>
+      <div class="generic__serif">
         ${page.text ? page.text.written : ''}
       </div>
     </div>
