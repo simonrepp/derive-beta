@@ -52,7 +52,7 @@
 .tile_header {
   font-family: 'FunctionPro-Medium';
   font-size: 1.65em;
-  word-wrap: break-word;
+  overflow-wrap: break-word;
 
   a {
     text-decoration: none;
