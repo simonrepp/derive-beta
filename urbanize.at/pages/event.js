@@ -6,6 +6,11 @@ const tags = require('../widgets/tags.js');
 const timeframe = require('../widgets/timeframe.js');
 
 module.exports = (urbanize, event) => {
+  let involved;
+  if(urbanize.edition === 'wien') {
+    involved = new Set(event.hosts.concat(event.participants));
+  }
+
   const html = `
     <div>
       <div class="generic__heading">
@@ -44,8 +49,13 @@ module.exports = (urbanize, event) => {
 
       <hr/>
 
-      ${hosts(event.hosts)}
-      ${participants(event.participants)}
+      ${urbanize.edition === 'berlin' ? `
+        ${hosts(event.hosts)}
+        ${participants(event.participants)}
+        ` :
+        hosts([...involved])
+      }
+
       ${categories(event.categories)}
       ${tags(event.tags)}
 
