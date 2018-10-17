@@ -33,7 +33,8 @@ module.exports = async (data, urbanize, preview) => {
     if(toRelativeCropped) {
       const toAbsoluteCropped = path.join(data.buildDir, toRelativeCropped);
 
-      await image.resize(300, 300, { position: sharp.strategy.entropy })
+      await image.resize(300, 300)
+                 .crop(sharp.strategy.entropy)
                  .toFile(toAbsoluteCropped);
     }
 

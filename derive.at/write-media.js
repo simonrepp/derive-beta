@@ -1,6 +1,6 @@
-const fsExtra = require('fs-extra'),
-      path = require('path'),
-      sharp = require('sharp');
+const fsExtra = require('fs-extra');
+const path = require('path');
+const sharp = require('sharp');
 
 module.exports = async (data, preview) => {
 
@@ -15,7 +15,9 @@ module.exports = async (data, preview) => {
     const fromAbsolute = path.join(data.root, fromRelative);
     const toAbsolute = path.join(data.buildDir, toRelative);
 
-    return sharp(fromAbsolute).resize(960, 960, { fit: 'inside', withoutEnlargement: true })
+    return sharp(fromAbsolute).resize(960, 960)
+                              .max()
+                              .withoutEnlargement()
                               .toFile(toAbsolute);
   };
 
