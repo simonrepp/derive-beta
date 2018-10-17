@@ -11,23 +11,34 @@ module.exports = async (data, urbanize, preview) => {
     return fsExtra.copy(fromAbsolute, toAbsolute);
   };
 
-  const copyCropped = (fromRelative, toRelative) => {
+  const copyResized = async (imageObj, fromRelative, toRelative, toRelativeCropped) => {
     const fromAbsolute = path.join(data.root, fromRelative);
     const toAbsolute = path.join(data.buildDir, toRelative);
 
-    return sharp(fromAbsolute).resize(300, 300)
-                             .crop(sharp.strategy.entropy)
-                             .toFile(toAbsolute);
-  };
+    const image = sharp(fromAbsolute);
 
-  const copyResized = (fromRelative, toRelative) => {
-    const fromAbsolute = path.join(data.root, fromRelative);
-    const toAbsolute = path.join(data.buildDir, toRelative);
+    let { width, height } = await image.metadata();
 
-    return sharp(fromAbsolute).resize(960, 960)
-                             .max()
-                             .withoutEnlargement()
-                             .toFile(toAbsolute);
+    if(width >= height && width > 960) {
+      height = parseInt((960 / width) * height);
+      width = 960;
+    } else if(height >= width && height > 960) {
+      width = parseInt((960 / height) * width);
+      height = 960;
+    }
+
+    imageObj.width = width;
+    imageObj.height = height;
+
+    if(toRelativeCropped) {
+      const toAbsoluteCropped = path.join(data.buildDir, toRelativeCropped);
+
+      await image.resize(300, 300, { position: sharp.strategy.entropy })
+                 .toFile(toAbsoluteCropped);
+    }
+
+    await image.resize(width, height)
+               .toFile(toAbsolute);
   };
 
   const concurrentWrites = [];
@@ -36,10 +47,13 @@ module.exports = async (data, urbanize, preview) => {
     if(event.image) {
       if(preview) {
         event.image.written = encodeURI(`/_root_media/${event.image.localFilesystemPath}`);
+        event.image.writtenCropped = encodeURI(`/_root_media/${event.image.localFilesystemPath}`);
       } else {
         event.image.written = path.join('/veranstaltungen', event.permalink, `bild${path.extname(event.image.normalizedPath)}`);
-        concurrentWrites.push( copyCropped(event.image.localFilesystemPath, event.image.written) );
+        event.image.writtenCropped = path.join('/veranstaltungen', event.permalink, `bild-ausschnitt${path.extname(event.image.normalizedPath)}`);
+        concurrentWrites.push( copyResized(event.image, event.image.localFilesystemPath, event.image.written, event.image.writtenCropped) );
         event.image.written += `?${urbanize.assetHash}`;
+        event.image.writtenCropped += `?${urbanize.assetHash}`;
       }
     }
 
@@ -67,7 +81,7 @@ module.exports = async (data, urbanize, preview) => {
 
         for(let embed of event.text.embeds) {
           embed.written = path.join('/veranstaltungen', event.permalink, `text-${embed.virtualFilename}`);
-          concurrentWrites.push( copyResized(embed.localFilesystemPath, embed.written) );
+          concurrentWrites.push( copyResized(embed, embed.localFilesystemPath, embed.written) );
           embed.written += `?${urbanize.assetHash}`;
 
           text = text.replace(embed.placeholder, embed.written);
@@ -85,7 +99,7 @@ module.exports = async (data, urbanize, preview) => {
         feature.image.written = encodeURI(`/_root_media/${feature.image.localFilesystemPath}`);
       } else {
         feature.image.written = path.join('/features', `bild-${featureNumber++}${path.extname(feature.image.normalizedPath)}`);
-        concurrentWrites.push( copyResized(feature.image.localFilesystemPath, feature.image.written) );
+        concurrentWrites.push( copyResized(feature.image, feature.image.localFilesystemPath, feature.image.written) );
         feature.image.written += `?${urbanize.assetHash}`;
       }
     }
@@ -116,7 +130,7 @@ module.exports = async (data, urbanize, preview) => {
 
         for(let embed of page.text.embeds) {
           embed.written = path.join('/', page.permalink, `text-${embed.virtualFilename}`);
-          concurrentWrites.push( copyResized(embed.localFilesystemPath, embed.written) );
+          concurrentWrites.push( copyResized(embed, embed.localFilesystemPath, embed.written) );
           embed.written += `?${urbanize.assetHash}`;
 
           text = text.replace(embed.placeholder, embed.written);

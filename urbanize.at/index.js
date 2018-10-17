@@ -19,7 +19,7 @@ const indexEvents = urbanize => {
         abstract: event.abstract ? { converted: event.abstract.converted } : null,
         address: event.address,
         dates: event.dates,
-        image: event.image ? { written: event.image.written } : null,
+        image: event.image ? { writtenCropped: event.image.writtenCropped } : null,
         permalink: event.permalink,
         title: event.title
       },

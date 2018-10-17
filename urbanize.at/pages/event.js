@@ -1,3 +1,5 @@
+const striptags = require('striptags');
+
 const addThis = require('../widgets/add-this.js');
 const categories = require('../widgets/categories.js');
 const hosts = require('../widgets/hosts.js');
@@ -59,9 +61,21 @@ module.exports = (urbanize, event) => {
       ${categories(event.categories)}
       ${tags(event.tags)}
 
-      ${addThis(`https://berlin.urbanize.at/veranstaltungen/${event.permalink}/`)}
+      ${addThis(`${urbanize.base_url}/veranstaltungen/${event.permalink}/`)}
     </div>
   `;
 
-  return layout(html, urbanize, { title: event.title });
+  const og = {};
+
+  if(event.image) {
+    og.image = urbanize.base_url + event.image.written;
+    og.imageWidth = event.image.width;
+    og.imageHeight = event.image.height;
+  } else if(event.text && event.text.embeds && event.text.embeds.length > 0) {
+    og.image = urbanize.base_url + event.text.embeds[0].written;
+    og.imageWidth = event.text.embeds[0].width;
+    og.imageHeight = event.text.embeds[0].height;
+  }
+
+  return layout(html, urbanize, { description: event.abstract ? striptags(event.abstract.converted) : undefined, og: og, title: event.title });
 };

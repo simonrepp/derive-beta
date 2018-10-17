@@ -3,7 +3,7 @@ const eventResult = function(event) {
 
   html += '<div class="list-item">';
   if(event.image) {
-    html += '<img class="teaser-image" src="' + event.image.written + '">';
+    html += '<img class="teaser-image" src="' + event.image.writtenCropped + '">';
   }
   html += '  <strong class="generic__subheading">';
   html += '    <a href="/veranstaltungen/' + event.permalink + '">' + event.title + '</a>';

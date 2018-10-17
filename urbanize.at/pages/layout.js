@@ -2,48 +2,89 @@ const footer = require('../widgets/footer.js');
 const header = require('../widgets/header.js');
 const sidebar = require('../widgets/sidebar.js');
 
-const DEFAULT_TITLE = 'Ur9anize 2018';
+module.exports = (content, urbanize, options = {}) => {
+  if(!options.description) {
+    options.description = urbanize.title;
+  }
 
-module.exports = (content, urbanize, options = {}) => `
-  <!DOCTYPE html>
-  <html>
-    <head>
-      <title>
-        ${options.title || DEFAULT_TITLE}
-      </title>
+  if(!options.title) {
+    options.title = urbanize.title;
+  }
 
-      <meta charset="utf-8">
-      <meta name="description" content="dérive">
-      <meta name="turbolinks-cache-control" content="no-cache">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
+  if(!options.og) {
+    options.og = {};
+  }
 
-      <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-      <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-      <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-      <link rel="manifest" href="/site.webmanifest">
-      <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
-      <meta name="msapplication-TileColor" content="#da532c">
-      <meta name="theme-color" content="#ffffff">
+  if(!options.og.image) {
+    if(urbanize.edition === 'berlin') {
+      options.og.image = urbanize.base_url + '/images/berlin_opengraph.jpg';
+      options.og.imageHeight = 1262;
+      options.og.imageWidth = 816;
+    } else {
+      options.og.image = urbanize.base_url + '/images/wien_opengraph.jpg';
+      options.og.imageHeight = 1200;
+      options.og.imageWidth = 675;
+    }
+  }
 
-      <link rel="stylesheet" href="/styles.css?${urbanize.assetHash}">
+  if(/\.png(\?\d+)?$/i.test(options.og.image)) {
+    options.og.imageType = 'image/png';
+  } else if(/\.jpe?g(\?\d+)?$/i.test(options.og.image)) {
+    options.og.imageType = 'image/jpeg';
+  }
 
-      <script defer src="/bundle.js?${urbanize.assetHash}"></script>
-    </head>
+  const html = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>
+          ${options.title}
+        </title>
 
-    <body style="background-image: url(${urbanize.background});">
-      <div class="restraint">
-        ${header(urbanize)}
+        <meta charset="utf-8">
+        <meta name="description" content="dérive">
+        <meta name="turbolinks-cache-control" content="no-cache">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <div class="split">
-          <div class="${options.tiles ? 'tiles' : 'content'} offset">
-            ${content}
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="manifest" href="/site.webmanifest">
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+        <meta name="msapplication-TileColor" content="#da532c">
+        <meta name="theme-color" content="#ffffff">
+
+        <meta property="og:description" content="${options.description}">
+        <meta property="og:image" content="${options.og.image}">
+        <meta property="og:image:width" content="${options.og.imageWidth}">
+        <meta property="og:image:height" content="${options.og.imageHeight}">
+        <meta property="og:image:type" content="${options.og.imageType}">
+        <meta property="og:image:alt" content="${options.title}">
+        <meta property="og:title" content="${options.title}">
+        <meta property="og:type" content="website">
+
+        <link rel="stylesheet" href="/styles.css?${urbanize.assetHash}">
+
+        <script defer src="/bundle.js?${urbanize.assetHash}"></script>
+      </head>
+
+      <body style="background-image: url(${urbanize.background});">
+        <div class="restraint">
+          ${header(urbanize)}
+
+          <div class="split">
+            <div class="${options.tiles ? 'tiles' : 'content'} offset">
+              ${content}
+            </div>
+
+            ${sidebar(urbanize)}
           </div>
 
-          ${sidebar(urbanize)}
+          ${footer(urbanize)}
         </div>
+      </body>
+    </html>
+  `;
 
-        ${footer(urbanize)}
-      </div>
-    </body>
-  </html>
-`;
+  return html;
+};

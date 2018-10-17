@@ -35,7 +35,7 @@ module.exports = events => `
     ${events.sort(eventSort).map(event => `
       <div class="list-item">
         ${event.image ? `
-          <img class="teaser-image" src="${event.image.written}">
+          <img class="teaser-image" src="${event.image.writtenCropped}">
         `:''}
 
         <strong class="generic__subheading">

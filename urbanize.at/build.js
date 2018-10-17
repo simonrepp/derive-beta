@@ -44,11 +44,13 @@ const compileSass = (data, urbanize) => {
   });
 };
 
-module.exports = async (data, city, options = { preview: false }) => {
+module.exports = async (data, site, options = { preview: false }) => {
   console.time('build');
 
+  const city = site.includes('berlin') ? 'berlin' : 'wien';
   const urbanize = data.urbanize[city];
 
+  urbanize.base_url = `https://${site}`;
   urbanize.assetHash = (new Date()).getTime().toString();
 
   console.time('writeDirectories');
