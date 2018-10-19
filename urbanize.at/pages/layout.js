@@ -21,9 +21,9 @@ module.exports = (content, urbanize, options = {}) => {
       options.og.imageHeight = 1262;
       options.og.imageWidth = 816;
     } else {
-      options.og.image = urbanize.base_url + '/images/wien_opengraph.jpg';
+      options.og.image = urbanize.base_url + '/images/graetzelhood_facebook.jpg';
       options.og.imageHeight = 1200;
-      options.og.imageWidth = 675;
+      options.og.imageWidth = 630;
     }
   }
 
