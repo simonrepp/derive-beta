@@ -2,9 +2,8 @@ let audio;
 let radioNoticeShown = false;
 
 document.addEventListener('click', function(event) {
-  if(event.button !== 0) {
+  if(event.button !== 0)
     return;
-  }
 
   const widgetToggles = document.querySelectorAll('.sidebar__widget-toggle');
   for(let toggleLink of widgetToggles) {
@@ -51,6 +50,14 @@ document.addEventListener('click', function(event) {
 
     layoutScroll.scrollBy(0, -layoutScroll.scrollTop);
 
+    return;
+  }
+
+
+  const filterToggleButton = document.querySelector('button[data-toggle-filters]');
+  if(filterToggleButton.contains(event.target)) {
+    const filters = document.querySelector('.search__filters');
+    filters.classList.toggle('shown');
     return;
   }
 

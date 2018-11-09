@@ -6,11 +6,12 @@ module.exports = data => {
       <div class="pagination TODO-dontusepaginationbutgenericthing">
         <form action="/suche/" class="search__searchform">
           <div>
-            <span class="icon-search"></span>
-
             <input name="query" placeholder="Ihr Suchbegriff" type="search" />
 
-            <button>
+            <button type="button" data-toggle-filters>
+              Filter
+            </button>
+            <button type="submit">
               Suchen
             </button>
           </div>
@@ -22,8 +23,6 @@ module.exports = data => {
             <div class="search__filter"><span class="icon-checkbox-checked" data-section="programs"></span> Radio</div>
             <div class="search__filter"><span class="icon-checkbox-checked" data-section="articles"></span> Texte</div>
           </div>
-
-          <!-- TODO: Restore up there ^^^^^^^ the correct checkbox state based on global search.sections data on turbolinks:render -->
         </form>
       </div>
 
