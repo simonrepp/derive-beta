@@ -11,8 +11,8 @@ module.exports = event => `
     </h1>
 
     ${event.dates.map(date =>
-      `${moment(date.date).format('D.M.YYYY')} ${date.time || ''}`.trim()
-    ).join('<br/>')}
+      `${moment(date.date).format('D.M.YYYY')} ${date.time || ''}<br/>`.trim()
+    )}
 
     ${event.image ? `
       <img src="${event.image.written}">
