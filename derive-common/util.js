@@ -1,6 +1,5 @@
 const fs = require('fs');
 const eno = require('enojs');
-const glob = require('glob');
 const markdownIt = require('markdown-it')({ html: true });
 const markdownItFootnote = require('markdown-it-footnote');
 const path = require('path');
@@ -59,10 +58,6 @@ exports.featureSort = (a, b) => {
 
   return a.position - b.position;
 };
-
-exports.globFiles = (directory, pattern) => new Promise((resolve, reject) =>
-  glob(pattern, { cwd: directory, nodir: true }, (err, files) => err ? reject(err) : resolve(files))
-);
 
 exports.loadFile = filePath => new Promise((resolve, reject) =>
   fs.readFile(filePath, 'utf-8', (err, content) => err ? reject(err) : resolve(content))

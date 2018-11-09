@@ -1,16 +1,16 @@
+const fastGlob = require('fast-glob');
 const path = require('path');
 
-const { globFiles } = require('./util.js'),
-      sourceArticle = require('./source/article.js'),
-      sourceBook = require('./source/book.js'),
-      sourceEvent = require('./source/event.js'),
-      sourceFeature = require('./source/feature.js'),
-      sourceFestival = require('./source/festival.js'),
-      sourceIssue = require('./source/issue.js'),
-      sourcePage = require('./source/page.js'),
-      sourcePlayer = require('./source/player.js'),
-      sourceProgram = require('./source/program.js'),
-      sourceRadio = require('./source/radio.js');
+const sourceArticle = require('./source/article.js');
+const sourceBook = require('./source/book.js');
+const sourceEvent = require('./source/event.js');
+const sourceFeature = require('./source/feature.js');
+const sourceFestival = require('./source/festival.js');
+const sourceIssue = require('./source/issue.js');
+const sourcePage = require('./source/page.js');
+const sourcePlayer = require('./source/player.js');
+const sourceProgram = require('./source/program.js');
+const sourceRadio = require('./source/radio.js');
 
 const forbiddenFilenameCharacters = /[\\?*:|"<>]/;
 const noExtension = /[^.]{8,}\s*$/;
@@ -28,7 +28,7 @@ module.exports = async data => {
   data.programs.clear();
   data.warnings = [];
 
-  const globPaths = await globFiles(data.root, '**/*');
+  const globPaths = await fastGlob('**/*', { cwd: data.root, onlyFiles: true });
 
   for(let localFilesystemPath of globPaths) {
     const normalizedPath = localFilesystemPath.normalize();
