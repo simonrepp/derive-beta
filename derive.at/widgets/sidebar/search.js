@@ -3,23 +3,23 @@ module.exports = `
     <input name="query" placeholder="Suche" type="search" />
 
     <div>
-      Zeitschrift <span class="icon-checkbox-checked" data-section="issues"/>
+      Zeitschrift <span class="icon-checkbox-checked" data-section="issues"></span>
     </div>
 
     <div>
-      Autoren <span class="icon-checkbox-checked" data-section="authors"/>
+      Autoren <span class="icon-checkbox-checked" data-section="authors"></span>
     </div>
 
     <div>
-      Bücher <span class="icon-checkbox-checked" data-section="books"/>
+      Bücher <span class="icon-checkbox-checked" data-section="books"></span>
     </div>
 
     <div>
-      Radio <span class="icon-checkbox-checked" data-section="programs"/>
+      Radio <span class="icon-checkbox-checked" data-section="programs"></span>
     </div>
 
     <div>
-      Texte <span class="icon-checkbox-checked" data-section="articles"/>
+      Texte <span class="icon-checkbox-checked" data-section="articles"></span>
     </div>
 
     <button>
