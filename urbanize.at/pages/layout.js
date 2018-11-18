@@ -63,9 +63,9 @@ module.exports = (content, urbanize, options = {}) => {
         <meta property="og:title" content="${options.title}">
         <meta property="og:type" content="website">
 
-        <link rel="stylesheet" href="/styles.css?${urbanize.assetHash}">
+        <link rel="stylesheet" href="/${urbanize.edition}.css?${urbanize.assetHash}">
 
-        <script defer src="/bundle.js?${urbanize.assetHash}"></script>
+        <script defer src="/scripts.js?${urbanize.assetHash}"></script>
       </head>
 
       <body style="background-image: url(${urbanize.background});">

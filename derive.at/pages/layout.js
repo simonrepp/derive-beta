@@ -26,7 +26,7 @@ module.exports = (data, content, options = {}) => `
 
       <link rel="stylesheet" href="/styles.css?${data.assetHash}">
 
-      <script defer src="/bundle.js?${data.assetHash}"></script>
+      <script defer src="/scripts.js?${data.assetHash}"></script>
     </head>
 
     <body>

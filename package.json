@@ -10,13 +10,17 @@
     "markdown-it-footnote": "^3.0.1",
     "mobx": "^5.5.0",
     "moment": "^2.22.2",
-    "sass": "1.8.0",
     "sharp": "^0.20.8",
     "speakingurl": "^14.0.1",
-    "striptags": "^3.1.1",
-    "uglify-es": "^3.3.9"
+    "striptags": "^3.1.1"
   },
   "description": "dérive Atom Plugin Beta",
+  "devDependencies": {
+    "fuse.js": "^3.3.0",
+    "node-sass": "^4.10.0",
+    "parcel-bundler": "^1.10.3",
+    "turbolinks": "^5.2.0"
+  },
   "engines": {
     "atom": ">=1.15.0 <2.0.0"
   },
@@ -36,6 +40,17 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/simonrepp/derive-beta.git"
+  },
+  "scripts": {
+    "all-compile": "npm run derive-compile && npm run urbanize-compile",
+    "derive-compile": "npm run derive-scripts && npm run derive-styles",
+    "derive-scripts": "parcel build derive.at/scripts/main.js --experimental-scope-hoisting --no-cache --no-source-maps --out-dir derive.at/static --out-file scripts.js",
+    "derive-styles": "node-sass --output-style compressed derive.at/styles/main.scss derive.at/static/styles.css",
+    "urbanize-compile": "npm run urbanize-scripts && npm run urbanize-styles",
+    "urbanize-scripts": "parcel build urbanize.at/scripts/main.js --experimental-scope-hoisting --no-cache --no-source-maps --out-dir urbanize.at/static --out-file scripts.js",
+    "urbanize-styles": "npm run urbanize-styles-berlin && npm run urbanize-styles-wien",
+    "urbanize-styles-berlin": "node-sass --output-style compressed urbanize.at/styles/berlin.scss urbanize.at/static/berlin.css",
+    "urbanize-styles-wien": "node-sass --output-style compressed urbanize.at/styles/wien.scss urbanize.at/static/wien.css"
   },
   "version": "1.18.2"
 }
