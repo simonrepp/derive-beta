@@ -1,5 +1,1 @@
-/public
-/config.js
-/deploy.js
-
-node_modules
+/node_modules/
