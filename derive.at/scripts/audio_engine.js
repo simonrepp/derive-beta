@@ -104,7 +104,7 @@ class AudioEngine {
   static seek = event => {
     if(this.audio.dataset.src === this.radio.dataset.src) {
       const bounds = this.seekbar.getBoundingClientRect();
-      const newTime = Math.floor(((event.screenX - bounds.left) / (bounds.right - bounds.left)) * this.audio.duration);
+      const newTime = Math.floor(((event.clientX - bounds.left) / (bounds.right - bounds.left)) * this.audio.duration);
 
       this.audio.currentTime = newTime;
 
