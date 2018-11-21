@@ -58,7 +58,7 @@ module.exports = (data, program) => {
     </div>
   `;
 
-  const script = 'AudioEngine.register();';
+  const script = program.soundfile ? 'AudioEngine.register();' : null;
 
   return layout(data, html, { activeSection: 'Radio', script: script, title: program.title });
 };

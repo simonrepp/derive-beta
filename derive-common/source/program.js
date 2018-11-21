@@ -49,7 +49,7 @@ module.exports = async (data, enoPath) => {
       program.subtitle = doc.field('Untertitel');
       program.image = doc.field('Bild', validatePath);
       program.imageCaption = doc.string('Bilduntertitel');
-      program.soundfile = doc.field('Soundfile', validatePath, { required: true });
+      program.soundfile = doc.field('Soundfile', validatePath);
       program.editorReferences = doc.list('Redaktion', { withElements: true });
       program.language = doc.field('Sprache');
       program.categoriesDisconnected = doc.list('Kategorien');
