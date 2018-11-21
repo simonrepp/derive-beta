@@ -27,20 +27,19 @@ module.exports = (data, program) => {
 
         ${firstBroadcast(program.firstBroadcast)}
 
-        <div class="featured__radio">
-          <audio controls
-                 controlsList="nodownload"
-                 data-title="${program.title}"
-                 src="${program.soundfile.written}">
-          </audio>
-        </div>
-
-        <div class="radio__notice">
-          Die Radiosendung spielt im Hintergrund weiter, du kannst dich während
-          dem zuhören frei durch die Seite bewegen. Eine Button zum pausieren
-          bzw. anschliessendem weiterführen der Wiedergabe wurde in der
-          Seitenleiste hinzugefügt und ist jederzeit verfügbar.
-        </div>
+        ${program.soundfile ? `
+          <div class="radio"
+               data-title="${program.title}"
+               data-src="${program.soundfile.written}">
+            <a class="radio__button">
+              <span class="radio__playback_icon icon-play"></span>
+            </a>
+            <div class="radio__seekbar">
+              <div class="radio__seekbar_progress"></div>
+              <div class="radio__seekbar_text"></div>
+            </div>
+          </div>
+        `:''}
 
         <div class="generic__margin_vertical">
           ${program.abstract ? program.abstract.converted : ''}
@@ -59,5 +58,7 @@ module.exports = (data, program) => {
     </div>
   `;
 
-  return layout(data, html, { activeSection: 'Radio', title: program.title });
+  const script = 'AudioEngine.register();';
+
+  return layout(data, html, { activeSection: 'Radio', script: script, title: program.title });
 };

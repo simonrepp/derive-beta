@@ -1,0 +1,49 @@
+audio {
+  width: 100%;
+}
+
+.radio {
+  background-color: $color-almost-white;
+  border: 1px solid $color-grey;
+  border-radius: 3px;
+  display: flex;
+}
+
+.radio__button {
+  padding: 0.5em;
+}
+
+.radio__playback_icon {
+  pointer-events: none;
+}
+
+.radio__seekbar {
+  flex-grow: 1;
+  position: relative;
+}
+
+.radio__seekbar {
+  cursor: pointer;
+}
+
+.radio__seekbar_progress {
+  background-color: $color-beige;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  width: 1px;
+}
+
+.radio__seekbar_text {
+  padding: 0.5em;
+  position: absolute;
+  right: 0;
+}
+
+.radio__notice {
+  display: none;
+}
+
+.radio__notice--shown {
+  display: block;
+}

@@ -1,6 +1,7 @@
+const moment = require('moment');
+
 module.exports = () => {
   window.audio = null;
-  window.radioNoticeShown = false;
 
   document.addEventListener('click', event => {
     if(event.button !== 0)
@@ -25,24 +26,6 @@ module.exports = () => {
 
         return;
       }
-    }
-
-    const radioPlaybackControl = document.querySelector('.sidebar__link__playback');
-    if(radioPlaybackControl.contains(event.target)) {
-      const icon = radioPlaybackControl.querySelector('.sidebar__playback-icon');
-
-      icon.classList.toggle('icon-play');
-      icon.classList.toggle('icon-pause');
-
-      if(window.audio) {
-        if(window.audio.paused) {
-          window.audio.play();
-        } else {
-          window.audio.pause();
-        }
-      }
-
-      return;
     }
 
     const toTopLink = document.querySelector('.sidebar__link__top');
@@ -114,7 +97,7 @@ module.exports = () => {
         window.search.pending = true;
 
         let request = new XMLHttpRequest();
-        request.onreadystatechange = function() {
+        request.onreadystatechange = () => {
           if(request.readyState == XMLHttpRequest.DONE) {
             if(request.status == 200) {
               const results = JSON.parse(request.responseText);
@@ -142,68 +125,6 @@ module.exports = () => {
       }
 
       Turbolinks.visit('/suche/');
-    }
-  });
-
-  document.addEventListener('play', event => {
-    if(event.target.tagName === 'AUDIO') {
-      const previousAudio = window.audio;
-
-      window.audio = event.target;
-
-      if(previousAudio && previousAudio !== window.audio) {
-        previousAudio.pause();
-      }
-
-      const radioPlaybackControl = document.querySelector('.sidebar__link__playback');
-      radioPlaybackControl.title = 'Du hörst: ' + event.target.dataset.title;
-      radioPlaybackControl.classList.remove('sidebar__link--disabled');
-
-      const icon = radioPlaybackControl.querySelector('.sidebar__playback-icon');
-
-      icon.classList.remove('icon-play');
-      icon.classList.add('icon-pause');
-
-      if(!window.radioNoticeShown) {
-        document.querySelector('.radio__notice').classList.add('radio__notice--shown');
-        // TODO: Fade out message
-        window.radioNoticeShown = true;
-      }
-    }
-  }, true);
-
-  document.addEventListener('pause', event => {
-    if(window.audio && event.target === window.audio) {
-      const icon = document.querySelector('.sidebar__playback-icon');
-
-      icon.classList.add('icon-play');
-      icon.classList.remove('icon-pause');
-    }
-  }, true);
-
-  document.addEventListener('ended', event => {
-    if(window.audio && event.target === window.audio) {
-      window.audio.currentTime = 0;
-
-      const icon = document.querySelector('.sidebar__playback-icon');
-      icon.classList.remove('icon-pause');
-      icon.classList.add('icon-play');
-    }
-  }, true);
-
-  document.addEventListener('turbolinks:click', event => {
-    if(window.audio) {
-      document.querySelector('#persistent_audio').append(window.audio);
-    }
-  });
-
-  document.addEventListener('turbolinks:before-render', event => {
-    if(window.audio) {
-      const radio = event.data.newBody.querySelector('.featured__radio audio');
-
-      if(radio && radio.src === window.audio.src) {
-        radio.parentNode.replaceChild(window.audio, radio);
-      }
     }
   });
 };

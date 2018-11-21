@@ -26,12 +26,10 @@ module.exports = (data, content, options = {}) => `
 
       <link rel="stylesheet" href="/styles.css?${data.assetHash}">
 
-      <script defer src="/scripts.js?${data.assetHash}"></script>
+      <script src="/scripts.js?${data.assetHash}"></script>
     </head>
 
     <body>
-      <div id="persistent_audio" data-turbolinks-permanent></div>
-
       <div class="layout__split">
         <div class="layout__content">
           <div class="layout__scroll">
@@ -55,6 +53,8 @@ module.exports = (data, content, options = {}) => `
           ${sidebar(data)}
         </div>
       </div>
+
+      ${options.script ? `<script>${options.script}</script>` : ''}
     </body>
   </html>
 `;

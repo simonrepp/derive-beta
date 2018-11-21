@@ -41,10 +41,10 @@ module.exports = data => `
       ${data.issuesDescending[0].number}
     </a>
 
-    <a class="sidebar__link sidebar__link__playback sidebar__link--disabled"
+    <a class="sidebar__link sidebar__link_playback sidebar__link_disabled"
        data-turbolinks-permanent
        id="sidebar-radio-permanent">
-      <span class="sidebar__playback-icon icon-play"></span>
+      <span class="sidebar__playback_icon icon-play"></span>
     </a>
 
     <a class="sidebar__link sidebar__link__top">
