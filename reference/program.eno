@@ -2,9 +2,9 @@ Titel: Erforderlich
 Untertitel: 
 
 Bild: 
-Bilderuntertitel:
+Bilduntertitel:
 
-> Für jede Sendung muss ein Soundfile existieren
+> Soundfile kann leergelassen werden. (aber bitte nur in gut begründeten Ausnahmefällen)
 Soundfile: /Radiosendungen/Soundfiles/Beispiel.mp3
 
 Redaktion:
