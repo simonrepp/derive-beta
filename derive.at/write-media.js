@@ -8,7 +8,7 @@ module.exports = async (data, preview) => {
     const fromAbsolute = path.join(data.root, fromRelative);
     const toAbsolute = path.join(data.buildDir, toRelative);
 
-    return fsExtra.copy(fromAbsolute, toAbsolute);
+    return fsExtra.copy(fromAbsolute, toAbsolute, { preserveTimestamps: true });
   };
 
   const copyResized = (fromRelative, toRelative) => {
