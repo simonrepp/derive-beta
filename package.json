@@ -54,5 +54,5 @@
     "urbanize-styles-berlin": "node-sass --output-style compressed urbanize.at/styles/berlin.scss urbanize.at/static/berlin.css",
     "urbanize-styles-wien": "node-sass --output-style compressed urbanize.at/styles/wien.scss urbanize.at/static/wien.css"
   },
-  "version": "1.19.6"
+  "version": "1.20.0"
 }
