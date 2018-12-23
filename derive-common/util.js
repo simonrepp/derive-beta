@@ -1,5 +1,6 @@
 const fs = require('fs');
 const eno = require('enojs');
+const { HtmlReporter } = require('enojs');
 const markdownIt = require('markdown-it')({ html: true });
 const markdownItFootnote = require('markdown-it-footnote');
 const path = require('path');
@@ -69,7 +70,7 @@ exports.loadEno = (directory, enoPath) => new Promise((resolve, reject) =>
       reject(err);
     } else {
       try {
-        resolve( eno.parse(content, { locale: 'de', reporter: 'html' }) );
+        resolve( eno.parse(content, { locale: 'de', reporter: HtmlReporter }) );
       } catch(err) {
         reject(err);
       }
