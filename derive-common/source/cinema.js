@@ -1,6 +1,6 @@
 const { loadEno, statFile } = require('../util.js');
 const { ParseError, ValidationError  } = require('enojs');
-const { validateMarkdown } = require('../validate/markdown.js');
+const { validateMarkdown, validateMarkdownWithMedia } = require('../validate/markdown.js');
 const validatePath = require('../validate/path.js');
 
 module.exports = async (data, enoPath) => {
@@ -42,10 +42,13 @@ module.exports = async (data, enoPath) => {
       cinema.externalLink = doc.url('Filmcasino Link', { required: true });
 
       cinema.dates = doc.sections('Termin').map(date => ({
+        abstract: date.field('Kurztext [Markdown]', validateMarkdown, { required: true }),
         date: date.datetime('Datum', { required: true }),
+        filmMeta: date.string('Filminfo', { required: true }),
+        eventMeta: date.field('Veranstaltungsinfo [Markdown]', validateMarkdown, { required: true }),
         image: date.field('Bild', validatePath, { required: true }),
         link: date.url('Link', { required: true }),
-        text: date.field('Text', validateMarkdown, { required: true }),
+        text: date.field('Langtext [Markdown+Medien]', validateMarkdownWithMedia, { required: true }),
         time: date.string('Zeit', { required: true }),
         title: date.string('Titel', { required: true })
       }));
