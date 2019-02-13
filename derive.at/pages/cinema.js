@@ -22,7 +22,7 @@ module.exports = data => {
           <a href="${data.cinema.externalLink}">Stadt Streifen auf filmcasino.at</a>
         </div>
 
-        ${share(data.cinema.title, 'https://derive.at/stadt-streifen/')}
+        ${share(data.cinema.title, 'https://derive.at/kino/')}
       </div>
     </div>
 

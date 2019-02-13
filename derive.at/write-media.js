@@ -87,7 +87,7 @@ module.exports = async (data, preview) => {
   if(preview) {
     data.cinema.image.written = encodeURI(`/_root_media/${data.cinema.image.localFilesystemPath}`);
   } else {
-    data.cinema.image.written = path.join('/stadt-streifen', `bild-${cinemaDateNumber++}${path.extname(data.cinema.image.normalizedPath)}`);
+    data.cinema.image.written = path.join('/kino', `bild-${cinemaDateNumber++}${path.extname(data.cinema.image.normalizedPath)}`);
     concurrentWrites.push( copyResized(data.cinema.image.localFilesystemPath, data.cinema.image.written) );
     data.cinema.image.written += `?${data.assetHash}`;
   }
@@ -96,7 +96,7 @@ module.exports = async (data, preview) => {
     if(preview) {
       date.image.written = encodeURI(`/_root_media/${date.image.localFilesystemPath}`);
     } else {
-      date.image.written = path.join('/stadt-streifen', `bild-${cinemaDateNumber++}${path.extname(date.image.normalizedPath)}`);
+      date.image.written = path.join('/kino', `bild-${cinemaDateNumber++}${path.extname(date.image.normalizedPath)}`);
       concurrentWrites.push( copyResized(date.image.localFilesystemPath, date.image.written) );
       date.image.written += `?${data.assetHash}`;
     }

@@ -80,7 +80,7 @@ module.exports = data => {
         if(!connectMedia(data, date.image)) {
           data.errors.push({
             files: [{ path: data.cinema.sourceFile }],
-            message: `Das Bild "${date.image.normalizedPath}", dass bei einem der Termine auf der Stadt Streifen Seite referenziert wird, wurde nicht gefunden.`
+            message: `Das Bild "${date.image.normalizedPath}", dass bei einem der Termine auf der Kino Seite referenziert wird, wurde nicht gefunden.`
           });
 
           data.cinema = null;
@@ -90,7 +90,7 @@ module.exports = data => {
     } else {
       data.errors.push({
         files: [{ path: data.cinema.sourceFile }],
-        message: `Das Bild "${data.cinema.image.normalizedPath}", dass als Headerbild der Stadt Streifen Seite referenziert wird, wurde nicht gefunden.`
+        message: `Das Bild "${data.cinema.image.normalizedPath}", dass als Headerbild der Kino Seite referenziert wird, wurde nicht gefunden.`
       });
 
       data.cinema = null;

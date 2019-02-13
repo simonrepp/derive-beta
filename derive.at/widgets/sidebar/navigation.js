@@ -4,6 +4,7 @@ module.exports = `
   <a href="/zeitschrift/">Zeitschrift</a><br>
   <a href="/texte/">Texte</a><br>
   <a href="/radio/">Radio</a><br>
+  <a href="/kino/">Kino</a><br>
   <a href="/festival/">Festival</a><br>
   <a href="/buecher/">Bücher</a><br>
   <a href="/autoren/">Autoren</a><br>

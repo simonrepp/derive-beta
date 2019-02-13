@@ -26,7 +26,7 @@ module.exports = async data => {
     writeFile(data.buildDir, 'texte/index.html', articlesPage(data, data.articlesPaginated[0])),
     writeFile(data.buildDir, 'autoren/index.html', authorsPage(data)),
     writeFile(data.buildDir, 'buecher/index.html', booksPage(data, data.booksPaginated[0])),
-    writeFile(data.buildDir, 'stadt-streifen/index.html', cinemaPage(data)),
+    writeFile(data.buildDir, 'kino/index.html', cinemaPage(data)),
     writeFile(data.buildDir, 'festival/index.html', festivalPage(data)),
     writeFile(data.buildDir, 'index.html', indexPage(data)),
     writeFile(data.buildDir, 'zeitschrift/index.html', issuesPage(data)),

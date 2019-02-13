@@ -3,14 +3,14 @@ const moment = require('moment');
 // TODO: Uses artice-panel ... etc. css classes as generic templates although this is cinema
 
 const infoDetails = date => `
-  <strong>Info</strong><br/>
-  ${moment(date.date).format('D.M.YYYY')} ${date.time}
+  <strong>${moment(date.date).format('D.M.YYYY')}</strong><br>
+  <strong>${date.time}</strong>
 
-  <br/><br/>
+  <br><br>
 
   <strong>
     <a href="${date.link}" target="_blank">
-      Tickets und Info bei filmcasino.at
+      Tickets
     </a>
   </strong>
 `;

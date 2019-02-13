@@ -54,13 +54,13 @@ module.exports = async data => {
 
         await sourceFestival(data, localFilesystemPath);
 
+      } else if(normalizedPath === 'Kino/Kino.eno') {
+        
+        await sourceCinema(data, localFilesystemPath);
+
       } else if(normalizedPath === 'Radio/Radio.eno') {
 
         await sourceRadio(data, localFilesystemPath);
-
-      } else if(normalizedPath === 'Stadt Streifen/Stadt Streifen.eno') {
-
-        await sourceCinema(data, localFilesystemPath);
 
       } else if(normalizedPath.match(/^Akteure\//)) {
 

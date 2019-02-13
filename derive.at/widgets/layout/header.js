@@ -4,7 +4,7 @@ const sections = [
   { name: 'Zeitschrift', route: '/zeitschrift/' },
   { name: 'Texte', route: '/texte/' },
   { name: 'Radio', route: '/radio/' },
-  { name: 'Kino', route: '/stadt-streifen/' },
+  { name: 'Kino', route: '/kino/' },
   { name: 'Festival', route: '/festival/' },
   { name: 'Bücher', route: '/buecher/' },
   { name: 'Autoren', route: '/autoren/' },
