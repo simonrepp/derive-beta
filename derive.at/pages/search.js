@@ -6,7 +6,7 @@ module.exports = data => {
       <div class="pagination TODO-dontusepaginationbutgenericthing">
         <form action="/suche/" class="search__searchform">
           <div>
-            <input name="query" placeholder="Ihr Suchbegriff" type="search" />
+            <input name="query" placeholder="Ihr Suchbegriff" type="search">
 
             <button type="button" data-toggle-filters>
               Filter
@@ -27,7 +27,7 @@ module.exports = data => {
       </div>
 
       <div class="search__info">
-        Suchergebnisse für:<br/>
+        Suchergebnisse für:<br>
         <h2 class="search__query"></h2>
       </div>
 

@@ -15,7 +15,7 @@ module.exports = issue => `
     </div>
 
     <div class="issue-tile__label">
-      <a href="/zeitschrift/${issue.permalink}/"><strong>N° ${issue.number}</strong></a><br/>
+      <a href="/zeitschrift/${issue.permalink}/"><strong>N° ${issue.number}</strong></a><br>
       <a href="/zeitschrift/${issue.permalink}/">${issue.title}</a>
     </div>
   </div>

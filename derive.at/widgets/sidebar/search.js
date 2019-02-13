@@ -1,6 +1,6 @@
 module.exports = `
   <form action="/suche/" class="sidebar__searchform">
-    <input name="query" placeholder="Suche" type="search" />
+    <input name="query" placeholder="Suche" type="search">
 
     <div>
       Zeitschrift <span class="icon-checkbox-checked" data-section="issues"></span>

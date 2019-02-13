@@ -13,7 +13,7 @@ module.exports = (data, pagination) => {
   }
 
   const html = `
-    <br/>
+    <br>
 
     <div class="pagination">
       ${data.authorsPaginated.map(paginationIterated => `

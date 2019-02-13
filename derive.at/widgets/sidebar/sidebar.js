@@ -37,7 +37,7 @@ module.exports = data => `
 
     <a class="sidebar__link sidebar__link__edition"
        href="/zeitschrift/${data.issuesDescending[0].number}">
-      N°<br/>
+      N°<br>
       ${data.issuesDescending[0].number}
     </a>
 

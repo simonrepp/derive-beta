@@ -15,7 +15,7 @@ module.exports = (data, publisher) => {
         ${publisher.text.converted}
       `:''}
 
-      ${[publisher.country, publisher.city].filter(Boolean).join(', ')}<br/>
+      ${[publisher.country, publisher.city].filter(Boolean).join(', ')}<br>
       ${publisher.website ? `
         <a href="${publisher.website}">Zur Website von ${publisher.name}</a>
       `:''}

@@ -17,7 +17,7 @@ const articleResult = article => `
         <img src="${article.issue.cover.written}">
       </div>
       <div class="tile_image_split__meta">
-        <a href="/zeitschrift/${article.issue.permalink}/">dérive N°${article.issue.number}</a><br/>
+        <a href="/zeitschrift/${article.issue.permalink}/">dérive N°${article.issue.number}</a><br>
         Seiten: ${article.inIssueOnPages}
       </div>
     </div>
@@ -87,7 +87,7 @@ const issueResult = issue => `
       <img src="${issue.cover.written}">
     </div>
     <div class="tile_image_split__meta">
-    ${formattedQuarter[issue.quarter]} / ${issue.year}<br/>
+    ${formattedQuarter[issue.quarter]} / ${issue.year}<br>
     ${issue.outOfPrint ? 'Vergriffen!' : ''}
     </div>
   </div>
@@ -106,11 +106,11 @@ const programResult = program => `
     <div class="tile_image_split__meta">
       ${program.subtitle ? `<strong><a href="/radio/${program.permalink}/">${program.subtitle}</a></strong>` : ''}
       <div class="generic__margin_vertical">
-      <strong>Redaktion</strong><br/>
+      <strong>Redaktion</strong><br>
         ${program.editors.map(editor => `<a href="/autoren/${editor.permalink}/">${editor.name}</a>`).join(', ')}
       </div>
       <div class="generic__margin_vertical">
-        <strong>Erstaustrahlung</strong><br/>
+        <strong>Erstaustrahlung</strong><br>
         ${program.firstBroadcast}
       </div>
     </div>

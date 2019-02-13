@@ -51,7 +51,7 @@ module.exports = (data, program) => {
       </div>
     </div>
 
-    <hr/>
+    <hr>
 
     <div class="generic__serif">
       ${program.text ? program.text.written : ''}

@@ -3,19 +3,19 @@ const tags = require('../tags.js');
 const { stripAndTruncateHtml } = require('../../../derive-common/util.js');
 
 const infoDetails = article => `
-  <strong>Autor*innen</strong><br/>
+  <strong>Autor*innen</strong><br>
   ${authors(article.authors)}
 
-  <br/><br/>
+  <br><br>
 
   ${article.issue ? `
-    <strong>Ausgabe</strong><br/>
+    <strong>Ausgabe</strong><br>
     <a class="generic__smaller_text"
        href="/zeitschrift/${article.issue.permalink}">
       N°${article.issue.number} (${article.inIssueOnPages === 'Nur online' ? 'Nur online' : `Seite ${article.inIssueOnPages}`})
     </a>
 
-    <br/><br/>
+    <br><br>
   `:''}
 
   ${tags(article.tags)}

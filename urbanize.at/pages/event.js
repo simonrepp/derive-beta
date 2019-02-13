@@ -26,7 +26,7 @@ module.exports = (urbanize, event) => {
       `:''}
 
       <div class="additional">
-        ${timeframe(event)}<br/>
+        ${timeframe(event)}<br>
         ${event.address}
       </div>
 
@@ -42,14 +42,14 @@ module.exports = (urbanize, event) => {
 
 
       ${event.text ? `
-        <hr/>
+        <hr>
 
         <div class="generic__serif">
            ${event.text.written}
         </div>
       `:''}
 
-      <hr/>
+      <hr>
 
       ${urbanize.edition === 'berlin' ? `
         ${hosts(event.hosts)}

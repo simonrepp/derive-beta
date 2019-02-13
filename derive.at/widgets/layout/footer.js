@@ -1,14 +1,14 @@
 module.exports = () => `
-  <hr/>
+  <hr>
 
   <div class="generic__margin_vertical">
 
     <footer class="footer">
       <div>
-        <a href="/ueber-derive/">Über dérive</a><br/>
-        <a href="/medieninformationen/">Medieninformationen</a><br/>
-        <a href="/kooperationen/">Kooperationen</a><br/>
-        <a href="/impressum/">Kontakt / Impressum</a><br/>
+        <a href="/ueber-derive/">Über dérive</a><br>
+        <a href="/medieninformationen/">Medieninformationen</a><br>
+        <a href="/kooperationen/">Kooperationen</a><br>
+        <a href="/impressum/">Kontakt / Impressum</a><br>
       </div>
 
       <div class="footer__inserts"></div>
@@ -46,7 +46,7 @@ module.exports = () => `
           <span class="icon-vimeo"></span>
         </a>
 
-        <br/>
+        <br>
 
         <a href="http://eepurl.com/fmHIo" target="_blank">
           Newsletter bestellen

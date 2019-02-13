@@ -35,8 +35,8 @@ module.exports = (data, issue) => {
             </div>
           `:''}
 
-          Mit Beiträgen von:<br/>
-          ${authors([...issueAuthors].sort((a, b) => a.name.localeCompare(b.name)))}<br/><br/>
+          Mit Beiträgen von:<br>
+          ${authors([...issueAuthors].sort((a, b) => a.name.localeCompare(b.name)))}<br><br>
 
           ${tags(issue.tags)}
 

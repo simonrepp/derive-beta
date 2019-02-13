@@ -22,7 +22,7 @@ module.exports = article => `
           <img src="${article.issue.cover.written}">
         </div>
         <div class="tile_image_split__meta">
-        <a href="/zeitschrift/${article.issue.permalink}/">dérive N°${article.issue.number}</a><br/>
+        <a href="/zeitschrift/${article.issue.permalink}/">dérive N°${article.issue.number}</a><br>
           Seite ${article.inIssueOnPages}
         </div>
       </div>

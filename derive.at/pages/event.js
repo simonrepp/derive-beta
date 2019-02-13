@@ -22,7 +22,7 @@ module.exports = (data, event) => {
 
         ${event.urbanize ? `
           <div class="generic__margin_vertical">
-            <strong>Urbanize Festival</strong><br/>
+            <strong>Urbanize Festival</strong><br>
             ${event.urbanize}
           </div>
         `:''}
@@ -53,7 +53,7 @@ module.exports = (data, event) => {
     </div>
 
     ${event.text ? `
-      <hr/>
+      <hr>
 
       <div class="generic__serif">
         ${event.text.written}

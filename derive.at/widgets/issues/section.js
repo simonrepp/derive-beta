@@ -3,8 +3,8 @@ const authors = require('../authors.js');
 const article = article => `
   <div class="section-article__split">
     <div class="section-article__info">
-      ${authors(article.authors)}<br/>
-      Seite: ${article.inIssueOnPages}<br/>
+      ${authors(article.authors)}<br>
+      Seite: ${article.inIssueOnPages}<br>
       <a href="/texte/${article.permalink}/">
         ${article.readable ? 'Artikel lesen' : 'Abstract lesen'}
       </a>
@@ -28,7 +28,7 @@ const article = article => `
 `;
 
 module.exports = section => `
-  <hr class="hr__light" />
+  <hr class="hr__light">
 
   <h1>${section.title}</h1>
 

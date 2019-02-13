@@ -21,10 +21,10 @@ module.exports = article => `
       <h1><a href="/texte/${article.permalink}/">${article.title}</a></h1>
 
       ${article.subtitle ? `
-        <strong>${article.subtitle}</strong><br/><br/>
+        <strong>${article.subtitle}</strong><br><br>
       `:''}
 
-      ${article.issue ? fullIssueTitle(article.issue) : ''}<br/><br/>
+      ${article.issue ? fullIssueTitle(article.issue) + '<br><br>' : ''}
 
       <div class="generic__margin_vertical generic__serif">
         ${article.abstract ? article.abstract.converted :
@@ -35,7 +35,7 @@ module.exports = article => `
 
       ${article.issue && article.issue.shopLink ? `
         <strong>
-          <a href="${article.issue.shopLink}">Heft kaufen</a><br/><br/>
+          <a href="${article.issue.shopLink}">Heft kaufen</a><br><br>
         </strong>
       `:''}
 

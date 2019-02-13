@@ -51,8 +51,8 @@ module.exports = data => {
             </div>
           `:''}
 
-          <strong>Mit Beiträgen von:</strong><br/>
-          ${authors([...latestAuthors].sort((a, b) => a.name.localeCompare(b.name)))}<br/><br/>
+          <strong>Mit Beiträgen von:</strong><br>
+          ${authors([...latestAuthors].sort((a, b) => a.name.localeCompare(b.name)))}<br><br>
 
           ${tags(latest.tags)}
 
@@ -61,7 +61,7 @@ module.exports = data => {
       </div>
 
       ${Object.keys(years).sort((a, b) => b - a).map(year => `
-        <hr/>
+        <hr>
 
         <h2>${year}</h2>
 

@@ -2,7 +2,7 @@
 
 module.exports = participants => participants.length > 0 ? `
   <div class="generic__margin_vertical">
-    <strong>TeilnehmerInnen</strong><br/>
+    <strong>TeilnehmerInnen</strong><br>
     ${participants.map(participant => `
       <a href="/autoren/${participant.permalink}/">${participant.name}</a>
     `.trim()).join(', ')}

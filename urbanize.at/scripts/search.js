@@ -11,7 +11,7 @@ module.exports = () => {
     </strong>
     <div class="additional">
       <span>
-        ${event.dates.map(date => `${moment(date.date).locale('de').format('dddd, D.M.YYYY')}<br/>`).join('')}
+        ${event.dates.map(date => `${moment(date.date).locale('de').format('dddd, D.M.YYYY')}<br>`).join('')}
       </span>
       ${event.address}
     </div>
