@@ -81,6 +81,29 @@ module.exports = async (data, preview) => {
     }
   }
 
+  // Cinema
+
+  let cinemaDateNumber = 0;
+  if(preview) {
+    data.cinema.image.written = encodeURI(`/_root_media/${data.cinema.image.localFilesystemPath}`);
+  } else {
+    data.cinema.image.written = path.join('/stadt-streifen', `bild-${cinemaDateNumber++}${path.extname(data.cinema.image.normalizedPath)}`);
+    concurrentWrites.push( copyResized(data.cinema.image.localFilesystemPath, data.cinema.image.written) );
+    data.cinema.image.written += `?${data.assetHash}`;
+  }
+
+  for(let date of data.cinema.dates) {
+    if(preview) {
+      date.image.written = encodeURI(`/_root_media/${date.image.localFilesystemPath}`);
+    } else {
+      date.image.written = path.join('/stadt-streifen', `bild-${cinemaDateNumber++}${path.extname(date.image.normalizedPath)}`);
+      concurrentWrites.push( copyResized(date.image.localFilesystemPath, date.image.written) );
+      date.image.written += `?${data.assetHash}`;
+    }
+  }
+
+  // Events
+
   for(let event of data.events.values()) {
     if(event.image) {
       if(preview) {

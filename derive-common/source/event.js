@@ -60,8 +60,8 @@ module.exports = async (data, enoPath) => {
       event.text = doc.field('Text', validateMarkdownWithMedia);
 
       event.dates = doc.sections('Termin').map(date => ({
-        date: date.datetime('Datum'),
-        time: date.field('Zeit')
+        date: date.datetime('Datum'), // TODO: Required ?
+        time: date.field('Zeit') // TODO: Required ?
       }));
 
       doc.assertAllTouched();

@@ -1,5 +1,5 @@
-const layout = require('./layout.js'),
-      share = require('../widgets/share.js');
+const layout = require('./layout.js');
+const share = require('../widgets/share.js');
 
 module.exports = data => {
   const html = `

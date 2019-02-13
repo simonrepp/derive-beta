@@ -13,6 +13,7 @@ module.exports = async data => {
     'festival',
     'radio',
     'seite-nicht-gefunden',
+    'stadt-streifen',
     'suche',
     'tags',
     'texte',

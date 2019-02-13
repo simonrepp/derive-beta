@@ -6,6 +6,7 @@ const articlesPage = require('./pages/articles.js');
 const authorPage = require('./pages/author.js');
 const authorsPage = require('./pages/authors.js');
 const bookPage = require('./pages/book.js');
+const cinemaPage = require('./pages/cinema.js');
 const eventPage = require('./pages/event.js');
 const booksPage = require('./pages/books.js');
 const festivalPage = require('./pages/festival.js');
@@ -25,6 +26,7 @@ module.exports = async data => {
     writeFile(data.buildDir, 'texte/index.html', articlesPage(data, data.articlesPaginated[0])),
     writeFile(data.buildDir, 'autoren/index.html', authorsPage(data)),
     writeFile(data.buildDir, 'buecher/index.html', booksPage(data, data.booksPaginated[0])),
+    writeFile(data.buildDir, 'stadt-streifen/index.html', cinemaPage(data)),
     writeFile(data.buildDir, 'festival/index.html', festivalPage(data)),
     writeFile(data.buildDir, 'index.html', indexPage(data)),
     writeFile(data.buildDir, 'zeitschrift/index.html', issuesPage(data)),

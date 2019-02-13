@@ -73,6 +73,30 @@ module.exports = data => {
     }
   });
 
+  // TODO: Revisit how the singular data.cinema, data.festival, data.radio sections are invalidated on error (set to null?) and if this is all gracefully and soundly handled
+  if(data.cinema) {
+    if(connectMedia(data, data.cinema.image)) {
+      for(const date of data.cinema.dates) {
+        if(!connectMedia(data, date.image)) {
+          data.errors.push({
+            files: [{ path: data.cinema.sourceFile }],
+            message: `Das Bild "${date.image.normalizedPath}", dass bei einem der Termine auf der Stadt Streifen Seite referenziert wird, wurde nicht gefunden.`
+          });
+
+          data.cinema = null;
+          break;
+        }
+      }
+    } else {
+      data.errors.push({
+        files: [{ path: data.cinema.sourceFile }],
+        message: `Das Bild "${data.cinema.image.normalizedPath}", dass als Headerbild der Stadt Streifen Seite referenziert wird, wurde nicht gefunden.`
+      });
+
+      data.cinema = null;
+    }
+  }
+
   data.events.forEach(event => {
     if(event.image && !connectMedia(data, event.image)) {
       data.warnings.push({
@@ -113,7 +137,20 @@ module.exports = data => {
   });
 
   if(data.festival) {
-    if(!connectMedia(data, data.festival.image)) {
+    if(connectMedia(data, data.festival.image)) {
+
+      // TODO: Here (and elsewhere?) probably needs a for(const of .. ) loop and if an error occurs we break out of that loop because there's nothing more to do
+      data.festival.editions.forEach(edition => {
+        if(!connectMedia(data, edition.image)) {
+          data.errors.push({
+            files: [{ path: data.festival.sourceFile }],
+            message: `Das Bild "${edition.image.normalizedPath}", dass unter einer der vergangengen Editionen auf der Festivalseite referenziert wird, wurde nicht gefunden.`
+          });
+
+          data.festival = null;
+        }
+      });
+    } else {
       data.errors.push({
         files: [{ path: data.festival.sourceFile }],
         message: `Das Bild "${data.festival.image.normalizedPath}", dass als Headerbild der Festivalseite referenziert wird, wurde nicht gefunden.`
@@ -121,17 +158,6 @@ module.exports = data => {
 
       data.festival = null;
     }
-
-    data.festival.editions.forEach(edition => {
-      if(!connectMedia(data, edition.image)) {
-        data.errors.push({
-          files: [{ path: data.festival.sourceFile }],
-          message: `Das Bild "${edition.image.normalizedPath}", dass unter einer der vergangengen Editionen auf der Festivalseite referenziert wird, wurde nicht gefunden.`
-        });
-
-        data.festival = null;
-      }
-    });
   }
 
   data.issues.forEach(issue => {
@@ -164,13 +190,15 @@ module.exports = data => {
     }
   });
 
-  if(!connectMedia(data, data.radio.image)) {
-    data.errors.push({
-      files: [{ path: data.radio.sourceFile }],
-      message: `Das Bild "${data.radio.image.normalizedPath}", dass als Headerbild der Radioseite referenziert wird, wurde nicht gefunden.`
-    });
+  if(data.radio) {
+    if(!connectMedia(data, data.radio.image)) {
+      data.errors.push({
+        files: [{ path: data.radio.sourceFile }],
+        message: `Das Bild "${data.radio.image.normalizedPath}", dass als Headerbild der Radioseite referenziert wird, wurde nicht gefunden.`
+      });
 
-    data.radio = null;
+      data.radio = null;
+    }
   }
 
   data.programs.forEach(program => {

@@ -1,8 +1,9 @@
-const fastGlob = require('fast-glob');
+const glob = require('fast-glob');
 const path = require('path');
 
 const sourceArticle = require('./source/article.js');
 const sourceBook = require('./source/book.js');
+const sourceCinema = require('./source/cinema.js');
 const sourceEvent = require('./source/event.js');
 const sourceFeature = require('./source/feature.js');
 const sourceFestival = require('./source/festival.js');
@@ -12,8 +13,8 @@ const sourcePlayer = require('./source/player.js');
 const sourceProgram = require('./source/program.js');
 const sourceRadio = require('./source/radio.js');
 
-const forbiddenFilenameCharacters = /[\\?*:|"<>]/;
-const noExtension = /[^.]{8,}\s*$/;
+const FORBIDDEN_FILENAME_CHARACTERS = /[\\?*:|"<>]/;
+const NO_EXTENSION = /[^.]{8,}\s*$/;
 
 module.exports = async data => {
   data.articles.clear();
@@ -28,19 +29,19 @@ module.exports = async data => {
   data.programs.clear();
   data.warnings = [];
 
-  const globPaths = await fastGlob('**/*', { cwd: data.root, onlyFiles: true });
+  const globPaths = await glob('**/*', { cwd: data.root, onlyFiles: true });
 
   for(let localFilesystemPath of globPaths) {
     const normalizedPath = localFilesystemPath.normalize();
 
-    if(normalizedPath.match(noExtension)) {
+    if(normalizedPath.match(NO_EXTENSION)) {
 
       data.warnings.push({
         files: [{ path: localFilesystemPath }],
         message: `Die Datei ${normalizedPath} hat keine Dateiendung.`,
       });
 
-    } else if(normalizedPath.match(forbiddenFilenameCharacters)) {
+    } else if(normalizedPath.match(FORBIDDEN_FILENAME_CHARACTERS)) {
 
       data.warnings.push({
         files: [{ path: localFilesystemPath }],
@@ -56,6 +57,10 @@ module.exports = async data => {
       } else if(normalizedPath === 'Radio/Radio.eno') {
 
         await sourceRadio(data, localFilesystemPath);
+
+      } else if(normalizedPath === 'Stadt Streifen/Stadt Streifen.eno') {
+
+        await sourceCinema(data, localFilesystemPath);
 
       } else if(normalizedPath.match(/^Akteure\//)) {
 
