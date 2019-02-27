@@ -18,7 +18,7 @@
   "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-plugin-transform-class-properties": "^6.24.1",
-    "fuse.js": "^3.3.0",
+    "fuse.js": "^3.4.2",
     "node-sass": "^4.11.0",
     "parcel-bundler": "^1.11.0",
     "turbolinks": "^5.2.0"
