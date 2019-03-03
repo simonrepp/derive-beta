@@ -1,6 +1,23 @@
+const markdownIt = require('markdown-it')({ html: true });
+const markdownItFootnote = require('markdown-it-footnote');
 const path = require('path');
 
-const { renderMarkdown } = require('../util.js');
+markdownIt.use(markdownItFootnote);
+markdownIt.renderer.rules.image = (tokens, idx, options, env, self) => {
+  const token = tokens[idx];
+  const srcIndex = token.attrIndex('src');
+  const url = token.attrs[srcIndex][1];
+  const caption = token.content;
+
+  return `
+    <div><img class="generic__image_restraint" src="${url}" alt="${caption}"></div>
+    ${caption ? `<small>${caption}</small>` : ''}
+  `.trim();
+};
+
+const renderMarkdown = markdown => {
+  return markdownIt.render(markdown);
+};
 
 const embeddableMediaExtensions = ['.gif', '.GIF', '.jpg', '.JPG', '.jpeg', '.JPEG', '.png', '.PNG'];
 
@@ -10,7 +27,7 @@ const markdownMediaRegex = /(!|)\[(?:(?!\[.*\]).)*\]\((?!https?:\/\/|\/\/)(\S(?:
 // Pluggable, modulare regex components to build the md/html rules? - also think more in terms of inception matching (no src="" inside src="", no ![]() inside ![]() ..)
 // match(/!\[((?!!\[.*\]\(.*\)).)*\]\(((?!!\[.*\]\(.*\)).)*\)/g); (possibly resuse to improve regexes later, missing ](https?: NEGATIVE LOOKAHEAD THINGY)
 
-const validate = ({ name, value }, mediaAllowed) => {
+const validate = (value, mediaAllowed) => {
   if(value.trim().length === 0)
     return null;
 
@@ -38,7 +55,7 @@ const validate = ({ name, value }, mediaAllowed) => {
 
         return fullMatch.replace(urlMatch, embed.placeholder);
       } else {
-        throw `Das Markdown-Feld "${name}" enthält einen Embed der Datei "${urlMatch}", dessen Dateityp ist aber für Embeds nicht erlaubt.`;
+        throw `Der Markdown Text enthält einen Embed der Datei "${urlMatch}", dessen Dateityp ist aber für Embeds nicht erlaubt.`;
       }
     } else if(typeMatch === '' || typeMatch === 'href') {
       const download = {
@@ -61,14 +78,14 @@ const validate = ({ name, value }, mediaAllowed) => {
   value = value.replace(htmlMediaRegex, validateEmbeddedMedia);
 
   if(!mediaAllowed && (downloads.length > 0 || embeds.length > 0)) {
-    throw `Das Markdown im Feld "${name}" enhält Verweise auf Mediendateien, in diesem Feld ist das aber nicht erlaubt.`;
+    throw `Der Markdown Text enhält Verweise auf Mediendateien, in diesem Feld ist das aber nicht erlaubt.`;
   }
 
   let html;
   try {
     html = renderMarkdown(value);
   } catch(err) {
-    throw `Das Markdown im Feld "${name}" hat beim konvertieren einen Fehler ausgelöst: ${err}`;
+    throw `Der Markdown Text hat beim konvertieren einen Fehler ausgelöst: ${err}`;
   }
 
   return {
@@ -78,5 +95,6 @@ const validate = ({ name, value }, mediaAllowed) => {
   };
 };
 
-exports.validateMarkdown = enoValue => validate(enoValue, false);
-exports.validateMarkdownWithMedia = enoValue => validate(enoValue, true);
+exports.markdown = value => validate(value, false);
+exports.markdownWithMedia = value => validate(value, true);
+exports.renderMarkdown = renderMarkdown;

@@ -1,8 +1,5 @@
 const { loadEno, statFile } = require('../util.js');
-const { ValidationError, ParseError } = require('enojs');
-const { validateMarkdown } = require('../validate/markdown.js');
-const validatePath = require('../validate/path.js');
-const validatePermalink = require('../validate/permalink.js');
+const { ValidationError, ParseError } = require('enolib');
 
 module.exports = async (data, enoPath) => {
   const cached = data.cache.get(enoPath);
@@ -36,29 +33,25 @@ module.exports = async (data, enoPath) => {
       sourceFile: enoPath
     };
 
-    doc.enforceAllElements();
+    doc.allElementsRequired();
 
     try {
-      const title = doc.field('Titel', { required: true, withElement: true });
-      book.title = title.value;
-      book.titleElement = title.element;
-
-      const permalink = doc.field('Permalink', validatePermalink, { required: true, withElement: true });
-      book.permalink = permalink.value;
-      book.permalinkElement = permalink.element;
-
-      book.yearOfPublication = doc.number('Erscheinungsjahr', { required: true });
-      book.isxn = doc.field('ISBN/ISSN');
-      book.url = doc.url('URL');
-      book.placeOfPublication = doc.field('Erscheinungsort');
-      book.numberOfPages = doc.number('Seitenanzahl');
-      book.price = doc.field('Preis');
-      book.featuredRank = doc.number('Featured (Position)');
-      book.authorReferences = doc.list('Autoren/Herausgeber', { withElements: true });
-      book.publisherReferences = doc.list('Verleger', { withElements: true });
-      book.tagsDisconnected = doc.list('Tags');
-      book.cover = doc.field('Cover', validatePath);
-      book.description = doc.field('Verlagstext', validateMarkdown);
+      book.titleField = doc.field('Titel');
+      book.title = book.titleField.requiredStringValue();
+      book.permalinkField = doc.field('Permalink');
+      book.permalink = book.permalinkField.requiredPermalinkValue();
+      book.yearOfPublication = doc.field('Erscheinungsjahr').requiredIntegerValue();
+      book.isxn = doc.field('ISBN/ISSN').optionalStringValue();
+      book.url = doc.field('URL').optionalUrlValue();
+      book.placeOfPublication = doc.field('Erscheinungsort').optionalStringValue();
+      book.numberOfPages = doc.field('Seitenanzahl').optionalIntegerValue();
+      book.price = doc.field('Preis').optionalStringValue();
+      book.featuredRank = doc.field('Featured (Position)').optionalIntegerValue();
+      book.authorReferences = doc.list('Autoren/Herausgeber').items().map(item => ({ item, name: item.requiredStringValue() }));
+      book.publisherReferences = doc.list('Verleger').items().map(item => ({ item, name: item.requiredStringValue() }));
+      book.tagsDisconnected = doc.list('Tags').requiredStringValues();
+      book.cover = doc.field('Cover').optionalPathValue();
+      book.description = doc.field('Verlagstext').optionalMarkdownValue();
 
       doc.assertAllTouched();
     } catch(err) {

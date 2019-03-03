@@ -5,8 +5,8 @@ module.exports = data => {
     let existingArticle = data.articlesByTitle.get(article.title);
 
     if(existingArticle) {
-      const existingError = existingArticle.titleElement.error();
-      const discardedError = article.titleElement.error();
+      const existingError = existingArticle.titleField.valueError();
+      const discardedError = article.titleField.valueError();
 
       data.warnings.push({
         files: [
@@ -25,8 +25,8 @@ module.exports = data => {
     existingArticle = articlesByPermalink.get(article.permalink);
 
     if(existingArticle) {
-      const existingError = existingArticle.permalinkElement.error();
-      const discardedError = article.permalinkElement.error();
+      const existingError = existingArticle.permalinkField.valueError();
+      const discardedError = article.permalinkField.valueError();
 
       data.warnings.push({
         files: [
@@ -51,8 +51,8 @@ module.exports = data => {
     let existingBook = data.booksByTitle.get(book.title);
 
     if(existingBook) {
-      const existingError = existingBook.titleElement.error();
-      const discardedError = book.titleElement.error();
+      const existingError = existingBook.titleField.valueError();
+      const discardedError = book.titleField.valueError();
 
       data.warnings.push({
         files: [
@@ -70,8 +70,8 @@ module.exports = data => {
     existingBook = booksByPermalink.get(book.permalink);
 
     if(existingBook) {
-      const existingError = existingBook.permalinkElement.error();
-      const discardedError = book.permalinkElement.error();
+      const existingError = existingBook.permalinkField.valueError();
+      const discardedError = book.permalinkField.valueError();
 
       data.warnings.push({
         files: [
@@ -95,8 +95,8 @@ module.exports = data => {
     const existingEvent = eventsByPermalink.get(event.permalink);
 
     if(existingEvent) {
-      const existingError = existingEvent.permalinkElement.error();
-      const discardedError = event.permalinkElement.error();
+      const existingError = existingEvent.permalinkField.valueError();
+      const discardedError = event.permalinkField.valueError();
 
       data.warnings.push({
         files: [
@@ -118,8 +118,8 @@ module.exports = data => {
     const existingIssue = issuesByNumber.get(issue.number);
 
     if(existingIssue) {
-      const existingError = existingIssue.numberElement.error();
-      const discardedError = issue.numberElement.error();
+      const existingError = existingIssue.numberField.valueError();
+      const discardedError = issue.numberField.valueError();
 
       data.warnings.push({
         files: [
@@ -142,8 +142,8 @@ module.exports = data => {
     let existingPlayer = data.playersByName.get(player.name);
 
     if(existingPlayer) {
-      const existingError = existingPlayer.nameElement.error();
-      const discardedError = player.nameElement.error();
+      const existingError = existingPlayer.nameField.valueError();
+      const discardedError = player.nameField.valueError();
 
       data.warnings.push({
         files: [
@@ -161,8 +161,8 @@ module.exports = data => {
     existingPlayer = playersByPermalink.get(player.permalink);
 
     if(existingPlayer) {
-      const existingError = existingPlayer.permalinkElement.error();
-      const discardedError = player.permalinkElement.error();
+      const existingError = existingPlayer.permalinkField.valueError();
+      const discardedError = player.permalinkField.valueError();
 
       data.warnings.push({
         files: [
@@ -187,8 +187,8 @@ module.exports = data => {
     const existingPage = pagesByPermalink.get(contextualizedPermalink);
 
     if(existingPage) {
-      const existingError = existingPage.permalinkElement.error();
-      const discardedError = page.permalinkElement.error();
+      const existingError = existingPage.permalinkField.valueError();
+      const discardedError = page.permalinkField.valueError();
 
       data.warnings.push({
         files: [
@@ -210,8 +210,8 @@ module.exports = data => {
     const existingProgram = programsByPermalink.get(program.permalink);
 
     if(existingProgram) {
-      const existingError = existingProgram.permalinkElement.error();
-      const discardedError = program.permalinkElement.error();
+      const existingError = existingProgram.permalinkField.valueError();
+      const discardedError = program.permalinkField.valueError();
 
       data.warnings.push({
         files: [

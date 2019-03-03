@@ -1,7 +1,5 @@
 const { loadEno, statFile } = require('../util.js');
-const { ValidationError, ParseError } = require('enojs');
-const { validateMarkdown } = require('../validate/markdown.js');
-const validatePath = require('../validate/path.js');
+const { ValidationError, ParseError } = require('enolib');
 
 module.exports = async (data, enoPath) => {
   const cached = data.cache.get(enoPath);
@@ -32,13 +30,13 @@ module.exports = async (data, enoPath) => {
 
     const radio = { sourceFile: enoPath };
 
-    doc.enforceAllElements();
+    doc.allElementsRequired();
 
     try {
-      radio.title = doc.field('Titel', { required: true });
-      radio.image = doc.field('Bild', validatePath, { required: true });
-      radio.info = doc.field('Allgemeine Info', validateMarkdown, { required: true });
-      radio.editorReferences = doc.list('Redaktion', { withElements: true });
+      radio.title = doc.field('Titel').requiredStringValue();
+      radio.image = doc.field('Bild').requiredPathValue();
+      radio.info = doc.field('Allgemeine Info').requiredMarkdownValue();
+      radio.editorReferences = doc.list('Redaktion').items().map(item => ({ item, name: item.requiredStringValue() }))
 
       doc.assertAllTouched();
     } catch(err) {

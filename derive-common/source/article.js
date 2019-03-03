@@ -1,10 +1,5 @@
-const { loadEno, statFile, URBANIZE_ENUM } = require('../util.js');
-const { ValidationError, ParseError } = require('enojs');
-const validateBoolean = require('../validate/boolean.js');
-const validateEnum = require('../validate/enum.js');
-const { validateMarkdown, validateMarkdownWithMedia } = require('../validate/markdown.js');
-const validatePath = require('../validate/path.js');
-const validatePermalink = require('../validate/permalink.js');
+const { loadEno, statFile } = require('../util.js');
+const { ValidationError, ParseError } = require('enolib');
 
 module.exports = async (data, enoPath) => {
   const cached = data.cache.get(enoPath);
@@ -38,31 +33,29 @@ module.exports = async (data, enoPath) => {
       sourceFile: enoPath
     };
 
-    doc.enforceAllElements();
+    doc.allElementsRequired();
 
     try {
-      const title = doc.field('Titel', { required: true, withElement: true });
-      article.title = title.value;
-      article.titleElement = title.element;
+      article.titleField = doc.field('Titel');
+      article.title = article.titleField.requiredStringValue();
 
-      const permalink = doc.field('Permalink', validatePermalink, { required: true, withElement: true });
-      article.permalink = permalink.value;
-      article.permalinkElement = permalink.element;
+      article.permalinkField = doc.field('Permalink');
+      article.permalink = article.permalinkField.requiredPermalinkValue();
 
-      article.subtitle = doc.field('Untertitel');
-      article.image = doc.field('Bild', validatePath);
-      article.imageCaption = doc.string('Bilduntertitel');
-      article.authorReferences = doc.list('Autoren', { withElements: true });
-      article.date = doc.date('Datum');
-      article.language = doc.field('Sprache');
-      article.categoriesDisconnected = doc.list('Kategorien');
-      article.tagsDisconnected = doc.list('Tags');
-      article.reviewedBookReferences = doc.list('Buchbesprechungen', { withElements: true });
-      article.readable = doc.field('Lesbar', validateBoolean);
-      article.urbanize = doc.field('Urbanize', validateEnum(URBANIZE_ENUM));
-      article.abstract = doc.field('Abstract', validateMarkdown);
-      article.bibliography = doc.field('Literaturverzeichnis', validateMarkdown);
-      article.text = doc.field('Text', validateMarkdownWithMedia);
+      article.subtitle = doc.field('Untertitel').optionalStringValue();
+      article.image = doc.field('Bild').optionalPathValue();
+      article.imageCaption = doc.field('Bilduntertitel').optionalStringValue();
+      article.authorReferences = doc.list('Autoren').items().map(item => ({ item, name: item.requiredStringValue() }));
+      article.date = doc.field('Datum').optionalDateValue();
+      article.language = doc.field('Sprache').optionalStringValue();
+      article.categoriesDisconnected = doc.list('Kategorien').requiredStringValues();
+      article.tagsDisconnected = doc.list('Tags').requiredStringValues();
+      article.reviewedBookReferences = doc.list('Buchbesprechungen').items().map(item => ({ item, title: item.requiredStringValue() }))
+      article.readable = doc.field('Lesbar').requiredBooleanValue();
+      article.urbanize = doc.field('Urbanize').optionalUrbanizeEditionValue();
+      article.abstract = doc.field('Abstract').optionalMarkdownValue();
+      article.bibliography = doc.field('Literaturverzeichnis').optionalMarkdownValue();
+      article.text = doc.field('Text').optionalMarkdownWithMediaValue();
 
       doc.assertAllTouched();
     } catch(err) {

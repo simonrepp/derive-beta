@@ -1,8 +1,5 @@
-const { FEATURE_TYPE_ENUM, loadEno, statFile, URBANIZE_ENUM } = require('../util.js');
-const { ValidationError, ParseError } = require('enojs');
-const validateEnum = require('../validate/enum.js');
-const { validateMarkdown } = require('../validate/markdown.js');
-const validatePath = require('../validate/path.js');
+const { loadEno, statFile } = require('../util.js');
+const { ValidationError, ParseError } = require('enolib');
 
 module.exports = async (data, enoPath) => {
   const cached = data.cache.get(enoPath);
@@ -36,17 +33,17 @@ module.exports = async (data, enoPath) => {
       sourceFile: enoPath
     };
 
-    doc.enforceAllElements();
+    doc.allElementsRequired();
 
     try {
-      feature.title = doc.string('Titel', { required: true });
-      feature.header = doc.string('Header');
-      feature.image = doc.field('Bild', validatePath);
-      feature.position = doc.number('Position');
-      feature.type = doc.field('Typ', validateEnum(FEATURE_TYPE_ENUM), { required: true });
-      feature.url = doc.url('URL');
-      feature.text = doc.field('Text', validateMarkdown);
-      feature.urbanize = doc.field('Urbanize', validateEnum(URBANIZE_ENUM));
+      feature.title = doc.field('Titel').requiredStringValue();
+      feature.header = doc.field('Header').optionalStringValue();
+      feature.image = doc.field('Bild').optionalPathValue();
+      feature.position = doc.field('Position').optionalIntegerValue();
+      feature.type = doc.field('Typ').requiredFeatureTypeValue();
+      feature.url = doc.field('URL').optionalUrlValue();
+      feature.text = doc.field('Text').optionalMarkdownValue();
+      feature.urbanize = doc.field('Urbanize').optionalUrbanizeEditionValue();
 
       doc.assertAllTouched();
     } catch(err) {

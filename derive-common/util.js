@@ -1,41 +1,34 @@
 const fs = require('fs');
-const eno = require('enojs');
-const { HtmlReporter } = require('enojs');
-const markdownIt = require('markdown-it')({ html: true });
-const markdownItFootnote = require('markdown-it-footnote');
+const enolib = require('enolib');
+const { HtmlReporter } = require('enolib');
+const { date, datetime, integer, url } = require('enotype');
+const { de } = require('enolib/lib/messages/de');
 const path = require('path');
 const striptags = require('striptags');
 
-markdownIt.use(markdownItFootnote);
-markdownIt.renderer.rules.image = (tokens, idx, options, env, self) => {
-  const token = tokens[idx];
-  const srcIndex = token.attrIndex('src');
-  const url = token.attrs[srcIndex][1];
-  const caption = token.content;
+const boolean = require('./loaders/boolean.js');
+const { featureType, urbanizeEdition } = require('./loaders/enum.js');
+const { markdown, markdownWithMedia } = require('./loaders/markdown.js');
+const pagesInfo = require('./loaders/pages_info.js');
+const pathLoader = require('./loaders/path.js');
+const issueNumber = require('./loaders/issue_number.js');
+const permalink = require('./loaders/permalink.js');
 
-  return `
-    <div><img class="generic__image_restraint" src="${url}" alt="${caption}"></div>
-    ${caption ? `<small>${caption}</small>` : ''}
-  `.trim();
-}
-
-exports.FEATURE_TYPE_ENUM = [
-  'landscape',
-  'portrait',
-  'card'
-];
-
-exports.URBANIZE_ENUM = [
-  '2012',
-  '2013',
-  '2014',
-  '2015',
-  'Hamburg 2016',
-  'Wien 2016',
-  '2017',
-  'Berlin 2018',
-  'Wien 2018'
-];
+enolib.register({
+  boolean,
+  date,
+  datetime,
+  featureType,
+  integer,
+  issueNumber,
+  markdown,
+  markdownWithMedia,
+  pagesInfo,
+  path: pathLoader,
+  permalink,
+  urbanizeEdition,
+  url
+});
 
 exports.createDir = (base, directory) => new Promise((resolve, reject) =>
   fs.mkdir(path.join(base, directory), err => err ? reject(err) : resolve())
@@ -70,7 +63,7 @@ exports.loadEno = (directory, enoPath) => new Promise((resolve, reject) =>
       reject(err);
     } else {
       try {
-        resolve( eno.parse(content, { locale: 'de', reporter: HtmlReporter }) );
+        resolve( enolib.parse(content, { locale: de, reporter: HtmlReporter }) );
       } catch(err) {
         reject(err);
       }
@@ -79,10 +72,6 @@ exports.loadEno = (directory, enoPath) => new Promise((resolve, reject) =>
 );
 
 exports.random = array => array[Math.floor(Math.random() * array.length)];
-
-exports.renderMarkdown = markdown => {
-  return markdownIt.render(markdown);
-};
 
 exports.statFile = (directory, filePath) => new Promise((resolve, reject) =>
   fs.stat(path.join(directory, filePath), (err, stat) => err ? reject(err) : resolve(stat))

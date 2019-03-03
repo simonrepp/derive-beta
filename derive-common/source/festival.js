@@ -1,7 +1,5 @@
 const { loadEno, statFile } = require('../util.js');
-const { ValidationError, ParseError } = require('enojs');
-const { validateMarkdown } = require('../validate/markdown.js');
-const validatePath = require('../validate/path.js');
+const { ValidationError, ParseError } = require('enolib');
 
 module.exports = async (data, enoPath) => {
   const cached = data.cache.get(enoPath);
@@ -32,16 +30,16 @@ module.exports = async (data, enoPath) => {
 
     const festival = { sourceFile: enoPath };
 
-    doc.enforceAllElements();
+    doc.allElementsRequired();
 
     try {
-      festival.title = doc.field('Titel', { required: true });
-      festival.subtitle = doc.field('Untertitel', { required: true });
-      festival.image = doc.field('Bild', validatePath, { required: true });
-      festival.description = doc.field('Beschreibung', validateMarkdown, { required: true });
+      festival.title = doc.field('Titel').requiredStringValue();
+      festival.subtitle = doc.field('Untertitel').requiredStringValue();
+      festival.image = doc.field('Bild').requiredPathValue();
+      festival.description = doc.field('Beschreibung').requiredMarkdownValue();
       festival.editions = doc.sections('Edition').map(edition => ({
-        image: edition.field('Bild', validatePath, { required: true }),
-        url: edition.url('URL', { required: true })
+        image: edition.field('Bild').requiredPathValue(),
+        url: edition.field('URL').requiredUrlValue()
       }));
 
       doc.assertAllTouched();

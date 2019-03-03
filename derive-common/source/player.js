@@ -1,7 +1,5 @@
 const { loadEno, statFile } = require('../util.js');
-const { ValidationError, ParseError } = require('enojs');
-const { validateMarkdown } = require('../validate/markdown.js');
-const validatePermalink = require('../validate/permalink.js');
+const { ValidationError, ParseError } = require('enolib');
 
 module.exports = async (data, enoPath) => {
   const cached = data.cache.get(enoPath);
@@ -35,25 +33,21 @@ module.exports = async (data, enoPath) => {
       sourceFile: enoPath
     };
 
-    doc.enforceAllElements();
+    doc.allElementsRequired();
 
     try {
-      const name = doc.field('Name', { required: true, withElement: true });
-      player.name = name.value;
-      player.nameElement = name.element;
-
-      const permalink = doc.field('Permalink', validatePermalink, { required: true, withElement: true });
-      player.permalink = permalink.value;
-      player.permalinkElement = permalink.element;
-
-      player.firstName = doc.field('Vorname');
-      player.lastName = doc.field('Nachname');
-      player.country = doc.field('Land');
-      player.city = doc.field('Stadt');
-      player.tagsDisconnected = doc.list('Tags');
-      player.website = doc.url('Website');
-      player.biography = doc.field('Biographie', validateMarkdown);
-      player.text = doc.field('Text', validateMarkdown);
+      player.nameField = doc.field('Name');
+      player.name = player.nameField.requiredStringValue();
+      player.permalinkField = doc.field('Permalink');
+      player.permalink = player.permalinkField.requiredPermalinkValue();
+      player.firstName = doc.field('Vorname').optionalStringValue();
+      player.lastName = doc.field('Nachname').optionalStringValue();
+      player.country = doc.field('Land').optionalStringValue();
+      player.city = doc.field('Stadt').optionalStringValue();
+      player.tagsDisconnected = doc.list('Tags').requiredStringValues();
+      player.website = doc.field('Website').optionalUrlValue();
+      player.biography = doc.field('Biographie').optionalMarkdownValue();
+      player.text = doc.field('Text').optionalMarkdownValue();
 
       doc.assertAllTouched();
     } catch(err) {

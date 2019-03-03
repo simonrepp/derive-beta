@@ -27,8 +27,8 @@ const clearLookupStructures = data => {
 const connectBookReviews = data => {
   data.articles.forEach(article => {
     article.reviewedBooks = [];
-    article.reviewedBookReferences.forEach(({ element, value }) => {
-      const book = data.booksByTitle.get(value);
+    for(const { item, title } of article.reviewedBookReferences) {
+      const book = data.booksByTitle.get(title);
 
       if(book) {
         if(!article.draft && !book.draft) {
@@ -36,7 +36,7 @@ const connectBookReviews = data => {
           book.reviews.push(article);
         }
       } else {
-        const error = element.error(`Im Artikel "${article.title}" wird das Buch "${value}" besprochen, allerdings wurde kein Buch mit diesem Titel gefunden.`);
+        const error = item.valueError(`Das verlinkte Buch mit dem Titel '${title}' wurde nicht gefunden - möglicherweise ein Tippfehler?`);
 
         data.warnings.push({
           files: [{ path: article.sourceFile, selection: error.selection }],
@@ -44,15 +44,15 @@ const connectBookReviews = data => {
           snippet: error.snippet
         });
       }
-    });
+    }
   });
 };
 
 const connectPlayers = (data, collection, referencesField, instancesField, backReferenceField) => {
   data[collection].forEach(document => {
     document[instancesField] = [];
-    document[referencesField].forEach(({ element, value }) => {
-      const instance = data.playersByName.get(value);
+    for(const { item, name } of document[referencesField]) {
+      const instance = data.playersByName.get(name);
 
       if(instance) {
         if(!document.draft && !instance.draft) {
@@ -60,7 +60,7 @@ const connectPlayers = (data, collection, referencesField, instancesField, backR
           instance[backReferenceField].push(document);
         }
       } else {
-        const error = element.error(`Im Feld "${element.name}" wird die AkteurIn "${value}" angegeben, es wurde aber keine AkteurIn mit diesem Namen gefunden.`);
+        const error = item.valueError(`Die verlinkte AkteurIn mit dem Namen '${name}' wurde nicht gefunden - möglicherweise ein Tippfehler?`);
 
         data.warnings.push({
           files: [{ path: document.sourceFile, selection: error.selection }],
@@ -68,7 +68,7 @@ const connectPlayers = (data, collection, referencesField, instancesField, backR
           snippet: error.snippet
         });
       }
-    });
+    }
   });
 };
 
@@ -89,7 +89,7 @@ const connectIssuesWithArticles = data => {
             article.inIssueOnPages = reference.pages;
           }
         } else {
-          const error = reference.titleElement.error(`In Zeitschrift N° ${issue.number} wird in der Rubrik "${section.title}" der Artikel "${reference.title}" referenziert, es wurde aber kein Artikel mit diesem Titel gefunden.`);
+          const error = reference.titleField.valueError(`Der referenzierte Artikel mit dem Titel '${reference.title}' wurde nicht gefunden - möglicherweise ein Tippfehler?`);
 
           data.warnings.push({
             files: [{ path: issue.sourceFile, selection: error.selection }],
@@ -105,15 +105,16 @@ const connectIssuesWithArticles = data => {
 const connectRadioEditors = data => {
   if(data.radio) {
     data.radio.editors = [];
-    data.radio.editorReferences.forEach(({ element, value }) => {
-      const player = data.playersByName.get(value);
+
+    for(const { item, name } of data.radio.editorReferences) {
+      const player = data.playersByName.get(name);
 
       if(player) {
         if(!player.draft) {
           data.radio.editors.push(player);
         }
       } else {
-        const error = element.error(`Die AkteurIn "${value}", angegeben als Teil der allgemeinen Radio Redaktion, wurde nicht gefunden.`);
+        const error = item.valueError(`Die AkteurIn '${name}', angegeben als Teil der allgemeinen Radio Redaktion, wurde nicht gefunden - möglicherweise ein Tippfehler?`);
 
         data.errors.push({
           files: [{ path: data.radio.sourceFile, selection: error.selection }],
@@ -121,7 +122,7 @@ const connectRadioEditors = data => {
           snippet: error.snippet
         });
       }
-    });
+    }
   }
 };
 

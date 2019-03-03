@@ -1,7 +1,5 @@
 const { loadEno, statFile } = require('../util.js');
-const { ParseError, ValidationError  } = require('enojs');
-const { validateMarkdown, validateMarkdownWithMedia } = require('../validate/markdown.js');
-const validatePath = require('../validate/path.js');
+const { ParseError, ValidationError  } = require('enolib');
 
 module.exports = async (data, enoPath) => {
   const cached = data.cache.get(enoPath);
@@ -32,25 +30,25 @@ module.exports = async (data, enoPath) => {
 
     const cinema = { sourceFile: enoPath };
 
-    doc.enforceAllElements();
+    doc.allElementsRequired();
 
     try {
-      cinema.title = doc.string('Titel', { required: true });
-      cinema.subtitle = doc.string('Untertitel', { required: true });
-      cinema.image = doc.field('Bild', validatePath, { required: true });
-      cinema.description = doc.field('Allgemeine Info', validateMarkdown, { required: true });
-      cinema.externalLink = doc.url('Filmcasino Link', { required: true });
+      cinema.title = doc.field('Titel').requiredStringValue();
+      cinema.subtitle = doc.field('Untertitel').requiredStringValue();
+      cinema.image = doc.field('Bild').requiredPathValue();
+      cinema.description = doc.field('Allgemeine Info').requiredMarkdownValue();
+      cinema.externalLink = doc.field('Filmcasino Link').requiredUrlValue();
 
       cinema.dates = doc.sections('Termin').map(date => ({
-        abstract: date.field('Kurztext [Markdown]', validateMarkdown, { required: true }),
-        date: date.datetime('Datum', { required: true }),
-        filmMeta: date.string('Filminfo', { required: true }),
-        eventMeta: date.field('Veranstaltungsinfo [Markdown]', validateMarkdown, { required: true }),
-        image: date.field('Bild', validatePath, { required: true }),
-        link: date.url('Link', { required: true }),
-        text: date.field('Langtext [Markdown+Medien]', validateMarkdownWithMedia, { required: true }),
-        time: date.string('Zeit', { required: true }),
-        title: date.string('Titel', { required: true })
+        abstract: date.field('Kurztext [Markdown]').requiredMarkdownValue(),
+        date: date.field('Datum').requiredDatetimeValue(),
+        filmMeta: date.field('Filminfo').requiredStringValue(),
+        eventMeta: date.field('Veranstaltungsinfo [Markdown]').requiredMarkdownValue(),
+        image: date.field('Bild').requiredPathValue(),
+        link: date.field('Link').requiredUrlValue(),
+        text: date.field('Langtext [Markdown+Medien]').requiredMarkdownWithMediaValue(),
+        time: date.field('Zeit').requiredStringValue(),
+        title: date.field('Titel').requiredStringValue()
       }));
 
       doc.assertAllTouched();

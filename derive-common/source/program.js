@@ -1,8 +1,5 @@
 const { loadEno, statFile } = require('../util.js');
-const { ValidationError, ParseError } = require('enojs');
-const { validateMarkdown, validateMarkdownWithMedia } = require('../validate/markdown.js');
-const validatePath = require('../validate/path.js');
-const validatePermalink = require('../validate/permalink.js');
+const { ValidationError, ParseError } = require('enolib');
 
 module.exports = async (data, enoPath) => {
   const cached = data.cache.get(enoPath);
@@ -36,26 +33,23 @@ module.exports = async (data, enoPath) => {
       sourceFile: enoPath
     };
 
-    doc.enforceAllElements();
+    doc.allElementsRequired();
 
     try {
-      program.title = doc.field('Titel', { required: true });
-
-      const permalink = doc.field('Permalink', validatePermalink, { required: true, withElement: true });
-      program.permalink = permalink.value;
-      program.permalinkElement = permalink.element;
-
-      program.firstBroadcast = doc.date('Erstausstrahlung', { required: true });
-      program.subtitle = doc.field('Untertitel');
-      program.image = doc.field('Bild', validatePath);
-      program.imageCaption = doc.string('Bilduntertitel');
-      program.soundfile = doc.field('Soundfile', validatePath);
-      program.editorReferences = doc.list('Redaktion', { withElements: true });
-      program.language = doc.field('Sprache');
-      program.categoriesDisconnected = doc.list('Kategorien');
-      program.tagsDisconnected = doc.list('Tags');
-      program.abstract = doc.field('Abstract', validateMarkdown);
-      program.text = doc.field('Text', validateMarkdownWithMedia);
+      program.title = doc.field('Titel').requiredStringValue();
+      program.permalinkField = doc.field('Permalink');
+      program.permalink = program.permalinkField.requiredPermalinkValue();
+      program.firstBroadcast = doc.field('Erstausstrahlung').requiredDateValue();
+      program.subtitle = doc.field('Untertitel').optionalStringValue();
+      program.image = doc.field('Bild').optionalPathValue();
+      program.imageCaption = doc.field('Bilduntertitel').optionalStringValue();
+      program.soundfile = doc.field('Soundfile').optionalPathValue();
+      program.editorReferences = doc.list('Redaktion').items().map(item => ({ item, name: item.requiredStringValue() }));
+      program.language = doc.field('Sprache').optionalStringValue();
+      program.categoriesDisconnected = doc.list('Kategorien').requiredStringValues();
+      program.tagsDisconnected = doc.list('Tags').requiredStringValues();
+      program.abstract = doc.field('Abstract').optionalMarkdownValue();
+      program.text = doc.field('Text').optionalMarkdownWithMediaValue();
 
       doc.assertAllTouched();
     } catch(err) {
