@@ -7,7 +7,7 @@ module.exports = async (data, enoPath) => {
   const cached = data.cache.get(enoPath);
   const stats = await statFile(data.root, enoPath);
 
-  if(cached && stats.size === cached.stats.size && stats.mTimeMs === cached.stats.mTimeMs) {
+  if(cached && stats.size === cached.stats.size && stats.mtimeMs === cached.stats.mtimeMs) {
     data.cinema = cached.cinema;
   } else {
     let doc;

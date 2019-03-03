@@ -55,7 +55,7 @@ module.exports = async data => {
         await sourceFestival(data, localFilesystemPath);
 
       } else if(normalizedPath === 'Kino/Kino.eno') {
-        
+
         await sourceCinema(data, localFilesystemPath);
 
       } else if(normalizedPath === 'Radio/Radio.eno') {
