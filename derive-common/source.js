@@ -3,7 +3,6 @@ const path = require('path');
 
 const sourceArticle = require('./source/article.js');
 const sourceBook = require('./source/book.js');
-const sourceCinema = require('./source/cinema.js');
 const sourceEvent = require('./source/event.js');
 const sourceFeature = require('./source/feature.js');
 const sourceFestival = require('./source/festival.js');
@@ -11,7 +10,7 @@ const sourceIssue = require('./source/issue.js');
 const sourcePage = require('./source/page.js');
 const sourcePlayer = require('./source/player.js');
 const sourceProgram = require('./source/program.js');
-const sourceRadio = require('./source/radio.js');
+const sourceScreening = require('./source/screening.js');
 
 const FORBIDDEN_FILENAME_CHARACTERS = /[\\?*:|"<>]/;
 const NO_EXTENSION = /[^.]{8,}\s*$/;
@@ -54,14 +53,6 @@ module.exports = async data => {
 
         await sourceFestival(data, localFilesystemPath);
 
-      } else if(normalizedPath === 'Kino/Kino.eno') {
-
-        await sourceCinema(data, localFilesystemPath);
-
-      } else if(normalizedPath === 'Radio/Radio.eno') {
-
-        await sourceRadio(data, localFilesystemPath);
-
       } else if(normalizedPath.match(/^Akteure\//)) {
 
         await sourcePlayer(data, localFilesystemPath);
@@ -73,6 +64,10 @@ module.exports = async data => {
       } else if(normalizedPath.match(/^Features\//)) {
 
         await sourceFeature(data, localFilesystemPath);
+
+      } else if(normalizedPath.match(/^Kino\//)) {
+
+        await sourceScreening(data, localFilesystemPath);
 
       } else if(normalizedPath.match(/^Radio\//)) {
 

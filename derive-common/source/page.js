@@ -1,11 +1,13 @@
 const { loadEno, statFile, URBANIZE_ENUM } = require('../util.js');
-const { ValidationError, ParseError } = require('enolib');
+const { ParseError, ValidationError } = require('enolib');
 
 const WHITELISTED_DERIVE_PERMALINKS = [
   'impressum',
   'kooperationen',
   'medieninformationen',
-  'ueber-derive'
+  'ueber-cinema-derive',
+  'ueber-derive',
+  'ueber-radio-derive'
 ];
 
 const WHITELISTED_URBANIZE_PERMALINKS = [

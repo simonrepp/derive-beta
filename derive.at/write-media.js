@@ -83,28 +83,19 @@ module.exports = async (data, preview) => {
 
   // Cinema
 
-  let cinemaDateNumber = 0;
-  if(preview) {
-    data.cinema.image.written = encodeURI(`/_root_media/${data.cinema.image.localFilesystemPath}`);
-  } else {
-    data.cinema.image.written = path.join('/kino', `bild-${cinemaDateNumber++}${path.extname(data.cinema.image.normalizedPath)}`);
-    concurrentWrites.push( copyResized(data.cinema.image.localFilesystemPath, data.cinema.image.written) );
-    data.cinema.image.written += `?${data.assetHash}`;
-  }
-
-  for(let date of data.cinema.dates) {
+  for(const screening of data.screenings.values()) {
     if(preview) {
-      date.image.written = encodeURI(`/_root_media/${date.image.localFilesystemPath}`);
+      screening.image.written = encodeURI(`/_root_media/${screening.image.localFilesystemPath}`);
     } else {
-      date.image.written = path.join('/kino', `bild-${cinemaDateNumber++}${path.extname(date.image.normalizedPath)}`);
-      concurrentWrites.push( copyResized(date.image.localFilesystemPath, date.image.written) );
-      date.image.written += `?${data.assetHash}`;
+      screening.image.written = path.join('/kino', screening.permalink, `bild${path.extname(screening.image.normalizedPath)}`);
+      concurrentWrites.push( copyResized(screening.image.localFilesystemPath, screening.image.written) );
+      screening.image.written += `?${data.assetHash}`;
     }
   }
 
   // Events
 
-  for(let event of data.events.values()) {
+  for(const event of data.events.values()) {
     if(event.image) {
       if(preview) {
         event.image.written = encodeURI(`/_root_media/${event.image.localFilesystemPath}`);
@@ -228,14 +219,6 @@ module.exports = async (data, preview) => {
   }
 
   // Radio
-
-  if(preview) {
-    data.radio.image.written = encodeURI(`/_root_media/${data.radio.image.localFilesystemPath}`);
-  } else {
-    data.radio.image.written = path.join('/radio', `header${path.extname(data.radio.image.normalizedPath)}`);
-    concurrentWrites.push( copyResized(data.radio.image.localFilesystemPath, data.radio.image.written) );
-    data.radio.image.written += `?${data.assetHash}`;
-  }
 
   for(let program of data.programs.values()) {
     if(program.image) {

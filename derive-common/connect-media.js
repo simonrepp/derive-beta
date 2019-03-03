@@ -73,27 +73,14 @@ module.exports = data => {
     }
   });
 
-  // TODO: Revisit how the singular data.cinema, data.festival, data.radio sections are invalidated on error (set to null?) and if this is all gracefully and soundly handled
-  if(data.cinema) {
-    if(connectMedia(data, data.cinema.image)) {
-      for(const date of data.cinema.dates) {
-        if(!connectMedia(data, date.image)) {
-          data.errors.push({
-            files: [{ path: data.cinema.sourceFile }],
-            message: `Das Bild "${date.image.normalizedPath}", dass bei einem der Termine auf der Kino Seite referenziert wird, wurde nicht gefunden.`
-          });
-
-          data.cinema = null;
-          break;
-        }
-      }
-    } else {
-      data.errors.push({
-        files: [{ path: data.cinema.sourceFile }],
-        message: `Das Bild "${data.cinema.image.normalizedPath}", dass als Headerbild der Kino Seite referenziert wird, wurde nicht gefunden.`
+  for(const screening of data.screenings.values()) {
+    if(!connectMedia(data, screening.image)) {
+      data.warnings.push({
+        files: [{ path: screening.sourceFile }],
+        message: `Das Bild "${screening.image.normalizedPath}", dass bei einem der Termine auf der Kino Seite referenziert wird, wurde nicht gefunden.` // TODO: Here and elsewhere generate an actual eno style error?
       });
 
-      data.cinema = null;
+      data.screenings.delete(screening.sourceFile);
     }
   }
 
@@ -136,6 +123,7 @@ module.exports = data => {
     }
   });
 
+  // TODO: Revisit how the singular data.festival section is invalidated on error (set to null?) and if this is all gracefully and soundly handled
   if(data.festival) {
     if(connectMedia(data, data.festival.image)) {
 
@@ -189,17 +177,6 @@ module.exports = data => {
       }
     }
   });
-
-  if(data.radio) {
-    if(!connectMedia(data, data.radio.image)) {
-      data.errors.push({
-        files: [{ path: data.radio.sourceFile }],
-        message: `Das Bild "${data.radio.image.normalizedPath}", dass als Headerbild der Radioseite referenziert wird, wurde nicht gefunden.`
-      });
-
-      data.radio = null;
-    }
-  }
 
   data.programs.forEach(program => {
     if(program.image && !connectMedia(data, program.image)) {

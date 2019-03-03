@@ -102,30 +102,6 @@ const connectIssuesWithArticles = data => {
   });
 };
 
-const connectRadioEditors = data => {
-  if(data.radio) {
-    data.radio.editors = [];
-
-    for(const { item, name } of data.radio.editorReferences) {
-      const player = data.playersByName.get(name);
-
-      if(player) {
-        if(!player.draft) {
-          data.radio.editors.push(player);
-        }
-      } else {
-        const error = item.valueError(`Die AkteurIn '${name}', angegeben als Teil der allgemeinen Radio Redaktion, wurde nicht gefunden - möglicherweise ein Tippfehler?`);
-
-        data.errors.push({
-          files: [{ path: data.radio.sourceFile, selection: error.selection }],
-          message: error.text,
-          snippet: error.snippet
-        });
-      }
-    }
-  }
-};
-
 module.exports = data => {
   clearBackReferences(data);
 
@@ -139,8 +115,6 @@ module.exports = data => {
   connectPlayers(data, 'programs', 'editorReferences', 'editors', 'programs');
 
   connectIssuesWithArticles(data);
-
-  connectRadioEditors(data);
 
   clearLookupStructures(data);
 

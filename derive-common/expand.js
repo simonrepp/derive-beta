@@ -169,6 +169,12 @@ const paginatePrograms = data => {
   data.programsPaginated = [];
   const programsSorted = Array.from(data.programs.values()).sort((a, b) => b.firstBroadcast - a.firstBroadcast);
 
+  data.programsPaginated.push({
+    featured: programsSorted[0],
+    label: 'Aktuell',
+    programs: programsSorted.slice(0, 12)
+  });
+
   programsSorted.forEach((program, index) => {
     const label = program.firstBroadcast.getFullYear().toString();
     const existingPagination = data.programsPaginated.find(pagination => pagination.label === label);

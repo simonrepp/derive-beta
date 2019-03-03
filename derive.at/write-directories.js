@@ -42,6 +42,7 @@ module.exports = async data => {
   data.programs.forEach(program => midDirectories.add(`radio/${program.permalink}`));
   data.programsPaginated.forEach(pagination => midDirectories.add(`radio/${pagination.label}`));
   data.publishers.forEach(publisher => midDirectories.add(`verlage/${publisher.permalink}`));
+  data.screenings.forEach(screening => midDirectories.add(`kino/${screening.permalink}`));
   data.tags.forEach(tag => midDirectories.add(`tags/${tag.permalink}`));
 
   await Promise.all([...midDirectories].map(dir => createDir(data.buildDir, dir)));
