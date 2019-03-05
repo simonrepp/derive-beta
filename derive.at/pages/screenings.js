@@ -27,7 +27,7 @@ module.exports = data => {
         </span>
 
         <div class="generic__margin_vertical">
-          <a href="/ueber-radio-derive/">Über Cinema dérive</a>
+          <a href="/ueber-cinema-derive/">Über Cinema dérive</a>
         </div>
 
         ${share(featured.title, `https://derive.at/kino/${featured.permalink}/`)}
