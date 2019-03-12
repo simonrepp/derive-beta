@@ -31,3 +31,5 @@ exports.urbanizeEdition = value => {
     throw `Eine Urbanize Edition muss angegeben werden (${URBANIZE_EDITIONS.map(edition => `"${edition}"`).join(', ')}) der aktuelle Wert ${value} ist nicht erlaubt (Gross/Kleinschreibung beachten!).`;
   }
 }
+
+exports.URBANIZE_EDITIONS = URBANIZE_EDITIONS;
