@@ -3,6 +3,7 @@ const { ParseError, ValidationError } = require('enolib');
 
 const WHITELISTED_DERIVE_PERMALINKS = [
   'impressum',
+  'jahrespartner-big',
   'kooperationen',
   'medieninformationen',
   'ueber-cinema-derive',
