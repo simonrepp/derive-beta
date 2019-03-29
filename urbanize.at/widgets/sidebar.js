@@ -114,7 +114,7 @@ module.exports = urbanize => `
       <div><a href="https://2014.urbanize.at">ur5anize! 2014</a></div>
       <div><a href="https://2013.urbanize.at">ur4anize! 2013</a></div>
       <div><a href="https://2012.urbanize.at">ur3anize! 2012</a></div>
-      <div><a href="http://2011.urbanize.at">urbani2e! 2011</a></div>
+      <div><a href="https://2011.urbanize.at">urbani2e! 2011</a></div>
     </div>
   </div>
 `;

@@ -17,7 +17,7 @@ module.exports = () => `
         <!-- TODO: Generic share on facebook implementation (prerenderer w/o javascript?) - open in tab instead of window (mobile consideration mostly) -->
 
         <a class="a__no-underline"
-           href="http://www.facebook.com/sharer/sharer.php?u=www.derive.at&title=derive"
+           href="https://www.facebook.com/sharer/sharer.php?u=www.derive.at&title=derive"
            title="dérive auf facebook teilen">
          <span class="icon-facebook"></span>
         </a>
@@ -48,7 +48,7 @@ module.exports = () => `
 
         <br>
 
-        <a href="http://eepurl.com/fmHIo" target="_blank">
+        <a href="https://eepurl.com/fmHIo" target="_blank">
           Newsletter bestellen
         </a>
 
