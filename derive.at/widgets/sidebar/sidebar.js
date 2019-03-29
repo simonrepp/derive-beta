@@ -24,7 +24,7 @@ module.exports = data => `
     </div>
 
     <a class="sidebar__link"
-       href="https://derive.tictail.com/"
+       href="/shop/"
        target="_blank" >
       <span class="icon-kiosk"></span>
     </a>

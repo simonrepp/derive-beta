@@ -8,7 +8,7 @@ const sections = [
   { name: 'Festival', route: '/festival/' },
   { name: 'Bücher', route: '/buecher/' },
   { name: 'Autoren', route: '/autoren/' },
-  { name: 'Kiosk', route: 'https://derive.tictail.com/', tab: true }
+  { name: 'Shop', route: '/shop/', tab: true }
 ];
 
 module.exports = options => `

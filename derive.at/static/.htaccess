@@ -1,1 +1,2 @@
 ErrorDocument 404 /seite-nicht-gefunden/
+Redirect 301 /shop https://derive-shop.myshopify.com/
