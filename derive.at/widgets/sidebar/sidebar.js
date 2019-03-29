@@ -24,7 +24,7 @@ module.exports = data => `
     </div>
 
     <a class="sidebar__link"
-       href="/shop/"
+       href="https://shop.derive.at"
        target="_blank" >
       <span class="icon-kiosk"></span>
     </a>

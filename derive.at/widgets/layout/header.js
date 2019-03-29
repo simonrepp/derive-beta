@@ -8,7 +8,7 @@ const sections = [
   { name: 'Festival', route: '/festival/' },
   { name: 'Bücher', route: '/buecher/' },
   { name: 'Autoren', route: '/autoren/' },
-  { name: 'Shop', route: '/shop/', tab: true }
+  { name: 'Shop', route: 'https://shop.derive.at', tab: true }
 ];
 
 module.exports = options => `
