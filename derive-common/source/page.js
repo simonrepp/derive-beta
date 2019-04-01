@@ -2,6 +2,7 @@ const { loadEno, statFile, URBANIZE_ENUM } = require('../util.js');
 const { ParseError, ValidationError } = require('enolib');
 
 const WHITELISTED_DERIVE_PERMALINKS = [
+  'datenschutzerklaerung',
   'impressum',
   'jahrespartner-big',
   'kooperationen',
