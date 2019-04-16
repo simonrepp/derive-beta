@@ -3,6 +3,37 @@ const markdownItFootnote = require('markdown-it-footnote');
 const path = require('path');
 
 markdownIt.use(markdownItFootnote);
+
+// Override markdown-it-footnote render functions to include
+// data-turbolinks="false" which prevents turbolinks to reload the page (and
+// mess up scrolling therefore) instead of just letting the internal page scroll
+// jump happen.
+//
+// Possibly there might be an upstream fix at some point (not likely soon though) - see https://github.com/turbolinks/turbolinks/issues/75
+markdownIt.renderer.rules.footnote_ref = (tokens, idx, options, env, slf) => {
+  var id      = slf.rules.footnote_anchor_name(tokens, idx, options, env, slf);
+  var caption = slf.rules.footnote_caption(tokens, idx, options, env, slf);
+  var refid   = id;
+
+  if (tokens[idx].meta.subId > 0) {
+    refid += ':' + tokens[idx].meta.subId;
+  }
+
+  return '<sup class="footnote-ref"><a href="#fn' + id + '" id="fnref' + refid + '" data-turbolinks="false">' + caption + '</a></sup>';
+};
+
+// See above
+markdownIt.renderer.rules.footnote_anchor = (tokens, idx, options, env, slf) => {
+  var id = slf.rules.footnote_anchor_name(tokens, idx, options, env, slf);
+
+  if (tokens[idx].meta.subId > 0) {
+    id += ':' + tokens[idx].meta.subId;
+  }
+
+  /* ↩ with escape code to prevent display as Apple Emoji on iOS */
+  return ' <a href="#fnref' + id + '" class="footnote-backref" data-turbolinks="false">\u21a9\uFE0E</a>';
+};
+
 markdownIt.renderer.rules.image = (tokens, idx, options, env, self) => {
   const token = tokens[idx];
   const srcIndex = token.attrIndex('src');
