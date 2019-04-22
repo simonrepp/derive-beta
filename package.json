@@ -1,8 +1,8 @@
 {
   "author": "Simon Repp <simon@fdpl.io> (https://simonrepp.com)",
   "dependencies": {
-    "atom-package-deps": "^5.0.0",
-    "enolib": "^0.4.3",
+    "atom-package-deps": "^5.1.0",
+    "enolib": "^0.5.0",
     "enotype": "^0.3.0",
     "express": "^4.16.4",
     "fast-glob": "^2.2.6",
