@@ -1,1 +1,1 @@
-module.exports = urbanize => `<div class="footer">${urbanize.footer}</div>`;
+module.exports = urbanize => `<div class="footer">2019 URBANIZE! INTERNATIONALES FESTIVAL FÜR URBANE ERKUNDUNGEN WIEN</div>`;

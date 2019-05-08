@@ -192,26 +192,6 @@
         ]
       },
       {
-        "label": "berlin.urbanize.at",
-        "submenu": [
-          {
-            "label": "Lokale Seitenvorschau",
-            "command": "derive-beta:preview-berlin.urbanize.at"
-          },
-          {
-            "type": "separator"
-          },
-          {
-            "label": "staging.berlin.urbanize.at aktualisieren",
-            "command": "derive-beta:deploy-staging.berlin.urbanize.at"
-          },
-          {
-            "label": "berlin.urbanize.at aktualisieren",
-            "command": "derive-beta:deploy-berlin.urbanize.at"
-          }
-        ]
-      },
-      {
         "type": "separator"
       },
       {

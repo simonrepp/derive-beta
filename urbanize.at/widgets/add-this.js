@@ -15,7 +15,7 @@ module.exports = url => `
       <span class="icon-print"></span>
     </a>
 
-    <a href="mailto:?subject=${encodeURI('urbanize! 2018 in Berlin')}&body=${encodeURI(url)}"
+    <a href="mailto:?subject=${encodeURI('urbanize! 2019')}&body=${encodeURI(url)}"
        title="Per Email versenden">
        <span class="icon-mail"></span>
     </a>

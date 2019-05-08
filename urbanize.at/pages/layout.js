@@ -16,15 +16,9 @@ module.exports = (content, urbanize, options = {}) => {
   }
 
   if(!options.og.image) {
-    if(urbanize.edition === 'berlin') {
-      options.og.image = urbanize.base_url + '/images/berlin_opengraph.jpg';
-      options.og.imageHeight = 1262;
-      options.og.imageWidth = 816;
-    } else {
-      options.og.image = urbanize.base_url + '/images/graetzelhood_facebook.jpg';
-      options.og.imageHeight = 1200;
-      options.og.imageWidth = 630;
-    }
+    options.og.image = urbanize.base_url + '/images/graetzelhood_facebook.jpg';
+    options.og.imageHeight = 1200;
+    options.og.imageWidth = 630;
   }
 
   if(/\.png(\?\d+)?$/i.test(options.og.image)) {
@@ -63,7 +57,7 @@ module.exports = (content, urbanize, options = {}) => {
         <meta property="og:title" content="${options.title}">
         <meta property="og:type" content="website">
 
-        <link rel="stylesheet" href="/${urbanize.edition}.css?${urbanize.assetHash}">
+        <link rel="stylesheet" href="/styles.css?${urbanize.assetHash}">
 
         <script defer src="/scripts.js?${urbanize.assetHash}"></script>
       </head>

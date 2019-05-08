@@ -3,7 +3,6 @@
     "f5": "derive-beta:refresh",
     "ctrl-1": "derive-beta:preview-derive.at",
     "ctrl-2": "derive-beta:preview-urbanize.at",
-    "ctrl-3": "derive-beta:preview-berlin.urbanize.at",
     "ctrl-5": "derive-beta:toggle-panel"
   }
 }

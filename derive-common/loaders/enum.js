@@ -13,7 +13,8 @@ const URBANIZE_EDITIONS = [
   'Wien 2016',
   '2017',
   'Berlin 2018',
-  'Wien 2018'
+  'Wien 2018',
+  '2019'
 ];
 
 exports.featureType = value => {
