@@ -93,54 +93,6 @@ module.exports = async (data, preview) => {
     }
   }
 
-  // Events
-
-  for(const event of data.events.values()) {
-    if(event.image) {
-      if(preview) {
-        event.image.written = encodeURI(`/_root_media/${event.image.localFilesystemPath}`);
-      } else {
-        event.image.written = path.join('/veranstaltungen', event.permalink, `bild${path.extname(event.image.normalizedPath)}`);
-        concurrentWrites.push( copyResized(event.image.localFilesystemPath, event.image.written) );
-        event.image.written += `?${data.assetHash}`;
-      }
-    }
-
-    if(event.text) {
-      let text = event.text.converted;
-
-      if(preview) {
-        for(let download of event.text.downloads) {
-          download.written = encodeURI(`/_root_media/${download.localFilesystemPath}`);
-          text = text.replace(download.placeholder, download.written);
-        }
-
-        for(let embed of event.text.embeds) {
-          embed.written = encodeURI(`/_root_media/${embed.localFilesystemPath}`);
-          text = text.replace(embed.placeholder, embed.written);
-        }
-      } else {
-        for(let download of event.text.downloads) {
-          download.written = path.join('/veranstaltungen', event.permalink, `text-${download.virtualFilename}`);
-          concurrentWrites.push( copy(download.localFilesystemPath, download.written) );
-          download.written += `?${data.assetHash}`;
-
-          text = text.replace(download.placeholder, download.written);
-        }
-
-        for(let embed of event.text.embeds) {
-          embed.written = path.join('/veranstaltungen', event.permalink, `text-${embed.virtualFilename}`);
-          concurrentWrites.push( copyResized(embed.localFilesystemPath, embed.written) );
-          embed.written += `?${data.assetHash}`;
-
-          text = text.replace(embed.placeholder, embed.written);
-        }
-      }
-
-      event.text.written = text;
-    }
-  }
-
   let featureNumber = 0;
   for(let feature of data.features.values()) {
     if(feature.image) {

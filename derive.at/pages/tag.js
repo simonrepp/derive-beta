@@ -1,8 +1,7 @@
-const layout = require('./layout.js'),
-      articleTile = require('../widgets/articles/tile.js'),
-      bookTile = require('../widgets/books/tile.js'),
-      eventTile = require('../widgets/event-tile.js'),
-      programTile = require('../widgets/program-tile.js');
+const layout = require('./layout.js');
+const articleTile = require('../widgets/articles/tile.js');
+const bookTile = require('../widgets/books/tile.js');
+const programTile = require('../widgets/program-tile.js');
 
 module.exports = (data, tag) => {
   const html = `
@@ -32,14 +31,6 @@ module.exports = (data, tag) => {
           ${tag.programs.map(programTile).join('')}
         </div>
 
-      `:''}
-
-      ${tag.events ? `
-        <h1>Veranstaltungen</h1>
-
-        <div class="tiles">
-          ${tag.events.map(eventTile).join('')}
-        </div>
       `:''}
     </div>
   `;

@@ -6,7 +6,6 @@ const articlesPage = require('./pages/articles.js');
 const authorPage = require('./pages/author.js');
 const authorsPage = require('./pages/authors.js');
 const bookPage = require('./pages/book.js');
-const eventPage = require('./pages/event.js');
 const booksPage = require('./pages/books.js');
 const festivalPage = require('./pages/festival.js');
 const indexPage = require('./pages/index.js');
@@ -62,10 +61,6 @@ module.exports = async data => {
 
   for(const author of data.bookAuthors) {
     await writeFile(data.buildDir, `autoren/${author.permalink}/index.html`, authorPage(data, author));
-  }
-
-  for(const event of data.events.values()) {
-    await writeFile(data.buildDir, `veranstaltungen/${event.permalink}/index.html`, eventPage(data, event));
   }
 
   for(const issue of data.issues.values()) {

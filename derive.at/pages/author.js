@@ -1,23 +1,8 @@
-const layout = require('./layout.js'),
-      articleTile = require('../widgets/articles/tile.js'),
-      bookTile = require('../widgets/books/tile.js'),
-      eventTile = require('../widgets/event-tile.js'),
-      programTile = require('../widgets/program-tile.js'),
-      tags = require('../widgets/tags.js');
-
-const eventSort = (a, b) => {
-  if(a.dates && a.dates.length > 0) {
-    if(b.dates && b.dates.length > 0) {
-      return b.dates[b.dates.length - 1].date - a.dates[a.dates.length - 1].date;
-    } else {
-      return -1;
-    }
-  } else if(b.dates && b.dates.length > 0) {
-    return 1;
-  } else {
-    return 0;
-  }
-};
+const layout = require('./layout.js');
+const articleTile = require('../widgets/articles/tile.js');
+const bookTile = require('../widgets/books/tile.js');
+const programTile = require('../widgets/program-tile.js');
+const tags = require('../widgets/tags.js');
 
 module.exports = (data, author) => {
   const html = `
@@ -60,14 +45,6 @@ module.exports = (data, author) => {
         ${author.programs.sort((a, b) => b.firstBroadcast - a.firstBroadcast).map(programTile).join('')}
       </div>
 
-    `:''}
-
-    ${author.eventParticipations && author.eventParticipations.length > 0 ? `
-      <h1>Veranstaltungen</h1>
-
-      <div class="tiles">
-        ${author.eventParticipations.sort(eventSort).map(eventTile).join('')}
-      </div>
     `:''}
   `;
 

@@ -11,7 +11,7 @@ const eventSort = (a, b) => {
     bDate = b.dates[0].date;
   }
 
-  const dateDifference = aDate - bDate
+  const dateDifference = aDate - bDate;
 
   if(dateDifference === 0) {
     let aTime, bTime;
