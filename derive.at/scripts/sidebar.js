@@ -86,7 +86,7 @@ module.exports = () => {
       window.search.query = event.target.querySelector('input[name="query"]').value;
       window.search.results = null;
 
-      if(!location.hostname.match(/derive\.at|urbanize\.at/)) {
+      if(!location.hostname.match(/derive\.at/)) {
         window.search.error = 'Die Suche ist beim lokalen Testen nicht verfügbar da sie auf PHP angewiesen ist.';
         window.renderSearch();
       } else if(window.search.query.length < 1) {
