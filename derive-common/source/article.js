@@ -52,7 +52,6 @@ module.exports = async (data, enoPath) => {
       article.tagsDisconnected = doc.list('Tags').requiredStringValues();
       article.reviewedBookReferences = doc.list('Buchbesprechungen').items().map(item => ({ item, title: item.requiredStringValue() }))
       article.readable = doc.field('Lesbar').requiredBooleanValue();
-      article.urbanize = doc.field('Urbanize').optionalUrbanizeEditionValue();
       article.abstract = doc.field('Abstract').optionalMarkdownValue();
       article.bibliography = doc.field('Literaturverzeichnis').optionalMarkdownValue();
       article.text = doc.field('Text').optionalMarkdownWithMediaValue();

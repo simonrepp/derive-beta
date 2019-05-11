@@ -48,7 +48,6 @@ module.exports = async (data, enoPath) => {
       event.categoriesDisconnected = doc.list('Kategorien').requiredStringValues();
       event.tagsDisconnected = doc.list('Tags').requiredStringValues();
       event.image = doc.field('Bild').optionalPathValue();
-      event.urbanize = doc.field('Urbanize').optionalUrbanizeEditionValue();
       event.address = doc.field('Adresse').optionalStringValue();
       event.abstract = doc.field('Abstract').optionalMarkdownValue();
       event.additionalInfo = doc.field('Zusatzinfo').optionalMarkdownValue();

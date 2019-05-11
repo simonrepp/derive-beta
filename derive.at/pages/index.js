@@ -2,7 +2,7 @@ const { featureSort } = require('../../derive-common/util.js');
 const layout = require('./layout.js');
 
 module.exports = data => {
-  const sortedFeatures = Array.from(data.features.values()).filter(feature => feature.urbanize === null).sort(featureSort);
+  const sortedFeatures = Array.from(data.features.values()).sort(featureSort);
 
   const html = `
     <div class="features">

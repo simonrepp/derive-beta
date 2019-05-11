@@ -1,14 +1,7 @@
 Titel: Erforderlich
 
-> Jede Seite muss einen in ihrem Kontext einzigartigen Permalink besitzen.
-> Z.b. für jedes Urbanize Festival kann es nur eine Seite mit Permalink
-> "impressum" geben, bzw. unter den Seiten die keinem Urbanize Festival
-> zugeordnet sind kann es z.b. nur eine Seite mit dem Permalink 
-> "bestellungen" geben.
+> Jede Seite muss einen einzigartigen Permalink besitzen.
 Permalink: erforder-lich
-
-> Für das aktuelle urbanize Festival ist der Wert "2019" vorgesehen
-Urbanize: 2019
 
 -- Text
 Langer Text ...

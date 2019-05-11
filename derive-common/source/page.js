@@ -1,4 +1,4 @@
-const { loadEno, statFile, URBANIZE_ENUM } = require('../util.js');
+const { loadEno, statFile } = require('../util.js');
 const { ParseError, ValidationError } = require('enolib');
 
 const WHITELISTED_DERIVE_PERMALINKS = [
@@ -10,18 +10,6 @@ const WHITELISTED_DERIVE_PERMALINKS = [
   'ueber-cinema-derive',
   'ueber-derive',
   'ueber-radio-derive'
-];
-
-const WHITELISTED_URBANIZE_PERMALINKS = [
-  'about',
-  'impressum',
-  'kontakt',
-  'orte',
-  'partnerinnen',
-  'presse',
-  'radio',
-  'verein',
-  'zeitschrift'
 ];
 
 module.exports = async (data, enoPath) => {
@@ -62,14 +50,9 @@ module.exports = async (data, enoPath) => {
       page.title = doc.field('Titel').requiredStringValue();
       page.permalinkField = doc.field('Permalink');
       page.permalink = page.permalinkField.requiredPermalinkValue();
-      page.urbanize = doc.field('Urbanize').optionalUrbanizeEditionValue();
 
-      if(page.urbanize === null && !WHITELISTED_DERIVE_PERMALINKS.includes(page.permalink)) {
+      if(!WHITELISTED_DERIVE_PERMALINKS.includes(page.permalink)) {
         throw page.permalinkField.valueError(`Für die derive.at Seiten sind nur die folgenden Permalinks explizit vorgesehen: ${WHITELISTED_DERIVE_PERMALINKS.map(permalink => `'${permalink}'`).join(', ')}`);
-      }
-
-      if(page.urbanize !== null && !WHITELISTED_URBANIZE_PERMALINKS.includes(page.permalink)) {
-        throw page.permalinkField.valueError(`Für die urbanize.at Seiten sind nur die folgenden Permalinks explizit vorgesehen: ${WHITELISTED_URBANIZE_PERMALINKS.map(permalink => `'${permalink}'`).join(', ')}`);
       }
 
       page.text = doc.field('Text').requiredMarkdownWithMediaValue();

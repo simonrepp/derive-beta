@@ -136,7 +136,7 @@ module.exports = async (data, preview) => {
     }
   }
 
-  for(let page of data.derivePages) {
+  for(let page of data.pages.values()) {
     let text = page.text.converted;
 
     if(preview) {

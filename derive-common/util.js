@@ -7,7 +7,7 @@ const path = require('path');
 const striptags = require('striptags');
 
 const boolean = require('./loaders/boolean.js');
-const { featureType, urbanizeEdition } = require('./loaders/enum.js');
+const featureType = require('./loaders/feature_type.js');
 const { markdown, markdownWithMedia } = require('./loaders/markdown.js');
 const pagesInfo = require('./loaders/pages_info.js');
 const pathLoader = require('./loaders/path.js');
@@ -26,7 +26,6 @@ enolib.register({
   pagesInfo,
   path: pathLoader,
   permalink,
-  urbanizeEdition,
   url
 });
 

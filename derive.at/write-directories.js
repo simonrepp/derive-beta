@@ -21,7 +21,7 @@ module.exports = async data => {
     'zeitschrift'
   ];
 
-  data.derivePages.forEach(page => topDirectories.push(page.permalink));
+  data.pages.forEach(page => topDirectories.push(page.permalink));
 
   await Promise.all(topDirectories.map(dir => createDir(data.buildDir, dir)));
 

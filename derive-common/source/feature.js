@@ -43,7 +43,6 @@ module.exports = async (data, enoPath) => {
       feature.type = doc.field('Typ').requiredFeatureTypeValue();
       feature.url = doc.field('URL').optionalUrlValue();
       feature.text = doc.field('Text').optionalMarkdownValue();
-      feature.urbanize = doc.field('Urbanize').optionalUrbanizeEditionValue();
 
       doc.assertAllTouched();
     } catch(err) {

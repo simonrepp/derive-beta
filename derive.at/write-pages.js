@@ -67,7 +67,7 @@ module.exports = async data => {
     await writeFile(data.buildDir, `zeitschrift/${issue.permalink}/index.html`, issuePage(data, issue));
   }
 
-  for(const page of data.derivePages) {
+  for(const page of data.pages.values()) {
     await writeFile(data.buildDir, `${page.permalink}/index.html`, pagePage(data, page));
   }
 

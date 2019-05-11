@@ -183,8 +183,7 @@ module.exports = data => {
 
   const pagesByPermalink = new Map();
   data.pages.forEach(page => {
-    const contextualizedPermalink = `${page.urbanize || 'derive'}-${page.permalink}`;
-    const existingPage = pagesByPermalink.get(contextualizedPermalink);
+    const existingPage = pagesByPermalink.get(page.permalink);
 
     if(existingPage) {
       const existingError = existingPage.permalinkField.valueError();
@@ -195,13 +194,13 @@ module.exports = data => {
           { path: existingPage.sourceFile, selection: existingError.selection },
           { path: page.sourceFile, selection: discardedError.selection }
         ],
-        message: `Es existieren zwei Seiten mit dem Permalink "${page.permalink}" im selben Kontext (z.b. für das selbe Urbanize Festival)`,
+        message: `Es existieren zwei Seiten mit dem Permalink "${page.permalink}".`,
         snippet: discardedError.snippet
       });
 
       data.pages.delete(page.sourceFile);
     } else {
-      pagesByPermalink.set(contextualizedPermalink, page);
+      pagesByPermalink.set(page.permalink, page);
     }
   });
 
