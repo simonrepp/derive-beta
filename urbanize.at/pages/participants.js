@@ -1,16 +1,15 @@
-const layout = require('./layout.js'),
-      participantListing = require('../widgets/participant-listing.js');
+const layout = require('./layout.js');
 
 module.exports = urbanize => {
-  const involvedPlayers = new Set([...urbanize.hosts].concat([...urbanize.participants]));
-
   const html = `
     <div>
       <div class="generic__heading">
         Beteiligte
       </div>
 
-      ${participantListing(involvedPlayers)}
+      ${urbanize.participants.map(participant => `
+        <div><a href="/${participant.permalink}/">${participant.name}</a></div>
+      `).join('')}
     </div>
   `;
 

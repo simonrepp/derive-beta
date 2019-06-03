@@ -1,12 +1,11 @@
 const fsExtra = require('fs-extra');
 const path = require('path');
 
-const index = require('./index.js');
+// const index = require('./index.js');
 const { loadFile, writeFile } = require('../derive-common/util.js');
 const writeDirectories = require('./write-directories.js');
 const writeMedia = require('./write-media.js');
 const writePages = require('./write-pages.js');
-
 
 module.exports = async (data, site, options = { preview: false }) => {
   console.time('build');
@@ -16,7 +15,7 @@ module.exports = async (data, site, options = { preview: false }) => {
   data.urbanize.assetHash = (new Date()).getTime().toString();
 
   console.time('writeDirectories');
-  await writeDirectories(data, data.urbanize);
+  await writeDirectories(data);
   console.timeEnd('writeDirectories');
 
   console.time('writeMedia');
@@ -25,12 +24,13 @@ module.exports = async (data, site, options = { preview: false }) => {
 
   console.time('writePages');
   await fsExtra.copy(path.join(__dirname, 'static/'), data.buildDir),
-  await  writePages(data, data.urbanize)
+  await writePages(data);
   console.timeEnd('writePages');
 
-  console.time('index');
-  await index(data, data.urbanize);
-  console.timeEnd('index');
+  // TODO: Use messagepack? / or hardcode into page (probably makes more sense)
+  // console.time('index');
+  // await index(data, data.urbanize);
+  // console.timeEnd('index');
 
   console.timeEnd('build');
 };

@@ -39,7 +39,7 @@ module.exports = events => `
         `:''}
 
         <strong class="generic__subheading">
-          <a href="/veranstaltungen/${event.permalink}/">
+          <a href="/${event.permalink}/">
             ${event.title}
           </a>
         </strong>
@@ -47,7 +47,7 @@ module.exports = events => `
         <div class="additional">
           ${timeframe(event)}
           &nbsp;
-          ${event.address}
+          ${event.address || ''}
         </div>
 
         <div class="generic__serif">

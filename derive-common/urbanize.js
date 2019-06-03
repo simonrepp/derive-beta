@@ -1,70 +1,36 @@
 module.exports = data => {
-  data.urbanize = {
-    background: '/images/graetzelhood.png',
-    categories: new Map(),
-    events: [],
-    eventsByDate: new Map(),
-    features: [...data.features].filter(feature => feature.urbanize === '2019'), // TODO: Switch to maps to save us this whole stuff everywhere?
-    hosts: new Set(),
-    pages: [...data.pages].filter(page => page.urbanize === '2019'),
-    participants: new Set(),
-    tags: new Map(),
-    title: 'urbanize! 2019'
-  };
+  // TODO: Switch to maps to save us this whole stuff everywhere?
+  data.urbanize.features = [...data.features].filter(feature => feature.urbanize === '2019');
+  data.urbanize.title = 'urbanize! 2019';
 
-  data.events.forEach(event => {
-    if(event.urbanize === '2019') {
-      data.urbanize.events.push(event);
+  for(const event of Object.values(data.urbanize.events)) {
+    event.participants = [];
+  }
 
-      event.dates.forEach(date => {
-        const existingDate = data.urbanize.eventsByDate.get(date.date.toISOString());
+  const participantsByName = {};
+  for(const participant of data.urbanize.participants) {
+    participant.events = [];
+    participantsByName[participant.name] = participant;
+  }
 
-        if(existingDate) {
-          existingDate.push(event);
-        } else {
-          data.urbanize.eventsByDate.set(date.date.toISOString(), [event]);
-        }
-      });
+  for(const event of Object.values(data.urbanize.events)) {
+    // TODO: Actually: Connect participants and events both ways
+    event.participants = [];
+    for(const participantReference of event.participantReferences) {
+      const participant = participantsByName[participantReference.name];
 
-      event.categories.forEach(category => {
-        const existingCategory = data.urbanize.categories.get(category.permalink);
+      if(participant !== undefined) {
+        event.participants.push(participant)
+        participant.events.push(event);
+      } else {
+        const error = participantReference.item.valueError(`Die verlinkte Beteiligte mit dem Namen '${participantReference.name}' wurde nicht gefunden - möglicherweise ein Tippfehler?`);
 
-        if(existingCategory) {
-          existingCategory.events.push(event);
-        } else {
-          const categoryData = {
-            events: [event],
-            name: category.name,
-            permalink: category.permalink
-          };
-
-          data.urbanize.categories.set(category.permalink, categoryData);
-        }
-      });
-
-      event.hosts.forEach(host =>
-        data.urbanize.hosts.add(host)
-      );
-
-      event.participants.forEach(participant =>
-        data.urbanize.participants.add(participant)
-      );
-
-      event.tags.forEach(tag => {
-        const existingTag = data.urbanize.tags.get(tag.permalink);
-
-        if(existingTag) {
-          existingTag.events.push(event);
-        } else {
-          const tagData = {
-            events: [event],
-            name: tag.name,
-            permalink: tag.permalink
-          };
-
-          data.urbanize.tags.set(tag.permalink, tagData);
-        }
-      });
+        data.warnings.push({
+          files: [{ path: event.sourceFile, selection: error.selection }],
+          message: error.text,
+          snippet: error.snippet
+        });
+      }
     }
-  });
+  }
 };

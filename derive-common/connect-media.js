@@ -84,14 +84,15 @@ module.exports = data => {
     }
   }
 
-  data.events.forEach(event => {
+  // TODO: Connect only urbanize events with urbanize media (and likewise for all derive-contained data)
+  for(const event of Object.values(data.urbanize.events)) {
     if(event.image && !connectMedia(data, event.image)) {
       data.warnings.push({
         files: [{ path: event.sourceFile }],
         message: `Die Veranstaltung "${event.title}" referenziert im Dateifeld "Bild" die Datei "${event.image.normalizedPath}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`
       });
 
-      data.events.delete(event.sourceFile);
+      delete data.events[event.sourceFile];
     }
 
     if(event.text) {
@@ -104,13 +105,13 @@ module.exports = data => {
             message: `Problem beim prüfen der eingebetteten Mediendateien in der Veranstaltung "${event.title}": ${err.message}`
           });
 
-          data.events.delete(event.sourceFile);
+          delete data.events[event.sourceFile];
         } else {
           throw err;
         }
       }
     }
-  });
+  }
 
   data.features.forEach(feature => {
     if(feature.image && !connectMedia(data, feature.image)) {
@@ -177,6 +178,24 @@ module.exports = data => {
       }
     }
   });
+
+  for(const page of Object.values(data.urbanize.pages)) {
+    if(!page.text) continue;
+
+    try {
+      connectMarkdownMedia(data, page.text, 'Text');
+    } catch(err) {
+      if(!(err instanceof ConnectMediaError))
+        throw err;
+
+      data.warnings.push({
+        files: [{ path: page.sourceFile }],
+        message: `Problem beim prüfen der eingebetteten Mediendateien auf der Seite "${page.title}": ${err.message}`
+      });
+
+      delete data.urbanize.pages[page.sourceFile];
+    }
+  }
 
   data.programs.forEach(program => {
     if(program.image && !connectMedia(data, program.image)) {

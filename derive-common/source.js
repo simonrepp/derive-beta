@@ -3,7 +3,6 @@ const path = require('path');
 
 const sourceArticle = require('./source/article.js');
 const sourceBook = require('./source/book.js');
-const sourceEvent = require('./source/event.js');
 const sourceFeature = require('./source/feature.js');
 const sourceFestival = require('./source/festival.js');
 const sourceIssue = require('./source/issue.js');
@@ -12,20 +11,30 @@ const sourcePlayer = require('./source/player.js');
 const sourceProgram = require('./source/program.js');
 const sourceScreening = require('./source/screening.js');
 
+const sourceUrbanizeEvent = require('./source/urbanize/event.js');
+const sourceUrbanizeHome = require('./source/urbanize/home.js');
+const sourceUrbanizePage = require('./source/urbanize/page.js');
+const sourceUrbanizeParticipants = require('./source/urbanize/participants.js');
+
 const FORBIDDEN_FILENAME_CHARACTERS = /[\\?*:|"<>]/;
 const NO_EXTENSION = /[^.]{8,}\s*$/;
 
 module.exports = async data => {
   data.articles.clear();
   data.books.clear();
-  data.errors = [];
-  data.events.clear();
   data.features.clear();
   data.issues.clear();
   data.media.clear();
   data.pages.clear();
   data.players.clear();
   data.programs.clear();
+  data.urbanize = {
+    events: {},
+    pages: {},
+    participants: []
+  };
+
+  data.errors = [];
   data.warnings = [];
 
   const globPaths = await glob(['**/*', '!Archiv'], { cwd: data.root, onlyFiles: true });
@@ -52,8 +61,17 @@ module.exports = async data => {
       if(normalizedPath.match(/^Radio\//)) { await sourceProgram(data, localFilesystemPath); } else
       if(normalizedPath.match(/^Seiten\//)) { await sourcePage(data, localFilesystemPath); } else
       if(normalizedPath.match(/^Texte\//)) { await sourceArticle(data, localFilesystemPath); } else
-      if(normalizedPath.match(/^Veranstaltungen\//)) { await sourceEvent(data, localFilesystemPath); } else
-      if(normalizedPath.match(/^Zeitschriften\//)) { await sourceIssue(data, localFilesystemPath); }
+      if(normalizedPath.match(/^Zeitschriften\//)) { await sourceIssue(data, localFilesystemPath); } else
+      if(normalizedPath.match(/^2019\.urbanize\.at\/programm\//)) { await sourceUrbanizeEvent(data, localFilesystemPath); } else
+      if(normalizedPath === '2019.urbanize.at/startseite.eno') { await sourceUrbanizeHome(data, localFilesystemPath); } else
+      if(normalizedPath === '2019.urbanize.at/beteiligte.eno') { await sourceUrbanizeParticipants(data, localFilesystemPath); } else
+      if(normalizedPath.match(/^2019\.urbanize\.at\//)) { await sourceUrbanizePage(data, localFilesystemPath); }
+      else if(normalizedPath !== 'derive.eno') {
+        data.warnings.push({
+          files: [{ path: localFilesystemPath }],
+          message: `Die Datei ${normalizedPath} ist nicht zuordenbar. Sie ist wahrscheinlich entweder vom System (noch) nicht vorgesehen, im falschen Ordner oder ihr Name ist falsch geschrieben.`
+        });
+      }
     } else {
       data.media.set(normalizedPath, { localFilesystemPath, used: false });
     }

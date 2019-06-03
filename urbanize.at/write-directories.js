@@ -1,34 +1,18 @@
 const fsExtra = require('fs-extra');
-const moment = require('moment');
 
 const { createDir } = require('../derive-common/util.js');
 
-module.exports = async (data, urbanize) => {
+module.exports = async data => {
   await fsExtra.emptyDir(data.buildDir);
 
-  const topDirectories = new Set([
+  const directories = [
     'beteiligte',
-    'features',
-    'kategorien',
+    'programm',
     'seite-nicht-gefunden',
-    'suche',
-    'tags',
-    'veranstaltungen'
-  ]);
+    ...Object.values(data.urbanize.events).map(event => event.permalink),
+    ...Object.values(data.urbanize.pages).map(page => page.permalink),
+    ...data.urbanize.participants.map(participant => participant.permalink)
+  ];
 
-  urbanize.eventsByDate.forEach((events, date) =>
-    topDirectories.add(moment(date).locale('de').format('D-MMMM-YYYY'))
-  );
-
-  urbanize.pages.forEach(page => topDirectories.add(`${page.permalink}`));
-
-  await Promise.all([...topDirectories].map(dir => createDir(data.buildDir, dir)));
-
-  const midDirectories = [];
-
-  urbanize.events.forEach(event => midDirectories.push(`veranstaltungen/${event.permalink}`));
-  urbanize.categories.forEach(category => midDirectories.push(`kategorien/${category.permalink}`));
-  urbanize.tags.forEach(tag => midDirectories.push(`tags/${tag.permalink}`));
-
-  await Promise.all(midDirectories.map(dir => createDir(data.buildDir, dir)));
+  await Promise.all(directories.map(dir => createDir(data.buildDir, dir)));
 };

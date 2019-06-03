@@ -44,7 +44,7 @@ module.exports = async (data, urbanize, preview) => {
 
   const concurrentWrites = [];
 
-  for(let event of urbanize.events) {
+  for(const event of Object.values(urbanize.events)) {
     if(event.image) {
       if(preview) {
         event.image.written = encodeURI(`/_root_media/${event.image.localFilesystemPath}`);
@@ -106,40 +106,40 @@ module.exports = async (data, urbanize, preview) => {
     }
   }
 
-  for(let page of urbanize.pages) {
-    if(page.text) {
-      let text = page.text.converted;
+  for(const page of Object.values(urbanize.pages)) {
+    if(!page.text) continue;
 
-      if(preview) {
-        for(let download of page.text.downloads) {
-          download.written = encodeURI(`/_root_media/${download.localFilesystemPath}`);
-          text = text.replace(download.placeholder, download.written);
-        }
+    let text = page.text.converted;
 
-        for(let embed of page.text.embeds) {
-          embed.written = encodeURI(`/_root_media/${embed.localFilesystemPath}`);
-          text = text.replace(embed.placeholder, embed.written);
-        }
-      } else {
-        for(let download of page.text.downloads) {
-          download.written = path.join('/', page.permalink, `text-${download.virtualFilename}`);
-          concurrentWrites.push( copy(download.localFilesystemPath, download.written) );
-          download.written += `?${urbanize.assetHash}`;
-
-          text = text.replace(download.placeholder, download.written);
-        }
-
-        for(let embed of page.text.embeds) {
-          embed.written = path.join('/', page.permalink, `text-${embed.virtualFilename}`);
-          concurrentWrites.push( copyResized(embed, embed.localFilesystemPath, embed.written) );
-          embed.written += `?${urbanize.assetHash}`;
-
-          text = text.replace(embed.placeholder, embed.written);
-        }
+    if(preview) {
+      for(let download of page.text.downloads) {
+        download.written = encodeURI(`/_root_media/${download.localFilesystemPath}`);
+        text = text.replace(download.placeholder, download.written);
       }
 
-      page.text.written = text;
+      for(let embed of page.text.embeds) {
+        embed.written = encodeURI(`/_root_media/${embed.localFilesystemPath}`);
+        text = text.replace(embed.placeholder, embed.written);
+      }
+    } else {
+      for(let download of page.text.downloads) {
+        download.written = path.join('/', page.permalink, `text-${download.virtualFilename}`);
+        concurrentWrites.push( copy(download.localFilesystemPath, download.written) );
+        download.written += `?${urbanize.assetHash}`;
+
+        text = text.replace(download.placeholder, download.written);
+      }
+
+      for(let embed of page.text.embeds) {
+        embed.written = path.join('/', page.permalink, `text-${embed.virtualFilename}`);
+        concurrentWrites.push( copyResized(embed, embed.localFilesystemPath, embed.written) );
+        embed.written += `?${urbanize.assetHash}`;
+
+        text = text.replace(embed.placeholder, embed.written);
+      }
     }
+
+    page.text.written = text;
   }
 
   await Promise.all(concurrentWrites);

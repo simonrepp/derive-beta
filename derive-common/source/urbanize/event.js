@@ -1,4 +1,4 @@
-const { loadEno, statFile } = require('../util.js');
+const { loadEno, statFile } = require('../../util.js');
 const { ParseError, ValidationError } = require('enolib');
 
 module.exports = async (data, enoPath) => {
@@ -6,7 +6,7 @@ module.exports = async (data, enoPath) => {
   const stats = await statFile(data.root, enoPath);
 
   if(cached && stats.size === cached.stats.size && stats.mtimeMs === cached.stats.mtimeMs) {
-    data.events.set(enoPath, cached.event);
+    data.urbanize.events[enoPath] = cached.event;
   } else {
     let doc;
 
@@ -28,10 +28,11 @@ module.exports = async (data, enoPath) => {
       }
     }
 
-    const event = {
-      draft: /\.entwurf\.eno$/.test(enoPath),
-      sourceFile: enoPath
-    };
+    const event = { sourceFile: enoPath };
+
+    if(/\.entwurf\.eno$/.test(enoPath)) {
+      event.draft = true;
+    }
 
     doc.allElementsRequired();
 
@@ -42,16 +43,17 @@ module.exports = async (data, enoPath) => {
       event.permalink = event.permalinkField.requiredPermalinkValue();
 
       event.subtitle = doc.field('Untertitel').optionalStringValue();
-      event.url = doc.field('URL').optionalUrlValue();
-      event.hostReferences = doc.list('Veranstalter').items().map(item => ({ item, name: item.requiredStringValue() }));
-      event.participantReferences = doc.list('Teilnehmer').items().map(item => ({ item, name: item.requiredStringValue() }));
-      event.categoriesDisconnected = doc.list('Kategorien').requiredStringValues();
-      event.tagsDisconnected = doc.list('Tags').requiredStringValues();
+      event.url = doc.field('Externer Link').optionalUrlValue();
+      event.participantReferences = doc.list('Beteiligte').items().map(item => ({ item, name: item.requiredStringValue() }));
+      event.category = doc.field('Kategorie').requiredUrbanizeCategoryValue();
       event.image = doc.field('Bild').optionalPathValue();
       event.address = doc.field('Adresse').optionalStringValue();
-      event.abstract = doc.field('Abstract').optionalMarkdownValue();
+      event.abstract = doc.field('Abstract').requiredMarkdownValue();
       event.additionalInfo = doc.field('Zusatzinfo').optionalMarkdownValue();
-      event.text = doc.field('Text').optionalMarkdownWithMediaValue();
+      event.text = doc.field('Beschreibung (Markdown)').requiredMarkdownWithMediaValue();
+      event.isAlltagsforschung = doc.field('Alltagsforschung').requiredBooleanValue();
+      event.isStadtlabor = doc.field('Stadtlabor').requiredBooleanValue();
+      event.language = doc.field('Sprache').requiredUrbanizeLanguageValue();
 
       event.dates = doc.sections('Termin').map(date => ({
         date: date.field('Datum').optionalDatetimeValue(), // TODO: Required ?
@@ -76,6 +78,6 @@ module.exports = async (data, enoPath) => {
     }
 
     data.cache.set(enoPath, { event: event, stats: stats });
-    data.events.set(enoPath, event);
+    data.urbanize.events[enoPath] = event;
   }
 };

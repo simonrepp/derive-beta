@@ -1,15 +1,11 @@
 const striptags = require('striptags');
 
 const addThis = require('../widgets/add-this.js');
-const categories = require('../widgets/categories.js');
-const hosts = require('../widgets/hosts.js');
+const layout = require('./layout.js');
 const participants = require('../widgets/participants.js');
-const tags = require('../widgets/tags.js');
 const timeframe = require('../widgets/timeframe.js');
 
 module.exports = (urbanize, event) => {
-  const involved = new Set(event.hosts.concat(event.participants));
-
   const html = `
     <div>
       <div class="generic__heading">
@@ -48,9 +44,8 @@ module.exports = (urbanize, event) => {
 
       <hr>
 
-      ${hosts([...involved])}
-      ${categories(event.categories)}
-      ${tags(event.tags)}
+      ${participants(event.participants)}
+      Kategorie: ${event.category}
 
       ${addThis(`${urbanize.base_url}/veranstaltungen/${event.permalink}/`)}
     </div>

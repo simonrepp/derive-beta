@@ -90,29 +90,6 @@ module.exports = data => {
     data.booksByTitle.set(book.title, book);
   });
 
-  const eventsByPermalink = new Map();
-  data.events.forEach(event => {
-    const existingEvent = eventsByPermalink.get(event.permalink);
-
-    if(existingEvent) {
-      const existingError = existingEvent.permalinkField.valueError();
-      const discardedError = event.permalinkField.valueError();
-
-      data.warnings.push({
-        files: [
-          { path: existingEvent.sourceFile, selection: existingError.selection },
-          { path: event.sourceFile, selection: discardedError.selection }
-        ],
-        message: `Es existieren zwei Veranstaltungen mit dem Permalink "${event.permalink}"`,
-        snippet: discardedError.snippet
-      });
-
-      data.events.delete(event.sourceFile);
-    } else {
-      eventsByPermalink.set(event.permalink, event);
-    }
-  });
-
   const issuesByNumber = new Map();
   data.issues.forEach(issue => {
     const existingIssue = issuesByNumber.get(issue.number);
@@ -249,4 +226,64 @@ module.exports = data => {
       screeningsByPermalink.set(screening.permalink, screening);
     }
   }
+
+  const urbanizePermalinks = {};
+  const urbanizePermalinkConflict = (existing, addition) => {
+    const existingEntity = Object.values(existing)[0];
+    const additionEntity = Object.values(addition)[0];
+
+    const existingError = existingEntity.permalinkField.valueError();
+    const additionError = additionEntity.permalinkField.valueError();
+
+    const warning = {
+      files: [
+        { path: existingEntity.sourceFile, selection: existingError.selection },
+        { path: additionEntity.sourceFile, selection: additionError.selection },
+      ],
+      snippet: additionError.snippet
+    };
+
+    if(existing.hasOwnProperty('event')) {
+      warning.message = `Der Permalink '${existing.event.permalink}' wird bereits von der Veranstaltung '${existing.event.title}' verwendet.`
+    } else if(existing.hasOwnProperty('page')) {
+      warning.message = `Der Permalink '${existing.page.permalink}' wird bereits von der Seite '${existing.page.title}' verwendet.`
+    } else if(existing.hasOwnProperty('participant')) {
+      warning.message = `Der Permalink '${existing.participant.permalink}' wird bereits vom Beteiligten '${existing.participant.name}' verwendet.`
+    }
+
+    data.warnings.push(warning);
+  };
+
+  for(const event of Object.values(data.urbanize.events)) {
+    if(urbanizePermalinks.hasOwnProperty(event.permalink)) {
+      urbanizePermalinkConflict(urbanizePermalinks[event.permalink], { event });
+
+      data.events.delete(event.sourceFile);
+    } else {
+      urbanizePermalinks[event.permalink] = { event };
+    }
+  }
+
+  for(const page of Object.values(data.urbanize.pages)) {
+    if(urbanizePermalinks.hasOwnProperty(page.permalink)) {
+      urbanizePermalinkConflict(urbanizePermalinks[page.permalink], { page });
+
+      data.pages.delete(page.sourceFile);
+    } else {
+      urbanizePermalinks[page.permalink] = { page };
+    }
+  }
+
+  for(const participant of data.urbanize.participants) {
+    if(urbanizePermalinks.hasOwnProperty(participant.permalink)) {
+      urbanizePermalinkConflict(urbanizePermalinks[participant.permalink], { participant });
+
+      participant.delete = true;
+    } else {
+      urbanizePermalinks[participant.permalink] = { participant };
+    }
+  }
+
+  // TODO: Possibly use a one-loop implementation instead
+  data.urbanize.participants = data.urbanize.participants.filter(participant => !participant.hasOwnProperty('delete'));
 };

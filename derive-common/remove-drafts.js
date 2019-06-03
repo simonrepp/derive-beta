@@ -11,12 +11,6 @@ module.exports = data => {
     }
   });
 
-  data.events.forEach(event => {
-    if(event.draft) {
-      data.events.delete(event.sourceFile);
-    }
-  });
-
   data.features.forEach(feature => {
     if(feature.draft) {
       data.features.delete(feature.sourceFile);
@@ -46,4 +40,16 @@ module.exports = data => {
       data.programs.delete(program.sourceFile);
     }
   });
+
+  for(const event of Object.values(data.urbanize.events)) {
+    if(event.hasOwnProperty('draft')) {
+      delete data.urbanize.events[event.sourceFile];
+    }
+  }
+
+  for(const page of Object.values(data.urbanize.pages)) {
+    if(page.hasOwnProperty('draft')) {
+      delete data.urbanize.pages[page.sourceFile];
+    }
+  }
 };

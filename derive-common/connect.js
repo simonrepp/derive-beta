@@ -110,8 +110,6 @@ module.exports = data => {
   connectPlayers(data, 'articles', 'authorReferences', 'authors', 'articles');
   connectPlayers(data, 'books', 'authorReferences', 'authors', 'authoredBooks');
   connectPlayers(data, 'books', 'publisherReferences', 'publishers', 'publishedBooks');
-  connectPlayers(data, 'events', 'hostReferences', 'hosts', 'hostedEvents');
-  connectPlayers(data, 'events', 'participantReferences', 'participants', 'eventParticipations');
   connectPlayers(data, 'programs', 'editorReferences', 'editors', 'programs');
 
   connectIssuesWithArticles(data);

@@ -1,8 +1,8 @@
-module.exports = participants => participants.length > 0 ? `
+module.exports = participants => participants && participants.length > 0 ? `
   <p>
     TEILNEHMER*INNEN<br>
     ${participants.map(participant => `
-      <a href="/beteiligte/#${participant.permalink}">
+      <a href="/${participant.permalink}/">
         ${participant.name}
       </a>
     `).join(', ')}

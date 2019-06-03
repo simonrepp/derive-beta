@@ -1,3 +1,22 @@
+.hover_menu {
+	background-color: $panel_color;
+	display: none;
+	flex-direction: column;
+	left: 0;
+	padding: 1em;
+	position: absolute;
+}
+
+.hover_menu_trigger {
+	position: relative;
+
+	&:hover {
+		.hover_menu {
+			display: flex;
+		}
+	}
+}
+
 .add-this {
 	font-size: 1.33em;
 
@@ -47,20 +66,19 @@
 
 .footer {
 	background-color: $panel_color;
-	box-shadow: 0 0 0.5em rgba(146, 146, 146, 0.8);
 	font-size: 0.8em;
-	margin-bottom: 100vh;
 	padding: 1em;
 	text-align: center;
 }
 
 .header {
 	background-color: $panel_color;
-	box-shadow: 0 0 0.5em rgba(146, 146, 146, 0.8);
+	display: flex;
+	font-size: 1.2em;
+	padding: 1em;
 
-	img {
-		display: block;
-		max-width: 100%;
+	& > a:not(:first-child) {
+		margin-left: 2em;
 	}
 }
 

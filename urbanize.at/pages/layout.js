@@ -1,6 +1,5 @@
 const footer = require('../widgets/footer.js');
 const header = require('../widgets/header.js');
-const sidebar = require('../widgets/sidebar.js');
 
 module.exports = (content, urbanize, options = {}) => {
   if(!options.description) {
@@ -62,20 +61,14 @@ module.exports = (content, urbanize, options = {}) => {
         <script defer src="/scripts.js?${urbanize.assetHash}"></script>
       </head>
 
-      <body style="background-image: url(${urbanize.background});">
-        <div class="restraint">
-          ${header(urbanize)}
+      <body>
+        ${header(urbanize)}
 
-          <div class="split">
-            <div class="${options.tiles ? 'tiles' : 'content'} offset">
-              ${content}
-            </div>
-
-            ${sidebar(urbanize)}
-          </div>
-
-          ${footer(urbanize)}
+        <div>
+          ${content}
         </div>
+
+        ${footer(urbanize)}
       </body>
     </html>
   `;

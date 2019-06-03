@@ -13,6 +13,8 @@ const pagesInfo = require('./loaders/pages_info.js');
 const pathLoader = require('./loaders/path.js');
 const issueNumber = require('./loaders/issue_number.js');
 const permalink = require('./loaders/permalink.js');
+const urbanizeCategory = require('./loaders/urbanize/category.js');
+const urbanizeLanguage = require('./loaders/urbanize/language.js');
 
 enolib.register({
   boolean,
@@ -26,6 +28,8 @@ enolib.register({
   pagesInfo,
   path: pathLoader,
   permalink,
+  urbanizeCategory,
+  urbanizeLanguage,
   url
 });
 

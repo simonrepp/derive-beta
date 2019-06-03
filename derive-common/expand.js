@@ -111,8 +111,7 @@ const paginateAuthors = data => {
   for(let author of authorsSorted) {
     if((!author.articles || author.articles.length === 0) &&
        (!author.programs || author.programs.length === 0) &&
-       (!author.authoredBooks || author.authoredBooks.length === 0) &&
-       (!author.eventParticipations || author.eventParticipations.length === 0))
+       (!author.authoredBooks || author.authoredBooks.length === 0))
       continue;
 
     const relevantName = author.lastName || author.name;
@@ -203,14 +202,12 @@ module.exports = data => {
   data.categories.clear();
 
   addToCategories(data, 'articles');
-  addToCategories(data, 'events');
   addToCategories(data, 'programs');
 
   data.tags.clear();
 
   addToTags(data, 'articles');
   addToTags(data, 'books');
-  addToTags(data, 'events');
   addToTags(data, 'issues');
   addToTags(data, 'players');
   addToTags(data, 'programs');
@@ -220,7 +217,7 @@ module.exports = data => {
   data.publishers = [];
 
   data.players.forEach(player => {
-    if(player.eventParticipations || player.articles || player.programs) {
+    if(player.articles || player.programs) {
       data.authors.push(player);
     }
     if(player.publishedBooks) {
