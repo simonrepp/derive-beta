@@ -14,11 +14,11 @@ module.exports = async (data, enoPath) => {
       doc.allElementsRequired();
 
       const participants = doc.sections().map(participantSection => ({
-        abstract: participantSection.field('Text').requiredStringValue(),
         name: participantSection.stringKey(),
         permalinkField: participantSection.field('Permalink'),
         permalink: participantSection.field('Permalink').requiredPermalinkValue(),
-        sourceFile: enoPath
+        sourceFile: enoPath,
+        text: participantSection.field('Text').requiredStringValue()
       }));
 
       doc.assertAllTouched();
