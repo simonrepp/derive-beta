@@ -9,21 +9,20 @@ textarea {
 
 body {
  	background-attachment: fixed;
-  background-color: #eee;
+  background-color: $urbanize_white;
  	background-position: center center;
   background-repeat: no-repeat;
  	background-size: 60vmin;
-  color: #333;
+  color: $urbanize_black;
   margin: 0;
   max-height: 100vh;
 }
 
 a {
-  color: $primary_color;
+  color: $urbanize_pink;
 	text-decoration: none;
-}
 
-strong {
-  font-family: 'FunctionPro-Medium';
-  font-weight: 400;
+  &:hover {
+    color: $urbanize_black;
+  }
 }
