@@ -23,7 +23,7 @@ module.exports = async (data, preview) => {
 
   const concurrentWrites = [];
 
-  for(let article of data.readableArticles) {
+  for(let article of data.articles.values()) {
     if(article.image) {
       if(preview) {
         article.image.written = encodeURI(`/_root_media/${article.image.localFilesystemPath}`);
@@ -34,7 +34,7 @@ module.exports = async (data, preview) => {
       }
     }
 
-    if(article.text) {
+    if(article.readable && article.text) {
       let text = article.text.converted;
 
       if(preview) {
