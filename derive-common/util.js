@@ -2,7 +2,7 @@ const fs = require('fs');
 const enolib = require('enolib');
 const { HtmlReporter } = require('enolib');
 const { date, datetime, integer, url } = require('enotype');
-const { de } = require('enolib/lib/messages/de');
+const { de } = require('enolib/locales');
 const path = require('path');
 const striptags = require('striptags');
 
