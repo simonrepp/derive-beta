@@ -1,0 +1,41 @@
+.footer {
+	background-color: $urbanize_pink;
+  color: $urbanize_white;
+  display: flex;
+	font-size: 0.8em;
+  justify-content: space-between;
+	padding: 1em;
+	text-align: center;
+
+  a {
+    color: $urbanize_white;
+
+    &:hover {
+      color: $urbanize_black;
+    }
+  }
+
+  a.button_rectangle {
+    background-color: $urbanize_black;
+    border-radius: 0.6em;
+    color: $urbanize_white;
+
+    &:hover {
+      background-color: $urbanize_white;
+      color: $urbanize_black;
+    }
+  }
+
+  a.button_circle {
+    background-color: $urbanize_black;
+    border-radius: 50%;
+    color: $urbanize_pink;
+    font-size: 1.8em;
+    margin: 0.14em;
+
+    &:hover {
+      background-color: $urbanize_white;
+      color: $urbanize_black;
+    }
+  }
+}

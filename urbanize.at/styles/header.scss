@@ -1,0 +1,41 @@
+.header {
+	background-color: $urbanize_pink;
+	display: flex;
+	font-size: 1.2em;
+  justify-content: flex-end;
+	padding: 1em;
+
+  a {
+    background-color: $urbanize_white;
+    border-radius: 0.6em;
+    color: $urbanize_black;
+    padding: 0.1em 0.5em;
+
+    &:hover {
+      background-color: $urbanize_black;
+      color: $urbanize_white;
+    }
+  }
+
+	& > a:not(:first-child) {
+		margin-left: 2em;
+	}
+}
+
+.hover_menu {
+	display: none;
+	flex-direction: column;
+	left: 0;
+	padding: 0 0.8em;
+	position: absolute;
+}
+
+.hover_menu_trigger {
+	position: relative;
+
+	&:hover {
+		.hover_menu {
+			display: flex;
+		}
+	}
+}

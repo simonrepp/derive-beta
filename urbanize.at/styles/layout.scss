@@ -1,22 +1,3 @@
-.hover_menu {
-	background-color: $panel_color;
-	display: none;
-	flex-direction: column;
-	left: 0;
-	padding: 1em;
-	position: absolute;
-}
-
-.hover_menu_trigger {
-	position: relative;
-
-	&:hover {
-		.hover_menu {
-			display: flex;
-		}
-	}
-}
-
 .add-this {
 	font-size: 1.33em;
 
@@ -61,24 +42,6 @@
 
 	@media (max-width: 1010px) {
 		max-width: 100%;
-	}
-}
-
-.footer {
-	background-color: $panel_color;
-	font-size: 0.8em;
-	padding: 1em;
-	text-align: center;
-}
-
-.header {
-	background-color: $panel_color;
-	display: flex;
-	font-size: 1.2em;
-	padding: 1em;
-
-	& > a:not(:first-child) {
-		margin-left: 2em;
 	}
 }
 

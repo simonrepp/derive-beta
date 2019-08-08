@@ -1,0 +1,21 @@
+.participants {
+  color: $urbanize_pink;
+
+  a {
+    color: $urbanize_black;
+
+    &:hover {
+      color: $urbanize_pink;
+    }
+  }
+
+  .letter {
+    display: flex;
+    justify-content: flex-start;
+    padding-left: 5em;
+
+    & > div:first-child {
+      width: 1.5em;
+    }
+  }
+}
