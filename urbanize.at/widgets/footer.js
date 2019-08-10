@@ -6,7 +6,7 @@ module.exports = urbanize => `
     </div>
 
     <div>
-      dérive<br>
+      <img alt="Logo dérive" src="/images/derive.svg"><br>
       dérive — Verein für Stadtforschung<br>
       <a href="https://derive.at">derive.at</a><br><br>
 
