@@ -2,7 +2,6 @@
 	background-color: $urbanize_pink;
   color: $urbanize_white;
   display: flex;
-	font-size: 0.8em;
   justify-content: space-between;
 	padding: 1em;
 	text-align: center;
@@ -15,18 +14,7 @@
     }
   }
 
-  a.button_rectangle {
-    background-color: $urbanize_black;
-    border-radius: 0.6em;
-    color: $urbanize_white;
-
-    &:hover {
-      background-color: $urbanize_white;
-      color: $urbanize_black;
-    }
-  }
-
-  a.button_circle {
+  a.button_circle_black {
     background-color: $urbanize_black;
     border-radius: 50%;
     color: $urbanize_pink;

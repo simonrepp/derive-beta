@@ -1,3 +1,44 @@
+@mixin button_rect {
+  border-radius: 0.6em;
+  font-size: 1.2em;
+  padding: 0.1em 0.5em;
+}
+
+a.button_rect_black {
+  @include button_rect;
+
+  background-color: $urbanize_black;
+  color: $urbanize_white;
+
+  &:hover {
+    background-color: $urbanize_white;
+    color: $urbanize_black;
+  }
+}
+
+a.button_rect_pink {
+  @include button_rect;
+
+  background-color: $urbanize_pink;
+  color: $urbanize_white;
+
+  &:hover {
+    background-color: $urbanize_black;
+  }
+}
+
+a.button_rect_white {
+  @include button_rect;
+
+  background-color: $urbanize_white;
+  color: $urbanize_black;
+
+  &:hover {
+    background-color: $urbanize_black;
+    color: $urbanize_white;
+  }
+}
+
 .generic__heading {
   color: $primary_color;
   font-family: 'FunctionPro-Medium';

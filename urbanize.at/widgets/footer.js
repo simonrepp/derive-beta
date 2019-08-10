@@ -1,8 +1,8 @@
 module.exports = urbanize => `
   <div class="footer">
     <div>
-    <a class="button_rectangle" href="#">Newsletter</a><br>
-    <a class="button_rectangle" href="#">Impressum</a><br>
+    <a class="button_rect_black" href="#">Newsletter</a><br>
+    <a class="button_rect_black" href="#">Impressum</a><br>
     </div>
 
     <div>
@@ -10,11 +10,11 @@ module.exports = urbanize => `
       dérive — Verein für Stadtforschung<br>
       <a href="https://derive.at">derive.at</a><br><br>
 
-      <a class="button_circle" href="https://facebook.com/derivemagazin/"><span class="icon-facebook"></span></a>
-      <a class="button_circle" href="https://twitter.com/derivemagazin"><span class="icon-twitter"></span></a>
-      <a class="button_circle" href="https://instagram.com/derive_urbanize/"><span class="icon-instagram"></span></a>
-      <a class="button_circle" href="https://vimeo.com/derivestadtforschung"><span class="icon-vimeo"></span></a>
-      <a class="button_circle" href="http://flickr.com/photos/derivemagazin"><span class="icon-flickr"></span></a><br><br>
+      <a class="button_circle_black" href="https://facebook.com/derivemagazin/"><span class="icon-facebook"></span></a>
+      <a class="button_circle_black" href="https://twitter.com/derivemagazin"><span class="icon-twitter"></span></a>
+      <a class="button_circle_black" href="https://instagram.com/derive_urbanize/"><span class="icon-instagram"></span></a>
+      <a class="button_circle_black" href="https://vimeo.com/derivestadtforschung"><span class="icon-vimeo"></span></a>
+      <a class="button_circle_black" href="http://flickr.com/photos/derivemagazin"><span class="icon-flickr"></span></a><br><br>
 
       © 2019 URBANIZE! INTERNATIONALES FESTIVAL FÜR URBANE ERKUNDUNGEN WIEN
     </div>

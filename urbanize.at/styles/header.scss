@@ -1,21 +1,17 @@
 .header {
 	background-color: $urbanize_pink;
 	display: flex;
-	font-size: 1.2em;
   justify-content: flex-end;
 	padding: 1em;
 
-  a {
-    background-color: $urbanize_white;
-    border-radius: 0.6em;
-    color: $urbanize_black;
-    padding: 0.1em 0.5em;
-
-    &:hover {
-      background-color: $urbanize_black;
-      color: $urbanize_white;
-    }
-  }
+	a.language {
+		color: $urbanize_white;
+		font-size: 1.2em;
+		
+		&:hover {
+			color: $urbanize_black;
+		}
+	}
 
 	& > a:not(:first-child) {
 		margin-left: 2em;
