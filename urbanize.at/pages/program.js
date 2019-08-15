@@ -1,5 +1,6 @@
 const eventListing = require('../widgets/event-listing.js');
 const layout = require('./layout.js');
+const scrollToTop = require('../widgets/scroll_to_top.js');
 
 module.exports = urbanize => {
   const html = `
@@ -19,6 +20,8 @@ module.exports = urbanize => {
       [Sortierung frueher oben, spaeter unten (zb. MO oben, DI unten)]<br><br>
 
       ${eventListing(Object.values(urbanize.events))}
+
+      ${scrollToTop}
     </div>
   `;
 

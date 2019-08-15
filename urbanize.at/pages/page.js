@@ -1,4 +1,5 @@
 const layout = require('./layout.js');
+const scrollToTop = require('../widgets/scroll_to_top.js');
 
 module.exports = (urbanize, page) => {
   const html = `
@@ -10,6 +11,8 @@ module.exports = (urbanize, page) => {
       <div class="generic__serif">
         ${page.text ? page.text.written : ''}
       </div>
+
+      ${scrollToTop}
     </div>
   `;
 

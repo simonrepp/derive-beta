@@ -1,5 +1,6 @@
 const { featureSort } = require('../../derive-common/util.js');
 const layout = require('./layout.js');
+const scrollToTop = require('../widgets/scroll_to_top.js');
 
 module.exports = urbanize => {
   // const sortedFeatures = urbanize.features.sort(featureSort);
@@ -22,6 +23,8 @@ module.exports = urbanize => {
         ${feature.text}<br>
       </div>
     `).join('<br><br>')}
+
+    ${scrollToTop}
   `;
 
   // TODO: Re-use/remove

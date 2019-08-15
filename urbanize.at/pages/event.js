@@ -3,6 +3,7 @@ const striptags = require('striptags');
 const addThis = require('../widgets/add-this.js');
 const layout = require('./layout.js');
 const participants = require('../widgets/participants.js');
+const scrollToTop = require('../widgets/scroll_to_top.js');
 const timeframe = require('../widgets/timeframe.js');
 
 module.exports = (urbanize, event) => {
@@ -48,6 +49,7 @@ module.exports = (urbanize, event) => {
       Kategorie: ${event.category}
 
       ${addThis(`${urbanize.base_url}/veranstaltungen/${event.permalink}/`)}
+      ${scrollToTop}
     </div>
   `;
 

@@ -1,0 +1,12 @@
+.scroll_to_top {
+  display: flex;
+  justify-content: flex-end;
+
+  a {
+    display: inline-block;
+
+    img {
+      height: 2em;
+    }
+  }
+}

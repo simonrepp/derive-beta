@@ -1,4 +1,5 @@
 const layout = require('./layout.js');
+const scrollToTop = require('../widgets/scroll_to_top.js');
 
 module.exports = urbanize => {
   const participantsByLetter = [];
@@ -31,6 +32,8 @@ module.exports = urbanize => {
           </div>
         </div>
       `).join('')}
+
+      ${scrollToTop}
     </div>
   `;
 
