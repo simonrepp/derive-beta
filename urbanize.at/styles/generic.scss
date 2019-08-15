@@ -40,9 +40,9 @@ a.button_rect_white {
 }
 
 .generic__heading {
-  color: $primary_color;
-  font-family: 'FunctionPro-Medium';
+  color: $urbanize_pink;
   font-size: 1.65em;
+  font-weight: 500;
   overflow-wrap: break-word;
 
   a {
@@ -50,7 +50,7 @@ a.button_rect_white {
   }
 
   a:hover {
-    border-bottom: 1px solid $primary_color;
+    border-bottom: 1px solid $urbanize_pink;
   }
 
   margin-bottom: 1em;
