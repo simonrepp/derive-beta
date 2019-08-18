@@ -10,17 +10,11 @@
 	}
 }
 
-.additional {
-	color: $secondary_color;
-	margin-bottom: 10px;
-}
-
 .breadcrumb {
 	margin-bottom: 30px;
 }
 
 .content {
-	background-color: $panel_color;
 	box-shadow: 0 0 0.5em rgba(146, 146, 146, 0.8);
 	box-sizing: border-box;
 	flex-grow: 1;
@@ -77,7 +71,6 @@
 .sidebar {
   align-items: flex-start;
 	align-self: flex-start;
-	background-color: $panel_color;
 	box-shadow: 0 0 0.5em rgba(146, 146, 146, 0.8);
 	box-sizing: border-box;
   display: flex;
