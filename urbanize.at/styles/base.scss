@@ -14,8 +14,11 @@ body {
   background-repeat: no-repeat;
  	background-size: 60vmin;
   color: $urbanize_black;
+  display: flex;
+  flex-direction: column;
   margin: 0;
   max-height: 100vh;
+  min-height: 100vh;
 }
 
 a {

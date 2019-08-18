@@ -15,15 +15,9 @@
 }
 
 .content {
-	box-shadow: 0 0 0.5em rgba(146, 146, 146, 0.8);
-	box-sizing: border-box;
-	flex-grow: 1;
-	max-width: 620px;
-	padding: 1em;
+	@include restraint;
 
-	@media (max-width: 1010px) {
-		max-width: 100%;
-	}
+	flex: 1;
 
 	img {
 		max-width: 100%;
@@ -46,16 +40,6 @@
 .list-item {
 	margin: 35px 0;
   clear:both;
-}
-
-.offset {
-	margin-bottom: 1.33em;
-}
-
-.restraint {
-  max-width: 960px;
-  margin: 0 auto;
-	padding: 1.33em;
 }
 
 .search {

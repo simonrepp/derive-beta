@@ -58,7 +58,7 @@ module.exports = (content, urbanize, options = {}) => {
       <body>
         ${header(urbanize)}
 
-        <div>
+        <div class="content">
           ${content}
         </div>
 

@@ -1,29 +1,33 @@
 .footer {
 	background-color: $urbanize_pink;
   color: $urbanize_white;
-  display: flex;
-  justify-content: space-between;
-	padding: 1em;
-	text-align: center;
 
-  a {
-    color: $urbanize_white;
+	.alignment {
+		@include restraint;
 
-    &:hover {
-      color: $urbanize_black;
-    }
-  }
+		display: flex;
+		justify-content: space-between;
+		text-align: center;
 
-  a.button_circle_black {
-    background-color: $urbanize_black;
-    border-radius: 50%;
-    color: $urbanize_pink;
-    font-size: 1.8em;
-    margin: 0.14em;
+		a {
+			color: $urbanize_white;
 
-    &:hover {
-      background-color: $urbanize_white;
-      color: $urbanize_black;
-    }
-  }
+			&:hover {
+				color: $urbanize_black;
+			}
+		}
+
+		a.button_circle_black {
+			background-color: $urbanize_black;
+			border-radius: 50%;
+			color: $urbanize_pink;
+			font-size: 1.8em;
+			margin: 0.14em;
+
+			&:hover {
+				background-color: $urbanize_white;
+				color: $urbanize_black;
+			}
+		}
+	}
 }

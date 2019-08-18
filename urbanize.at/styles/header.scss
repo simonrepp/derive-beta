@@ -1,20 +1,26 @@
 .header {
 	background-color: $urbanize_pink;
-	display: flex;
-  justify-content: flex-end;
-	padding: 1em;
+	margin-bottom: 1.33em;
 
-	a.language {
-		color: $urbanize_white;
-		font-size: 1.2em;
-		
-		&:hover {
-			color: $urbanize_black;
+	.alignment {
+		@include restraint;
+
+		align-items: center;
+		display: flex;
+		justify-content: flex-end;
+
+		& > a:not(:first-child) {
+			margin-left: 1.6em;
 		}
-	}
 
-	& > a:not(:first-child) {
-		margin-left: 2em;
+		a.language {
+			color: $urbanize_white;
+			font-size: 1.2em;
+
+			&:hover {
+				color: $urbanize_black;
+			}
+		}
 	}
 }
 
