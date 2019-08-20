@@ -5,8 +5,6 @@ module.exports = urbanize => `
         <a class="button_rect_white font_size_1_2" href="/">Festival</a>
         <div class="hover_menu">
           <a class="button_rect_white font_size_1_2" href="/about/">About</a>
-          <a class="button_rect_white font_size_1_2" href="/alltagsforschung/">Alltagsforschung</a>
-          <a class="button_rect_white font_size_1_2" href="/stadtlabor/">Stadtlabor</a>
           <a class="button_rect_white font_size_1_2" href="/orte/">Orte</a>
           <a class="button_rect_white font_size_1_2" href="/partnerinnen/">PartnerInnen</a>
         </div>

@@ -3,13 +3,11 @@ const { ParseError, ValidationError } = require('enolib');
 
 const URBANIZE_PAGE_PERMALINKS = [
   'about',
-  'alltagsforschung',
   'english',
   'kontakt',
   'orte',
   'partnerinnen',
-  'presse',
-  'stadtlabor'
+  'presse'
 ];
 
 module.exports = async (data, enoPath) => {
