@@ -7,6 +7,7 @@
 
 		display: flex;
 		justify-content: space-between;
+		padding-top: 2.8em;
 		text-align: center;
 
 		a {
@@ -28,5 +29,27 @@
 				color: $urbanize_black;
 			}
 		}
+	}
+
+	.archive {
+		text-align: right;
+
+		.label {
+			margin-bottom: 0.5em;
+		}
+	}
+
+	.buttons {
+		display: flex;
+		flex-direction: column;
+
+		& > a:not(:first-child) {
+			margin-top: 0.5em;
+		}
+	}
+
+	.derive_logo {
+		max-width: 10em;
+		margin-bottom: 0.5em;
 	}
 }
