@@ -1,10 +1,10 @@
-@mixin button_rect {
+@mixin rounded_rect {
   border-radius: 0.6em;
   padding: 0.1em 0.5em;
 }
 
 a.button_rect_black {
-  @include button_rect;
+  @include rounded_rect;
 
   background-color: $urbanize_black;
   color: $urbanize_white;
@@ -16,7 +16,7 @@ a.button_rect_black {
 }
 
 a.button_rect_pink {
-  @include button_rect;
+  @include rounded_rect;
 
   background-color: $urbanize_pink;
   color: $urbanize_white;
@@ -27,7 +27,7 @@ a.button_rect_pink {
 }
 
 a.button_rect_white {
-  @include button_rect;
+  @include rounded_rect;
 
   background-color: $urbanize_white;
   color: $urbanize_black;
@@ -36,6 +36,65 @@ a.button_rect_white {
     background-color: $urbanize_black;
     color: $urbanize_white;
   }
+}
+
+button.button_rect_white {
+  @include rounded_rect;
+
+  background-color: $urbanize_white;
+  border: none;
+  color: $urbanize_black;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $urbanize_black;
+    color: $urbanize_white;
+  }
+}
+
+input[type="checkbox"] {
+  display: none;
+}
+
+label.slider_white {
+  @include rounded_rect;
+
+  background-color: $urbanize_white;
+  border: 1px solid $urbanize_black;
+  cursor: pointer;
+  display: inline-block;
+  height: 1.5em;
+  padding: 0;
+  position: relative;
+  top: 0.4em;
+  width: 2.5em;
+
+  .nub {
+    background-color: $urbanize_black;
+    border-radius: 0.5em;
+    display: inline-block;
+    height: 1.3em;
+    left: 0.2em;
+    position: absolute;
+    top: 0.1em;
+    transition: background-color ease-in-out 0.1s, left ease-in-out 0.1s;
+    width: 1.3em;
+  }
+}
+
+input:checked + label.slider_white .nub {
+  background-color: $urbanize_pink;
+  left: 1.1em;
+}
+
+input.input_rect_white {
+  @include rounded_rect;
+
+  background-color: $urbanize_white;
+  border: 1px solid $urbanize_black;
+  color: $urbanize_black;
+  display: block;
+  width: 100%;
 }
 
 .generic__heading {

@@ -24,6 +24,13 @@
 	}
 }
 
+.content_slim {
+	@include restraint;
+
+	background-color: $urbanize_pink;
+	flex: 1;
+}
+
 .tiles {
 	flex-grow: 1;
 	max-width: 620px;

@@ -56,13 +56,19 @@ module.exports = (content, urbanize, options = {}) => {
       </head>
 
       <body>
-        ${header(urbanize)}
+        ${options.slim ? `
+          <div class="content_slim">
+            ${content}
+          </div>
+        `:`
+          ${header(urbanize)}
 
-        <div class="content">
-          ${content}
-        </div>
+          <div class="content">
+            ${content}
+          </div>
 
-        ${footer(urbanize)}
+          ${footer(urbanize)}
+        `}
       </body>
     </html>
   `;

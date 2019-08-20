@@ -7,6 +7,8 @@ module.exports = async data => {
 
   const directories = [
     'beteiligte',
+    'newsletter',
+    'presse-newsletter',
     'programm',
     'seite-nicht-gefunden',
     ...Object.values(data.urbanize.events).map(event => event.permalink),

@@ -3,6 +3,7 @@ const { writeFile } = require('../derive-common/util.js');
 const startPage = require('./pages/index.js');
 const notFoundPage = require('./pages/site-not-found.js');
 const eventPage = require('./pages/event.js');
+const newsletterPage = require('./pages/newsletter.js');
 const pagePage = require('./pages/page.js');
 const participantPage = require('./pages/participant.js');
 const participantsPage = require('./pages/participants.js');
@@ -13,7 +14,9 @@ module.exports = async data => {
 
   await Promise.all([
     writeFile(data.buildDir, 'index.html', startPage(urbanize)),
-    writeFile(data.buildDir, 'seite-nicht-gefunden/index.html', notFoundPage(urbanize)),
+    writeFile(data.buildDir, '/newsletter/index.html', newsletterPage(urbanize, 'public')),
+    writeFile(data.buildDir, '/presse-newsletter/index.html', newsletterPage(urbanize, 'press')),
+    writeFile(data.buildDir, '/seite-nicht-gefunden/index.html', notFoundPage(urbanize)),
     writeFile(data.buildDir, '/beteiligte/index.html', participantsPage(urbanize)),
     writeFile(data.buildDir, '/programm/index.html', programPage(urbanize))
   ]);
