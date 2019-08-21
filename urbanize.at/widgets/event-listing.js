@@ -50,9 +50,7 @@ module.exports = events => `
           ${event.address || ''}
         </div>
 
-        <div class="generic__serif">
-          ${event.abstract ? event.abstract.converted : ''}
-        </div>
+        ${event.abstract ? event.abstract.converted : ''}
       </div>
     `).join('')}
   </div>

@@ -7,9 +7,7 @@ module.exports = participants => `
           ${participant.name}
         </strong>
 
-        <div class="generic__serif">
-          ${participant.text ? participant.text.converted : (participant.biography ? participant.biography.converted : '')}
-        </div>
+        ${participant.text ? participant.text.converted : (participant.biography ? participant.biography.converted : '')}
 
         ${participant.website ? `<a href="${participant.website}">${participant.website}</a>` : ''}
       </div>

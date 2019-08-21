@@ -8,9 +8,7 @@ module.exports = (urbanize, page) => {
         ${page.title}
       </div>
 
-      <div class="generic__serif">
-        ${page.text ? page.text.written : ''}
-      </div>
+      ${page.text ? page.text.written : ''}
 
       ${scrollToTop}
     </div>

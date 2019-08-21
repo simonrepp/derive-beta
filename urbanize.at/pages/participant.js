@@ -9,7 +9,7 @@ module.exports = (urbanize, participant) => {
         ${participant.name}
       </div>
 
-      ${participant.text ? `<div class="generic__serif">${participant.text}</div>` : ''}
+      ${participant.text ? participant.text : ''}
 
       ${eventListing(participant.events)}
 

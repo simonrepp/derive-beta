@@ -28,19 +28,11 @@ module.exports = (urbanize, event) => {
         ${event.additionalInfo ? event.additionalInfo.converted : ''}
       </div>
 
-      ${event.abstract ? `
-        <div class="generic__serif">
-          ${event.abstract.converted}
-        </div>
-      `:''}
-
+      ${event.abstract ? `<div>${event.abstract.converted}</div>` : ''}
 
       ${event.text ? `
         <hr>
-
-        <div class="generic__serif">
-           ${event.text.written}
-        </div>
+        <div>${event.text.written}</div>
       `:''}
 
       <hr>
