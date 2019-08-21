@@ -81,24 +81,24 @@ input[type="checkbox"] {
 }
 
 label.slider_white {
-  @include rounded_rect;
-
   background-color: $urbanize_white;
   border: 1px solid $urbanize_black;
+  border-radius: 4.6em;
   cursor: pointer;
   display: inline-block;
+  font-size: 0.8em;
   height: 1.5em;
-  padding: 0;
+  margin-right: 0.5em;
   position: relative;
   top: 0.4em;
   width: 2.5em;
 
   .nub {
     background-color: $urbanize_black;
-    border-radius: 0.5em;
+    border-radius: 4.6em;
     display: inline-block;
     height: 1.3em;
-    left: 0.2em;
+    left: 0.1em;
     position: absolute;
     top: 0.1em;
     transition: background-color ease-in-out 0.1s, left ease-in-out 0.1s;
@@ -151,4 +151,14 @@ input.input_rect_white {
 
 .generic__serif {
   font-family: 'Crimson Text';
+}
+
+.margin_y_0_5 {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.margin_y_2_0 {
+  margin-top: 2em;
+  margin-bottom: 2em;
 }

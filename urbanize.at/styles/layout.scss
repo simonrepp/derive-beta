@@ -24,11 +24,9 @@
 	}
 }
 
-.content_slim {
-	@include restraint;
-
+body.slim {
 	background-color: $urbanize_pink;
-	flex: 1;
+	color: $urbanize_white;
 }
 
 .tiles {

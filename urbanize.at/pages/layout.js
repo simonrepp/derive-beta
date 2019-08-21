@@ -55,12 +55,14 @@ module.exports = (content, urbanize, options = {}) => {
         <script defer src="/scripts.js?${urbanize.assetHash}"></script>
       </head>
 
-      <body>
-        ${options.slim ? `
-          <div class="content_slim">
+      ${options.slim ? `
+        <body class="slim">
+          <div class="content">
             ${content}
           </div>
-        `:`
+        </body>
+      `:`
+        <body>
           ${header(urbanize)}
 
           <div class="content">
@@ -68,8 +70,9 @@ module.exports = (content, urbanize, options = {}) => {
           </div>
 
           ${footer(urbanize)}
-        `}
-      </body>
+        </body>
+      `}
+
     </html>
   `;
 
