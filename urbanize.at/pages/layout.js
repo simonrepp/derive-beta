@@ -1,7 +1,12 @@
 const footer = require('../widgets/footer.js');
 const header = require('../widgets/header.js');
+const smallBanner = require('../widgets/banner_small.js');
 
 module.exports = (content, urbanize, options = {}) => {
+  if(!options.banner) {
+    options.banner = 'small';
+  }
+
   if(!options.description) {
     options.description = urbanize.title;
   }
@@ -57,6 +62,8 @@ module.exports = (content, urbanize, options = {}) => {
 
       ${options.slim ? `
         <body class="slim">
+          ${smallBanner('white')}
+
           <div class="content">
             ${content}
           </div>
@@ -64,6 +71,7 @@ module.exports = (content, urbanize, options = {}) => {
       `:`
         <body>
           ${header(urbanize)}
+          ${options.banner === 'small' ? smallBanner('pink') : 'TODO: Large Banner'}
 
           <div class="content">
             ${content}

@@ -5,7 +5,6 @@ const PRESS_URL = 'TODO'; // TODO: Setup press newsletter interface through mail
 
 module.exports = (urbanize, audience) => {
   const html = `
-
     <h1>
       ${audience === 'press' ? 'Presse-Newsletter-Anmeldung' : 'Newsletter-Anmeldung'}
     </h1>

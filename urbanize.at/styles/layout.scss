@@ -15,7 +15,7 @@
 }
 
 .content {
-	@include restraint;
+	@include restraint-narrow;
 
 	flex: 1;
 

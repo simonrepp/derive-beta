@@ -1,0 +1,40 @@
+@mixin banner_small {
+  @include restraint-medium;
+
+  display: flex;
+  justify-content: space-between;
+
+  .info {
+    line-height: 1.3em;
+
+    @media (max-width: 620px) {
+      display: none;
+    }
+  }
+
+  .logo {
+    max-height: 100px;
+
+    @media (max-width: 500px) {
+      max-width: 70%;
+    }
+  }
+
+  .slogan {
+    max-height: 100px;
+
+    @media (max-width: 890px) {
+      display: none;
+    }
+  }
+}
+
+.banner_small_pink {
+  @include banner_small;
+  color: $urbanize_pink;
+}
+
+.banner_small_white {
+  @include banner_small;
+  color: $urbanize_white;
+}

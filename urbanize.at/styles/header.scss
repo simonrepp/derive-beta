@@ -16,7 +16,7 @@
 
 .header {
 	.alignment_desktop {
-		@include restraint;
+		@include restraint-wide;
 
 		align-items: center;
 		display: flex;
@@ -40,7 +40,7 @@
 	}
 
 	.alignment_mobile {
-		@include restraint;
+		@include restraint-wide;
 
 		position: fixed;
 		right: 0;
@@ -72,7 +72,6 @@
 
 	@media (min-width: 745px) {
 		background-color: $urbanize_pink;
-		margin-bottom: 1.33em;
 	}
 }
 

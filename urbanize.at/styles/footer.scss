@@ -3,7 +3,7 @@
   color: $urbanize_white;
 
 	.alignment {
-		@include restraint;
+		@include restraint-medium;
 
 		display: flex;
 		justify-content: space-between;
