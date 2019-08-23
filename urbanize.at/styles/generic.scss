@@ -101,7 +101,7 @@ label.slider_white {
     left: 0.1em;
     position: absolute;
     top: 0.1em;
-    transition: background-color ease-in-out 0.1s, left ease-in-out 0.1s;
+    transition: background-color ease 0.02s, left ease 0.02s;
     width: 1.3em;
   }
 }
