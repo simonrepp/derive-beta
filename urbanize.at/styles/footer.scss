@@ -2,6 +2,14 @@
 	background-color: $urbanize_pink;
   color: $urbanize_white;
 
+	a {
+		color: $urbanize_white;
+
+		&:hover {
+			color: $urbanize_black;
+		}
+	}
+
 	.alignment {
 		@include restraint-medium;
 
@@ -10,12 +18,8 @@
 		padding-top: 2.8em;
 		text-align: center;
 
-		a {
-			color: $urbanize_white;
-
-			&:hover {
-				color: $urbanize_black;
-			}
+		@media (min-width: 381px) and (max-width: 709px) {
+			justify-content: space-around;
 		}
 	}
 
@@ -39,5 +43,21 @@
 	.derive_logo {
 		max-width: 10em;
 		margin-bottom: 0.5em;
+	}
+
+	.derive_desktop {
+		@media (max-width: 709px) {
+				display: none;
+		}
+	}
+
+	.derive_mobile {
+		@include restraint-medium;
+
+		text-align: center;
+
+		@media (min-width: 710px) {
+			display: none;
+		}
 	}
 }
