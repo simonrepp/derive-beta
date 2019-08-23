@@ -1,34 +1,63 @@
 const layout = require('./layout.js');
 
-const PUBLIC_URL = 'https://app.mailjet.com/widget/iframe/2fTc/iDa';
-const PRESS_URL = 'TODO'; // TODO: Setup press newsletter interface through mailjet (possibly needs custom csrf_token below too?)
+// TODO: Form gives no feedback/silently ignores "Abonnieren" click if consent slider has not been toggled
+
+const PRESS_NEWSLETTER = {
+  csrfToken: 'MTRkYzVlNzI3Mjc0ODA1ODMzZTRjNzU3NGViYjI3NDg4MmVlN2U2NDU3MjllMGI0ZTM3OWE0YWUzMDFlMzUzYQ==',
+  keys: {
+    city: 'w-field-field-71835-403698-537738-125386',
+    country: 'w-field-field-71835-403698-537738-106942',
+    email: 'w-field-field-71835-403698-537738-email',
+    firstName: 'w-field-field-71835-403698-537738-106940',
+    institution: 'w-field-field-71835-403698-537738-125387',
+    lastName: 'w-field-field-71835-403698-537738-106941'
+  },
+  title: 'Presse-Newsletter Anmeldung',
+  url: 'https://app.mailjet.com/widget/iframe/2fTc/iGD'
+};
+
+const PUBLIC_NEWSLETTER = {
+  csrfToken: 'MzAzYTQyMDVlM2ZhZGY4OWQzYWIxYTg0NDE1MTNmNWQwYWY1YWUxOGRhZGE5MDVmYTRkMmUyODk0ZGI2YzJhYw==',
+  keys: {
+    city: 'w-field-field-71620-402641-537738-125386',
+    country: 'w-field-field-71620-402641-537738-106942',
+    email: 'w-field-field-71620-402641-537738-email',
+    firstName: 'w-field-field-71620-402641-537738-106940',
+    institution: 'w-field-field-71620-402641-537738-125387',
+    lastName: 'w-field-field-71620-402641-537738-106941'
+  },
+  title: 'Newsletter Anmeldung',
+  url: 'https://app.mailjet.com/widget/iframe/2fTc/iDa'
+};
 
 module.exports = (urbanize, audience) => {
+  const newsletter = audience === 'press' ? PRESS_NEWSLETTER : PUBLIC_NEWSLETTER;
+
   const html = `
     <h1>
-      ${audience === 'press' ? 'Presse-Newsletter-Anmeldung' : 'Newsletter-Anmeldung'}
+      ${newsletter.title}
     </h1>
 
-    <form action="${audience === 'press' ? PRESS_URL : PUBLIC_URL}" method="post">
-      <input type="hidden" id="csrf_token" name="csrf_token" value="MzAzYTQyMDVlM2ZhZGY4OWQzYWIxYTg0NDE1MTNmNWQwYWY1YWUxOGRhZGE5MDVmYTRkMmUyODk0ZGI2YzJhYw==">
+    <form action="${newsletter.url}" method="post">
+      <input type="hidden" id="csrf_token" name="csrf_token" value="${newsletter.csrfToken}">
 
       <div class="color_black margin_y_0_5">E-Mail</div>
-      <input class="input_rect_white margin_y_0_5" name="w-field-field-71620-402641-537738-email" required="required" type="email">
+      <input class="input_rect_white margin_y_0_5" name="${newsletter.keys.email}" required="required" type="email">
 
       <div class="color_black margin_y_0_5">Vorname</div>
-      <input class="input_rect_white margin_y_0_5" name="w-field-field-71620-402641-537738-106940" required="required" type="text">
+      <input class="input_rect_white margin_y_0_5" name="${newsletter.keys.firstName}" required="required" type="text">
 
       <div class="color_black margin_y_0_5">Nachname</div>
-      <input class="input_rect_white margin_y_0_5" name="w-field-field-71620-402641-537738-106941" required="required" type="text">
+      <input class="input_rect_white margin_y_0_5" name="${newsletter.keys.lastName}" required="required" type="text">
 
       <div class="color_black margin_y_0_5">Institution</div>
-      <input class="input_rect_white margin_y_0_5" name="w-field-field-71620-402641-537738-125387" type="text">
+      <input class="input_rect_white margin_y_0_5" name="${newsletter.keys.institution}" type="text">
 
       <div class="color_black margin_y_0_5">Stadt/Ort</div>
-      <input class="input_rect_white margin_y_0_5" name="w-field-field-71620-402641-537738-125386" required="required" type="text">
+      <input class="input_rect_white margin_y_0_5" name="${newsletter.keys.city}" required="required" type="text">
 
       <div class="color_black margin_y_0_5">Land</div>
-      <input class="input_rect_white margin_y_0_5" name="w-field-field-71620-402641-537738-106942" required="required" type="text">
+      <input class="input_rect_white margin_y_0_5" name="${newsletter.keys.country}" required="required" type="text">
 
       <div class="color_black margin_y_2_0">
         <input id="checkbox_consent" name="w-preview-consent-checkbox" required="required" type="checkbox">
