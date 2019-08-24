@@ -6,17 +6,6 @@ module.exports = urbanize => {
   // const sortedFeatures = urbanize.features.sort(featureSort);
 
   const html = `
-    <h1>${urbanize.home.title}</h1>
-    <h2>${urbanize.home.timeframe}</h2>
-    <div>[10 Jahre Urbanize Badge (grafisch, rund, leicht seitlich)]</div>
-    <div>[Collage und Infos (above the fold)]</div>
-
-    <br><br><br><br><br><br>
-
-    <h3>[Statischer Kurz About Text] ${urbanize.home.shortDescription}</h3>
-
-    <br><br><br><br>
-
     ${urbanize.home.features.map(feature => `
       <div>
         <a href="${feature.link}">${feature.title}</a><br>

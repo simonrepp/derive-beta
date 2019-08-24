@@ -29,15 +29,6 @@ body.slim {
 	color: $urbanize_white;
 }
 
-.tiles {
-	flex-grow: 1;
-	max-width: 620px;
-
-	@media (max-width: 1010px) {
-		max-width: 100%;
-	}
-}
-
 .indented {
 	padding-left: 15px;
 }
