@@ -38,3 +38,42 @@
   @include banner_small;
   color: $urbanize_white;
 }
+
+.banner_large {
+  background-color: $urbanize_pink;
+  color: $urbanize_white;
+  margin-bottom: 10em;
+
+  .alignment {
+    @include restraint-medium;
+
+    img {
+      max-width: 100%;
+    }
+
+    .info {
+      font-size: 2vw;
+      line-height: 1.3em;
+      margin-top: 1em;
+      text-align: right;
+    }
+
+    .logo {
+    	max-width: 80%;
+    	position: relative;
+    	left: 10%;
+    }
+
+    .slogan {
+      max-width: 30%;
+      left: 35%;
+      margin-top: 5em;
+      position: relative;
+    }
+
+    .sujet {
+      margin-bottom: -11em;
+      margin-top: -20em;
+    }
+  }
+}

@@ -1,6 +1,7 @@
 const footer = require('../widgets/footer.js');
 const header = require('../widgets/header.js');
 const smallBanner = require('../widgets/banner_small.js');
+const largeBanner = require('../widgets/banner_large.js');
 
 module.exports = (content, urbanize, options = {}) => {
   if(!options.banner) {
@@ -71,7 +72,7 @@ module.exports = (content, urbanize, options = {}) => {
       `:`
         <body>
           ${header(urbanize)}
-          ${options.banner === 'small' ? smallBanner('pink') : 'TODO: Large Banner'}
+          ${options.banner === 'small' ? smallBanner('pink') : largeBanner}
 
           <div class="content">
             ${content}

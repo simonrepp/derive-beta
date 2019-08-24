@@ -44,5 +44,5 @@ module.exports = urbanize => {
   //   </div>
   // `;
 
-  return layout(html, urbanize, { tiles: true, title: urbanize.title });
+  return layout(html, urbanize, { banner: 'large', title: urbanize.title });
 };
