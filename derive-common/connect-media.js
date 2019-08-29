@@ -124,6 +124,17 @@ module.exports = data => {
     }
   });
 
+  for(const feature of data.urbanize.home.features) {
+    if(feature.image && !connectMedia(data, feature.image)) {
+      data.warnings.push({
+        files: [{ path: feature.sourceFile }],
+        message: `Das Feature "${feature.title}" referenziert im Dateifeld "Bild" die Datei "${feature.image.normalizedPath}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`
+      });
+
+      data.features.delete(feature.sourceFile);
+    }
+  }
+
   // TODO: Revisit how the singular data.festival section is invalidated on error (set to null?) and if this is all gracefully and soundly handled
   if(data.festival) {
     if(connectMedia(data, data.festival.image)) {

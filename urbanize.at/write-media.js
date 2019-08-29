@@ -94,12 +94,12 @@ module.exports = async (data, urbanize, preview) => {
   }
 
   let featureNumber = 0;
-  for(let feature of urbanize.features) {
+  for(const feature of urbanize.home.features) {
     if(feature.image) {
       if(preview) {
         feature.image.written = encodeURI(`/_root_media/${feature.image.localFilesystemPath}`);
       } else {
-        feature.image.written = path.join('/features', `bild-${featureNumber++}${path.extname(feature.image.normalizedPath)}`);
+        feature.image.written = path.join('/', `bild-${featureNumber++}${path.extname(feature.image.normalizedPath)}`);
         concurrentWrites.push( copyResized(feature.image, feature.image.localFilesystemPath, feature.image.written) );
         feature.image.written += `?${urbanize.assetHash}`;
       }
