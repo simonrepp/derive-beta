@@ -2,16 +2,31 @@ const { featureSort } = require('../../derive-common/util.js');
 const layout = require('./layout.js');
 const scrollToTop = require('../widgets/scroll_to_top.js');
 
+const feature = feature => `
+  <div class="feature margin_y_2_0">
+    <img src="${feature.image.written}">
+    <hr class="hairline">
+    <h1><a href="${feature.link}">${feature.title}</a></h1>
+    <hr class="hairline">
+
+    ${feature.text}
+
+    <hr>
+  </div>
+`;
+
 module.exports = urbanize => {
   // const sortedFeatures = urbanize.features.sort(featureSort);
 
   const html = `
-    ${urbanize.home.features.map(feature => `
-      <div>
-        <a href="${feature.link}">${feature.title}</a><br>
-        ${feature.text}<br>
-      </div>
-    `).join('<br><br>')}
+    <div class="features alignment_desktop">
+      <div>${urbanize.home.features.filter((_, index) => index % 2 === 0).map(feature).join('')}</div>
+      <div>${urbanize.home.features.filter((_, index) => index % 2 === 1).map(feature).join('')}</div>
+    </div>
+
+    <div class="features alignment_mobile">
+      ${urbanize.home.features.map(feature).join('')}
+    </div>
 
     ${scrollToTop}
   `;

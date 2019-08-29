@@ -34,3 +34,13 @@ h1 {
   font-size: 1.65em;
   font-weight: 500;
 }
+
+hr {
+	background-color: $urbanize_pink;
+	height: 0.5em;
+	border: none;
+
+  &.hairline {
+    height: 1px;
+  }
+}
