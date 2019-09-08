@@ -35,6 +35,16 @@ h1 {
   font-weight: 500;
 }
 
+h2 {
+  color: $urbanize_pink;
+  font-weight: 500;
+}
+
+h3 {
+  color: $urbanize_pink;
+  font-weight: 600;
+}
+
 hr {
 	background-color: $urbanize_pink;
 	height: 0.5em;
@@ -43,4 +53,8 @@ hr {
   &.hairline {
     height: 1px;
   }
+}
+
+strong {
+  font-weight: 600;
 }
