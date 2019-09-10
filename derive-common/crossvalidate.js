@@ -258,7 +258,7 @@ module.exports = data => {
     if(urbanizePermalinks.hasOwnProperty(event.permalink)) {
       urbanizePermalinkConflict(urbanizePermalinks[event.permalink], { event });
 
-      data.events.delete(event.sourceFile);
+      delete data.urbanize.events[event.sourceFile];
     } else {
       urbanizePermalinks[event.permalink] = { event };
     }
