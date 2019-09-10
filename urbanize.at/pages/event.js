@@ -37,6 +37,15 @@ module.exports = (urbanize, event) => {
 
       <hr>
 
+      ${event.links.length > 0 ? `
+        <div class="margin_y_0_5">
+          <strong>Links</strong><br>
+          ${event.links.map(link => `
+              <a href="${link}">${link}</a><br>
+          `).join('')}
+        </div>
+      ` : ''}
+
       ${participants(event.participants)}
       Kategorie: ${event.category}
 
