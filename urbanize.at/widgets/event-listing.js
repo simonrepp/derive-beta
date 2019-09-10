@@ -73,9 +73,13 @@ module.exports = events => `
             </a>
           </h2>
 
-          ${event.abstract ? event.abstract.converted : ''}
+          <div class="margin_y_0_5">
+            ${event.subtitle}
 
-          Mit Marie und Max Mustermann
+            <a href="/${event.permalink}/">
+              <img src="/images/arrow.svg">
+            </a>
+          </div>
 
           ${event.additionalInfo ? `
             <div class="margin_y_0_5">

@@ -42,8 +42,8 @@ module.exports = async (data, enoPath) => {
       event.permalinkField = doc.field('Permalink');
       event.permalink = event.permalinkField.requiredPermalinkValue();
 
-      event.subtitle = doc.field('Untertitel').optionalStringValue();
       event.url = doc.field('Externer Link').optionalUrlValue();
+      event.subtitle = doc.field('Untertitel').requiredStringValue();
       event.participantReferences = doc.list('Beteiligte').items().map(item => ({ item, name: item.requiredStringValue() }));
       event.category = doc.field('Kategorie').requiredUrbanizeCategoryValue();
       event.image = doc.field('Bild').optionalPathValue();
