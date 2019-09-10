@@ -1,6 +1,7 @@
 .event {
   display: grid;
   grid-gap: 2em;
+  grid-template-columns: 2fr 3fr;
 }
 
 .event_details {
@@ -11,4 +12,16 @@
   position: absolute;
   right: 0;
   top: 0;
+}
+
+.event_download {
+  display: flex;
+  align-items: center;
+
+  img {
+    margin-right: 1em;
+    position: relative;
+    top: -0.1em;
+    width: 1.5em;
+  }
 }

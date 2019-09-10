@@ -50,8 +50,8 @@ module.exports = events => `
             ${event.category}
           </a>
 
-          Mi, 9 OKT 2019<br>
-          19:00
+          <strong class="color_pink">Mi, 9 OKT 2019</strong><br>
+          <strong class="color_pink">19:00</strong>
           == ${timeframe(event)}
 
           <hr class="hairline">
@@ -81,20 +81,55 @@ module.exports = events => `
             </a>
           </div>
 
+          ${event.participants.length > 0 ? `
+            <div class="margin_y_0_5">
+              <strong>
+                Mit
+                <a href="/${event.participants[0].permalink}/" target="_blank">
+                  ${event.participants[0].name}
+                </a>
+
+                ${event.participants >= 3 ? event.participants.slice(1, event.participants.length - 1).map(participant => `
+                  ,
+                  <a href="/${participant.permalink}/" target="_blank">
+                    ${participant.name}
+                  </a>
+                `).join('') : ''}
+
+                ${event.participants >= 2 ? `
+                  und
+                  <a href="/${event.participants[event.participants.length - 1].permalink}/" target="_blank">
+                    ${event.participants[event.participants.length - 1].name}
+                  </a>
+                ` : ''}
+              </strong>
+            </div>
+          ` : ''}
+
           ${event.additionalInfo ? `
             <div class="margin_y_0_5">
               ${event.additionalInfo.converted}
             </div>
           ` : ''}
 
-          <a href="#">
-            <img src="/images/calendar.svg"> Termin downloaden
-          </a>
+          <div class="flex_split_lr margin_y_0_5">
+            <div>
+              <a class="event_download" href="#">
+                <img src="/images/calendar.svg"> <span class="font_size_0_8">Termin downloaden</span>
+              </a>
+            </div>
 
-          <!-- TODO: No boolean field for this, no info where to link to -->
-          <a class="button_rect_pink" href="">
-            Anmeldung
-          </a>
+            <div>
+              <!-- TODO: No boolean field for this, no info where to link to -->
+              ${true ? `
+                <a class="button_rect_pink" href="">
+                  Anmeldung
+                </a>
+              ` : `
+                Keine Anmeldung notwendig
+              `}
+            </div>
+          </div>
         </div>
       </div>
 
