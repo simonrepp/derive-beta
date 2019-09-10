@@ -9,11 +9,9 @@ module.exports = urbanize => {
         Programm
       </div>
 
-      <a class="filter" data-filter="all">Alles anzeigen</a> &nbsp;&nbsp;
-      <a class="filter" data-filter="day">Bestimmter Tag</a> &nbsp;&nbsp;
-      <a class="filter" data-filter="format">Bestimmtes Format</a> &nbsp;&nbsp;
-      <a class="filter" data-filter="alltagsforschung">Alltagsforschung</a> &nbsp;&nbsp;
-      <a class="filter" data-filter="stadtlabor">Stadtlabor</a> &nbsp;&nbsp;
+      <a class="button_rect_pink filter" data-filter="date">Datum</a> &nbsp;&nbsp;
+      <a class="button_rect_pink filter" data-filter="category">Kategorie</a> &nbsp;&nbsp;
+      <a class="button_rect_pink filter" data-filter="query">Volltextsuche</a> &nbsp;&nbsp;
 
       <br><br>
 
