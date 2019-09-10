@@ -47,6 +47,7 @@ module.exports = async (data, enoPath) => {
       event.participantReferences = doc.list('Beteiligte').items().map(item => ({ item, name: item.requiredStringValue() }));
       event.category = doc.field('Kategorie').requiredUrbanizeCategoryValue();
       event.image = doc.field('Bild').optionalPathValue();
+      event.imageCredits = doc.field('Bilduntertitel').optionalStringValue();
       event.venue = doc.field('Venue').requiredStringValue();
       event.address = doc.field('Adresse').requiredStringValue();
       event.directions = doc.field('Anfahrt').optionalMarkdownValue();
