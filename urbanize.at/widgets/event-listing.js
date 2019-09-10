@@ -57,7 +57,9 @@ module.exports = events => `
           <hr class="hairline">
 
           <strong>${event.venue}</strong><br>
-          <strong>${event.address}</strong>
+          <strong>
+            ${event.mapLink ? `<a href="${event.mapLink}" target="_blank">${event.address}</a>` : event.address}
+          </strong>
 
           ${event.directions ? `
             <div class="margin_y_0_5">
