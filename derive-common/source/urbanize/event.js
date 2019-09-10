@@ -56,8 +56,8 @@ module.exports = async (data, enoPath) => {
       event.language = doc.field('Sprache').requiredUrbanizeLanguageValue();
 
       event.dates = doc.sections('Termin').map(date => ({
-        date: date.field('Datum').optionalDatetimeValue(), // TODO: Required ?
-        time: date.field('Zeit').optionalStringValue() // TODO: Required ?
+        date: date.field('Datum').requiredDatetimeValue(),
+        time: date.field('Zeit').requiredStringValue()
       }));
 
       doc.assertAllTouched();
