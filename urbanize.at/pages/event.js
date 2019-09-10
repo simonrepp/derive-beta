@@ -1,6 +1,5 @@
 const striptags = require('striptags');
 
-const addThis = require('../widgets/add-this.js');
 const layout = require('./layout.js');
 const participants = require('../widgets/participants.js');
 const scrollToTop = require('../widgets/scroll_to_top.js');
@@ -9,33 +8,63 @@ const timeframe = require('../widgets/timeframe.js');
 module.exports = (urbanize, event) => {
   const html = `
     <div>
-      <div class="generic__heading">
-        ${event.title}
-      </div>
+      <strong class="color_pink">Mi, 9 OKT 2019</strong><br>
+      <strong class="color_pink">19:00</strong>
+      == ${timeframe(event)}
 
-      ${event.subtitle ? `
-        <strong class="generic__subheading generic__heading_addendum">
-          ${event.subtitle}
-        </strong>
-      `:''}
+      <hr class="hairline">
 
-      <div class="additional">
-        ${timeframe(event)}<br>
-        ${event.address}
-      </div>
+      <strong>${event.venue}</strong><br>
+      <strong>
+        ${event.mapLink ? `<a href="${event.mapLink}" target="_blank">${event.address}</a>` : event.address}
+      </strong>
 
-      <div class="additional">
-        ${event.additionalInfo ? event.additionalInfo.converted : ''}
-      </div>
+      ${event.directions ? `
+        <div class="margin_y_0_5">
+          ${event.directions.converted}
+        </div>
+      ` : ''}
 
-      ${event.abstract ? `<div>${event.abstract.converted}</div>` : ''}
+      <hr class="hairline">
+
+      <h2>
+        <a href="/${event.permalink}/">
+          ${event.title}
+        </a>
+      </h2>
 
       ${event.text ? `
-        <hr>
-        <div>${event.text.written}</div>
-      `:''}
+        <div class="margin_y_0_5">
+          ${event.text.written}
+        </div>
+      ` : ''}
 
-      <hr>
+      ${event.participants.length > 0 ? `
+        <div class="margin_y_0_5">
+          <strong>
+            Mit
+            <a href="/${event.participants[0].permalink}/" target="_blank">
+              ${event.participants[0].name}
+            </a>
+
+            ${event.participants >= 3 ? event.participants.slice(1, event.participants.length - 1).map(participant => `
+              ,
+              <a href="/${participant.permalink}/" target="_blank">
+                ${participant.name}
+              </a>
+            `).join('') : ''}
+
+            ${event.participants >= 2 ? `
+              und
+              <a href="/${event.participants[event.participants.length - 1].permalink}/" target="_blank">
+                ${event.participants[event.participants.length - 1].name}
+              </a>
+            ` : ''}
+          </strong>
+        </div>
+      ` : ''}
+
+      <hr class="hairline">
 
       ${event.links.length > 0 ? `
         <div class="margin_y_0_5">
@@ -46,10 +75,14 @@ module.exports = (urbanize, event) => {
         </div>
       ` : ''}
 
-      ${participants(event.participants)}
-      Kategorie: ${event.category}
+      <div class="margin_y_0_5">
+        <a class="button_rect_pink" href="">
+          Anmeldung
+        </a>
+      </div>
 
-      ${addThis(`${urbanize.base_url}/veranstaltungen/${event.permalink}/`)}
+      <hr>
+
       ${scrollToTop}
     </div>
   `;
