@@ -92,7 +92,7 @@ module.exports = data => {
         message: `Die Veranstaltung "${event.title}" referenziert im Dateifeld "Bild" die Datei "${event.image.normalizedPath}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`
       });
 
-      delete data.events[event.sourceFile];
+      delete data.urbanize.events[event.sourceFile];
     }
 
     if(event.text) {
@@ -105,7 +105,7 @@ module.exports = data => {
             message: `Problem beim prüfen der eingebetteten Mediendateien in der Veranstaltung "${event.title}": ${err.message}`
           });
 
-          delete data.events[event.sourceFile];
+          delete data.urbanize.events[event.sourceFile];
         } else {
           throw err;
         }
