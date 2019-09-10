@@ -122,14 +122,15 @@ module.exports = events => `
             </div>
 
             <div>
-              <!-- TODO: No boolean field for this, no info where to link to -->
-              ${true ? `
-                <a class="button_rect_pink" href="">
-                  Anmeldung
-                </a>
-              ` : `
-                Keine Anmeldung notwendig
-              `}
+              ${event.signupRequired ?
+                  event.signupFull ?
+                    '<span class="color_pink">Anmeldung bereits ausgebucht</span>'
+                  : `
+                    <a class="button_rect_pink" href="mailto:todo@derive.at?subject=${encodeURIComponent(`Anmeldung für ${event.title}`)}&body=${encodeURIComponent('TODO')}">
+                      Anmeldung
+                    </a>
+                  `
+              : '<span class="color_pink">Keine Anmeldung notwendig</span>'}
             </div>
           </div>
         </div>

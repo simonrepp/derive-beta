@@ -57,6 +57,8 @@ module.exports = async (data, enoPath) => {
       event.isStadtlabor = doc.field('Stadtlabor').requiredBooleanValue();
       event.additionalInfo = doc.field('Zusatzinfo').optionalMarkdownValue();
       event.language = doc.field('Sprache').requiredUrbanizeLanguageValue();
+      event.signupRequired = doc.field('Anmeldung erforderlich').requiredBooleanValue();
+      event.signupFull = doc.field('Anmeldung ausgebucht').requiredBooleanValue();
 
       event.dates = doc.sections('Termin').map(date => ({
         date: date.field('Datum').requiredDatetimeValue(),
