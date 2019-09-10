@@ -52,8 +52,8 @@ module.exports = events => `
 
           <hr class="hairline">
 
-          <strong>Venue</strong><br>
-          <strong>${event.address || 'Straße, Ort' || 'is strasse ort == address?'}</strong>
+          <strong>${event.venue}</strong><br>
+          <strong>${event.address}</strong>
 
           ${event.directions ? `
             <div class="margin_y_0_5">
