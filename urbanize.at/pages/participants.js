@@ -5,7 +5,7 @@ module.exports = urbanize => {
   const participantsByLetter = [];
 
   for(const participant of urbanize.participants) {
-    const letter = participant.name[0].toUpperCase();
+    const letter = (participant.lastName || participant.name)[0].toUpperCase();
 
     if(participantsByLetter.hasOwnProperty(letter)) {
       participantsByLetter[letter].push(participant);
@@ -28,9 +28,13 @@ module.exports = urbanize => {
             ${letter}
           </div>
           <div>
-            ${participants.map(participant => `
-              <div><a href="/${participant.permalink}/">${participant.name}</a></div>
-            `).join('')}
+            ${participants.map(participant =>
+              participant.lastName ? `
+                <div><a href="/${participant.permalink}/">${participant.lastName}, ${participant.firstName}</a></div>
+              ` : `
+                <div><a href="/${participant.permalink}/">${participant.name}</a></div>
+              `
+            ).join('')}
           </div>
         </div>
       `).join('')}

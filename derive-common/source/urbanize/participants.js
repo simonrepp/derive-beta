@@ -14,6 +14,8 @@ module.exports = async (data, enoPath) => {
       doc.allElementsRequired();
 
       const participants = doc.sections().map(participantSection => ({
+        firstName: participantSection.field('Vorname').optionalStringValue(),
+        lastName: participantSection.field('Nachname').optionalStringValue(),
         name: participantSection.stringKey(),
         permalinkField: participantSection.field('Permalink'),
         permalink: participantSection.field('Permalink').requiredPermalinkValue(),
