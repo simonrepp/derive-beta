@@ -5,7 +5,7 @@ module.exports = urbanize => {
   const participantsByLetter = [];
 
   for(const participant of urbanize.participants) {
-    const letter = participant.name[0];
+    const letter = participant.name[0].toUpperCase();
 
     if(participantsByLetter.hasOwnProperty(letter)) {
       participantsByLetter[letter].push(participant);
@@ -20,7 +20,9 @@ module.exports = urbanize => {
         Beteiligte:
       </div>
 
-      ${Object.entries(participantsByLetter).map(([letter, participants]) => `
+      ${Object.entries(participantsByLetter)
+              .sort((a,b) => b[0] > a[0] ? -1 : 1)
+              .map(([letter, participants]) => `
         <div class="letter">
           <div>
             ${letter}
