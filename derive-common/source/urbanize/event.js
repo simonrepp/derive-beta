@@ -48,11 +48,11 @@ module.exports = async (data, enoPath) => {
       event.category = doc.field('Kategorie').requiredUrbanizeCategoryValue();
       event.image = doc.field('Bild').optionalPathValue();
       event.address = doc.field('Adresse').optionalStringValue();
+      event.directions = doc.field('Anfahrt').optionalMarkdownValue();
       event.abstract = doc.field('Abstract').requiredMarkdownValue();
-      event.additionalInfo = doc.field('Zusatzinfo').optionalMarkdownValue();
       event.text = doc.field('Beschreibung (Markdown)').requiredMarkdownWithMediaValue();
-      event.isAlltagsforschung = doc.field('Alltagsforschung').requiredBooleanValue();
       event.isStadtlabor = doc.field('Stadtlabor').requiredBooleanValue();
+      event.additionalInfo = doc.field('Zusatzinfo').optionalMarkdownValue();
       event.language = doc.field('Sprache').requiredUrbanizeLanguageValue();
 
       event.dates = doc.sections('Termin').map(date => ({
