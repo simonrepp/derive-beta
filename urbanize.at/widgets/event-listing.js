@@ -33,25 +33,64 @@ const eventSort = (a, b) => {
 module.exports = events => `
   <div>
     ${events.sort(eventSort).map(event => `
-      <div class="list-item">
-        ${event.image ? `
-          <img class="teaser-image" src="${event.image.writtenCropped}">
-        `:''}
-
-        <strong class="generic__subheading">
-          <a href="/${event.permalink}/">
-            ${event.title}
-          </a>
-        </strong>
-
-        <div class="additional">
-          ${timeframe(event)}
-          &nbsp;
-          ${event.address || ''}
+      <div class="event margin_y_2_0">
+        <div class="event_image">
+          ${event.image ? `
+            <img class="teaser-image" src="${event.image.writtenCropped}">
+          `:''}
         </div>
 
-        ${event.abstract ? event.abstract.converted : ''}
+        <div class="event_details">
+          <!-- position: absolute, right: 0 etc. -->
+          <a class="button_rect_black event_category_tag" href="#">
+            ${event.category}
+          </a>
+
+          Mi, 9 OKT 2019<br>
+          19:00
+          == ${timeframe(event)}
+
+          <hr class="hairline">
+
+          <strong>Venue</strong><br>
+          <strong>${event.address || 'Straße, Ort' || 'is strasse ort == address?'}</strong>
+
+          ${event.directions ? `
+            <div class="margin_y_0_5">
+              ${event.directions.converted}
+            </div>
+          ` : ''}
+
+          <hr class="hairline">
+
+          <h2>
+            <a href="/${event.permalink}/">
+              ${event.title}
+            </a>
+          </h2>
+
+          ${event.abstract ? event.abstract.converted : ''}
+
+          Mit Marie und Max Mustermann
+
+          ${event.additionalInfo ? `
+            <div class="margin_y_0_5">
+              ${event.additionalInfo.converted}
+            </div>
+          ` : ''}
+
+          <a href="#">
+            <img src="/images/calendar.svg"> Termin downloaden
+          </a>
+
+          <!-- TODO: No boolean field for this, no info where to link to -->
+          <a class="button_rect_pink" href="">
+            Anmeldung
+          </a>
+        </div>
       </div>
+
+      <hr>
     `).join('')}
   </div>
 `;

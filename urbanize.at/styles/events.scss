@@ -1,0 +1,14 @@
+.event {
+  display: grid;
+  grid-gap: 2em;
+}
+
+.event_details {
+  position: relative;
+}
+
+.event_category_tag {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
