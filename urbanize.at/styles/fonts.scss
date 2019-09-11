@@ -7,6 +7,13 @@
 
 @font-face {
   font-family: 'Jost';
+  font-style: italic;
+  font-weight: 400;
+  src: url('/fonts/Jost-400-BookItalic.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Jost';
   font-style: normal;
   font-weight: 500;
   src: url('/fonts/Jost-500-Medium.woff') format('woff');
