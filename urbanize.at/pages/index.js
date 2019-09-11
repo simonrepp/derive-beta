@@ -5,6 +5,9 @@ const scrollToTop = require('../widgets/scroll_to_top.js');
 const feature = feature => `
   <div class="feature margin_y_2_0">
     <img src="${feature.image.written}">
+    ${feature.imageCredits ? `
+      <div class="color_grey font_size_0_8 text_align_right">${feature.imageCredits}</div>
+    ` : ''}
     <hr class="hairline">
     <h1><a href="${feature.link}">${feature.title}</a></h1>
     <hr class="hairline">

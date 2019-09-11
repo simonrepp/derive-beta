@@ -18,6 +18,7 @@ module.exports = async (data, enoPath) => {
       const home = {
         features: doc.sections('Feature').map(edition => ({
           image: edition.field('Bild').optionalPathValue(),
+          imageCredits: edition.field('Bilduntertitel').optionalStringValue(),
           link: edition.field('Link').requiredUrlValue(),
           text: edition.field('Text').requiredMarkdownValue(),
           title: edition.field('Titel').requiredStringValue()
