@@ -19,7 +19,7 @@ module.exports = async (data, enoPath) => {
         features: doc.sections('Feature').map(edition => ({
           image: edition.field('Bild').optionalPathValue(),
           link: edition.field('Link').requiredUrlValue(),
-          text: edition.field('Text').requiredStringValue(),
+          text: edition.field('Text').requiredMarkdownValue(),
           title: edition.field('Titel').requiredStringValue()
         })),
         sourceFile: enoPath,

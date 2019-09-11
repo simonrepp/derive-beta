@@ -9,7 +9,7 @@ const feature = feature => `
     <h1><a href="${feature.link}">${feature.title}</a></h1>
     <hr class="hairline">
 
-    ${feature.text}
+    ${feature.text.converted}
 
     <hr>
   </div>
