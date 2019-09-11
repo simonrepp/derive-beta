@@ -16,6 +16,14 @@ const signupButton = require('../widgets/signup_button.js');
 module.exports = (urbanize, event) => {
   const html = `
     <div>
+      <div class="margin_y_2_0">
+        ${event.image ? `
+          <img src="${event.image.written}">
+        `:''}
+        ${event.imageCredits ? `
+          <div class="color_grey font_size_0_8 text_align_right">${event.imageCredits}</div>
+        `:''}
+      </div>
 
       ${event.dates.map(date => `
         <div class="flex_split_lr margin_y_0_5">
