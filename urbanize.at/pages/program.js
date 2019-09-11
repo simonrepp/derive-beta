@@ -15,8 +15,6 @@ module.exports = urbanize => {
 
       <br><br>
 
-      [Sortierung frueher oben, spaeter unten (zb. MO oben, DI unten)]<br><br>
-
       ${eventListing(Object.values(urbanize.events))}
 
       ${scrollToTop}
