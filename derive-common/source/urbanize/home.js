@@ -16,17 +16,14 @@ module.exports = async (data, enoPath) => {
       doc.allElementsRequired();
 
       const home = {
-        features: doc.sections('Feature').map(edition => ({
-          image: edition.field('Bild').optionalPathValue(),
-          imageCredits: edition.field('Bilduntertitel').optionalStringValue(),
-          link: edition.field('Link').requiredUrlValue(),
-          text: edition.field('Text').requiredMarkdownValue(),
-          title: edition.field('Titel').requiredStringValue()
+        features: doc.sections('Feature').map(feature => ({
+          image: feature.field('Bild').optionalPathValue(),
+          imageCredits: feature.field('Bilduntertitel').optionalStringValue(),
+          link: feature.field('Link').requiredUrlValue(),
+          text: feature.field('Text').requiredMarkdownValue(),
+          title: feature.field('Titel').requiredStringValue()
         })),
-        sourceFile: enoPath,
-        shortDescription: doc.field('Kurzbeschreibung Festival').requiredStringValue(),
-        title: doc.field('Titel').requiredStringValue(),
-        timeframe: doc.field('Zeitraum').requiredStringValue()
+        sourceFile: enoPath
       };
 
       doc.assertAllTouched();
