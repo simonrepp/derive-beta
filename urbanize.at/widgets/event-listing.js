@@ -39,8 +39,7 @@ module.exports = events => `
             <img src="${event.image.written}">
           `:''}
           ${event.imageCredits ? `
-            <!-- TODO: right aligned, testing -->
-            <span class="color_grey font_size_0_8">${event.imageCredits}</span>
+            <div class="color_grey font_size_0_8 text_align_right">${event.imageCredits}</div>
           `:''}
         </div>
 
