@@ -33,6 +33,10 @@ module.exports = (urbanize, event) => {
         </a>
       </h2>
 
+      <div class="margin_y_0_5">
+        <strong>${event.subtitle}</strong>
+      </div>
+
       ${event.text ? `
         <div class="margin_y_0_5">
           ${event.text.written}
