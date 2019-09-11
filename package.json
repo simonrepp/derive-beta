@@ -53,5 +53,5 @@
     "urbanize-scripts": "parcel build urbanize.at/scripts/main.js --experimental-scope-hoisting --no-cache --no-source-maps --out-dir urbanize.at/static --out-file scripts.js",
     "urbanize-styles": "node-sass --output-style compressed urbanize.at/styles/main.scss urbanize.at/static/styles.css"
   },
-  "version": "1.23.5"
+  "version": "1.23.6"
 }
