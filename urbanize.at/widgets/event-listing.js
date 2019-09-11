@@ -75,11 +75,11 @@ module.exports = events => `
           </h2>
 
           <div class="margin_y_0_5">
-            ${event.subtitle}
-
-            <a href="/${event.permalink}/">
-              <img src="/images/arrow.svg">
-            </a>
+            ${event.abstract.converted.replace(/(?=<\/p>\s*$)/, `
+              <a href="/${event.permalink}/">
+                <img src="/images/arrow.svg">
+              </a>
+            `)}
           </div>
 
           ${event.participants.length > 0 ? `
