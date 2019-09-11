@@ -50,8 +50,8 @@ module.exports = async (data, urbanize, preview) => {
         event.image.written = encodeURI(`/_root_media/${event.image.localFilesystemPath}`);
         event.image.writtenCropped = encodeURI(`/_root_media/${event.image.localFilesystemPath}`);
       } else {
-        event.image.written = path.join('/veranstaltungen', event.permalink, `bild${path.extname(event.image.normalizedPath)}`);
-        event.image.writtenCropped = path.join('/veranstaltungen', event.permalink, `bild-ausschnitt${path.extname(event.image.normalizedPath)}`);
+        event.image.written = path.join('/', event.permalink, `bild${path.extname(event.image.normalizedPath)}`);
+        event.image.writtenCropped = path.join('/', event.permalink, `bild-ausschnitt${path.extname(event.image.normalizedPath)}`);
         concurrentWrites.push( copyResized(event.image, event.image.localFilesystemPath, event.image.written, event.image.writtenCropped) );
         event.image.written += `?${urbanize.assetHash}`;
         event.image.writtenCropped += `?${urbanize.assetHash}`;
@@ -73,7 +73,7 @@ module.exports = async (data, urbanize, preview) => {
         }
       } else {
         for(let download of event.text.downloads) {
-          download.written = path.join('/veranstaltungen', event.permalink, `text-${download.virtualFilename}`);
+          download.written = path.join('/', event.permalink, `text-${download.virtualFilename}`);
           concurrentWrites.push( copy(download.localFilesystemPath, download.written) );
           download.written += `?${urbanize.assetHash}`;
 
@@ -81,7 +81,7 @@ module.exports = async (data, urbanize, preview) => {
         }
 
         for(let embed of event.text.embeds) {
-          embed.written = path.join('/veranstaltungen', event.permalink, `text-${embed.virtualFilename}`);
+          embed.written = path.join('/', event.permalink, `text-${embed.virtualFilename}`);
           concurrentWrites.push( copyResized(embed, embed.localFilesystemPath, embed.written) );
           embed.written += `?${urbanize.assetHash}`;
 
