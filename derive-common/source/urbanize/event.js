@@ -63,6 +63,10 @@ module.exports = async (data, enoPath) => {
         time: date.field('Zeit').requiredStringValue()
       }));
 
+      if(event.dates.length === 0) {
+        throw doc.error('Eine Veranstaltung muss zumindest einen Termin besitzen.');
+      }
+
       // TODO: Remove this hack after the "allElementsRequired -> explicit
       // optionalSection override" fix is available and publicly released
       // through enolib
