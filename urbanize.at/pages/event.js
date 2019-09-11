@@ -1,18 +1,36 @@
+const moment = require('moment');
 const striptags = require('striptags');
+
+moment.updateLocale('de', {
+  monthsShort : [
+    'JÄN', 'FEB', 'MÄR', 'APR', 'MAI', 'JUN',
+    'JUL', 'AUG', 'SEPT', 'OKT', 'NOV', 'DEZ'
+  ]
+});
 
 const layout = require('./layout.js');
 const participants = require('../widgets/participants.js');
 const scrollToTop = require('../widgets/scroll_to_top.js');
-const timeframe = require('../widgets/timeframe.js');
+const signupButton = require('../widgets/signup_button.js');
 
 module.exports = (urbanize, event) => {
   const html = `
     <div>
-      <strong class="color_pink">Mi, 9 OKT 2019</strong><br>
-      <strong class="color_pink">19:00</strong>
-      == ${timeframe(event)}
 
-      <hr class="hairline">
+      ${event.dates.map(date => `
+        <div class="flex_split_lr margin_y_0_5">
+          <div>
+            <strong class="color_pink">${moment(date.date).locale('de').format('dd, D MMM YYYY')}</strong><br>
+            <strong class="color_pink">${date.time}</strong>
+          </div>
+
+          <div>
+            ${signupButton(event, date)}
+          </div>
+        </div>
+
+        <hr class="hairline">
+      `).join('')}
 
       <strong>${event.venue}</strong><br>
       <strong>
@@ -78,12 +96,6 @@ module.exports = (urbanize, event) => {
           `).join('')}
         </div>
       ` : ''}
-
-      <div class="margin_y_0_5">
-        <a class="button_rect_pink" href="">
-          Anmeldung
-        </a>
-      </div>
 
       <hr>
 

@@ -1,11 +1,13 @@
 const moment = require('moment');
 
 moment.updateLocale('de', {
-    monthsShort : [
-        'JÄN', 'FEB', 'MÄR', 'APR', 'MAI', 'JUN',
-        'JUL', 'AUG', 'SEPT', 'OKT', 'NOV', 'DEZ'
-    ]
+  monthsShort : [
+    'JÄN', 'FEB', 'MÄR', 'APR', 'MAI', 'JUN',
+    'JUL', 'AUG', 'SEPT', 'OKT', 'NOV', 'DEZ'
+  ]
 });
+
+const signupButton = require('./signup_button.js');
 
 const eventSort = (a, b) => {
   const dateDifference = a.date.date - b.date.date;
@@ -117,16 +119,7 @@ module.exports = events => {
               </div>
 
               <div>
-                ${event.signup ?
-                    event.signup.full ?
-                      '<span class="color_pink">Anmeldung bereits ausgebucht</span>'
-                    : `
-                      <!-- TODO: Include event date in prefilled email subject, Multiple signup buttons @ event details page -->
-                      <a class="button_rect_pink" href="mailto:${event.signup.email}?subject=${encodeURIComponent(`Anmeldung für ${event.title}`)}">
-                        Anmeldung
-                      </a>
-                    `
-                : '<span class="color_pink">Keine Anmeldung notwendig</span>'}
+                ${signupButton(event, date)}
               </div>
             </div>
           </div>
