@@ -57,13 +57,25 @@ module.exports = async (data, enoPath) => {
       event.isStadtlabor = doc.field('Stadtlabor').requiredBooleanValue();
       event.additionalInfo = doc.field('Zusatzinfo').optionalMarkdownValue();
       event.language = doc.field('Sprache').requiredUrbanizeLanguageValue();
-      event.signupRequired = doc.field('Anmeldung erforderlich').requiredBooleanValue();
-      event.signupFull = doc.field('Anmeldung ausgebucht').requiredBooleanValue();
 
       event.dates = doc.sections('Termin').map(date => ({
         date: date.field('Datum').requiredDatetimeValue(),
         time: date.field('Zeit').requiredStringValue()
       }));
+
+      // TODO: Remove this hack after the "allElementsRequired -> explicit
+      // optionalSection override" fix is available and publicly released
+      // through enolib
+      doc.allElementsRequired(false);
+
+      const signup = doc.optionalSection('Anmeldung');
+
+      if(signup) {
+        event.signup = {
+          email: signup.field('Email').requiredEmailValue(),
+          full: signup.field('Ausgebucht').requiredBooleanValue()
+        };
+      }
 
       doc.assertAllTouched();
     } catch(err) {

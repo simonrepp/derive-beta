@@ -122,11 +122,12 @@ module.exports = events => `
             </div>
 
             <div>
-              ${event.signupRequired ?
-                  event.signupFull ?
+              ${event.signup ?
+                  event.signup.full ?
                     '<span class="color_pink">Anmeldung bereits ausgebucht</span>'
                   : `
-                    <a class="button_rect_pink" href="mailto:todo@derive.at?subject=${encodeURIComponent(`Anmeldung für ${event.title}`)}&body=${encodeURIComponent('TODO')}">
+                    <!-- TODO: Include event date in prefilled email subject, Multiple signup buttons @ event details page -->
+                    <a class="button_rect_pink" href="mailto:${event.signup.email}?subject=${encodeURIComponent(`Anmeldung für ${event.title}`)}">
                       Anmeldung
                     </a>
                   `
