@@ -121,34 +121,6 @@ input.input_rect_white {
   width: 100%;
 }
 
-.generic__heading {
-  color: $urbanize_pink;
-  font-size: 1.65em;
-  font-weight: 500;
-  overflow-wrap: break-word;
-
-  a {
-    text-decoration: none;
-  }
-
-  a:hover {
-    border-bottom: 1px solid $urbanize_pink;
-  }
-
-  margin-bottom: 1em;
-}
-
-.generic__heading_addendum {
-  margin-top: -1.3em;
-  margin-bottom: 1em !important;
-}
-
-.generic__subheading {
-  font-size: 1.2em;
-  margin-bottom: 0.1em;
-  display: block;
-}
-
 .flex_split_lr {
   display: flex;
   justify-content: space-between;

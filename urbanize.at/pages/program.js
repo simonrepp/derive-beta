@@ -5,9 +5,9 @@ const scrollToTop = require('../widgets/scroll_to_top.js');
 module.exports = urbanize => {
   const html = `
     <div>
-      <div class="generic__heading">
+      <h1>
         Programm
-      </div>
+      </h1>
 
       <a class="button_rect_pink filter" data-filter="date">Datum</a> &nbsp;&nbsp;
       <a class="button_rect_pink filter" data-filter="category">Kategorie</a> &nbsp;&nbsp;

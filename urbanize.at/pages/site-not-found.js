@@ -3,9 +3,9 @@ const layout = require('./layout.js');
 module.exports = urbanize => {
   const html = `
     <div>
-      <div class="generic__heading">
+      <h1>
         Diese Seite existiert nicht.
-      </div>
+      </h1>
     </div>
   `;
 

@@ -4,9 +4,9 @@ const scrollToTop = require('../widgets/scroll_to_top.js');
 module.exports = (urbanize, page) => {
   const html = `
     <div>
-      <div class="generic__heading">
+      <h1>
         ${page.title}
-      </div>
+      </h1>
 
       ${page.text ? page.text.written : ''}
 

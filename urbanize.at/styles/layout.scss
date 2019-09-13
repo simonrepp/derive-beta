@@ -27,6 +27,10 @@
 body.slim {
 	background-color: $urbanize_pink;
 	color: $urbanize_white;
+
+	h1 {
+		color: $urbanize_white;
+	}
 }
 
 .indented {

@@ -16,9 +16,9 @@ module.exports = urbanize => {
 
   const html = `
     <div class="participants">
-      <div class="generic__heading">
+      <h1>
         Beteiligte:
-      </div>
+      </h1>
 
       ${Object.entries(participantsByLetter)
               .sort((a,b) => b[0] > a[0] ? -1 : 1)
