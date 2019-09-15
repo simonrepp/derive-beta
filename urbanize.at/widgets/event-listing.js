@@ -8,6 +8,7 @@ moment.updateLocale('de', {
 });
 
 const signupButton = require('./signup_button.js');
+const calendarButton = require('./calendar_button.js');
 
 const eventSort = (a, b) => {
   const dateDifference = a.date.date - b.date.date;
@@ -113,9 +114,7 @@ module.exports = events => {
 
             <div class="flex_split_lr margin_y_0_5">
               <div>
-                <a class="event_download" href="#">
-                  <img src="/images/calendar.svg"> <span class="font_size_0_8">Termin downloaden</span>
-                </a>
+                ${calendarButton(event, date)}
               </div>
 
               <div>
