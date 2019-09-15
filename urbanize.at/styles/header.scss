@@ -46,6 +46,7 @@
 		right: 0;
 		text-align: right;
 		top: 0;
+		z-index: 9;
 
 		.toggle_menu {
 			align-items: flex-end;
@@ -85,6 +86,7 @@
 
 .hover_menu_trigger {
 	position: relative;
+	z-index: 9;
 
 	&:hover {
 		.hover_menu {
