@@ -62,7 +62,7 @@ module.exports = async (data, enoPath) => {
       event.dates = doc.sections('Termin').map(date => ({
         date: date.field('Datum').requiredDatetimeValue(),
         fullyBooked: date.field('Ausgebucht').requiredBooleanValue(),
-        time: date.field('Zeit').requiredStringValue()
+        time: date.field('Zeit').requiredTimeframeValue()
       }));
 
       if(event.dates.length === 0) {

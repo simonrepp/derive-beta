@@ -13,7 +13,7 @@ const eventSort = (a, b) => {
   const dateDifference = a.date.date - b.date.date;
 
   if(dateDifference === 0)
-    return a.date.time > b.date.time ? 1 : -1;
+    return a.date.time.raw > b.date.time.raw ? 1 : -1;
 
   return dateDifference;
 };
@@ -49,7 +49,7 @@ module.exports = events => {
             </a>
 
             <strong class="color_pink">${moment(date.date).locale('de').format('dd, D MMM YYYY')}</strong><br>
-            <strong class="color_pink">${date.time}</strong>
+            <strong class="color_pink">${date.time.raw}</strong>
 
             <hr class="hairline">
 

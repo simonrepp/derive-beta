@@ -29,7 +29,7 @@ module.exports = (urbanize, event) => {
         <div class="flex_split_lr margin_y_0_5">
           <div>
             <strong class="color_pink">${moment(date.date).locale('de').format('dd, D MMM YYYY')}</strong><br>
-            <strong class="color_pink">${date.time}</strong>
+            <strong class="color_pink">${date.time.raw}</strong>
           </div>
 
           <div>
