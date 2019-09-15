@@ -34,7 +34,7 @@ module.exports = events => {
     <div>
       ${sortedEvents.map(({ date, event }) => `
         <div class="event margin_y_2_0">
-          <div class="event_image">
+          <div class="event_image_desktop">
             ${event.image ? `
               <img src="${event.image.written}">
             `:''}
@@ -53,6 +53,15 @@ module.exports = events => {
             <strong class="color_pink">${date.time.raw}</strong>
 
             <hr class="hairline">
+
+            <div class="event_image_mobile">
+              ${event.image ? `
+                <img src="${event.image.written}">
+              `:''}
+              ${event.imageCredits ? `
+                <div class="color_grey font_size_0_8 text_align_right">${event.imageCredits}</div>
+              `:''}
+            </div>
 
             <strong>${event.venue}</strong><br>
             <strong>

@@ -2,6 +2,10 @@
   display: grid;
   grid-gap: 2em;
   grid-template-columns: 2fr 3fr;
+
+  @media (max-width: 869px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .event_details {
@@ -23,5 +27,17 @@
     position: relative;
     top: -0.1em;
     width: 1.5em;
+  }
+}
+
+.event_image_desktop {
+  @media (max-width: 869px) {
+    display: none;
+  }
+}
+
+.event_image_mobile {
+  @media (min-width: 870px) {
+    display: none;
   }
 }
