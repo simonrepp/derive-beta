@@ -74,8 +74,10 @@ module.exports = (content, urbanize, options = {}) => {
           ${header(urbanize)}
           ${options.banner === 'small' ? smallBanner('pink') : largeBanner}
 
-          <div class="content">
-            ${content}
+          <div>
+            <div class="content">
+              ${content}
+            </div>
           </div>
 
           ${footer(urbanize)}
