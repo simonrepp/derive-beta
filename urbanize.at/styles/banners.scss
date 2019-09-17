@@ -65,15 +65,25 @@
     }
 
     .slogan {
-      max-width: 30%;
+      font-size: 2vw;
       left: 35%;
-      margin-top: 5em;
+      margin-top: 2em;
+      max-width: 30%;
       position: relative;
     }
 
     .sujet {
       margin-bottom: -11em;
       margin-top: -20em;
+
+      @media (max-width: 1740px) {
+        font-size: 2vw;
+        margin-top: -10em;
+      }
+
+      @media (max-width: 300px) {
+        margin-bottom: -14em;
+      }
     }
   }
 }
