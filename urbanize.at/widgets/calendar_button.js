@@ -1,5 +1,6 @@
 const ical = require('ical-generator');
 const moment = require('moment');
+const striptags = require('striptags');
 const { Base64 } = require('js-base64');
 
 module.exports = (event, date) => {
@@ -17,11 +18,14 @@ module.exports = (event, date) => {
   const icsContent = ical({
     domain: 'urbanize.at',
     events: [{
-      start,
+      description: striptags(event.abstract.converted),
       end,
-      timestamp: moment(),
+      htmlDescription: event.abstract.converted,
+      location: `${event.venue} ${event.address}`,
+      organizer: 'Removed Below <mail@example.com>',
+      start,
       summary: `urbanize! 2019: ${event.title}`,
-      organizer: 'Removed Below <mail@example.com>'
+      timestamp: moment()
     }],
     name: 'Urbanize Festival Calendar',
     prodId: { company: 'derive.at', product: 'urbanize.at' },
