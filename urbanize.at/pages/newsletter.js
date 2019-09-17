@@ -1,6 +1,7 @@
 const layout = require('./layout.js');
 
 // TODO: Form gives no feedback/silently ignores "Abonnieren" click if consent slider has not been toggled
+// TODO: Replace current history step (= newsletter adress) with derive index on submit, so back button on next page leads to index instead of this page again
 
 const PRESS_NEWSLETTER = {
   csrfToken: 'MTRkYzVlNzI3Mjc0ODA1ODMzZTRjNzU3NGViYjI3NDg4MmVlN2U2NDU3MjllMGI0ZTM3OWE0YWUzMDFlMzUzYQ==',
@@ -77,7 +78,11 @@ module.exports = (urbanize, audience) => {
         Newsletter kann jederzeit einfach abbestellt werden.
       </div>
 
-      <button class="button_rect_white margin_y_0_5" type="submit">Abonnieren</button>
+      <button class="button_rect_white margin_y_0_5"
+              onclick="if(!document.querySelector('#checkbox_consent').checked) { alert('Bitte dem Erhalt des Newsletters durch Aktivierung des Sliders im Formular zustimmen.'); }"
+              type="submit">
+        Abonnieren
+      </button>
     </form>
   `;
 
