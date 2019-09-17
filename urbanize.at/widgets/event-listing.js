@@ -9,6 +9,7 @@ moment.updateLocale('de', {
 
 const signupButton = require('./signup_button.js');
 const calendarButton = require('./calendar_button.js');
+const timeframe = require('./timeframe.js');
 
 const eventSort = (a, b) => {
   const dateDifference = a.date.date - b.date.date;
@@ -50,7 +51,7 @@ module.exports = events => {
               </a>
 
               <strong class="color_pink">${moment(date.date).locale('de').format('dd, D MMM YYYY')}</strong><br>
-              <strong class="color_pink">${date.time.raw}</strong>
+              <strong class="color_pink">${timeframe(date)}</strong>
 
               <hr class="hairline">
 

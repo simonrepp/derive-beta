@@ -11,6 +11,7 @@ moment.updateLocale('de', {
 const layout = require('./layout.js');
 const scrollToTop = require('../widgets/scroll_to_top.js');
 const signupButton = require('../widgets/signup_button.js');
+const timeframe = require('../widgets/timeframe.js');
 
 module.exports = (urbanize, event) => {
   const html = `
@@ -28,7 +29,7 @@ module.exports = (urbanize, event) => {
         <div class="flex_split_lr margin_y_0_5">
           <div>
             <strong class="color_pink">${moment(date.date).locale('de').format('dd, D MMM YYYY')}</strong><br>
-            <strong class="color_pink">${date.time.raw}</strong>
+            <strong class="color_pink">${timeframe(date)}</strong>
           </div>
 
           <div>

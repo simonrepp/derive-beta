@@ -7,6 +7,8 @@ moment.updateLocale('de', {
   ]
 });
 
+const timeframe = require('./timeframe.js');
+
 module.exports = (event, date) => {
   if(!event.signupEmail)
     return '<span class="color_pink">Keine Anmeldung notwendig</span>';
@@ -16,7 +18,7 @@ module.exports = (event, date) => {
 
   return `
     <a class="button_rect_pink"
-       href="mailto:${event.signupEmail}?subject=${encodeURIComponent(`Anmeldung für ${event.title} / ${moment(date.date).locale('de').format('dd, D MMM YYYY')}, ${date.time.raw}`)}">
+       href="mailto:${event.signupEmail}?subject=${encodeURIComponent(`Anmeldung für ${event.title} / ${moment(date.date).locale('de').format('dd, D MMM YYYY')}, ${timeframe(date)}`)}">
       Anmeldung
     </a>
   `;
