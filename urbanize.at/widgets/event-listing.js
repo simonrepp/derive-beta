@@ -45,8 +45,7 @@ module.exports = events => {
             </div>
 
             <div class="event_details">
-              <!-- TODO: Category tag button behavior? -->
-              <a class="button_rect_black event_category_tag" href="#">
+              <a class="button_rect_black_faux event_category_tag">
                 ${event.category}
               </a>
 

@@ -27,6 +27,13 @@ a.button_rect_black {
   }
 }
 
+a.button_rect_black_faux {
+  @include rounded_rect;
+
+  background-color: $urbanize_black;
+  color: $urbanize_white;
+}
+
 a.button_rect_pink {
   @include rounded_rect;
 
