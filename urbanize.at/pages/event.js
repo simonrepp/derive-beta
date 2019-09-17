@@ -9,7 +9,6 @@ moment.updateLocale('de', {
 });
 
 const layout = require('./layout.js');
-const participants = require('../widgets/participants.js');
 const scrollToTop = require('../widgets/scroll_to_top.js');
 const signupButton = require('../widgets/signup_button.js');
 

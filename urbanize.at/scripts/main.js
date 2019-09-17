@@ -1,9 +1,9 @@
 const Turbolinks = require('turbolinks');
 
-const initSearch = require('./search.js');
+// const initSearch = require('./search.js');
 
 Turbolinks.start();
 
-initSearch();
+// initSearch();
 
 window.Turbolinks = Turbolinks;
