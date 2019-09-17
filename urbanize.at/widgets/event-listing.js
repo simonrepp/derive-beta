@@ -98,14 +98,14 @@ module.exports = events => {
                       ${event.participants[0].name}
                     </a>
 
-                    ${event.participants >= 3 ? event.participants.slice(1, event.participants.length - 1).map(participant => `
+                    ${event.participants.length >= 3 ? event.participants.slice(1, event.participants.length - 1).map(participant => `
                       ,
                       <a href="/${participant.permalink}/" target="_blank">
                         ${participant.name}
                       </a>
                     `).join('') : ''}
 
-                    ${event.participants >= 2 ? `
+                    ${event.participants.length >= 2 ? `
                       und
                       <a href="/${event.participants[event.participants.length - 1].permalink}/" target="_blank">
                         ${event.participants[event.participants.length - 1].name}
