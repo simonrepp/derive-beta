@@ -16,13 +16,24 @@ module.exports = async (data, enoPath) => {
       doc.allElementsRequired();
 
       const home = {
-        features: doc.sections('Feature').map(feature => ({
-          image: feature.field('Bild').optionalPathValue(),
-          imageCredits: feature.field('Bilduntertitel').optionalStringValue(),
-          link: feature.field('Link').requiredStringValue(),
-          text: feature.field('Text').requiredMarkdownValue(),
-          title: feature.field('Titel').requiredStringValue()
-        })),
+        features: doc.sections('Feature').map(feature => {
+
+          // TODO: Implement properly (after optionalFoo override fix)
+          if(feature.raw().elements.length === 1) {
+            return {
+              eventField: feature.field('Veranstaltung'),
+              eventTitle: feature.field('Veranstaltung').requiredStringValue()
+            };
+          }
+
+          return {
+            image: feature.field('Bild').optionalPathValue(),
+            imageCredits: feature.field('Bilduntertitel').optionalStringValue(),
+            link: feature.field('Link').requiredStringValue(),
+            text: feature.field('Text').requiredMarkdownValue(),
+            title: feature.field('Titel').requiredStringValue()
+          };
+        }),
         sourceFile: enoPath
       };
 

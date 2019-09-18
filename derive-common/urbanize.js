@@ -13,6 +13,32 @@ module.exports = data => {
     participantsByName[participant.name] = participant;
   }
 
+  const eventsByTitle = {};
+  for(const event of Object.values(data.urbanize.events)) {
+    eventsByTitle[event.title] = event;
+  }
+
+  for(const feature of data.urbanize.home.features) {
+    if(!feature.eventTitle) continue;
+
+    const event = eventsByTitle[feature.eventTitle];
+
+    if(event !== undefined) {
+      feature.event = event;
+    } else {
+      feature.flaggedForRemoval = true;
+      const error = feature.eventField.valueError(`Die verlinkte Veranstaltung mit dem Titel '${feature.eventTitle}' wurde nicht gefunden - möglicherweise ein Tippfehler?`);
+
+      data.warnings.push({
+        files: [{ path: data.urbanize.home.sourceFile, selection: error.selection }],
+        message: error.text,
+        snippet: error.snippet
+      });
+    }
+  }
+  
+  data.urbanize.home.features = data.urbanize.home.features.filter(feature => !feature.hasOwnProperty('flaggedForRemoval'));
+
   for(const event of Object.values(data.urbanize.events)) {
     // TODO: Actually: Connect participants and events both ways
     event.participants = [];
