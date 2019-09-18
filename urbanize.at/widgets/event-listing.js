@@ -69,11 +69,7 @@ module.exports = events => {
                 ${event.mapLink ? `<a href="${event.mapLink}" target="_blank">${event.address}</a>` : event.address}
               </strong>
 
-              ${event.directions ? `
-                <div class="margin_y_0_5">
-                  ${event.directions.converted}
-                </div>
-              ` : ''}
+              ${event.directions ? `<br><em>${event.directions}</em>` : ''}
 
               <hr class="hairline">
 

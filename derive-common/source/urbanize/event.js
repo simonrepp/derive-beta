@@ -50,7 +50,7 @@ module.exports = async (data, enoPath) => {
       event.imageCredits = doc.field('Bilduntertitel').optionalStringValue();
       event.venue = doc.field('Venue').requiredStringValue();
       event.address = doc.field('Adresse').requiredStringValue();
-      event.directions = doc.field('Anfahrt').optionalMarkdownValue();
+      event.directions = doc.field('Anfahrt').optionalStringValue();
       event.mapLink = doc.field('Stadtplanlink').optionalUrlValue();
       event.abstract = doc.field('Abstract').requiredMarkdownValue();
       event.text = doc.field('Beschreibung (Markdown)').requiredMarkdownWithMediaValue();
