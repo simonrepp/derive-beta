@@ -195,6 +195,21 @@ module.exports = data => {
   });
 
   for(const page of Object.values(data.urbanize.pages)) {
+    for(const image of page.gallery) {
+      if(image && !connectMedia(data, image)) {
+        data.warnings.push({
+          files: [{ path: page.sourceFile }],
+          message: `Die Seite "${page.title}" referenziert im Listenfeld "Gallerie" die Datei "${image.normalizedPath}", unter dem angegebenen Pfad wurde aber keine Datei gefunden.`
+        });
+
+        // TODO: Revisit if this even works/does not mess up the state completely, Pt. III
+        image.flaggedForRemoval = true;
+      }
+
+      // TODO: Revisit if this even works/does not mess up the state completely, Pt. IV
+      page.gallery = page.gallery.filter(image => !image.hasOwnProperty('flaggedForRemoval'));
+    }
+
     if(!page.text) continue;
 
     try {

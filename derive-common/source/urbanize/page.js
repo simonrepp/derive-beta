@@ -47,6 +47,10 @@ module.exports = async (data, enoPath) => {
     doc.allElementsRequired();
 
     try {
+      doc.allElementsRequired(false);
+      page.gallery = doc.list('Bildergalerie').requiredPathValues();
+      doc.allElementsRequired(true);
+
       page.title = doc.field('Titel').requiredStringValue();
       page.permalinkField = doc.field('Permalink');
       page.permalink = page.permalinkField.requiredPermalinkValue();
