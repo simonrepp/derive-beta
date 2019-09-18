@@ -44,11 +44,13 @@ h3 {
 
 hr {
 	background-color: $urbanize_pink;
+  border: none;
 	height: 0.8em;
-	border: none;
+  margin-bottom: 2em;
 
   &.hairline {
     height: 1px;
+    margin-bottom: revert;
   }
 }
 
