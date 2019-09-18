@@ -90,6 +90,12 @@ module.exports = (urbanize, event) => {
         </div>
       ` : ''}
 
+      ${event.additionalInfo ? `
+        <div class="margin_y_0_5">
+          ${event.additionalInfo.converted}
+        </div>
+      ` : ''}
+
       <hr class="hairline">
 
       ${event.links.length > 0 ? `
