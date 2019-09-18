@@ -16,8 +16,8 @@ module.exports = urbanize => `
   <div class="footer">
     <div class="alignment">
       <div class="buttons">
-        <a class="button_rect_black font_size_1_2" href="/newsletter/">Newsletter</a><br>
-        <a class="button_rect_black font_size_1_2" href="/impressum/">Impressum</a><br>
+        <a class="button_rect_black font_size_1_2" href="/newsletter/">Newsletter</a>
+        <a class="button_rect_black font_size_1_2" href="/impressum/">Impressum</a>
       </div>
 
       <div class="derive_desktop">
