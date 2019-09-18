@@ -41,3 +41,16 @@
     display: none;
   }
 }
+
+.filter_alignment {
+  display: flex;
+  justify-content: flex-start;
+
+  a.button_rect_yellow {
+    white-space: nowrap;
+  }
+
+  & > span:not(:first-child) {
+    margin-left: 1.6em;
+  }
+}
