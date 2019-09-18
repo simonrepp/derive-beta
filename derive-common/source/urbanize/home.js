@@ -27,7 +27,7 @@ module.exports = async (data, enoPath) => {
           }
 
           return {
-            image: feature.field('Bild').optionalPathValue(),
+            image: feature.field('Bild').requiredPathValue(),
             imageCredits: feature.field('Bilduntertitel').optionalStringValue(),
             link: feature.field('Link').requiredStringValue(),
             text: feature.field('Text').requiredMarkdownValue(),
