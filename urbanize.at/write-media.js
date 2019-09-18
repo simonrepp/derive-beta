@@ -108,13 +108,13 @@ module.exports = async (data, urbanize, preview) => {
 
   for(const page of Object.values(urbanize.pages)) {
     let imageNumber = 0;
-    for(const image of page.gallery) {
+    for(const galleryItem of page.gallery) {
       if(preview) {
-        image.written = encodeURI(`/_root_media/${image.localFilesystemPath}`);
+        galleryItem.image.written = encodeURI(`/_root_media/${galleryItem.image.localFilesystemPath}`);
       } else {
-        image.written = path.join('/', page.permalink, `bild-${imageNumber++}${path.extname(image.normalizedPath)}`);
-        concurrentWrites.push( copyResized(image, image.localFilesystemPath, image.written) );
-        image.written += `?${urbanize.assetHash}`;
+        galleryItem.image.written = path.join('/', page.permalink, `bild-${imageNumber++}${path.extname(galleryItem.image.normalizedPath)}`);
+        concurrentWrites.push( copyResized(galleryItem.image, galleryItem.image.localFilesystemPath, galleryItem.image.written) );
+        galleryItem.image.written += `?${urbanize.assetHash}`;
       }
     }
 

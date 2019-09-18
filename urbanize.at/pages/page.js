@@ -5,7 +5,10 @@ module.exports = (urbanize, page) => {
   const html = `
     <div>
       ${page.gallery.length > 0 ? `
-        <img src="${page.gallery[0].written}">
+        <img src="${page.gallery[0].image.written}">
+        ${page.gallery[0].imageCredits ? `
+          <div class="color_grey font_size_0_8 text_align_right">${page.gallery[0].imageCredits}</div>
+        `:''}
       ` : ''}
 
       <!--
