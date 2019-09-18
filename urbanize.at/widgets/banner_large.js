@@ -7,7 +7,7 @@ module.exports = `
         Wien—Favoriten
       </div>
       <img class="slogan" src="/images/alle_tage_wohnungsfrage_yellow.svg">
-      <img class="sujet" src="/images/sujet.svg">
+      <img class="sujet" src="/images/sujet.png">
     </div>
   </div>
 `;
