@@ -9,7 +9,7 @@
     "fs-extra": "^8.1.0",
     "ical-generator": "^1.8.1",
     "js-base64": "^2.5.1",
-    "markdown-it": "^9.1.0",
+    "markdown-it": "^10.0.0",
     "markdown-it-footnote": "^3.0.2",
     "mobx": "^5.13.0",
     "moment": "^2.24.0",
