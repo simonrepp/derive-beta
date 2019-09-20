@@ -133,6 +133,18 @@ input.input_rect_white {
   justify-content: space-between;
 }
 
+.flex_split_collapse_430 {
+  @media (max-width: 430px) {
+    flex-direction: column;
+  }
+}
+
+.flex_split_collapse_760 {
+    @media (max-width: 760px) {
+    flex-direction: column;
+  }
+}
+
 .margin_y_0 {
   margin-top: 0;
   margin-bottom: 0;

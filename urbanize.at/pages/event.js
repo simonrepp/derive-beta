@@ -26,13 +26,13 @@ module.exports = (urbanize, event) => {
       </div>
 
       ${event.dates.map(date => `
-        <div class="flex_split_lr margin_y_0_5">
+        <div class="flex_split_lr flex_split_collapse_430 margin_y_0_5">
           <div>
             <strong class="color_pink">${moment(date.date).locale('de').format('dd, D MMM YYYY')}</strong><br>
             <strong class="color_pink">${timeframe(date)}</strong>
           </div>
 
-          <div>
+          <div class="margin_y_0_5">
             ${signupButton(event, date)}
           </div>
         </div>
@@ -40,12 +40,22 @@ module.exports = (urbanize, event) => {
         <hr class="hairline">
       `).join('')}
 
-      <strong>${event.venue}</strong><br>
-      <strong>
-        ${event.mapLink ? `<a href="${event.mapLink}" target="_blank">${event.address}</a>` : event.address}
-      </strong>
+      <div class="flex_split_lr flex_split_collapse_760">
+        <div>
+          <strong>${event.venue}</strong><br>
+          <strong>
+            ${event.mapLink ? `<a href="${event.mapLink}" target="_blank">${event.address}</a>` : event.address}
+          </strong>
 
-      ${event.directions ? `<br><em>${event.directions}</em>` : ''}
+          ${event.directions ? `<br><em>${event.directions}</em>` : ''}
+        </div>
+
+        <div class="margin_y_0_5">
+          <a class="button_rect_black" href="/programm/?kategorie=${event.category}">
+            ${event.category}
+          </a>
+        </div>
+      </div>
 
       <hr class="hairline">
 
