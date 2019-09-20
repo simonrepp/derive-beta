@@ -67,8 +67,8 @@ window.initFilters = () => {
 
   const search = new URLSearchParams(window.location.search);
 
-  const dateOption = document.querySelector(`a[data-date="${search.has('date') ? search.get('date') : 'all'}"]`);
-  const categoryOption = document.querySelector(`a[data-category="${search.has('category') ? search.get('category') : 'all'}"]`);
+  const dateOption = document.querySelector(`a[data-date="${search.has('datum') ? search.get('datum') : 'all'}"]`);
+  const categoryOption = document.querySelector(`a[data-category="${search.has('kategorie') ? search.get('kategorie') : 'all'}"]`);
 
   window.updateFilter(dateOption, false);
   window.updateFilter(categoryOption, false);
