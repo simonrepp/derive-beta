@@ -9,59 +9,6 @@ module.exports = urbanize => {
         Filtern nach
       </h2>
 
-      <script type="text/javascript">
-        function filter() {
-          const activeDate = document.querySelector('.active_date');
-          const activeCategory = document.querySelector('.active_category');
-
-          for(const event of document.querySelectorAll('.event_filterable')) {
-            let display = true;
-
-            if(activeDate.dataset.value &&
-               activeDate.dataset.value !== 'all' &&
-               event.dataset.date !== activeDate.dataset.value) {
-              display = false;
-            }
-
-            if(activeCategory.dataset.value &&
-               activeCategory.dataset.value !== 'all' &&
-               event.dataset.category !== activeCategory.dataset.value) {
-              display = false;
-            }
-
-            event.style.display = display ? 'block' : 'none';
-          }
-        }
-
-        function updateFilter(option) {
-          if(option.dataset.date) {
-            const activeDate = document.querySelector('.active_date');
-
-            activeDate.dataset.value = option.dataset.date;
-
-            if(option.dataset.date === 'all') {
-              activeDate.innerHTML = '';
-            } else {
-              activeDate.innerHTML = ': ' + option.innerHTML;
-            }
-          }
-
-          if(option.dataset.category) {
-            const activeCategory = document.querySelector('.active_category');
-
-            activeCategory.dataset.value = option.dataset.category;
-
-            if(option.dataset.category === 'all') {
-              activeCategory.innerHTML = '';
-            } else {
-              activeCategory.innerHTML = ': ' + option.innerHTML;
-            }
-          }
-
-          filter();
-        }
-      </script>
-
       <div class="filter_alignment">
         <span class="hover_menu_trigger">
           <a class="button_rect_pink" data-filter="date" href="#" onclick="return false;">Datum<span class="active_date"></span></a>
@@ -98,6 +45,10 @@ module.exports = urbanize => {
       <br><br>
 
       ${eventListing(Object.values(urbanize.events))}
+
+      <div class="no_results" style="display: none;">
+        <em>Keine Veranstaltungen entsprechen den aktuellen Filterkriterien</em>
+      </div>
 
       ${scrollToTop}
     </div>
