@@ -21,7 +21,7 @@ module.exports = (content, urbanize, options = {}) => {
   }
 
   if(!options.og.image) {
-    options.og.image = urbanize.base_url + '/images/graetzelhood_facebook.jpg';
+    options.og.image = urbanize.base_url + '/images/facebook.png';
     options.og.imageHeight = 1200;
     options.og.imageWidth = 630;
   }
