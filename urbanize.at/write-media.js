@@ -19,9 +19,9 @@ module.exports = async (data, urbanize, preview) => {
 
     let { width, height } = await image.metadata();
 
-    if(width >= height && width > 960) {
-      height = parseInt((960 / width) * height);
-      width = 960;
+    if(width >= height && width > 1160) {
+      height = parseInt((1160 / width) * height);
+      width = 1160;
     } else if(height >= width && height > 960) {
       width = parseInt((960 / height) * width);
       height = 960;
