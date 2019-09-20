@@ -1,0 +1,19 @@
+.gallery {
+  height: 0;
+  padding-top: 900px / 1600px * 100%;
+  position: relative;
+  width: 100%;
+
+  & > div {
+    background-position: center center;
+    background-size: cover;
+    height: 0;
+    left: 0;
+    overflow: hidden;
+    padding-top: 900px / 1600px * 100%;
+    position: absolute;
+    top: 0;
+    transition: opacity 2s ease;
+    width: 100%;
+  }
+}
