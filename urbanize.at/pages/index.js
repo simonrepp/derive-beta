@@ -24,7 +24,7 @@ const feature = feature => feature.event ? `
   </div>
 
   <div class="event_details margin_y_0_5">
-    <a class="button_rect_black_faux event_category_tag">
+    <a class="button_rect_black event_category_tag" href="/programm/?kategorie=${feature.event.category}">
       ${feature.event.category}
     </a>
 
