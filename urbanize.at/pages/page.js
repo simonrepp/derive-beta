@@ -48,11 +48,13 @@ module.exports = (urbanize, page) => {
         </script>
       ` : ''}
 
-      <h1>
-        ${page.title}
-      </h1>
+      <div class="extra_indent">
+        <h1>
+          ${page.title}
+        </h1>
 
-      ${page.text ? page.text.written : ''}
+        ${page.text ? page.text.written : ''}
+      </div>
 
       ${scrollToTop}
     </div>

@@ -7,67 +7,73 @@ moment.updateLocale('de', {
   ]
 });
 
-const { featureSort } = require('../../derive-common/util.js');
 const layout = require('./layout.js');
 const scrollToTop = require('../widgets/scroll_to_top.js');
 const timeframe = require('../widgets/timeframe.js');
 
-const feature = feature => feature.event ? `
-<div class="feature margin_y_2_0">
-  <div>
-    ${feature.event.image ? `
-      <img src="${feature.event.image.written}">
-    `:''}
-    ${feature.event.imageCredits ? `
-      <div class="color_grey font_size_0_8 text_align_right">${feature.event.imageCredits}</div>
-    `:''}
-  </div>
-
-  <div class="event_details margin_y_0_5">
-    <a class="button_rect_black event_category_tag" href="/programm/?kategorie=${feature.event.category}">
-      ${feature.event.category}
-    </a>
-
-    <strong class="color_pink">${moment(feature.event.dates[0].date).locale('de').format('dd, D MMM YYYY')}</strong><br>
-    <strong class="color_pink">${timeframe(feature.event.dates[0])}</strong>
-  </div>
-
-  <hr class="hairline">
-
-  <h2 class="margin_y_0">
-    <a href="/${feature.event.permalink}/">
-      ${feature.event.title}
-    </a>
-  </h2>
-
-  <hr class="hairline">
-
-  <strong>${feature.event.venue}</strong><br>
-  <strong>
-    ${feature.event.mapLink ? `<a href="${feature.event.mapLink}" target="_blank">${feature.event.address}</a>` : feature.event.address}
-  </strong>
-
-  <hr>
-</div>
-` : `
+const eventFeature = event => `
   <div class="feature margin_y_2_0">
-    <img src="${feature.image.written}">
-    ${feature.imageCredits ? `
-      <div class="color_grey font_size_0_8 text_align_right">${feature.imageCredits}</div>
-    ` : ''}
-    <hr class="hairline">
-    <h1><a href="${feature.link}">${feature.title}</a></h1>
-    <hr class="hairline">
+    <div>
+      ${event.image ? `
+        <img src="${event.image.written}">
+      `:''}
+      ${event.imageCredits ? `
+        <div class="color_grey font_size_0_8 text_align_right">${event.imageCredits}</div>
+      `:''}
+    </div>
 
-    ${feature.text.converted}
+    <div class="extra_indent">
+      <div class="event_details margin_y_0_5">
+        <a class="button_rect_black event_category_tag" href="/programm/?kategorie=${event.category}">
+          ${event.category}
+        </a>
+
+        <strong class="color_pink">${moment(event.dates[0].date).locale('de').format('dd, D MMM YYYY')}</strong><br>
+        <strong class="color_pink">${timeframe(event.dates[0])}</strong>
+      </div>
+
+      <hr class="hairline">
+
+      <h2 class="margin_y_0">
+        <a href="/${event.permalink}/">
+          ${event.title}
+        </a>
+      </h2>
+
+      <hr class="hairline">
+
+      <strong>${event.venue}</strong><br>
+      <strong>
+        ${event.mapLink ? `<a href="${event.mapLink}" target="_blank">${event.address}</a>` : event.address}
+      </strong>
+    </div>
 
     <hr>
   </div>
 `;
 
-module.exports = urbanize => {
-  // const sortedFeatures = urbanize.features.sort(featureSort);
+const customFeature = feature => `
+  <div class="feature margin_y_2_0">
+    <img src="${feature.image.written}">
+    ${feature.imageCredits ? `
+      <div class="color_grey font_size_0_8 text_align_right">${feature.imageCredits}</div>
+    ` : ''}
 
+    <div class="extra_indent">
+      <hr class="hairline">
+      <h1><a href="${feature.link}">${feature.title}</a></h1>
+      <hr class="hairline">
+
+      ${feature.text.converted}
+    </div>
+
+    <hr>
+  </div>
+`;
+
+const feature = feature => feature.event ? eventFeature(feature.event) : customFeature(feature);
+
+module.exports = urbanize => {
   const html = `
     <div class="features alignment_desktop">
       <div>${urbanize.home.features.filter((_, index) => index % 2 === 0).map(feature).join('')}</div>

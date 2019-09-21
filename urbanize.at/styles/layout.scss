@@ -20,3 +20,14 @@ body.slim {
 .indented {
 	padding-left: 15px;
 }
+
+.extra_indent {
+	@media (min-width: 740px) {
+		margin: 1.5em;
+
+		hr {
+			margin-left: -1.5em;
+			margin-right: -1.5em;
+		}
+	}
+}

@@ -35,7 +35,7 @@ module.exports = events => {
     <div>
       ${sortedEvents.map(({ date, event }) => `
         <div class="event_filterable" data-category="${event.category}" data-date="${moment(date.date).format('YYYY-MM-DD')}">
-          <div class="event margin_y_2_0">
+          <div class="event extra_indent">
             <div class="event_image_desktop">
               ${event.image ? `
                 <img src="${event.image.written}">
