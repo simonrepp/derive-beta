@@ -48,7 +48,7 @@ module.exports = (urbanize, page) => {
         </script>
       ` : ''}
 
-      <div class="extra_indent">
+      <div class="extra_indent hr_exclude">
         <h1>
           ${page.title}
         </h1>
