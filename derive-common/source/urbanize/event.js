@@ -54,7 +54,6 @@ module.exports = async (data, enoPath) => {
       event.mapLink = doc.field('Stadtplanlink').optionalUrlValue();
       event.abstract = doc.field('Abstract').requiredMarkdownValue();
       event.text = doc.field('Beschreibung (Markdown)').requiredMarkdownWithMediaValue();
-      event.isStadtlabor = doc.field('Stadtlabor').requiredBooleanValue();
       event.additionalInfo = doc.field('Zusatzinfo').optionalMarkdownValue();
       event.language = doc.field('Sprache').requiredUrbanizeLanguageValue();
       event.signupEmail = doc.field('Anmeldung per Email').optionalEmailValue();
