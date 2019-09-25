@@ -101,6 +101,10 @@
       top: 0;
       transform-origin: top left;
       width: 920px;
+
+      @media (max-width: 500px) {
+        animation: subliminal 4s steps(192) infinite;
+      }
     }
 
     .logo_wrapper {
