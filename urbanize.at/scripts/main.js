@@ -76,6 +76,39 @@ window.initFilters = () => {
   window.filterEvents();
 };
 
+const WIDTH = 920;
+
+window.resizeBanners = () => {
+  const logoLarge = document.querySelector('.banner_large .logo');
+
+  if(logoLarge) {
+    const width = window.innerWidth;
+
+    if(width > 1350) {
+      logoLarge.style.transform = `scale(1.07) rotateZ(0.001deg)`;
+    } else {
+      logoLarge.style.transform = `scale(${(width / WIDTH) * 0.7}) rotateZ(0.001deg)`;
+    }
+
+
+  } else {
+    const logoSmall = document.querySelector('.banner_small_pink .logo, .banner_small_white .logo');
+
+    if(logoSmall) {
+      const width = window.innerWidth;
+
+      if(width > 500) {
+        logoSmall.style.transform = `scale(0.33) rotateZ(0.001deg)`;
+      } else {
+        logoSmall.style.transform = `scale(${(width / WIDTH) * 0.7}) rotateZ(0.001deg)`;
+      }
+    }
+  }
+};
+
+window.addEventListener('resize', window.resizeBanners);
+document.addEventListener('turbolinks:render', window.resizeBanners);
 document.addEventListener('turbolinks:render', window.initFilters);
 
+window.resizeBanners();
 window.initFilters();

@@ -1,3 +1,9 @@
+@keyframes subliminal {
+  100% {
+    background-position: 0 -34560px;
+  }
+}
+
 @mixin banner_small {
   @include restraint-medium;
 
@@ -13,10 +19,36 @@
   }
 
   .logo {
-    max-height: 100px;
+    animation: subliminal 4s steps(192) infinite;
+    background-position: 0 0;
+    background-size: 920px 34560px;
+    height: 180px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    transform-origin: top left;
+    width: 920px;
+  }
+
+  .logo_wrapper {
+    display: block;
+    min-height: 100px;
+    position: relative;
+    width: 310px;
 
     @media (max-width: 500px) {
-      max-width: 70%;
+      width: 70vw;
+    }
+  }
+
+  .tagline {
+    position: absolute;
+    max-width: 300px;
+    top: 3.5em;
+
+    @media (max-width: 500px) {
+      width: 70vw;
+      top: 15vw;
     }
   }
 
@@ -59,9 +91,37 @@
     }
 
     .logo {
-    	max-width: 80%;
-    	position: relative;
-    	left: 10%;
+      animation: subliminal 8s steps(192) infinite;
+      background-image: url('/images/urbanize_sprite_white.svg');
+      background-position: 0 0;
+      background-size: 920px 34560px;
+      height: 180px;
+      left: 10%;
+    	position: absolute;
+      top: 0;
+      transform-origin: top left;
+      width: 920px;
+    }
+
+    .logo_wrapper {
+      padding-bottom: 5%;
+      padding-top: 180px / 920px * 100%;
+      position: relative;
+    }
+
+    .tagline {
+      left: 10%;
+      position: absolute;
+
+      @media (min-width: 1350px) {
+        max-width: 51em;
+        top: 12em;
+      }
+
+      @media (max-width: 1349px) {
+        max-width: 75%;
+        top: 16vw;
+      }
     }
 
     .slogan {
