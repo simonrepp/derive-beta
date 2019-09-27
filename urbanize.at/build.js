@@ -1,7 +1,6 @@
 const fsExtra = require('fs-extra');
 const path = require('path');
 
-// const index = require('./index.js');
 const { loadFile, writeFile } = require('../derive-common/util.js');
 const writeDirectories = require('./write-directories.js');
 const writeMedia = require('./write-media.js');
@@ -26,11 +25,6 @@ module.exports = async (data, site, options = { preview: false }) => {
   await fsExtra.copy(path.join(__dirname, 'static/'), data.buildDir),
   await writePages(data);
   console.timeEnd('writePages');
-
-  // TODO: Use messagepack? / or hardcode into page (probably makes more sense)
-  // console.time('index');
-  // await index(data, data.urbanize);
-  // console.timeEnd('index');
 
   console.timeEnd('build');
 };
