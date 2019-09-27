@@ -46,11 +46,29 @@
   display: flex;
   justify-content: flex-start;
 
-  a.button_rect_yellow {
+  a.button_rect_yellow,
+  a.button_rect_pink {
     white-space: nowrap;
   }
 
-  & > span:not(:first-child) {
-    margin-left: 1.6em;
+  @media (max-width: 819px) {
+    flex-direction: column;
+
+    & > span:not(:first-child) {
+      margin-top: 0.5em;
+    }
+
+    & > span:not(:last-child) {
+      max-width: 100%;
+      width: 0;
+    }
+  }
+
+  @media (min-width: 820px) {
+    align-items: center;
+
+    & > span:not(:first-child) {
+      margin-left: 1.6em;
+    }
   }
 }

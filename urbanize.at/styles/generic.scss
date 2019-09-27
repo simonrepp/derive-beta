@@ -118,6 +118,21 @@ input:checked + label.slider_white .nub {
   left: 1.1em;
 }
 
+input.input_rect_pink {
+  @include rounded_rect;
+
+  background-color: $urbanize_white;
+  border: 1px solid $urbanize_pink;
+  color: $urbanize_black;
+  display: block;
+  width: 100%;
+
+  &::placeholder {
+    color: $urbanize_pink;
+    opacity: 1;
+  }
+}
+
 input.input_rect_white {
   @include rounded_rect;
 

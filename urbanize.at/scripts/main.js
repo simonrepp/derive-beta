@@ -7,6 +7,9 @@ window.Turbolinks = Turbolinks;
 window.filterEvents = () => {
   const activeDate = document.querySelector('.active_date');
   const activeCategory = document.querySelector('.active_category');
+  const activeQuery = document.querySelector('.active_query');
+
+  const queryRegex = activeQuery.value === '' ? null : new RegExp(activeQuery.value.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&'), 'i');
 
   let displayAny = false;
   for(const event of document.querySelectorAll('.event_filterable')) {
@@ -22,6 +25,14 @@ window.filterEvents = () => {
        activeCategory.dataset.value !== 'all' &&
        event.dataset.category !== activeCategory.dataset.value) {
       display = false;
+    }
+
+    if(queryRegex !== null) {
+      const { searchText } = JSON.parse(event.querySelector('.search_text').innerHTML);
+
+      if(!queryRegex.test(searchText)) {
+        display = false;
+      }
     }
 
     displayAny = displayAny || display;

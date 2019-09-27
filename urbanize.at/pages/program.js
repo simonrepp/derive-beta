@@ -10,7 +10,7 @@ module.exports = urbanize => {
       </h2>
 
       <div class="filter_alignment">
-        <span class="hover_menu_trigger">
+        <span class="hover_menu_trigger" style="z-index: 2;">
           <a class="button_rect_pink" data-filter="date" href="#" onclick="return false;">Datum<span class="active_date"></span></a>
           <div class="hover_menu">
             <a class="button_rect_yellow" data-date="all" href="#" onclick="updateFilter(this); return false;">Alle Tage</a>
@@ -22,7 +22,7 @@ module.exports = urbanize => {
           </div>
         </span>
 
-        <span class="hover_menu_trigger">
+        <span class="hover_menu_trigger" style="z-index: 1;">
           <a class="button_rect_pink" data-filter="category" href="#" onclick="return false;">Kategorie<span class="active_category"></span></a>
           <div class="hover_menu">
             <a class="button_rect_yellow" data-category="all" href="#" onclick="updateFilter(this); return false;">Alle Kategorien</a>
@@ -33,13 +33,9 @@ module.exports = urbanize => {
           </div>
         </span>
 
-        <!-- span class="hover_menu_trigger">
-          <a class="button_rect_pink" data-filter="query" href="/">Volltextsuche</a>
-          <div class="hover_menu">
-            <input type="search">
-            <a class="button_rect_pink" href="/search-todo/">Suchen</a>
-          </div>
-        </span -->
+        <span>
+          <input class="active_query input_rect_pink" data-filter="query" oninput="updateFilter(this); return false;" placeholder="Volltextsuche" type="search">
+        </span>
       </div>
 
       <br><br>

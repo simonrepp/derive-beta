@@ -1,4 +1,5 @@
 const moment = require('moment');
+const striptags = require('striptags');
 
 moment.updateLocale('de', {
   monthsShort : [
@@ -35,6 +36,23 @@ module.exports = events => {
     <div>
       ${sortedEvents.map(({ date, event }) => `
         <div class="event_filterable" data-category="${event.category}" data-date="${moment(date.date).format('YYYY-MM-DD')}">
+          <script class="search_text" type="text/json">
+            ${JSON.stringify({
+              searchText: [
+                event.title,
+                event.subtitle,
+                event.venue,
+                event.address,
+                event.directions || '',
+                event.additionalInfo ? striptags(event.additionalInfo.converted) : '',
+                event.links.map(link => link).join(' '),
+                event.participants.map(participant => participant.name).join(' '),
+                striptags(event.abstract.converted),
+                striptags(event.text.written)
+              ].join(' ')
+            })}
+          </script>
+
           <div class="event extra_indent">
             <div class="event_image_desktop">
               ${event.image ? `

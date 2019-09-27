@@ -72,6 +72,10 @@
 		}
 	}
 
+	.hover_menu_trigger {
+		z-index: 9;
+	}
+
 	@media (min-width: 745px) {
 		background-color: $urbanize_pink;
 	}
@@ -87,7 +91,6 @@
 
 .hover_menu_trigger {
 	position: relative;
-	z-index: 9;
 
 	&:hover {
 		.hover_menu {
