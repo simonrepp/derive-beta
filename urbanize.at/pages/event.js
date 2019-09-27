@@ -69,11 +69,9 @@ module.exports = (urbanize, event) => {
         <strong>${event.subtitle}</strong>
       </div>
 
-      ${event.text ? `
-        <div class="margin_y_0_5">
-          ${event.text.written}
-        </div>
-      ` : ''}
+      <div class="margin_y_0_5">
+        ${event.text.written}
+      </div>
 
       ${event.participants.length > 0 ? `
         <div class="margin_y_0_5">
