@@ -93,7 +93,7 @@ window.resizeBanners = () => {
   const logoLarge = document.querySelector('.banner_large .logo');
 
   if(logoLarge) {
-    const width = window.innerWidth;
+    const width = document.documentElement.clientWidth;
 
     if(width > 1350) {
       logoLarge.style.transform = `scale(1.07) rotateZ(0.001deg)`;
@@ -106,7 +106,7 @@ window.resizeBanners = () => {
     const logoSmall = document.querySelector('.banner_small_pink .logo, .banner_small_white .logo');
 
     if(logoSmall) {
-      const width = window.innerWidth;
+      const width = document.documentElement.clientWidth;
 
       if(width > 500) {
         logoSmall.style.transform = `scale(0.33) rotateZ(0.001deg)`;
