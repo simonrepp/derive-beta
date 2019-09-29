@@ -1,5 +1,5 @@
 const { loadEno, statFile } = require('../../util.js');
-const { EnoError } = require('enolib');
+const { EnoError, ValidationError } = require('enolib');
 
 // TODO: Port simplified/DRY try/catch construct to all other loaders
 
@@ -7,40 +7,57 @@ module.exports = async (data, enoPath) => {
   const cached = data.cache.get(enoPath);
   const stats = await statFile(data.root, enoPath);
 
+  data.urbanize.home = {
+    features: [],
+    sourceFile: enoPath
+  };
+
   if(cached && stats.size === cached.stats.size && stats.mtimeMs === cached.stats.mtimeMs) {
-    data.urbanize.home = cached.home;
+    data.urbanize.home.features = cached.features;
   } else {
     try {
       const doc = await loadEno(data.root, enoPath);
 
       doc.allElementsRequired();
 
-      const home = {
-        features: doc.sections('Feature').map(feature => {
-
+      let failures = 0;
+      for(const feature of doc.sections('Feature')) {
+        try {
           // TODO: Implement properly (after optionalFoo override fix)
           if(feature.raw().elements.length === 1) {
-            return {
+            data.urbanize.home.features.push({
               eventField: feature.field('Veranstaltung'),
               eventTitle: feature.field('Veranstaltung').requiredStringValue()
-            };
+            });
+          } else {
+            data.urbanize.home.features.push({
+              image: feature.field('Bild').requiredPathValue(),
+              imageCredits: feature.field('Bilduntertitel').optionalStringValue(),
+              link: feature.field('Link').requiredStringValue(),
+              text: feature.field('Text').requiredMarkdownValue(),
+              title: feature.field('Titel').requiredStringValue()
+            });
           }
+        } catch(err) {
+          if(!(err instanceof ValidationError))
+            throw err;
 
-          return {
-            image: feature.field('Bild').requiredPathValue(),
-            imageCredits: feature.field('Bilduntertitel').optionalStringValue(),
-            link: feature.field('Link').requiredStringValue(),
-            text: feature.field('Text').requiredMarkdownValue(),
-            title: feature.field('Titel').requiredStringValue()
-          };
-        }),
-        sourceFile: enoPath
-      };
+          failures += 1;
 
-      doc.assertAllTouched();
+          data.warnings.push({
+            files: [{ path: enoPath, selection: err.selection }],
+            message: err.text,
+            snippet: err.snippet
+          });
+        }
+      }
 
-      data.cache.set(enoPath, { home, stats });
-      data.urbanize.home = home;
+      if(failures > 0) {
+        data.cache.delete(enoPath);
+      } else {
+        doc.assertAllTouched();
+        data.cache.set(enoPath, { features: data.urbanize.home.features, stats });
+      }
     } catch(err) {
       if(!(err instanceof EnoError))
         throw err;
