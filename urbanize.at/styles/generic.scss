@@ -15,6 +15,18 @@ a.button_circle_black {
   }
 }
 
+a.button_circle_black_white {
+  background-color: $urbanize_black;
+  border-radius: 50%;
+  color: $urbanize_white;
+  margin: 0.14em;
+
+  &:hover {
+    background-color: $urbanize_yellow;
+    color: $urbanize_black;
+  }
+}
+
 a.button_rect_black {
   @include rounded_rect;
 
