@@ -61,7 +61,9 @@ const customFeature = feature => `
 
     <div class="extra_indent">
       <hr class="hairline">
-      <h1><a href="${feature.link}">${feature.title}</a></h1>
+      <h2 class="margin_y_0">
+        <a href="${feature.link}">${feature.title}</a>
+      </h2>
       <hr class="hairline">
 
       ${feature.text.converted}
