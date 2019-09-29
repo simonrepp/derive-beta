@@ -117,7 +117,9 @@ window.resizeBanners = () => {
   }
 };
 
+
 window.addEventListener('resize', window.resizeBanners);
+document.addEventListener('DOMContentLoaded', window.resizeBanners);
 document.addEventListener('turbolinks:render', window.resizeBanners);
 document.addEventListener('turbolinks:render', window.initFilters);
 
