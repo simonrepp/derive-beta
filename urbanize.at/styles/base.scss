@@ -26,6 +26,10 @@ a {
   }
 }
 
+h1, h2, h3 {
+  word-break: break-word;
+}
+
 h1 {
   color: $urbanize_pink;
   font-size: 1.9em;
