@@ -63,24 +63,28 @@ module.exports = (content, urbanize, options = {}) => {
 
       ${options.slim ? `
         <body class="slim">
-          ${smallBanner('white')}
+          <div class="partition">
+            ${smallBanner('white')}
 
-          <div class="content">
-            ${content}
-          </div>
-        </body>
-      `:`
-        <body>
-          ${header(urbanize)}
-          ${options.banner === 'small' ? smallBanner('pink') : largeBanner}
-
-          <div>
             <div class="content">
               ${content}
             </div>
           </div>
+        </body>
+      `:`
+        <body>
+          <div class="partition">
+            ${header(urbanize)}
+            ${options.banner === 'small' ? smallBanner('pink') : largeBanner}
 
-          ${footer(urbanize)}
+            <div>
+              <div class="content">
+                ${content}
+              </div>
+            </div>
+
+            ${footer(urbanize)}
+          </div>
         </body>
       `}
 
