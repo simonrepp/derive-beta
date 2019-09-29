@@ -6,6 +6,10 @@
 	img {
 		max-width: 100%;
 	}
+
+	@media (max-width: 744px) {
+		padding-top: 0;
+	}
 }
 
 body.slim {
