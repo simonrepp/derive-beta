@@ -1,6 +1,5 @@
 const layout = require('./layout.js');
 
-// TODO: Form gives no feedback/silently ignores "Abonnieren" click if consent slider has not been toggled
 // TODO: Replace current history step (= newsletter adress) with derive index on submit, so back button on next page leads to index instead of this page again
 
 const PRESS_NEWSLETTER = {

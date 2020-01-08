@@ -30,8 +30,7 @@ module.exports = data => `
     </a>
 
     <a class="sidebar__link"
-       href="https://eepurl.com/fmHIo"
-       target="_blank" >
+       href="/newsletter/" >
       <span class="icon-mail"></span>
     </a>
 

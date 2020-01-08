@@ -11,6 +11,7 @@ const festivalPage = require('./pages/festival.js');
 const indexPage = require('./pages/index.js');
 const issuePage = require('./pages/issue.js');
 const issuesPage = require('./pages/issues.js');
+const newsletterPage = require('./pages/newsletter.js');
 const siteNotFoundPage = require('./pages/site-not-found.js');
 const pagePage = require('./pages/page.js');
 const publisherPage = require('./pages/publisher.js');
@@ -29,6 +30,7 @@ module.exports = async data => {
     writeFile(data.buildDir, 'festival/index.html', festivalPage(data)),
     writeFile(data.buildDir, 'index.html', indexPage(data)),
     writeFile(data.buildDir, 'zeitschrift/index.html', issuesPage(data)),
+    writeFile(data.buildDir, 'newsletter/index.html', newsletterPage(data)),
     writeFile(data.buildDir, 'seite-nicht-gefunden/index.html', siteNotFoundPage(data)),
     writeFile(data.buildDir, 'radio/index.html', programsPage(data, data.programsPaginated[0])),
     writeFile(data.buildDir, 'kino/index.html', screeningsPage(data)),

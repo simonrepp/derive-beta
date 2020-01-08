@@ -1,0 +1,27 @@
+@use 'colors';
+
+input.newsletter_checkbox {
+  display: none;
+}
+
+input.newsletter_input {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid colors.$grey;
+  display: block;
+  margin-bottom: 1em;
+  width: 100%;
+}
+
+button.newsletter_button {
+	background-color: colors.$grey;
+	border: none;
+	border-radius: 3px;
+	cursor: pointer;
+	margin-top: 1em;
+	padding: .5em;
+}
+
+.newsletter_label {
+  margin-bottom: .5em;
+}
