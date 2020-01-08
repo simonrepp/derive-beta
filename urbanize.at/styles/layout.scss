@@ -1,5 +1,8 @@
+@use 'colors';
+@use 'mixins';
+
 .content {
-	@include restraint-narrow;
+	@include mixins.restraint-narrow;
 
 	flex: 1;
 
@@ -13,11 +16,11 @@
 }
 
 body.slim {
-	background-color: $urbanize_pink;
-	color: $urbanize_white;
+	background-color: colors.$urbanize_pink;
+	color: colors.$urbanize_white;
 
 	h1 {
-		color: $urbanize_white;
+		color: colors.$urbanize_white;
 	}
 }
 

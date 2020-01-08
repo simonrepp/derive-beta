@@ -1,97 +1,99 @@
+@use 'colors';
+
 @mixin rounded_rect {
   border-radius: 0.6em;
   padding: 0.1em 0.5em;
 }
 
 a.button_circle_black {
-  background-color: $urbanize_black;
+  background-color: colors.$urbanize_black;
   border-radius: 50%;
-  color: $urbanize_pink;
+  color: colors.$urbanize_pink;
   margin: 0.14em;
 
   &:hover {
-    background-color: $urbanize_white;
-    color: $urbanize_black;
+    background-color: colors.$urbanize_white;
+    color: colors.$urbanize_black;
   }
 }
 
 a.button_circle_black_white {
-  background-color: $urbanize_black;
+  background-color: colors.$urbanize_black;
   border-radius: 50%;
-  color: $urbanize_white;
+  color: colors.$urbanize_white;
   margin: 0.14em;
 
   &:hover {
-    background-color: $urbanize_yellow;
-    color: $urbanize_black;
+    background-color: colors.$urbanize_yellow;
+    color: colors.$urbanize_black;
   }
 }
 
 a.button_rect_black {
   @include rounded_rect;
 
-  background-color: $urbanize_black;
-  color: $urbanize_white;
+  background-color: colors.$urbanize_black;
+  color: colors.$urbanize_white;
 
   &:hover {
-    background-color: $urbanize_white;
-    color: $urbanize_black;
+    background-color: colors.$urbanize_white;
+    color: colors.$urbanize_black;
   }
 }
 
 a.button_rect_black_faux {
   @include rounded_rect;
 
-  background-color: $urbanize_black;
-  color: $urbanize_white;
+  background-color: colors.$urbanize_black;
+  color: colors.$urbanize_white;
 }
 
 a.button_rect_pink {
   @include rounded_rect;
 
-  background-color: $urbanize_pink;
-  color: $urbanize_white;
+  background-color: colors.$urbanize_pink;
+  color: colors.$urbanize_white;
 
   &:hover {
-    background-color: $urbanize_black;
+    background-color: colors.$urbanize_black;
   }
 }
 
 a.button_rect_white {
   @include rounded_rect;
 
-  background-color: $urbanize_white;
-  color: $urbanize_black;
+  background-color: colors.$urbanize_white;
+  color: colors.$urbanize_black;
 
   &:hover {
-    background-color: $urbanize_black;
-    color: $urbanize_white;
+    background-color: colors.$urbanize_black;
+    color: colors.$urbanize_white;
   }
 }
 
 a.button_rect_yellow {
   @include rounded_rect;
 
-  background-color: $urbanize_yellow;
-  color: $urbanize_black;
+  background-color: colors.$urbanize_yellow;
+  color: colors.$urbanize_black;
 
   &:hover {
-    background-color: $urbanize_black;
-    color: $urbanize_yellow;
+    background-color: colors.$urbanize_black;
+    color: colors.$urbanize_yellow;
   }
 }
 
 button.button_rect_white {
   @include rounded_rect;
 
-  background-color: $urbanize_white;
+  background-color: colors.$urbanize_white;
   border: none;
-  color: $urbanize_black;
+  color: colors.$urbanize_black;
   cursor: pointer;
 
   &:hover {
-    background-color: $urbanize_black;
-    color: $urbanize_white;
+    background-color: colors.$urbanize_black;
+    color: colors.$urbanize_white;
   }
 }
 
@@ -100,8 +102,8 @@ input[type="checkbox"] {
 }
 
 label.slider_white {
-  background-color: $urbanize_white;
-  border: 1px solid $urbanize_black;
+  background-color: colors.$urbanize_white;
+  border: 1px solid colors.$urbanize_black;
   border-radius: 4.6em;
   cursor: pointer;
   display: inline-block;
@@ -113,7 +115,7 @@ label.slider_white {
   width: 2.5em;
 
   .nub {
-    background-color: $urbanize_black;
+    background-color: colors.$urbanize_black;
     border-radius: 4.6em;
     display: inline-block;
     height: 1.3em;
@@ -126,21 +128,21 @@ label.slider_white {
 }
 
 input:checked + label.slider_white .nub {
-  background-color: $urbanize_pink;
+  background-color: colors.$urbanize_pink;
   left: 1.1em;
 }
 
 input.input_rect_pink {
   @include rounded_rect;
 
-  background-color: $urbanize_white;
-  border: 1px solid $urbanize_pink;
-  color: $urbanize_black;
+  background-color: colors.$urbanize_white;
+  border: 1px solid colors.$urbanize_pink;
+  color: colors.$urbanize_black;
   display: block;
   width: 100%;
 
   &::placeholder {
-    color: $urbanize_pink;
+    color: colors.$urbanize_pink;
     opacity: 1;
   }
 }
@@ -148,9 +150,9 @@ input.input_rect_pink {
 input.input_rect_white {
   @include rounded_rect;
 
-  background-color: $urbanize_white;
-  border: 1px solid $urbanize_black;
-  color: $urbanize_black;
+  background-color: colors.$urbanize_white;
+  border: 1px solid colors.$urbanize_black;
+  color: colors.$urbanize_black;
   display: block;
   width: 100%;
 }

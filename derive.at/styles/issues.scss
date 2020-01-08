@@ -1,4 +1,4 @@
-@import './colors.scss';
+@use 'colors';
 
 .tiles__magazine {
   display: -ms-grid;
@@ -38,11 +38,11 @@
 }
 
 .issue-tile {
-  background-color: $color-almost-white;
+  background-color: colors.$almost-white;
   transition: box-shadow 0.25s;
 
   &:hover {
-    box-shadow: 0 0 2.66em rgba($color-shadow, 0.66);
+    box-shadow: 0 0 2.66em rgba(colors.$shadow, 0.66);
   }
 }
 
@@ -51,7 +51,7 @@
 }
 
 .issue-tile__cover-overlay {
-  background-color: rgba($color-almost-white, 0.8);
+  background-color: rgba(colors.$almost-white, 0.8);
   height: 100%;
   opacity: 0;
   pointer-events: none;

@@ -1,17 +1,20 @@
+@use 'colors';
+@use 'mixins';
+
 .footer {
-	background-color: $urbanize_pink;
-  color: $urbanize_white;
+	background-color: colors.$urbanize_pink;
+  color: colors.$urbanize_white;
 
 	a {
-		color: $urbanize_white;
+		color: colors.$urbanize_white;
 
 		&:hover {
-			color: $urbanize_black;
+			color: colors.$urbanize_black;
 		}
 	}
 
 	.alignment {
-		@include restraint-medium;
+		@include mixins.restraint-medium;
 
 		display: flex;
 		justify-content: space-between;
@@ -52,7 +55,7 @@
 	}
 
 	.derive_mobile {
-		@include restraint-medium;
+		@include mixins.restraint-medium;
 
 		text-align: center;
 

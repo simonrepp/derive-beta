@@ -22,8 +22,8 @@
     "babel-core": "^6.26.3",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "fuse.js": "^3.4.6",
-    "node-sass": "^4.13.0",
     "parcel-bundler": "^1.12.4",
+    "sass": "^1.24.3",
     "turbolinks": "^5.2.0"
   },
   "engines": {
@@ -50,10 +50,10 @@
     "all-compile": "npm run derive-compile && npm run urbanize-compile",
     "derive-compile": "npm run derive-scripts && npm run derive-styles",
     "derive-scripts": "parcel build derive.at/scripts/main.js --experimental-scope-hoisting --no-cache --no-source-maps --out-dir derive.at/static --out-file scripts.js",
-    "derive-styles": "node-sass --output-style compressed derive.at/styles/main.scss derive.at/static/styles.css",
+    "derive-styles": "sass --no-source-map --style compressed derive.at/styles/main.scss derive.at/static/styles.css",
     "urbanize-compile": "npm run urbanize-scripts && npm run urbanize-styles",
     "urbanize-scripts": "parcel build urbanize.at/scripts/main.js --experimental-scope-hoisting --no-cache --no-source-maps --out-dir urbanize.at/static --out-file scripts.js",
-    "urbanize-styles": "node-sass --output-style compressed urbanize.at/styles/main.scss urbanize.at/static/styles.css"
+    "urbanize-styles": "sass --no-source-map --style compressed urbanize.at/styles/main.scss urbanize.at/static/styles.css"
   },
   "version": "1.23.20"
 }

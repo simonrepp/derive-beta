@@ -1,3 +1,5 @@
+@use 'colors';
+
 .features {
   display: grid;
   grid-gap: 2.66em 1.33em;
@@ -12,7 +14,7 @@
   }
 
   & > * {
-    background-color: $color-almost-white;
+    background-color: colors.$almost-white;
     min-width: 0;
   }
 }

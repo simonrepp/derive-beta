@@ -1,9 +1,12 @@
+@use 'colors';
+@use 'mixins';
+
 .dim_overlay {
 	display: none;
 
 	@media (max-width: 744px) {
 		&.visible {
-			background-color: rgba($urbanize_white, 0.9);
+			background-color: rgba(colors.$urbanize_white, 0.9);
 			display: block;
 			height: 100vh;
 			left: 0;
@@ -17,7 +20,7 @@
 
 .header {
 	.alignment_desktop {
-		@include restraint-wide;
+		@include mixins.restraint-wide;
 
 		align-items: center;
 		display: flex;
@@ -28,10 +31,10 @@
 		}
 
 		a.language {
-			color: $urbanize_white;
+			color: colors.$urbanize_white;
 
 			&:hover {
-				color: $urbanize_black;
+				color: colors.$urbanize_black;
 			}
 		}
 
@@ -41,7 +44,7 @@
 	}
 
 	.alignment_mobile {
-		@include restraint-wide;
+		@include mixins.restraint-wide;
 
 		position: fixed;
 		right: 0;
@@ -77,7 +80,7 @@
 	}
 
 	@media (min-width: 745px) {
-		background-color: $urbanize_pink;
+		background-color: colors.$urbanize_pink;
 	}
 }
 

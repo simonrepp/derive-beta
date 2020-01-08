@@ -1,7 +1,7 @@
-@import './colors.scss';
+@use 'colors';
 
 .header {
-  background-color: $color-beige;
+  background-color: colors.$beige;
   height: 205px;
   transition: height 0.5s;
 
@@ -74,7 +74,7 @@
 }
 
 .header__link--active {
-  border-bottom: 1px solid $color-text;
+  border-bottom: 1px solid colors.$text;
   transition: border 0.5s;
 }
 

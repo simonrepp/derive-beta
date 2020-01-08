@@ -1,4 +1,4 @@
-@import './colors.scss';
+@use 'colors';
 
 body,
 button,
@@ -18,19 +18,19 @@ textarea {
 }
 
 body {
-  background-color: $color-beige;
-  color: $color-text;
+  background-color: colors.$beige;
+  color: colors.$text;
   margin: 0;
   overflow: hidden;
 }
 
 a {
-  color: $color-text;
+  color: colors.$text;
   cursor: pointer;
-  text-decoration-color: $color-grey;
+  text-decoration-color: colors.$grey;
 
   &:hover {
-    text-decoration-color: $color-text;
+    text-decoration-color: colors.$text;
   }
 }
 

@@ -1,3 +1,5 @@
+@use 'colors';
+
 .features img {
   width: 100%;
 }
@@ -19,22 +21,22 @@
 }
 
 .feature:hover {
-  background-color: $urbanize_pink;
-  color: $urbanize_white;
+  background-color: colors.$urbanize_pink;
+  color: colors.$urbanize_white;
 
   a {
-    color: $urbanize_white;
+    color: colors.$urbanize_white;
   }
 
   hr {
-    background-color: $urbanize_black;
+    background-color: colors.$urbanize_black;
   }
 
   hr.hairline {
-    background-color: $urbanize_white;
+    background-color: colors.$urbanize_white;
   }
 
   .color_pink {
-    color: $urbanize_white;
+    color: colors.$urbanize_white;
   }
 }

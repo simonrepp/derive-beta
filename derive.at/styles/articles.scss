@@ -1,7 +1,7 @@
-@import './colors.scss';
+@use 'colors';
 
 .article-panel {
-  background-color: $color-almost-white;
+  background-color: colors.$almost-white;
   display: flex;
   justify-content: space-between;
   margin-bottom: 2em;
@@ -18,7 +18,7 @@
 
 .article-panel__info-split {
   display: flex;
-  justify-content: space-between;  
+  justify-content: space-between;
 }
 
 .article-panel__info-cover {

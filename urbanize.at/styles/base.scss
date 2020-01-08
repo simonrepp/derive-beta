@@ -1,3 +1,5 @@
+@use 'colors';
+
 body,
 button,
 input,
@@ -8,17 +10,17 @@ textarea {
 }
 
 body {
-  background-color: $urbanize_white;
-  color: $urbanize_black;
+  background-color: colors.$urbanize_white;
+  color: colors.$urbanize_black;
   margin: 0;
 }
 
 a {
-  color: $urbanize_pink;
+  color: colors.$urbanize_pink;
 	text-decoration: none;
 
   &:hover {
-    color: $urbanize_black;
+    color: colors.$urbanize_black;
   }
 }
 
@@ -27,20 +29,20 @@ h1, h2, h3 {
 }
 
 h1 {
-  color: $urbanize_pink;
+  color: colors.$urbanize_pink;
   font-size: 1.9em;
   font-weight: 500;
   margin-bottom: 1.4em;
 }
 
 h2 {
-  color: $urbanize_pink;
+  color: colors.$urbanize_pink;
   font-size: 1.7em;
   font-weight: 500;
 }
 
 h3 {
-  color: $urbanize_pink;
+  color: colors.$urbanize_pink;
   font-size: 1.3em;
   font-weight: 600;
 }
@@ -50,7 +52,7 @@ h3 + h2 {
 }
 
 hr {
-	background-color: $urbanize_pink;
+	background-color: colors.$urbanize_pink;
   border: none;
 	height: 0.8em;
   margin-bottom: 2em;

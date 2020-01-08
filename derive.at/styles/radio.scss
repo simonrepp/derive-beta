@@ -1,10 +1,12 @@
+@use 'colors';
+
 audio {
   width: 100%;
 }
 
 .radio {
-  background-color: $color-almost-white;
-  border: 1px solid $color-grey;
+  background-color: colors.$almost-white;
+  border: 1px solid colors.$grey;
   border-radius: 3px;
   display: flex;
 }
@@ -27,7 +29,7 @@ audio {
 }
 
 .radio__seekbar_progress {
-  background-color: $color-beige;
+  background-color: colors.$beige;
   height: 100%;
   left: 0;
   position: absolute;

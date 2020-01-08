@@ -1,3 +1,5 @@
+@use 'colors';
+
 .tiles {
   display: flex;
   flex-flow: row wrap;
@@ -6,13 +8,13 @@
 }
 
 .tile {
-  background-color: $color-almost-white;
+  background-color: colors.$almost-white;
   box-sizing: border-box;
   padding: 2em;
   width: calc((100% - 2.66em) / 3);
 
   &:hover {
-    box-shadow: 0 0 2.66em rgba($color-shadow, 0.66);
+    box-shadow: 0 0 2.66em rgba(colors.$shadow, 0.66);
   }
 
   &:nth-child(n+4) {
@@ -41,7 +43,7 @@
   transition: box-shadow 0.25s;
 
   &:hover {
-    box-shadow: 0 0 2.66em rgba($color-shadow, 0.66);
+    box-shadow: 0 0 2.66em rgba(colors.$shadow, 0.66);
   }
 
   img {

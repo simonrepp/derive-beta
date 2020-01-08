@@ -1,5 +1,7 @@
+@use 'colors';
+
 .pagination {
-  background-color: $color-almost-white;
+  background-color: colors.$almost-white;
   margin-bottom: 1.5em;
   padding: 1em;
   position: sticky;
@@ -15,6 +17,6 @@
 }
 
 .pagination--docked {
-  background-color: $color-beige;
+  background-color: colors.$beige;
   padding: 0.5em;
 }

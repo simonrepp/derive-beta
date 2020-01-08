@@ -1,17 +1,17 @@
-@import './fonts.scss';
-@import './icons.scss';
+@use 'fonts';
+@use 'icons';
 
-@import './base.scss';
+@use 'base';
 
-@import './articles.scss';
-@import './features.scss';
-@import './footer.scss';
-@import './generic.scss';
-@import './header.scss';
-@import './issues.scss';
-@import './layout.scss';
-@import './pagination.scss';
-@import './radio.scss';
-@import './search.scss';
-@import './sidebar.scss';
-@import './tiles.scss';
+@use 'articles';
+@use 'features';
+@use 'footer';
+@use 'generic';
+@use 'header';
+@use 'issues';
+@use 'layout';
+@use 'pagination';
+@use 'radio';
+@use 'search';
+@use 'sidebar';
+@use 'tiles';

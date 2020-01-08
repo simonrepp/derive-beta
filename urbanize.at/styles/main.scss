@@ -1,17 +1,17 @@
-@import './colors.scss';
-@import './fonts.scss';
-@import './icons.scss';
-@import './mixins.scss';
+@use 'colors';
+@use 'fonts';
+@use 'icons';
+@use 'mixins';
 
-@import './base.scss';
+@use 'base';
 
-@import './banners.scss';
-@import './events.scss';
-@import './features.scss';
-@import './footer.scss';
-@import './gallery.scss';
-@import './generic.scss';
-@import './header.scss';
-@import './layout.scss';
-@import './participants.scss';
-@import './scroll_to_top.scss';
+@use 'banners';
+@use 'events';
+@use 'features';
+@use 'footer';
+@use 'gallery';
+@use 'generic';
+@use 'header';
+@use 'layout';
+@use 'participants';
+@use 'scroll_to_top';
