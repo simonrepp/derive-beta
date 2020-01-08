@@ -23,11 +23,12 @@ module.exports = async (data, enoPath) => {
       let failures = 0;
       for(const feature of doc.sections('Feature')) {
         try {
-          // TODO: Implement properly (after optionalFoo override fix)
-          if(feature.raw().elements.length === 1) {
+          const eventField = feature.optionalField('Veranstaltung');
+
+          if(eventField !== null) {
             data.urbanize.home.features.push({
-              eventField: feature.field('Veranstaltung'),
-              eventTitle: feature.field('Veranstaltung').requiredStringValue()
+              eventField,
+              eventTitle: eventField.requiredStringValue()
             });
           } else {
             data.urbanize.home.features.push({
