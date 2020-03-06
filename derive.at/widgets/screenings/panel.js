@@ -44,7 +44,7 @@ module.exports = screening => `
       ${screening.abstract.converted}
 
       <div class="generic__margin_vertical">
-        <a href="/kino/${screening.permalink}/">Mehr Info und Trailer</a>
+        <a href="/kino/${screening.permalink}/">Weitere Informationen und Trailer</a>
       </div>
     </div>
   </div>
