@@ -19,6 +19,9 @@ module.exports = (data, screening) => {
           <a href="${screening.link}">Tickets</a>
         </div>
 
+        ${screening.filmMeta}
+        ${screening.eventMeta.converted}
+
         <span class="generic__serif">
           ${screening.text.converted}
         </span>
