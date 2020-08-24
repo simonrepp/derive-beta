@@ -1,18 +1,18 @@
 {
   "author": "Simon Repp <simon@fdpl.io> (https://simonrepp.com)",
   "dependencies": {
-    "atom-package-deps": "^5.1.0",
+    "atom-package-deps": "^7.0.1",
     "enolib": "^0.8.2",
     "enotype": "^0.3.0",
     "express": "^4.17.1",
-    "fast-glob": "^3.2.2",
-    "fs-extra": "^8.1.0",
-    "ical-generator": "^1.9.2",
-    "js-base64": "^2.5.2",
-    "markdown-it": "^10.0.0",
+    "fast-glob": "^3.2.4",
+    "fs-extra": "^9.0.1",
+    "ical-generator": "^1.14.0",
+    "js-base64": "^3.4.5",
+    "markdown-it": "^11.0.0",
     "markdown-it-footnote": "^3.0.2",
-    "mobx": "^5.15.4",
-    "moment": "^2.24.0",
+    "mobx": "^5.15.6",
+    "moment": "^2.27.0",
     "sharp": "^0.20.8",
     "speakingurl": "^14.0.1",
     "striptags": "^3.1.1"
@@ -23,7 +23,7 @@
     "babel-plugin-transform-class-properties": "^6.24.1",
     "fuse.js": "^3.4.6",
     "parcel-bundler": "^1.12.4",
-    "sass": "^1.26.2",
+    "sass": "^1.26.10",
     "turbolinks": "^5.2.0"
   },
   "engines": {
@@ -32,9 +32,10 @@
   "license": "MIT",
   "main": "./lib/main",
   "name": "derive-beta",
-  "package-deps": [
-    "language-eno:0.4.2"
-  ],
+  "package-deps": [{
+    "minimumVersion": "0.5.0",
+    "name": "language-eno"
+  }],
   "providedServices": {
     "autocomplete.provider": {
       "versions": {

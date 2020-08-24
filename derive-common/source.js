@@ -62,10 +62,10 @@ module.exports = async data => {
       if(normalizedPath.match(/^Seiten\//)) { await sourcePage(data, localFilesystemPath); } else
       if(normalizedPath.match(/^Texte\//)) { await sourceArticle(data, localFilesystemPath); } else
       if(normalizedPath.match(/^Zeitschriften\//)) { await sourceIssue(data, localFilesystemPath); } else
-      if(normalizedPath.match(/^2019\.urbanize\.at\/programm\//)) { await sourceUrbanizeEvent(data, localFilesystemPath); } else
-      if(normalizedPath === '2019.urbanize.at/startseite.eno') { await sourceUrbanizeHome(data, localFilesystemPath); } else
-      if(normalizedPath === '2019.urbanize.at/beteiligte.eno') { await sourceUrbanizeParticipants(data, localFilesystemPath); } else
-      if(normalizedPath.match(/^2019\.urbanize\.at\//)) { await sourceUrbanizePage(data, localFilesystemPath); }
+      if(normalizedPath.match(/^2020\.urbanize\.at\/programm\//)) { await sourceUrbanizeEvent(data, localFilesystemPath); } else
+      if(normalizedPath === '2020.urbanize.at/startseite.eno') { await sourceUrbanizeHome(data, localFilesystemPath); } else
+      if(normalizedPath === '2020.urbanize.at/beteiligte.eno') { await sourceUrbanizeParticipants(data, localFilesystemPath); } else
+      if(normalizedPath.match(/^2020\.urbanize\.at\//)) { await sourceUrbanizePage(data, localFilesystemPath); }
       else if(normalizedPath !== 'derive.eno') {
         data.warnings.push({
           files: [{ path: localFilesystemPath }],

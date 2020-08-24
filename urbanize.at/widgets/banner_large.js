@@ -6,7 +6,7 @@ module.exports = `
         <img class="tagline" src="/images/tagline_white.svg">
       </div>
       <div class="info font_weight_500">
-        9—13 OKT 2019<br>
+        14—18 OKT 2020<br>
         Wien—Favoriten
       </div>
       <img class="slogan" src="/images/alle_tage_wohnungsfrage_yellow.svg">

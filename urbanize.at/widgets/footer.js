@@ -9,7 +9,7 @@ const DERIVE_INFO = `
   <a class="button_circle_black font_size_1_6" href="https://vimeo.com/derivestadtforschung" target="_blank"><span class="icon-vimeo"></span></a>
   <a class="button_circle_black font_size_1_6" href="http://flickr.com/photos/derivemagazin" target="_blank"><span class="icon-flickr"></span></a><br><br>
 
-  <span class="font_size_0_8">© 2019 URBANIZE! INTERNATIONALES FESTIVAL FÜR URBANE ERKUNDUNGEN WIEN</span>
+  <span class="font_size_0_8">© 2020 URBANIZE! INTERNATIONALES FESTIVAL FÜR URBANE ERKUNDUNGEN WIEN</span>
 `;
 
 module.exports = urbanize => `

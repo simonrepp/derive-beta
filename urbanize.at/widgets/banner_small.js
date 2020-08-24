@@ -7,7 +7,7 @@ module.exports = variant => `
       </a>
       <img class="slogan" src="/images/alle_tage_wohnungsfrage_${variant}.svg">
       <div class="info font_size_1_2 font_weight_500">
-        9—13 OKT 2019<br>
+        14—18 OKT 2020<br>
         Wien—Favoriten
       </div>
     </div>
