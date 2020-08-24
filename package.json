@@ -23,7 +23,7 @@
   "main": "./lib/main",
   "name": "derive-beta",
   "optionalDependencies": {
-    "sharp": "^0.20.8"
+    "sharp": "^0.31.3"
   },
   "providedServices": {
     "autocomplete.provider": {
