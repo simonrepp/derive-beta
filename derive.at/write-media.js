@@ -15,9 +15,12 @@ module.exports = async (data, preview) => {
     const fromAbsolute = path.join(data.root, fromRelative);
     const toAbsolute = path.join(data.buildDir, toRelative);
 
-    return sharp(fromAbsolute).resize(960, 960)
-                              .max()
-                              .withoutEnlargement()
+    return sharp(fromAbsolute).resize({
+                                fit: 'inside',
+                                height: 960,
+                                width: 960,
+                                withoutEnlargement: true
+                              })
                               .toFile(toAbsolute);
   };
 
