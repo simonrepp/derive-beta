@@ -32,10 +32,12 @@
   "license": "MIT",
   "main": "./lib/main",
   "name": "derive-beta",
-  "package-deps": [{
-    "minimumVersion": "0.5.0",
-    "name": "language-eno"
-  }],
+  "package-deps": [
+    {
+      "minimumVersion": "0.5.0",
+      "name": "language-eno"
+    }
+  ],
   "providedServices": {
     "autocomplete.provider": {
       "versions": {
@@ -56,5 +58,5 @@
     "urbanize-scripts": "parcel build urbanize.at/scripts/main.js --experimental-scope-hoisting --no-cache --no-source-maps --out-dir urbanize.at/static --out-file scripts.js",
     "urbanize-styles": "sass --no-source-map --style compressed urbanize.at/styles/main.scss urbanize.at/static/styles.css"
   },
-  "version": "1.25.0"
+  "version": "1.26.0"
 }
