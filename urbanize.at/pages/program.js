@@ -11,7 +11,7 @@ module.exports = urbanize => {
 
       <div class="filter_alignment">
         <span class="hover_menu_trigger" style="z-index: 2;">
-          <a class="button_rect_pink" data-filter="date" href="#" onclick="return false;">Datum<span class="active_date"></span></a>
+          <a class="button_rect_accent" data-filter="date" href="#" onclick="return false;">Datum<span class="active_date"></span></a>
           <div class="hover_menu">
             <a class="button_rect_yellow" data-date="all" href="#" onclick="updateFilter(this); return false;">Alle Tage</a>
             <a class="button_rect_yellow" data-date="2020-10-14" href="#" onclick="updateFilter(this); return false;">14 OKT 2020</a>
@@ -23,7 +23,7 @@ module.exports = urbanize => {
         </span>
 
         <span class="hover_menu_trigger" style="z-index: 1;">
-          <a class="button_rect_pink" data-filter="category" href="#" onclick="return false;">Kategorie<span class="active_category"></span></a>
+          <a class="button_rect_accent" data-filter="category" href="#" onclick="return false;">Kategorie<span class="active_category"></span></a>
           <div class="hover_menu">
             <a class="button_rect_yellow" data-category="all" href="#" onclick="updateFilter(this); return false;">Alle Kategorien</a>
             <a class="button_rect_yellow" data-category="Film-Kunst-Musik" href="#" onclick="updateFilter(this); return false;">Film-Kunst-Musik</a>
@@ -34,7 +34,7 @@ module.exports = urbanize => {
         </span>
 
         <span>
-          <input class="active_query input_rect_pink" data-filter="query" oninput="updateFilter(this); return false;" placeholder="Volltextsuche" type="search">
+          <input class="active_query input_rect_accent" data-filter="query" oninput="updateFilter(this); return false;" placeholder="Volltextsuche" type="search">
         </span>
       </div>
 

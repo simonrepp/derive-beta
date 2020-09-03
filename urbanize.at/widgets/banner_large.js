@@ -9,7 +9,6 @@ module.exports = `
         14—18 OKT 2020<br>
         Wien—Favoriten
       </div>
-      <img class="slogan" src="/images/alle_tage_wohnungsfrage_yellow.svg">
       <img class="sujet" src="/images/sujet.png">
     </div>
   </div>

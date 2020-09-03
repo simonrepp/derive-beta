@@ -1,10 +1,10 @@
+$urbanize_accent: #e84b25;
 $urbanize_black: #000000;
 $urbanize_grey: #6f7375;
-$urbanize_pink: #ff1d55;
 $urbanize_white: #ffffff;
 $urbanize_yellow: #ffed00;
 
+.color_accent { color: $urbanize_accent; }
 .color_black { color: $urbanize_black; }
 .color_grey { color: $urbanize_grey; }
-.color_pink { color: $urbanize_pink; }
 .color_white { color: $urbanize_white; }

@@ -1,13 +1,13 @@
 @use 'colors';
 
 .participants {
-  color: colors.$urbanize_pink;
+  color: colors.$urbanize_accent;
 
   a {
     color: colors.$urbanize_black;
 
     &:hover {
-      color: colors.$urbanize_pink;
+      color: colors.$urbanize_accent;
     }
   }
 

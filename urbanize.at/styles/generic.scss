@@ -8,7 +8,7 @@
 a.button_circle_black {
   background-color: colors.$urbanize_black;
   border-radius: 50%;
-  color: colors.$urbanize_pink;
+  color: colors.$urbanize_accent;
   margin: 0.14em;
 
   &:hover {
@@ -48,10 +48,10 @@ a.button_rect_black_faux {
   color: colors.$urbanize_white;
 }
 
-a.button_rect_pink {
+a.button_rect_accent {
   @include rounded_rect;
 
-  background-color: colors.$urbanize_pink;
+  background-color: colors.$urbanize_accent;
   color: colors.$urbanize_white;
 
   &:hover {
@@ -128,21 +128,21 @@ label.slider_white {
 }
 
 input:checked + label.slider_white .nub {
-  background-color: colors.$urbanize_pink;
+  background-color: colors.$urbanize_accent;
   left: 1.1em;
 }
 
-input.input_rect_pink {
+input.input_rect_accent {
   @include rounded_rect;
 
   background-color: colors.$urbanize_white;
-  border: 1px solid colors.$urbanize_pink;
+  border: 1px solid colors.$urbanize_accent;
   color: colors.$urbanize_black;
   display: block;
   width: 100%;
 
   &::placeholder {
-    color: colors.$urbanize_pink;
+    color: colors.$urbanize_accent;
     opacity: 1;
   }
 }

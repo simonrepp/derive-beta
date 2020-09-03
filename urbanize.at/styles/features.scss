@@ -21,7 +21,7 @@
 }
 
 .feature:hover {
-  background-color: colors.$urbanize_pink;
+  background-color: colors.$urbanize_accent;
   color: colors.$urbanize_white;
 
   a {
@@ -36,7 +36,7 @@
     background-color: colors.$urbanize_white;
   }
 
-  .color_pink {
+  .color_accent {
     color: colors.$urbanize_white;
   }
 }

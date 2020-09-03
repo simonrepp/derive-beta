@@ -103,7 +103,7 @@ window.resizeBanners = () => {
 
 
   } else {
-    const logoSmall = document.querySelector('.banner_small_pink .logo, .banner_small_white .logo');
+    const logoSmall = document.querySelector('.banner_small_accent .logo, .banner_small_white .logo');
 
     if(logoSmall) {
       const width = document.documentElement.clientWidth;

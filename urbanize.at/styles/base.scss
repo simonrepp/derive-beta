@@ -16,7 +16,7 @@ body {
 }
 
 a {
-  color: colors.$urbanize_pink;
+  color: colors.$urbanize_accent;
 	text-decoration: none;
 
   &:hover {
@@ -29,20 +29,20 @@ h1, h2, h3 {
 }
 
 h1 {
-  color: colors.$urbanize_pink;
+  color: colors.$urbanize_accent;
   font-size: 1.9em;
   font-weight: 500;
   margin-bottom: 1.4em;
 }
 
 h2 {
-  color: colors.$urbanize_pink;
+  color: colors.$urbanize_accent;
   font-size: 1.7em;
   font-weight: 500;
 }
 
 h3 {
-  color: colors.$urbanize_pink;
+  color: colors.$urbanize_accent;
   font-size: 1.3em;
   font-weight: 600;
 }
@@ -52,7 +52,7 @@ h3 + h2 {
 }
 
 hr {
-	background-color: colors.$urbanize_pink;
+	background-color: colors.$urbanize_accent;
   border: none;
 	height: 0.8em;
   margin-bottom: 2em;

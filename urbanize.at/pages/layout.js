@@ -75,7 +75,7 @@ module.exports = (content, urbanize, options = {}) => {
         <body>
           <div class="partition">
             ${header(urbanize)}
-            ${options.banner === 'small' ? smallBanner('pink') : largeBanner}
+            ${options.banner === 'small' ? smallBanner('accent') : largeBanner}
 
             <div>
               <div class="content">

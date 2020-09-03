@@ -65,9 +65,9 @@
   }
 }
 
-.banner_small_pink {
+.banner_small_accent {
   @include banner_small;
-  color: colors.$urbanize_pink;
+  color: colors.$urbanize_accent;
 }
 
 .banner_small_white {
@@ -76,9 +76,9 @@
 }
 
 .banner_large {
-  background-color: colors.$urbanize_pink;
+  background-color: colors.$urbanize_accent;
   color: colors.$urbanize_white;
-  margin-bottom: 10em;
+  margin-bottom: 6em;
 
   .alignment {
     @include mixins.restraint-medium;
@@ -132,30 +132,28 @@
       }
     }
 
-    .slogan {
-      font-size: 2vw;
-      left: 35%;
-      margin-top: 2em;
-      max-width: 30%;
-      position: relative;
-    }
-
     .sujet {
       margin-bottom: -11em;
-      margin-top: -20em;
 
       @media (max-width: 1740px) {
         font-size: 2vw;
-        margin-top: -10em;
+        margin-bottom: -6em;
+      }
+
+      @media (max-width: 900px) {
+        margin-bottom: -8em;
+      }
+      @media (max-width: 500px) {
+        margin-bottom: -10em;
       }
 
       @media (max-width: 300px) {
-        margin-bottom: -14em;
+        margin-bottom: -12em;
       }
     }
   }
 
   @media (max-width: 1740px) {
-    margin-bottom: 20vw;
+    margin-bottom: 12vw;
   }
 }
