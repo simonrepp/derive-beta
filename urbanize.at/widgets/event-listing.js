@@ -48,7 +48,7 @@ module.exports = events => {
                 event.links.map(link => link).join(' '),
                 event.participants.map(participant => participant.name).join(' '),
                 striptags(event.abstract.converted),
-                striptags(event.text.written)
+                event.text ? striptags(event.text.written) : ''
               ].join(' ')
             })}
           </script>
