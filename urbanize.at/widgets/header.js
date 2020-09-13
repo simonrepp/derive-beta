@@ -36,17 +36,17 @@ module.exports = urbanize => `
       </a>
 
       <div class="toggle_menu">
-        <a class="button_rect_white font_size_1_2" href="/">Festival</a>
+        <a class="button_rect_accent font_size_1_2" href="/">Festival</a>
         <div class="indented">
-          <a class="button_rect_yellow font_size_1_2" href="/about/">About</a>
-          <a class="button_rect_yellow font_size_1_2" href="/orte/">Orte</a>
-          <a class="button_rect_yellow font_size_1_2" href="/partnerinnen/">PartnerInnen</a>
+          <a class="button_rect_black font_size_1_2" href="/about/">About</a>
+          <a class="button_rect_black font_size_1_2" href="/orte/">Orte</a>
+          <a class="button_rect_black font_size_1_2" href="/partnerinnen/">PartnerInnen</a>
         </div>
-        <a class="button_rect_white font_size_1_2" href="/programm/">Programm</a>
-        <a class="button_rect_white font_size_1_2" href="/beteiligte/">Beteiligte</a>
-        <a class="button_rect_white font_size_1_2" href="/presse/">Presse</a>
-        <a class="button_rect_white font_size_1_2" href="/kontakt/">Kontakt</a>
-        <a class="button_rect_white font_size_1_2" href="/english/">English</a>
+        <a class="button_rect_accent font_size_1_2" href="/programm/">Programm</a>
+        <a class="button_rect_accent font_size_1_2" href="/beteiligte/">Beteiligte</a>
+        <a class="button_rect_accent font_size_1_2" href="/presse/">Presse</a>
+        <a class="button_rect_accent font_size_1_2" href="/kontakt/">Kontakt</a>
+        <a class="language font_size_1_2" href="/english/">EN</a>
       </div>
     </div>
   </div>

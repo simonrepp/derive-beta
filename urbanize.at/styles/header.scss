@@ -50,16 +50,26 @@
 		right: 0;
 		text-align: right;
 		top: 0;
+		width: calc(100vw - 3.6em);
 		z-index: 9;
 
+		a.language {
+			color: colors.$urbanize_black;
+
+			&:hover {
+				color: colors.$urbanize_accent;
+			}
+		}
+
 		.toggle_menu {
-			align-items: flex-end;
+			align-items: flex-start;
 			display: none;
 			flex-direction: column;
+			margin-top: 3em;
 			padding-right: 0.8em;
 
 			.indented {
-				align-items: flex-end;
+				align-items: flex-start;
 				display: flex;
 				flex-direction: column;
 				padding-right: 0.8em;
@@ -67,6 +77,10 @@
 
 			&.visible {
 				display: flex;
+			}
+
+			*:not(:first-child) {
+				margin-top: .6em;
 			}
 		}
 
