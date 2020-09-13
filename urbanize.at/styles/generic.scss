@@ -189,6 +189,16 @@ input.input_rect_white {
   margin-bottom: 2em;
 }
 
+.sticky_h3 {
+  display: block;
+  color: colors.$urbanize_accent;
+  font-size: 1.3em;
+  font-weight: 600;
+  margin-bottom: 0;
+  margin-top: 1em;
+  word-break: break-word;
+}
+
 .text_align_right {
   text-align: right;
 }

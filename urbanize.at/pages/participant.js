@@ -19,7 +19,7 @@ module.exports = (urbanize, participant) => {
         ${participant.links.length > 0 ? `
           <div class="margin_y_2_0">
             ${participant.links.map(link => `
-                <a href="${link}">${link}</a><br>
+                <a href="${link}" target="_blank">${link}</a><br>
             `).join('')}
           </div>
         ` : ''}

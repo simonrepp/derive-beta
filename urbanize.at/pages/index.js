@@ -12,7 +12,7 @@ const scrollToTop = require('../widgets/scroll_to_top.js');
 const timeframe = require('../widgets/timeframe.js');
 
 const eventFeature = event => `
-  <div class="feature margin_y_2_0">
+  <div class="feature">
     <div>
       ${event.image ? `
         <img src="${event.image.written}">
@@ -53,7 +53,7 @@ const eventFeature = event => `
 `;
 
 const customFeature = feature => `
-  <div class="feature margin_y_2_0">
+  <div class="feature">
     <img src="${feature.image.written}">
     ${feature.imageCredits ? `
       <div class="color_grey font_size_0_8 text_align_right">${feature.imageCredits}</div>

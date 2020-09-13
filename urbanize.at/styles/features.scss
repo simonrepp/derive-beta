@@ -20,6 +20,11 @@
   }
 }
 
+.feature {
+  margin-bottom: 4em;
+  margin-top: 2em;
+}
+
 .feature:hover {
   background-color: colors.$urbanize_accent;
   color: colors.$urbanize_white;
