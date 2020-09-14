@@ -117,7 +117,17 @@ window.resizeBanners = () => {
   }
 };
 
+window.fadeMobileMenuBackdrop = () => {
+  const backdrop = document.querySelector('.alignment_mobile .backdrop');
 
+  if (window.scrollY < 60) {
+    backdrop.style.opacity = 0;
+  } else {
+    backdrop.style.opacity = 1;
+  }
+};
+
+window.addEventListener('scroll', window.fadeMobileMenuBackdrop);
 window.addEventListener('resize', window.resizeBanners);
 document.addEventListener('DOMContentLoaded', window.resizeBanners);
 document.addEventListener('turbolinks:render', window.resizeBanners);

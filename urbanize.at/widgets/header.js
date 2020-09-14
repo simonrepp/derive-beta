@@ -25,7 +25,11 @@ module.exports = urbanize => `
     </div>
 
     <div class="alignment_mobile">
-      <a class="button_circle_black_white font_size_1_6"
+      <div class="backdrop">
+        <img class="logo" src="/images/urbanize_static_white.svg">
+      </div>
+
+      <a class="button_circle_black_white font_size_1_3"
          href="#"
          onclick="
           document.querySelector('.toggle_menu').classList.toggle('visible');
