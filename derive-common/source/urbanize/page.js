@@ -3,10 +3,10 @@ const { ParseError, ValidationError } = require('enolib');
 
 const URBANIZE_PAGE_PERMALINKS = [
   'about',
+  'covid',
   'english',
   'impressum',
   'kontakt',
-  'orte',
   'partnerinnen',
   'presse'
 ];

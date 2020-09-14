@@ -13,8 +13,8 @@ module.exports = urbanize => `
         <a class="button_rect_white font_size_1_2" href="/">Festival</a>
         <div class="hover_menu">
           <a class="button_rect_white font_size_1_2" href="/about/">About</a>
-          <a class="button_rect_white font_size_1_2" href="/orte/">Orte</a>
           <a class="button_rect_white font_size_1_2" href="/partnerinnen/">PartnerInnen</a>
+          <a class="button_rect_white font_size_1_2" href="/covid/">Covid-19</a>
         </div>
       </span>
       <a class="button_rect_white font_size_1_2" href="/programm/">Programm</a>
@@ -43,8 +43,8 @@ module.exports = urbanize => `
         <a class="button_rect_accent font_size_1_2" href="/">Festival</a>
         <div class="indented">
           <a class="button_rect_black font_size_1_2" href="/about/">About</a>
-          <a class="button_rect_black font_size_1_2" href="/orte/">Orte</a>
           <a class="button_rect_black font_size_1_2" href="/partnerinnen/">PartnerInnen</a>
+          <a class="button_rect_black font_size_1_2" href="/covid/">Covid-19</a>
         </div>
         <a class="button_rect_accent font_size_1_2" href="/programm/">Programm</a>
         <a class="button_rect_accent font_size_1_2" href="/beteiligte/">Beteiligte</a>
