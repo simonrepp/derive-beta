@@ -8,7 +8,7 @@ module.exports = variant => `
       <img class="slogan" src="/images/common_spaces_hybrid_places_${variant === 'white' ? 'yellow' : variant}.svg">
       <div class="info font_size_1_2 font_weight_500">
         14—18 OKT 2020<br>
-        Wien—Favoriten
+        Wien—Floridsdorf
       </div>
     </div>
   </div>

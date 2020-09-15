@@ -7,7 +7,7 @@ module.exports = `
       </div>
       <div class="info font_weight_500">
         14—18 OKT 2020<br>
-        Wien—Favoriten
+        Wien—Floridsdorf
       </div>
       <img class="sujet" src="/images/sujet.png">
     </div>
