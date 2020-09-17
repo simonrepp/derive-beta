@@ -79,20 +79,20 @@ module.exports = (urbanize, event) => {
         <div class="margin_y_0_5">
           <strong>
             Mit
-            <a href="/${event.participants[0].permalink}/" target="_blank">
+            <a href="/${event.participants[0].permalink}/">
               ${event.participants[0].name}
             </a>
 
             ${event.participants.length >= 3 ? event.participants.slice(1, event.participants.length - 1).map(participant => `
               ,
-              <a href="/${participant.permalink}/" target="_blank">
+              <a href="/${participant.permalink}/">
                 ${participant.name}
               </a>
             `).join('') : ''}
 
             ${event.participants.length >= 2 ? `
               und
-              <a href="/${event.participants[event.participants.length - 1].permalink}/" target="_blank">
+              <a href="/${event.participants[event.participants.length - 1].permalink}/">
                 ${event.participants[event.participants.length - 1].name}
               </a>
             ` : ''}
@@ -112,7 +112,7 @@ module.exports = (urbanize, event) => {
         <div class="margin_y_0_5">
           <strong>Links</strong><br>
           ${event.links.map(link => `
-              <a href="${link}">${link}</a><br>
+              <a href="${link}" target="_blank">${link}</a><br>
           `).join('')}
         </div>
       ` : ''}
