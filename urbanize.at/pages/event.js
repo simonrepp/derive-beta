@@ -59,13 +59,13 @@ module.exports = (urbanize, event) => {
 
       <hr class="hairline">
 
-      <h2>
+      <h2 style="margin-bottom: 0;">
         <a href="/${event.permalink}/">
           ${event.title}
         </a>
       </h2>
 
-      <div class="margin_y_0_5">
+      <div style="margin-bottom: 1em;">
         <strong>${event.subtitle}</strong>
       </div>
 
