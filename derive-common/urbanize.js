@@ -1,7 +1,7 @@
 module.exports = data => {
   // TODO: Switch to maps to save us this whole stuff everywhere?
-  data.urbanize.features = [...data.features].filter(feature => feature.urbanize === '2020');
-  data.urbanize.title = 'urbanize! 2020';
+  data.urbanize.features = [...data.features].filter(feature => feature.urbanize === '2021');
+  data.urbanize.title = 'urbanize! 2021';
 
   for(const event of Object.values(data.urbanize.events)) {
     event.participants = [];

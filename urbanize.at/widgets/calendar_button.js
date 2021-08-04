@@ -24,7 +24,7 @@ module.exports = (event, date) => {
       location: `${event.venue} ${event.address}`,
       organizer: 'Removed Below <mail@example.com>',
       start,
-      summary: `urbanize! 2020: ${event.title}`,
+      summary: `urbanize! 2021: ${event.title}`,
       timestamp: moment()
     }],
     name: 'Urbanize Festival Calendar',

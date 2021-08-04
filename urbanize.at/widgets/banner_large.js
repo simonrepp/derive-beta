@@ -6,8 +6,8 @@ module.exports = `
         <img class="tagline" src="/images/tagline_white.svg">
       </div>
       <div class="info font_weight_500">
-        14—18 OKT 2020<br>
-        Wien—Floridsdorf
+        06—10 OKT 2021<br>
+        Wien—Nordwestbahnhof
       </div>
       <img class="sujet" src="/images/sujet.png">
     </div>
