@@ -34,7 +34,7 @@ module.exports = urbanize => {
         </span>
 
         <span>
-          <input class="active_query button_rect input_rect_accent" data-filter="query" oninput="updateFilter(this); return false;" placeholder="Volltextsuche" type="search">
+          <input class="active_query rounded_rect input_rect_accent" data-filter="query" oninput="updateFilter(this); return false;" placeholder="Volltextsuche" type="search">
         </span>
       </div>
 
