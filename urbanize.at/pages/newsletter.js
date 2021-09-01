@@ -42,22 +42,22 @@ module.exports = (urbanize, audience) => {
       <input type="hidden" id="csrf_token" name="csrf_token" value="${newsletter.csrfToken}">
 
       <div class="color_black margin_y_0_5">E-Mail</div>
-      <input class="input_rect_white margin_y_0_5" name="${newsletter.keys.email}" required="required" type="email">
+      <input class="rounded_rect input_rect_white margin_y_0_5" name="${newsletter.keys.email}" required="required" type="email">
 
       <div class="color_black margin_y_0_5">Vorname</div>
-      <input class="input_rect_white margin_y_0_5" name="${newsletter.keys.firstName}" required="required" type="text">
+      <input class="rounded_rect input_rect_white margin_y_0_5" name="${newsletter.keys.firstName}" required="required" type="text">
 
       <div class="color_black margin_y_0_5">Nachname</div>
-      <input class="input_rect_white margin_y_0_5" name="${newsletter.keys.lastName}" required="required" type="text">
+      <input class="rounded_rect input_rect_white margin_y_0_5" name="${newsletter.keys.lastName}" required="required" type="text">
 
       <div class="color_black margin_y_0_5">Institution</div>
-      <input class="input_rect_white margin_y_0_5" name="${newsletter.keys.institution}" type="text">
+      <input class="rounded_rect input_rect_white margin_y_0_5" name="${newsletter.keys.institution}" type="text">
 
       <div class="color_black margin_y_0_5">Stadt/Ort</div>
-      <input class="input_rect_white margin_y_0_5" name="${newsletter.keys.city}" required="required" type="text">
+      <input class="rounded_rect input_rect_white margin_y_0_5" name="${newsletter.keys.city}" required="required" type="text">
 
       <div class="color_black margin_y_0_5">Land</div>
-      <input class="input_rect_white margin_y_0_5" name="${newsletter.keys.country}" required="required" type="text">
+      <input class="rounded_rect input_rect_white margin_y_0_5" name="${newsletter.keys.country}" required="required" type="text">
 
       <div class="color_black margin_y_2_0">
         <input id="checkbox_consent" name="w-preview-consent-checkbox" required="required" type="checkbox">
@@ -77,7 +77,7 @@ module.exports = (urbanize, audience) => {
         Newsletter kann jederzeit einfach abbestellt werden.
       </div>
 
-      <button class="button_rect_white margin_y_0_5"
+      <button class="rounded_rect button_rect_white margin_y_0_5"
               onclick="if(!document.querySelector('#checkbox_consent').checked) { alert('Bitte dem Erhalt des Newsletters durch Aktivierung des Sliders im Formular zustimmen.'); }"
               type="submit">
         Abonnieren

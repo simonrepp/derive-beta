@@ -24,7 +24,7 @@ const eventFeature = event => `
 
     <div class="extra_indent">
       <div class="event_details margin_y_0_5">
-        <a class="button_rect_black event_category_tag" href="/programm/?kategorie=${event.category}">
+        <a class="rounded_rect button_rect_black event_category_tag" href="/programm/?kategorie=${event.category}">
           ${event.category}
         </a>
 

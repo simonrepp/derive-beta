@@ -1,6 +1,6 @@
 module.exports = variant => `
   <div>
-    <div class="banner_small_${variant}">
+    <div class="banner_small banner_small_${variant}">
       <a class="logo_wrapper" href="/">
         <div class="logo" style="background-image: url('/images/urbanize_sprite_${variant}.svg?final');"></div>
         <img class="tagline" src="/images/tagline_${variant}.svg">

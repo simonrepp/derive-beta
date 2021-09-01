@@ -6,7 +6,7 @@ module.exports = (event, date) => {
     return '<span class="color_accent">Veranstaltung bereits ausgebucht</span>';
 
   return `
-    <a class="button_rect_accent" href="${event.signupLink}" target="_blank">
+    <a class="rounded_rect button_rect_accent" href="${event.signupLink}" target="_blank">
       Anmeldung
     </a>
   `;

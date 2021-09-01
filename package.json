@@ -23,7 +23,6 @@
     "babel-plugin-transform-class-properties": "^6.24.1",
     "fuse.js": "^6.4.6",
     "parcel-bundler": "^1.12.5",
-    "sass": "^1.38.2",
     "turbolinks": "^5.2.0"
   },
   "engines": {
@@ -50,13 +49,9 @@
     "url": "https://github.com/simonrepp/derive-beta.git"
   },
   "scripts": {
-    "all-compile": "npm run derive-compile && npm run urbanize-compile",
-    "derive-compile": "npm run derive-scripts && npm run derive-styles",
-    "derive-scripts": "parcel build derive.at/scripts/main.js --experimental-scope-hoisting --no-cache --no-source-maps --out-dir derive.at/static --out-file scripts.js",
-    "derive-styles": "sass --no-source-map --style compressed derive.at/styles/main.scss derive.at/static/styles.css",
-    "urbanize-compile": "npm run urbanize-scripts && npm run urbanize-styles",
-    "urbanize-scripts": "parcel build urbanize.at/scripts/main.js --experimental-scope-hoisting --no-cache --no-source-maps --out-dir urbanize.at/static --out-file scripts.js",
-    "urbanize-styles": "sass --no-source-map --style compressed urbanize.at/styles/main.scss urbanize.at/static/styles.css"
+    "all-scripts": "npm run derive-scripts && npm run urbanize-scripts",
+    "derive-scripts": "parcel build derive.at/scripts/main.js --no-cache --no-source-maps --dist-dir derive.at/static --out-file scripts.js",
+    "urbanize-scripts": "parcel build urbanize.at/scripts/main.js --no-cache --no-source-maps --dist-dir urbanize.at/static --out-file scripts.js"
   },
   "version": "1.29.0"
 }

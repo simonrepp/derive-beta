@@ -64,7 +64,7 @@ module.exports = events => {
             </div>
 
             <div class="event_details">
-              <a class="button_rect_black_faux event_category_tag">
+              <a class="rounded_rect button_rect_black_faux event_category_tag">
                 ${event.category}
               </a>
 
