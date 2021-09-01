@@ -1,5 +1,5 @@
 {
-  "author": "Simon Repp <simon@fdpl.io> (https://simonrepp.com)",
+  "author": "Simon Repp <simon@fdpl.io>",
   "dependencies": {
     "atom-package-deps": "^8.0.0",
     "enolib": "^0.8.2",
@@ -49,9 +49,7 @@
     "url": "https://github.com/simonrepp/derive-beta.git"
   },
   "scripts": {
-    "all-scripts": "npm run derive-scripts && npm run urbanize-scripts",
-    "derive-scripts": "parcel build derive.at/scripts/main.js --no-cache --no-source-maps --dist-dir derive.at/static --out-file scripts.js",
-    "urbanize-scripts": "parcel build urbanize.at/scripts/main.js --no-cache --no-source-maps --dist-dir urbanize.at/static --out-file scripts.js"
+    "derive-scripts": "parcel build derive.at/scripts/main.js --no-cache --no-source-maps --dist-dir derive.at/static --out-file scripts.js"
   },
   "version": "1.29.0"
 }
