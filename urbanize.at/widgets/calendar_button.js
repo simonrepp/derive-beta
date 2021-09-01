@@ -18,9 +18,9 @@ module.exports = (event, date) => {
   const icsContent = ical({
     domain: 'urbanize.at',
     events: [{
-      description: striptags(event.abstract.converted),
+      description: event.abstract ? striptags(event.abstract.converted) : '',
       end,
-      htmlDescription: event.abstract.converted,
+      htmlDescription: event.abstract ? event.abstract.converted : '',
       location: `${event.venue} ${event.address}`,
       organizer: 'Removed Below <mail@example.com>',
       start,

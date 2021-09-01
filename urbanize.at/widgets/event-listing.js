@@ -31,7 +31,7 @@ module.exports = events => {
   }
 
   sortedEvents.sort(eventSort);
-
+  
   return `
     <div>
       ${sortedEvents.map(({ date, event }) => `
@@ -47,7 +47,7 @@ module.exports = events => {
                 event.additionalInfo ? striptags(event.additionalInfo.converted) : '',
                 event.links.map(link => link).join(' '),
                 event.participants.map(participant => participant.name).join(' '),
-                striptags(event.abstract.converted),
+                event.abstract ? striptags(event.abstract.converted) : '',
                 event.text ? striptags(event.text.written) : ''
               ].join(' ')
             })}
@@ -98,11 +98,19 @@ module.exports = events => {
               </h2>
 
               <div class="margin_y_0_5">
-                ${event.abstract.converted.replace(/(?=<\/p>\s*$)/, `
-                  <a href="/${event.permalink}/">
-                    <img src="/images/arrow.svg">
-                  </a>
-                `)}
+                ${event.abstract ? 
+                    event.abstract.converted.replace(/(?=<\/p>\s*$)/, `
+                      <a href="/${event.permalink}/">
+                        <img src="/images/arrow.svg">
+                      </a>
+                    `)
+                    :
+                    `
+                      <a href="/${event.permalink}/">
+                        <img src="/images/arrow.svg">
+                      </a>
+                    `
+                }
               </div>
 
               ${event.participants.length > 0 ? `
