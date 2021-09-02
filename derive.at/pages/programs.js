@@ -18,7 +18,7 @@ module.exports = (data, pagination) => {
       </div>
 
       <div class="generic__featured_text">
-        <h1>${featured.title}</h1>
+        <h1><a href="/radio/${featured.permalink}/">${featured.title}</a></h1>
 
         <div class="generic__margin_vertical">
           ${featured.abstract ? featured.abstract.converted : (featured.text ? stripAndTruncateHtml(featured.text.converted, 500, `/radio/${featured.permalink}/`) : 'Kein Text vorhanden.')}
@@ -30,7 +30,7 @@ module.exports = (data, pagination) => {
           <a href="/ueber-radio-derive/">Über Radio dérive</a>
         </div>
 
-        ${share(featured.title, `/radio/${pagination}`)}
+        ${share(featured.title, `https://derive.at/radio/${featured.permalink}/`)}
       </div>
     </div>
 

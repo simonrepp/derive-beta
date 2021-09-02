@@ -47,7 +47,7 @@ module.exports = (data, program) => {
 
         ${tags(program.tags)}
 
-        ${share(program.title, `/radio/${program.permalink}/`)}
+        ${share(program.title, `https://derive.at/radio/${program.permalink}/`)}
       </div>
     </div>
 
