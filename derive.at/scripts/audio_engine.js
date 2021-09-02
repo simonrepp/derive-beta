@@ -1,8 +1,4 @@
-const moment = require('moment');
-
-const timecode = seconds => moment.utc(seconds * 1000).format('mm:ss');
-
-// TODO: audio notice explaining that user can navigate further while listening
+const timecode = seconds => `${Math.floor(seconds) / 60}:${Math.floor(seconds) % 60}`;
 
 class AudioEngine {
   static initialize() {
