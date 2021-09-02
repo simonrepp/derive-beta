@@ -21,7 +21,7 @@
   "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-plugin-transform-class-properties": "^6.24.1",
-    "parcel-bundler": "^1.12.5",
+    "parcel-bundler": "^1.12.4",
     "turbolinks": "^5.2.0"
   },
   "engines": {
@@ -48,7 +48,7 @@
     "url": "https://github.com/simonrepp/derive-beta.git"
   },
   "scripts": {
-    "derive-scripts": "parcel build derive.at/scripts/main.js --no-cache --no-source-maps --dist-dir derive.at/static --out-file scripts.js"
+    "derive-scripts": "parcel build derive.at/scripts/main.js --no-cache --no-source-maps --out-dir derive.at/static --out-file scripts.js"
   },
   "version": "1.29.0"
 }
