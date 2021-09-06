@@ -18,12 +18,6 @@
     "striptags": "^3.2.0"
   },
   "description": "dérive Atom Plugin Beta",
-  "devDependencies": {
-    "babel-core": "^6.26.3",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "parcel-bundler": "^1.12.4",
-    "turbolinks": "^5.2.0"
-  },
   "engines": {
     "atom": ">=1.15.0 <2.0.0"
   },

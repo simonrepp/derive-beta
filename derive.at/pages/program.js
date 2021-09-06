@@ -28,9 +28,8 @@ module.exports = (data, program) => {
         ${firstBroadcast(program.firstBroadcast)}
 
         ${program.soundfile ? `
-          <div class="radio"
-               data-title="${program.title}"
-               data-src="${program.soundfile.written}">
+          <div class="radio">
+            <audio class="radio__audio" preload="none" src="${program.soundfile.written}"></audio>
             <a class="radio__button">
               <span class="radio__playback_icon icon-play"></span>
             </a>
@@ -58,7 +57,7 @@ module.exports = (data, program) => {
     </div>
   `;
 
-  const script = program.soundfile ? 'AudioEngine.register();' : null;
+  const extraScript = program.soundfile ? 'radio.js' : null;
 
-  return layout(data, html, { activeSection: 'Radio', script: script, title: program.title });
+  return layout(data, html, { activeSection: 'Radio', extraScript, title: program.title });
 };

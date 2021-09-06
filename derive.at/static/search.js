@@ -118,66 +118,71 @@ const programResult = program => `
 </div>
 `;
 
-module.exports = () => {
-  window.search = {
-    message: null,
-    pending: false,
-    query: '',
-    sections: {
-      articles: true,
-      authors: true,
-      books: true,
-      issues: true,
-      programs: true
-    }
-  };
+function renderSearch() {
+    const search = new URLSearchParams(window.location.search);
+    const query = search.get('begriff');
+    const sections = search.get('filter').split(',');
 
-  window.renderSearch = () => {
     const sectionCheckboxes = document.querySelectorAll('span[data-section]');
-    for(let checkbox of sectionCheckboxes) {
-      const section = checkbox.dataset.section;
+    for (const checkbox of sectionCheckboxes) {
+        const section = checkbox.dataset.section;
 
-      if(window.search.sections[section]) {
-        checkbox.classList.remove('icon-checkbox');
-        checkbox.classList.add('icon-checkbox-checked');
-      } else {
-        checkbox.classList.remove('icon-checkbox-checked');
-        checkbox.classList.add('icon-checkbox');
-      }
+        if (sections.includes(section)) {
+            checkbox.classList.remove('icon-checkbox');
+            checkbox.classList.add('icon-checkbox-checked');
+        } else {
+            checkbox.classList.remove('icon-checkbox-checked');
+            checkbox.classList.add('icon-checkbox');
+        }
     }
 
+    document.querySelector('.search__query').innerHTML = query;
     const results = document.querySelector('.search__results');
 
     if(results) {
-      if(window.search.results) {
-        document.querySelector('.search__query').innerHTML = window.search.query;
+        if (!location.hostname.match(/derive\.at/)) {
+            results.innerHTML = 'Die Suche ist beim lokalen Testen nicht verfügbar da sie auf PHP angewiesen ist.';
+        } else if (query.length < 1) {
+            results.innerHTML = 'Mindestens zwei Buchstaben erforderlich.';    
+        } else {
+            results.innerHTML = 'Suche läuft';
+            
+            const sectionsMapped = sections.map(section => 
+                ({
+                    'autoren': 'authors',
+                    'bücher': 'books',
+                    'radio': 'programs',
+                    'texte': 'articles',
+                    'zeitschrift': 'issues'
+                }[section])
+            ).join(',');
+            
+            fetch(`https://derive.at/api/search/?query=${encodeURI(query)}&sections=${sectionsMapped}`)
+                .then(response => response.json())
+                .then(data => {
+                    let html = '';
 
-        let html = '';
+                    for (const result of data) {
+                        if (result.hasOwnProperty('article')) {
+                            html += articleResult(result.article);
+                        } else if (result.hasOwnProperty('author')) {
+                            html += authorResult(result.author);
+                        } else if (result.hasOwnProperty('book')) {
+                            html += bookResult(result.book);
+                        } else if (result.hasOwnProperty('issue')) {
+                            html += issueResult(result.issue);
+                        } else if (result.hasOwnProperty('program')) {
+                            html += programResult(result.program);
+                        }
+                    }
 
-        for(let result of window.search.results) {
-          if(result.hasOwnProperty('article')) {
-            html += articleResult(result.article);
-          } else if(result.hasOwnProperty('author')) {
-            html += authorResult(result.author);
-          } else if(result.hasOwnProperty('book')) {
-            html += bookResult(result.book);
-          } else if(result.hasOwnProperty('issue')) {
-            html += issueResult(result.issue);
-          } else if(result.hasOwnProperty('program')) {
-            html += programResult(result.program);
-          }
+                    results.innerHTML = html;
+                })
+                .catch(error => {
+                    results.innerHTML = `Fehler: ${error}`;
+                });
         }
-
-        results.innerHTML = html;
-      } else if(window.search.pending) {
-        results.innerHTML = 'Suche läuft';
-      } else if(window.search.error) {
-        results.innerHTML = window.search.error;
-      }
     }
-  }
+}
 
-  window.renderSearch();
-
-  document.addEventListener('turbolinks:render', window.renderSearch);
-};
+window.addEventListener('DOMContentLoaded', renderSearch);

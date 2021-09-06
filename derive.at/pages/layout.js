@@ -8,9 +8,7 @@ module.exports = (data, content, options = {}) => `
   <!DOCTYPE html>
   <html>
     <head>
-      <title>
-        ${options.title || DEFAULT_TITLE}
-      </title>
+      <title>${options.title || DEFAULT_TITLE}</title>
 
       <meta charset="utf-8">
       <meta name="description" content="dérive">
@@ -21,6 +19,7 @@ module.exports = (data, content, options = {}) => `
       <link rel="stylesheet" href="/styles.css?${data.assetHash}">
 
       <script src="/scripts.js?${data.assetHash}"></script>
+      ${options.extraScript ? `<script src="/${options.extraScript}?${data.assetHash}"></script>` : ''}
     </head>
 
     <body>
@@ -47,8 +46,6 @@ module.exports = (data, content, options = {}) => `
           ${sidebar(data)}
         </div>
       </div>
-
-      ${options.script ? `<script>${options.script}</script>` : ''}
     </body>
   </html>
 `;

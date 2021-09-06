@@ -3,7 +3,7 @@ const layout = require('./layout.js');
 module.exports = data => {
   const html = `
     <div>
-      <div class="pagination TODO-dontusepaginationbutgenericthing">
+      <div class="pagination">
         <form action="/suche/" class="search__searchform">
           <div>
             <input name="query" placeholder="Ihr Suchbegriff" type="search">
@@ -17,11 +17,11 @@ module.exports = data => {
           </div>
 
           <div class="search__filters">
-            <div class="search__filter"><span class="icon-checkbox-checked" data-section="issues"></span> Zeitschrift</div>
-            <div class="search__filter"><span class="icon-checkbox-checked" data-section="authors"></span> Autoren</div>
-            <div class="search__filter"><span class="icon-checkbox-checked" data-section="books"></span> Bücher</div>
-            <div class="search__filter"><span class="icon-checkbox-checked" data-section="programs"></span> Radio</div>
-            <div class="search__filter"><span class="icon-checkbox-checked" data-section="articles"></span> Texte</div>
+            <div class="search__filter"><span class="icon-checkbox-checked" data-section="zeitschrift"></span> Zeitschrift</div>
+            <div class="search__filter"><span class="icon-checkbox-checked" data-section="autoren"></span> Autoren</div>
+            <div class="search__filter"><span class="icon-checkbox-checked" data-section="bücher"></span> Bücher</div>
+            <div class="search__filter"><span class="icon-checkbox-checked" data-section="radio"></span> Radio</div>
+            <div class="search__filter"><span class="icon-checkbox-checked" data-section="texte"></span> Texte</div>
           </div>
         </form>
       </div>
@@ -37,5 +37,5 @@ module.exports = data => {
     </div>
   `;
 
-  return layout(data, html, { title: 'Suche' });
+  return layout(data, html, { extraScript: 'search.js', title: 'Suche' });
 };
