@@ -137,6 +137,8 @@ function renderSearch() {
     }
 
     document.querySelector('.search__query').innerHTML = query;
+    document.querySelector('.search__searchform input[name="query"]').value = query;
+    document.querySelector('.sidebar__searchform  input[name="query"]').value = query;
     const results = document.querySelector('.search__results');
 
     if(results) {
