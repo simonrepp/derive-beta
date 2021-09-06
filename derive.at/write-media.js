@@ -25,13 +25,17 @@ module.exports = async (data, preview) => {
     const fromAbsolute = path.join(data.root, fromRelative);
     const toAbsolute = path.join(data.buildDir, toRelative);
 
-    return sharp(fromAbsolute).resize({
+    return new Promise((resolve, reject) => {
+        return sharp(fromAbsolute).resize({
                                 fit: 'inside',
                                 height: 960,
                                 width: 960,
                                 withoutEnlargement: true
                               })
-                              .toFile(toAbsolute);
+                              .toFile(toAbsolute)
+                              .then(result => resolve(result))
+                              .catch(err => reject(`Die Bildumrechung des Ausgangsbilds ${fromAbsolute} in die Zieldatei ${toAbsolute} hat nicht funktioniert. Debuginformation der sharp library: ${err}`));
+    });
   };
 
   const concurrentWrites = [];
