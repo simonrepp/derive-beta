@@ -3,6 +3,7 @@
     --color-black: #000000;
     --color-grey: #6f7375;
     --color-white: #ffffff;
+    --color-white-overlay: rgba(255, 255, 255, 0.9);
     --color-yellow: #ffed00;
 }
 @font-face {
@@ -327,7 +328,7 @@ input.input_rect_white {
 }
 .banner_large .alignment .logo_wrapper {
     padding-bottom: 5%;
-    padding-top: 0.1956521739130435px * 100%; /* 0.1956521739130435px = 180px / 920px */
+    padding-top: 19.56521739130%; /* 180px / 920px * 100% */
     position: relative;
 }
 .banner_large .alignment .tagline {
@@ -375,7 +376,7 @@ input.input_rect_white {
 .dim_overlay { display: none; }
 @media (max-width: 744px) {
 	.dim_overlay.visible {
-		background-color: rgba(var(--color-white), 0.9); /* TODO: Does this work in pure css? */
+		background-color: var(--color-white-overlay);
 		display: block;
 		height: 100vh;
 		left: 0;
@@ -522,7 +523,7 @@ input.input_rect_white {
 }
 .gallery {
   height: 0;
-  padding-top: 0.5625px * 100%; /* 0.5625px = 900px / 1600px */
+  padding-top: 56.25%; /* 900px / 1600px * 100% */
   position: relative;
   width: 100%;
 }
@@ -532,7 +533,7 @@ input.input_rect_white {
     height: 0;
     left: 0;
     overflow: hidden;
-    padding-top: 0.5625px * 100%; /* 0.5625px = 900px / 1600px */
+    padding-top: 56.25%; /* 900px / 1600px * 100% */
     position: absolute;
     top: 0;
     transition: opacity 2s ease;
