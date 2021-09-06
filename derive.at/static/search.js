@@ -157,7 +157,7 @@ function renderSearch() {
                 }[section])
             ).join(',');
             
-            fetch(`https://derive.at/api/search/?query=${encodeURI(query)}&sections=${sectionsMapped}`)
+            fetch(`/api/search/?query=${encodeURI(query)}&sections=${sectionsMapped}`)
                 .then(response => response.json())
                 .then(data => {
                     let html = '';
