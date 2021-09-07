@@ -14,11 +14,11 @@ module.exports = urbanize => {
           <a class="rounded_rect button_rect_accent" data-filter="date" href="#" onclick="return false;">Datum<span class="active_date"></span></a>
           <div class="hover_menu">
             <a class="rounded_rect button_rect_yellow" data-date="all" href="#" onclick="updateFilter(this); return false;">Alle Tage</a>
-            <a class="rounded_rect button_rect_yellow" data-date="2021-10-06" href="#" onclick="updateFilter(this); return false;">06 OKT 2021</a>
-            <a class="rounded_rect button_rect_yellow" data-date="2021-10-07" href="#" onclick="updateFilter(this); return false;">07 OKT 2021</a>
-            <a class="rounded_rect button_rect_yellow" data-date="2021-10-08" href="#" onclick="updateFilter(this); return false;">08 OKT 2021</a>
-            <a class="rounded_rect button_rect_yellow" data-date="2021-10-09" href="#" onclick="updateFilter(this); return false;">09 OKT 2021</a>
-            <a class="rounded_rect button_rect_yellow" data-date="2021-10-10" href="#" onclick="updateFilter(this); return false;">10 OKT 2021</a>
+            <a class="rounded_rect button_rect_yellow" data-date="2021-10-06" href="#" onclick="updateFilter(this); return false;">06&nbsp;OKT&nbsp;2021</a>
+            <a class="rounded_rect button_rect_yellow" data-date="2021-10-07" href="#" onclick="updateFilter(this); return false;">07&nbsp;OKT&nbsp;2021</a>
+            <a class="rounded_rect button_rect_yellow" data-date="2021-10-08" href="#" onclick="updateFilter(this); return false;">08&nbsp;OKT&nbsp;2021</a>
+            <a class="rounded_rect button_rect_yellow" data-date="2021-10-09" href="#" onclick="updateFilter(this); return false;">09&nbsp;OKT&nbsp;2021</a>
+            <a class="rounded_rect button_rect_yellow" data-date="2021-10-10" href="#" onclick="updateFilter(this); return false;">10&nbsp;OKT&nbsp;2021</a>
           </div>
         </span>
 
