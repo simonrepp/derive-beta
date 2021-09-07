@@ -57,7 +57,5 @@ module.exports = async data => {
   console.timeEnd('checkup');
   console.timeEnd('transform');
 
-  console.log(data); // TODO: Remove after all is done
-
   return data;
 };
