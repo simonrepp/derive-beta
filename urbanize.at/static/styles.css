@@ -7,54 +7,52 @@
     --color-yellow: #ffed00;
 }
 @font-face {
-  font-family: 'Jost';
-  font-style: normal;
-  font-weight: 400;
-  src: url('/fonts/Jost-400-Book.woff') format('woff');
+    font-family: 'Jost';
+    font-style: normal;
+    font-weight: 400;
+    src: url('/fonts/Jost-400-Book.woff') format('woff');
 }
 @font-face {
-  font-family: 'Jost';
-  font-style: italic;
-  font-weight: 400;
-  src: url('/fonts/Jost-400-BookItalic.woff') format('woff');
+    font-family: 'Jost';
+    font-style: italic;
+    font-weight: 400;
+    src: url('/fonts/Jost-400-BookItalic.woff') format('woff');
 }
 @font-face {
-  font-family: 'Jost';
-  font-style: normal;
-  font-weight: 500;
-  src: url('/fonts/Jost-500-Medium.woff') format('woff');
+    font-family: 'Jost';
+    font-style: normal;
+    font-weight: 500;
+    src: url('/fonts/Jost-500-Medium.woff') format('woff');
 }
 @font-face {
-  font-family: 'Jost';
-  font-style: normal;
-  font-weight: 600;
-  src: url('/fonts/Jost-600-Semi.woff') format('woff');
+    font-family: 'Jost';
+    font-style: normal;
+    font-weight: 600;
+    src: url('/fonts/Jost-600-Semi.woff') format('woff');
 }
-
-/* icons */
-
+/* icons begin */
 @font-face {
-  font-family: 'icon';
-  src: url('/fonts/icons.woff2?96992864') format('woff2');
-  font-weight: normal;
-  font-style: normal;
+    font-family: 'icon';
+    src: url('/fonts/icons.woff2?96992864') format('woff2');
+    font-weight: normal;
+    font-style: normal;
 }
 [class^="icon-"]:before, [class*=" icon-"]:before {
-  font-family: "icon";
-  font-style: normal;
-  font-weight: normal;
-  speak: none;
-  display: inline-block;
-  text-decoration: inherit;
-  width: 1em;
-  margin-right: .2em;
-  text-align: center;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1em;
-  margin-left: .2em;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    font-family: "icon";
+    font-style: normal;
+    font-weight: normal;
+    speak: none;
+    display: inline-block;
+    text-decoration: inherit;
+    width: 1em;
+    margin-right: .2em;
+    text-align: center;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1em;
+    margin-left: .2em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 .icon-print:before { content: '\e800'; } /* '' */
 .icon-twitter:before { content: '\f099'; } /* '' */
@@ -64,14 +62,11 @@
 .icon-facebook:before { content: '\f230'; } /* '' */
 .icon-vimeo:before { content: '\f27d'; } /* '' */
 .icon-flickr:before { content: '\f303'; } /* '' */
-
-/* remainder */
-
+/* icons end */
 .color_accent { color: var(--color-accent); }
 .color_black { color: var(--color-black); }
 .color_grey { color: var(--color-grey); }
 .color_white { color: var(--color-white); }
-
 body,
 button,
 input,
@@ -146,20 +141,20 @@ a.button_circle_black_white:hover {
     color: var(--color-black);
 }
 a.button_rect_black {
-  background-color: var(--color-black);
-  color: var(--color-white);
+    background-color: var(--color-black);
+    color: var(--color-white);
 }
 a.button_rect_black:hover {
     background-color: var(--color-white);
     color: var(--color-black);
 }
 a.button_rect_black_faux {
-  background-color: var(--color-black);
-  color: var(--color-white);
+    background-color: var(--color-black);
+    color: var(--color-white);
 }
 a.button_rect_accent {
-  background-color: var(--color-accent);
-  color: var(--color-white);
+    background-color: var(--color-accent);
+    color: var(--color-white);
 }
 a.button_rect_accent:hover { background-color: var(--color-black); }
 a.button_rect_white {
@@ -229,17 +224,12 @@ input.input_rect_accent::placeholder {
     opacity: 1;
 }
 input.input_rect_white {
-  background-color: var(--color-white);
-  border: 1px solid var(--color-black);
-  color: var(--color-black);
-  display: block;
-  width: 100%;
+    background-color: var(--color-white);
+    border: 1px solid var(--color-black);
+    color: var(--color-black);
+    display: block;
+    width: `100%;
 }
-
-@keyframes subliminal {
-  100% { background-position: 0 -34560px; }
-}
-
 .banner_small {
     display: flex;
     justify-content: space-between;
@@ -251,38 +241,12 @@ input.input_rect_white {
 @media (max-width: 620px) {
     .banner_small .info { display: none; }
 }
-.banner_small .logo {
-    animation: subliminal 4s steps(192) infinite;
-    background-position: 0 0;
-    background-size: 920px 34560px;
-    height: 180px;
-    left: 0;
-    position: absolute;
-    top: 0;
-    transform-origin: top left;
-    width: 920px;
-}
-.banner_small .logo_wrapper {
-    display: block;
-    min-height: 100px;
-    position: relative;
-    width: 310px;
-}
+.banner_small .logo_static { max-width: 100%; }
+.banner_small .logo_wrapper { max-width: 310px; }
 @media (max-width: 500px) {
     .banner_small .logo_wrapper {
         min-height: 20vw;
         width: 70vw;
-    }
-}
-.banner_small .tagline {
-    position: absolute;
-    max-width: 300px;
-    top: 3.5em;
-}
-@media (max-width: 500px) {
-    .banner_small .tagline {
-        width: 70vw;
-        top: 15vw;
     }
 }
 .banner_small .slogan { max-height: 100px; }
@@ -311,41 +275,16 @@ input.input_rect_white {
     margin-top: 1em;
     text-align: right;
 }
-.banner_large .alignment .logo {
-    animation: subliminal 8s steps(192) infinite;
-    background-image: url('/images/urbanize_sprite_white.svg?final');
-    background-position: 0 0;
-    background-size: 920px 34560px;
-    height: 180px;
+.banner_large .alignment .logo_static {
     left: 10%;
+    max-width: 75%;
     position: absolute;
     top: 0;
-    transform-origin: top left;
-    width: 920px;
-}
-@media (max-width: 500px) {
-    .banner_large .alignment .logo { animation: subliminal 4s steps(192) infinite; }
 }
 .banner_large .alignment .logo_wrapper {
     padding-bottom: 5%;
     padding-top: 19.56521739130%; /* 180px / 920px * 100% */
     position: relative;
-}
-.banner_large .alignment .tagline {
-    left: 10%;
-    position: absolute;
-}
-@media (min-width: 1350px) {
-    .banner_large .alignment .tagline {
-        max-width: 51em;
-        top: 12em;
-    }
-}
-@media (max-width: 1349px) {
-    .banner_large .alignment .tagline {
-        max-width: 75%;
-        top: 16vw;
-    }
 }
 .banner_large .alignment .sujet { margin-bottom: -11em; }
 @media (max-width: 1740px) {
@@ -387,22 +326,22 @@ input.input_rect_white {
 	}
 }
 .event {
-  display: grid;
-  grid-gap: 2em;
-  grid-template-columns: 2fr 3fr;
+    display: grid;
+    grid-gap: 2em;
+    grid-template-columns: 2fr 3fr;
 }
 @media (max-width: 869px) {
     .event { grid-template-columns: 1fr; }
 }
 .event_details { position: relative; }
 .event_category_tag {
-  position: absolute;
-  right: 0;
-  top: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
 }
 .event_download {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
 .event_download img {
     margin-right: 1em;
@@ -436,8 +375,8 @@ input.input_rect_white {
     .features.alignment_mobile { display: none; }
 }
 .feature {
-  margin-bottom: 4em;
-  margin-top: 2em;
+    margin-bottom: 4em;
+    margin-top: 2em;
 }
 .feature:hover {
     background-color: var(--color-accent);
@@ -448,8 +387,8 @@ input.input_rect_white {
 .feature:hover hr.hairline { background-color: var(--color-white); }
 .feature:hover .color_accent { color: var(--color-white); }
 .filter_alignment {
-  display: flex;
-  justify-content: flex-start;
+    display: flex;
+    justify-content: flex-start;
 }
 .filter_alignment a._accent,
 .filter_alignment a._yellow { white-space: nowrap; }
@@ -522,10 +461,10 @@ input.input_rect_white {
 	.footer .derive_mobile { display: none; }
 }
 .gallery {
-  height: 0;
-  padding-top: 56.25%; /* 900px / 1600px * 100% */
-  position: relative;
-  width: 100%;
+    height: 0;
+    padding-top: 56.25%; /* 900px / 1600px * 100% */
+    position: relative;
+    width: 100%;
 }
 .gallery > div {
     background-position: center center;
@@ -650,9 +589,9 @@ input.input_rect_white {
     padding: .1em .5em;
 }
 .scroll_to_top {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 2em;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2em;
 }
 .scroll_to_top a { display: inline-block; }
 .scroll_to_top a img { height: 2em; }
