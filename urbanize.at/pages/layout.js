@@ -47,7 +47,7 @@ module.exports = (content, urbanize, options = {}) => {
         <link rel="icon" type="image/png" href="/favicon.png">
 
         <meta property="og:description" content="${options.description}">
-        <meta property="og:image" content="${options.og.image}">
+        <meta property="og:image" content="${options.og.image}?${urbanize.assetHash}">
         <meta property="og:image:width" content="${options.og.imageWidth}">
         <meta property="og:image:height" content="${options.og.imageHeight}">
         <meta property="og:image:type" content="${options.og.imageType}">
