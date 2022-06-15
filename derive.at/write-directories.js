@@ -1,54 +1,56 @@
+const fs = require('fs');
 const fsExtra = require('fs-extra');
+const path = require('path');
 
-const { createDir } = require('../derive-common/util.js');
+module.exports = data => {
+    fsExtra.emptyDirSync(data.buildDir);
 
-module.exports = async data => {
-  await fsExtra.emptyDir(data.buildDir);
+    const dirs = new Set();
 
-  const topDirectories = [
-    'api',
-    'autoren',
-    'buecher',
-    'features',
-    'festival',
-    'kino',
-    'newsletter',
-    'radio',
-    'seite-nicht-gefunden',
-    'suche',
-    'tags',
-    'texte',
-    'verlage',
-    'zeitschrift'
-  ];
+    dirs.add('api');
+    dirs.add('api/search');
 
-  data.pages.forEach(page => topDirectories.push(page.permalink));
+    dirs.add('autoren');
+    data.authors.forEach(author => dirs.add(`autoren/${author.permalink}`));
+    data.authorsPaginated.forEach(pagination => dirs.add(`autoren/${pagination.label}`));
+    data.bookAuthors.forEach(author => dirs.add(`autoren/${author.permalink}`));
+    
+    dirs.add('buecher');
+    data.books.forEach(book => dirs.add(`buecher/${book.permalink}`));
+    data.booksPaginated.forEach(pagination => dirs.add(`buecher/${pagination.label}`));
 
-  await Promise.all(topDirectories.map(dir => createDir(data.buildDir, dir)));
+    dirs.add('features');
+    
+    dirs.add('festival');
+    
+    dirs.add('kino');
+    data.screenings.forEach(screening => dirs.add(`kino/${screening.permalink}`));
 
-  const midDirectories = new Set([
-    'api/search'
-  ]);
+    dirs.add('newsletter');
 
-  data.articles.forEach(article => midDirectories.add(`texte/${article.permalink}`));
-  data.articlesPaginated.forEach(pagination => midDirectories.add(`texte/${pagination.label}`));
-  data.authors.forEach(author => midDirectories.add(`autoren/${author.permalink}`));
-  data.authorsPaginated.forEach(pagination => midDirectories.add(`autoren/${pagination.label}`));
-  data.bookAuthors.forEach(author => midDirectories.add(`autoren/${author.permalink}`));
-  data.books.forEach(book => midDirectories.add(`buecher/${book.permalink}`));
-  data.booksPaginated.forEach(pagination => midDirectories.add(`buecher/${pagination.label}`));
-  data.issues.forEach(issue => midDirectories.add(`zeitschrift/${issue.permalink}`));
-  data.programs.forEach(program => midDirectories.add(`radio/${program.permalink}`));
-  data.programsPaginated.forEach(pagination => midDirectories.add(`radio/${pagination.label}`));
-  data.publishers.forEach(publisher => midDirectories.add(`verlage/${publisher.permalink}`));
-  data.screenings.forEach(screening => midDirectories.add(`kino/${screening.permalink}`));
-  data.tags.forEach(tag => midDirectories.add(`tags/${tag.permalink}`));
+    dirs.add('radio');
+    data.programs.forEach(program => dirs.add(`radio/${program.permalink}`));
+    data.programsPaginated.forEach(pagination => dirs.add(`radio/${pagination.label}`));
 
-  await Promise.all([...midDirectories].map(dir => createDir(data.buildDir, dir)));
+    dirs.add('seite-nicht-gefunden');
+    
+    dirs.add('suche');
 
-  const deepDirectories = [];
+    dirs.add('tags');
+    data.tags.forEach(tag => dirs.add(`tags/${tag.permalink}`));
 
-  data.articles.forEach(article => deepDirectories.push(`texte/${article.permalink}/druckversion`));
+    dirs.add('texte');
+    data.articles.forEach(article => dirs.add(`texte/${article.permalink}`));
+    data.articlesPaginated.forEach(pagination => dirs.add(`texte/${pagination.label}`));
+    data.articles.forEach(article => dirs.add(`texte/${article.permalink}/druckversion`));
 
-  await Promise.all(deepDirectories.map(dir => createDir(data.buildDir, dir)));
+    dirs.add('verlage');
+    data.publishers.forEach(publisher => dirs.add(`verlage/${publisher.permalink}`));
+
+    dirs.add('zeitschrift');
+    data.issues.forEach(issue => dirs.add(`zeitschrift/${issue.permalink}`));
+
+    data.pages.forEach(page => dirs.add(page.permalink));
+
+    dirs.forEach(dir => fs.mkdirSync(path.join(data.buildDir, dir), { recursive: true }));
 };

@@ -36,10 +36,6 @@ enolib.register({
   url
 });
 
-exports.createDir = (base, directory) => new Promise((resolve, reject) =>
-  fs.mkdir(path.join(base, directory), err => err ? reject(err) : resolve())
-);
-
 exports.featureSort = (a, b) => {
   if(a.type === 'landscape' && b.type !== 'landscape')
     return -1;

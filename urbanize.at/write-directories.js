@@ -1,20 +1,21 @@
+const fs = require('fs');
 const fsExtra = require('fs-extra');
+const path = require('path');
 
-const { createDir } = require('../derive-common/util.js');
+module.exports = data => {
+    fsExtra.emptyDirSync(data.buildDir);
 
-module.exports = async data => {
-  await fsExtra.emptyDir(data.buildDir);
+    const dirs = new Set();
 
-  const directories = [
-    'beteiligte',
-    'newsletter',
-    'presse-newsletter',
-    'programm',
-    'seite-nicht-gefunden',
-    ...Object.values(data.urbanize.events).map(event => event.permalink),
-    ...Object.values(data.urbanize.pages).map(page => page.permalink),
-    ...data.urbanize.participants.map(participant => participant.permalink)
-  ];
+    dirs.add('beteiligte');
+    dirs.add('newsletter');
+    dirs.add('presse-newsletter');
+    dirs.add('programm');
+    dirs.add('seite-nicht-gefunden');
+    
+    Object.values(data.urbanize.events).forEach(event => dirs.add(event.permalink));
+    Object.values(data.urbanize.pages).forEach(page => dirs.add(page.permalink));
+    data.urbanize.participants.forEach(participant => dirs.add(participant.permalink));
 
-  await Promise.all(directories.map(dir => createDir(data.buildDir, dir)));
+    dirs.forEach(dir => fs.mkdirSync(path.join(data.buildDir, dir), { recursive: true }));
 };

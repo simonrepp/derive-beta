@@ -13,7 +13,7 @@ module.exports = async (data, options = { preview: false }) => {
   data.assetHash = (new Date()).getTime().toString();
 
   console.time('writeDirectories');
-  await writeDirectories(data);
+  writeDirectories(data);
   console.timeEnd('writeDirectories');
 
   console.time('writeMedia');

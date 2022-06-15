@@ -14,7 +14,7 @@ module.exports = async (data, site, options = { preview: false }) => {
   data.urbanize.assetHash = (new Date()).getTime().toString();
 
   console.time('writeDirectories');
-  await writeDirectories(data);
+  writeDirectories(data);
   console.timeEnd('writeDirectories');
 
   console.time('writeMedia');
