@@ -190,13 +190,6 @@
             "command": "derive-beta:deploy-urbanize.at"
           }
         ]
-      },
-      {
-        "type": "separator"
-      },
-      {
-        "label": "Server Backup erstellen",
-        "command": "derive-beta:backup"
       }
     ]
   }
