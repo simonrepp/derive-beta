@@ -1,11 +1,14 @@
-const { loadEno, statFile } = require('../../util.js');
+const fs = require('fs');
+const path = require('path');
+
+const { loadEno } = require('../../util.js');
 const { EnoError, ValidationError } = require('enolib');
 
 // TODO: Port simplified/DRY try/catch construct to all other loaders
 
 module.exports = async (data, enoPath) => {
   const cached = data.cache.get(enoPath);
-  const stats = await statFile(data.root, enoPath);
+  const stats = fs.statSync(path.join(data.root, enoPath));
 
   data.urbanize.home = {
     features: [],
@@ -16,7 +19,7 @@ module.exports = async (data, enoPath) => {
     data.urbanize.home.features = cached.features;
   } else {
     try {
-      const doc = await loadEno(data.root, enoPath);
+      const doc = loadEno(data.root, enoPath);
 
       doc.allElementsRequired();
 

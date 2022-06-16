@@ -1,4 +1,7 @@
-const { loadEno, statFile } = require('../../util.js');
+const fs = require('fs');
+const path = require('path');
+
+const { loadEno } = require('../../util.js');
 const { ParseError, ValidationError } = require('enolib');
 
 const URBANIZE_PAGE_PERMALINKS = [
@@ -13,7 +16,7 @@ const URBANIZE_PAGE_PERMALINKS = [
 
 module.exports = async (data, enoPath) => {
   const cached = data.cache.get(enoPath);
-  const stats = await statFile(data.root, enoPath);
+  const stats = fs.statSync(path.join(data.root, enoPath));
 
   if(cached && stats.size === cached.stats.size && stats.mtimeMs === cached.stats.mtimeMs) {
     data.urbanize.pages[enoPath] = cached.page;
@@ -21,7 +24,7 @@ module.exports = async (data, enoPath) => {
     let doc;
 
     try {
-      doc = await loadEno(data.root, enoPath);
+      doc = loadEno(data.root, enoPath);
     } catch(err) {
       data.cache.delete(enoPath);
 

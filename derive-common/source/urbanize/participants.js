@@ -1,15 +1,18 @@
-const { loadEno, statFile } = require('../../util.js');
+const fs = require('fs');
+const path = require('path');
+
+const { loadEno } = require('../../util.js');
 const { EnoError } = require('enolib');
 
 module.exports = async (data, enoPath) => {
   const cached = data.cache.get(enoPath);
-  const stats = await statFile(data.root, enoPath);
+  const stats = fs.statSync(path.join(data.root, enoPath));
 
   if(cached && stats.size === cached.stats.size && stats.mtimeMs === cached.stats.mtimeMs) {
     data.urbanize.participants = cached.participants;
   } else {
     try {
-      const doc = await loadEno(data.root, enoPath);
+      const doc = loadEno(data.root, enoPath);
 
       doc.allElementsRequired();
 
