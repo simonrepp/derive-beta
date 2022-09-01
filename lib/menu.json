@@ -3,22 +3,8 @@
     "label": "dérive",
     "submenu": [
       {
-        "label": "Daten aktualisieren",
-        "command": "derive-beta:refresh"
-      },
-      {
-        "label": "Sidepanel ein/ausblenden",
-        "command": "derive-beta:toggle-panel"
-      },
-      {
-        "type": "separator"
-      },
-      {
         "label": "Pfad zu Mediendatei einfügen",
         "command": "derive-beta:insert-media"
-      },
-      {
-        "type": "separator"
       },
       {
         "label": "Neuer Artikel",
@@ -146,51 +132,12 @@
             "label": "Zeitschrift",
             "command": "derive-beta:issue-reference"
           }
-        ]
-      },
-      {
-        "type": "separator"
-      },
-      {
         "label": "derive.at",
-        "submenu": [
-          {
             "label": "Lokale Seitenvorschau",
-            "command": "derive-beta:preview-derive.at"
-          },
-          {
-            "type": "separator"
-          },
-          {
             "label": "staging.derive.at aktualisieren",
-            "command": "derive-beta:deploy-staging.derive.at"
-          },
-          {
             "label": "derive.at aktualisieren",
-            "command": "derive-beta:deploy-derive.at"
           }
-        ]
-      },
-      {
         "label": "urbanize.at",
-        "submenu": [
-          {
             "label": "Lokale Seitenvorschau",
-            "command": "derive-beta:preview-urbanize.at"
-          },
-          {
-            "type": "separator"
-          },
-          {
             "label": "staging.urbanize.at aktualisieren",
-            "command": "derive-beta:deploy-staging.urbanize.at"
-          },
-          {
             "label": "urbanize.at aktualisieren",
-            "command": "derive-beta:deploy-urbanize.at"
-          }
-        ]
-      }
-    ]
-  }
-]

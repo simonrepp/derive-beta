@@ -10,12 +10,6 @@
   Websites kann die ProgrammiererIn hier nachsehen welche Markdown Features
   die Website unterstützen muss, und umgekehrt können sich alle Verfasser von
   Inhalten darauf verlassen, dass diese dann auch korrekt dargestellt werden.
-
-  Das Handbuch ist selbst als Markdown Dokument verfasst, in der oberen
-  Menüleiste von Atom unter "Packages" -> "Markdown Preview" -> "Toggle Preview"
-  kann ein Markdown Preview Panel geöffnet werden, dessen Inhalt sich
-  automatisch aktualisiert wenn man hier in diesem Dokument Dinge verändert
-  und ausprobiert - was erlaubt und erwünscht ist!
 -->
 
 *Kursiver Text*
