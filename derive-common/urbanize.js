@@ -1,4 +1,4 @@
-const { URBANIZE_YEAR } = require('./config.js');
+const { URBANIZE_YEAR } = require('../urbanize.at/config.js');
 
 module.exports = data => {
   // TODO: Switch to maps to save us this whole stuff everywhere?

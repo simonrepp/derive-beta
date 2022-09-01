@@ -7,8 +7,8 @@ const path = require('path');
 const striptags = require('striptags');
 
 const {
-    boolean
-    featureType
+    boolean,
+    featureType,
     pagesInfo,
     path: pathLoader,
     issueNumber,
@@ -16,8 +16,8 @@ const {
     timeframe,
     urbanizeCategory,
     urbanizeLanguage
-} = require('./loaders.js');
-const { markdown, markdownWithMedia } = require('./loaders_markdown.js');
+} = require('./loaders/loaders.js');
+const { markdown, markdownWithMedia } = require('./loaders/loaders_markdown.js');
 
 enolib.register({
     boolean,
