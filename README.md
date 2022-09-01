@@ -2,7 +2,19 @@
 
 dérive Atom Plugin Beta
 
-## Dependency notes
+## Install note
+
+In the course of the atom discontinuation, apm seems to have been left in a
+state of abandonement, meaning that package publishing currently does not
+work, or only randomly works (see issues at
+https://github.com/atom/apm/issues).
+
+> Possible solution. Install using git repo if available like:
+> `apm install simonrepp/derive-beta`
+
+https://github.com/atom/atom/issues/25417#issuecomment-1103834423
+
+## Dependency note
 
 The `sharp` dependency at present **must not** be updated past `0.20.8` because client computers currently don't support it.
 As sharp `0.20.8` however does not build on more modern machines, for testing it might need to be bumped to `0.25.4` on a branch
