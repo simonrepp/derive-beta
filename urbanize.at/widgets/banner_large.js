@@ -1,3 +1,5 @@
+const { URBANIZE_YEAR } = require('../config.js');
+
 module.exports = `
     <div class="banner_large">
         <div class="alignment">
@@ -5,7 +7,7 @@ module.exports = `
                 <img class="logo_static" src="/images/urbanize_static_white.svg">
             </div>
             <div class="info font_weight_500">
-                06—10 OKT 2021<br>
+                06—10 OKT ${URBANIZE_YEAR}<br>
                 Wien—Nordwestbahnhof
             </div>
             <img class="sujet" src="/images/sujet.png">

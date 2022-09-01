@@ -1,3 +1,5 @@
+const { URBANIZE_YEAR } = require('../config.js');
+
 const DERIVE_INFO = `
   <img class="derive_logo" alt="Logo dérive" src="/images/derive.svg"><br>
   <div class="font_size_1_3">dérive — Verein für Stadtforschung</div>
@@ -9,7 +11,7 @@ const DERIVE_INFO = `
   <a class="button_circle_black font_size_1_6" href="https://vimeo.com/derivestadtforschung" target="_blank"><span class="icon-vimeo"></span></a>
   <a class="button_circle_black font_size_1_6" href="http://flickr.com/photos/derivemagazin" target="_blank"><span class="icon-flickr"></span></a><br><br>
 
-  <span class="font_size_0_8">© 2021 URBANIZE! INTERNATIONALES FESTIVAL FÜR URBANE ERKUNDUNGEN WIEN</span>
+  <span class="font_size_0_8">© ${URBANIZE_YEAR} URBANIZE! INTERNATIONALES FESTIVAL FÜR URBANE ERKUNDUNGEN WIEN</span>
 `;
 
 module.exports = urbanize => `
@@ -27,6 +29,7 @@ module.exports = urbanize => `
       <div class="archive">
         <div class="label font_size_1_3">Festivalarchiv</div>
 
+        <a href="https://2021.urbanize.at/" target="_blank">urbanize! 2021</a><br>
         <a href="https://2020.urbanize.at/" target="_blank">urbanize! 2020</a><br>
         <a href="https://2019.urbanize.at/" target="_blank">urbanize! 2019</a><br>
         <a href="https://2018.urbanize.at/" target="_blank">ur9anize! 2018</a><br>

@@ -3,6 +3,8 @@ const moment = require('moment');
 const striptags = require('striptags');
 const { Base64 } = require('js-base64');
 
+const { URBANIZE_YEAR } = require('../config.js');
+
 module.exports = (event, date) => {
   const start = moment(date.date);
   start.hours(date.time.start.hours);
@@ -24,7 +26,7 @@ module.exports = (event, date) => {
       location: `${event.venue} ${event.address}`,
       organizer: 'Removed Below <mail@example.com>',
       start,
-      summary: `urbanize! 2021: ${event.title}`,
+      summary: `urbanize! ${URBANIZE_YEAR}: ${event.title}`,
       timestamp: moment()
     }],
     name: 'Urbanize Festival Calendar',

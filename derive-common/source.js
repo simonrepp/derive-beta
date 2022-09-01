@@ -16,6 +16,8 @@ const sourceUrbanizeHome = require('./source/urbanize/home.js');
 const sourceUrbanizePage = require('./source/urbanize/page.js');
 const sourceUrbanizeParticipants = require('./source/urbanize/participants.js');
 
+const { URBANIZE_YEAR } = require('../urbanize.at/config.js');
+
 const FORBIDDEN_FILENAME_CHARACTERS = /[\\?*:|"<>]/;
 const NO_EXTENSION = /[^.]{8,}\s*$/;
 
@@ -54,18 +56,18 @@ module.exports = async data => {
       });
     } else if(path.extname(normalizedPath) === '.eno') {
       if(normalizedPath === 'Festival/Festival.eno') { await sourceFestival(data, localFilesystemPath); } else
-      if(normalizedPath.match(/^Akteure\//)) { await sourcePlayer(data, localFilesystemPath); } else
-      if(normalizedPath.match(/^Bücher\//)) { await sourceBook(data, localFilesystemPath); } else
-      if(normalizedPath.match(/^Features\//)) { await sourceFeature(data, localFilesystemPath); } else
-      if(normalizedPath.match(/^Kino\//)) { await sourceScreening(data, localFilesystemPath); } else
-      if(normalizedPath.match(/^Radio\//)) { await sourceProgram(data, localFilesystemPath); } else
-      if(normalizedPath.match(/^Seiten\//)) { await sourcePage(data, localFilesystemPath); } else
-      if(normalizedPath.match(/^Texte\//)) { await sourceArticle(data, localFilesystemPath); } else
-      if(normalizedPath.match(/^Zeitschriften\//)) { await sourceIssue(data, localFilesystemPath); } else
-      if(normalizedPath.match(/^2021\.urbanize\.at\/programm\//)) { await sourceUrbanizeEvent(data, localFilesystemPath); } else
-      if(normalizedPath === '2021.urbanize.at/startseite.eno') { await sourceUrbanizeHome(data, localFilesystemPath); } else
-      if(normalizedPath === '2021.urbanize.at/beteiligte.eno') { await sourceUrbanizeParticipants(data, localFilesystemPath); } else
-      if(normalizedPath.match(/^2021\.urbanize\.at\//)) { await sourceUrbanizePage(data, localFilesystemPath); }
+      if(normalizedPath.startsWith('Akteure/')) { await sourcePlayer(data, localFilesystemPath); } else
+      if(normalizedPath.startsWith('Bücher/')) { await sourceBook(data, localFilesystemPath); } else
+      if(normalizedPath.startsWith('Features/')) { await sourceFeature(data, localFilesystemPath); } else
+      if(normalizedPath.startsWith('Kino/')) { await sourceScreening(data, localFilesystemPath); } else
+      if(normalizedPath.startsWith('Radio/')) { await sourceProgram(data, localFilesystemPath); } else
+      if(normalizedPath.startsWith('Seiten/')) { await sourcePage(data, localFilesystemPath); } else
+      if(normalizedPath.startsWith('Texte/')) { await sourceArticle(data, localFilesystemPath); } else
+      if(normalizedPath.startsWith('Zeitschriften/')) { await sourceIssue(data, localFilesystemPath); } else
+      if(normalizedPath.startsWith(`${URBANIZE_YEAR}.urbanize.at/programm/`)) { await sourceUrbanizeEvent(data, localFilesystemPath); } else
+      if(normalizedPath === `${URBANIZE_YEAR}.urbanize.at/startseite.eno`) { await sourceUrbanizeHome(data, localFilesystemPath); } else
+      if(normalizedPath === `${URBANIZE_YEAR}.urbanize.at/beteiligte.eno`) { await sourceUrbanizeParticipants(data, localFilesystemPath); } else
+      if(normalizedPath.startsWith(`${URBANIZE_YEAR}.urbanize.at/`)) { await sourceUrbanizePage(data, localFilesystemPath); }
       else if(normalizedPath !== 'derive.eno') {
         data.warnings.push({
           files: [{ path: localFilesystemPath }],

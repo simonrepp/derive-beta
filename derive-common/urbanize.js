@@ -1,7 +1,9 @@
+const { URBANIZE_YEAR } = require('./config.js');
+
 module.exports = data => {
   // TODO: Switch to maps to save us this whole stuff everywhere?
-  data.urbanize.features = [...data.features].filter(feature => feature.urbanize === '2021');
-  data.urbanize.title = 'urbanize! 2021';
+  data.urbanize.features = [...data.features].filter(feature => feature.urbanize === URBANIZE_YEAR);
+  data.urbanize.title = `urbanize! ${URBANIZE_YEAR}`;
 
   for(const event of Object.values(data.urbanize.events)) {
     event.participants = [];
