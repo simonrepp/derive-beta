@@ -1,10 +1,10 @@
 :root {
-    --color-accent: #ea0029;
+    --color-accent: #1c9bd8;
     --color-black: #000000;
     --color-grey: #6f7375;
     --color-white: #ffffff;
     --color-white-overlay: rgba(255, 255, 255, 0.9);
-    --color-yellow: #ffed00;
+    --color-yellow: #ffff00;
 }
 @font-face {
     font-family: 'Jost';

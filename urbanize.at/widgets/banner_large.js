@@ -7,10 +7,13 @@ module.exports = `
                 <img class="logo_static" src="/images/urbanize_static_white.svg">
             </div>
             <div class="info font_weight_500">
-                06—10 OKT ${URBANIZE_YEAR}<br>
-                Wien—Nordwestbahnhof
+                4—9 OKT ${URBANIZE_YEAR}<br>
+                WIEN
             </div>
-            <img class="sujet" src="/images/sujet.png">
+            <img alt="Around the Corner"
+                 sizes="(max-width: 270px) 270px, (max-width: 540px) 540px, 1080px"
+                 src="images/sujet_1080.png"
+                 srcset="images/sujet_1080.png 1080w, images/sujet_540.png 540w, images/sujet_270.png 270w">
         </div>
     </div>
 `;
