@@ -14,6 +14,8 @@ https://github.com/atom/apm/issues).
 
 https://github.com/atom/atom/issues/25417#issuecomment-1103834423
 
+Also see https://github.com/atom/apm/pull/518
+
 ## Dependency note
 
 The `sharp` dependency at present **must not** be updated past `0.20.8` because client computers currently don't support it.
