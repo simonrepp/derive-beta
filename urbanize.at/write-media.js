@@ -1,6 +1,16 @@
 const fsExtra = require('fs-extra');
 const path = require('path');
-const sharp = require('sharp');
+
+let sharp;
+try {
+    sharp = require('sharp');
+} catch {
+    atom.notifications.addError(`Das Bildverarbeitungsmodul 'sharp' ist auf diesem System nicht verfügbar (es konnte bei der Plugininstallation nicht installiert werden). Bis auf das updaten der Seiten ((staging.)derive.at/(staging.)urbanize.at) ist das Plugin dennoch voll funktionsfähig!`, { dismissable: true });
+    sharp = () => {
+        atom.notifications.addError(`Das Bildverarbeitungsmodul 'sharp' ist auf diesem System nicht verfügbar. Updaten der Seiten ((staging.)derive.at/(staging.)urbanize.at) ist deshalb von dieser Installation nicht möglich!`, { dismissable: true });
+        throw 'sharp nicht verfügbar';
+    }
+}
 
 module.exports = async (data, urbanize, preview) => {
 
