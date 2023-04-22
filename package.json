@@ -1,7 +1,6 @@
 {
   "author": "Simon Repp <simon@fdpl.io>",
   "dependencies": {
-    "atom-package-deps": "^8.0.0",
     "enolib": "^0.8.2",
     "enotype": "^0.3.0",
     "express": "^4.17.1",
@@ -24,12 +23,6 @@
   "license": "MIT",
   "main": "./lib/main",
   "name": "derive-beta",
-  "package-deps": [
-    {
-      "minimumVersion": "0.5.0",
-      "name": "language-eno"
-    }
-  ],
   "providedServices": {
     "autocomplete.provider": {
       "versions": {
