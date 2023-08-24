@@ -7,7 +7,7 @@ module.exports = `
                 <img class="logo_static" src="/images/urbanize_static_white.svg">
             </div>
             <div class="info font_weight_500">
-                4—9 OKT ${URBANIZE_YEAR}<br>
+                3—8 OKT ${URBANIZE_YEAR}<br>
                 WIEN
             </div>
             <img alt="Around the Corner"

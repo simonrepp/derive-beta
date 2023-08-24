@@ -29,6 +29,7 @@ module.exports = urbanize => `
       <div class="archive">
         <div class="label font_size_1_3">Festivalarchiv</div>
 
+        <a href="https://2022.urbanize.at/" target="_blank">urbanize! 2022</a><br>
         <a href="https://2021.urbanize.at/" target="_blank">urbanize! 2021</a><br>
         <a href="https://2020.urbanize.at/" target="_blank">urbanize! 2020</a><br>
         <a href="https://2019.urbanize.at/" target="_blank">urbanize! 2019</a><br>

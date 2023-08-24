@@ -14,12 +14,12 @@ module.exports = urbanize => {
           <a class="rounded_rect button_rect_accent" data-filter="date" href="#" onclick="return false;">Datum<span class="active_date"></span></a>
           <div class="hover_menu">
             <a class="rounded_rect button_rect_yellow" data-date="all" href="#" onclick="updateFilter(this); return false;">Alle Tage</a>
-            <a class="rounded_rect button_rect_yellow" data-date="2022-10-04" href="#" onclick="updateFilter(this); return false;">4&nbsp;OKT&nbsp;2022</a>
-            <a class="rounded_rect button_rect_yellow" data-date="2022-10-05" href="#" onclick="updateFilter(this); return false;">5&nbsp;OKT&nbsp;2022</a>
-            <a class="rounded_rect button_rect_yellow" data-date="2022-10-06" href="#" onclick="updateFilter(this); return false;">6&nbsp;OKT&nbsp;2022</a>
-            <a class="rounded_rect button_rect_yellow" data-date="2022-10-07" href="#" onclick="updateFilter(this); return false;">7&nbsp;OKT&nbsp;2022</a>
-            <a class="rounded_rect button_rect_yellow" data-date="2022-10-08" href="#" onclick="updateFilter(this); return false;">8&nbsp;OKT&nbsp;2022</a>
-            <a class="rounded_rect button_rect_yellow" data-date="2022-10-09" href="#" onclick="updateFilter(this); return false;">9&nbsp;OKT&nbsp;2022</a>
+            <a class="rounded_rect button_rect_yellow" data-date="2023-10-03" href="#" onclick="updateFilter(this); return false;">3&nbsp;OKT&nbsp;2023</a>
+            <a class="rounded_rect button_rect_yellow" data-date="2023-10-04" href="#" onclick="updateFilter(this); return false;">4&nbsp;OKT&nbsp;2023</a>
+            <a class="rounded_rect button_rect_yellow" data-date="2023-10-05" href="#" onclick="updateFilter(this); return false;">5&nbsp;OKT&nbsp;2023</a>
+            <a class="rounded_rect button_rect_yellow" data-date="2023-10-06" href="#" onclick="updateFilter(this); return false;">6&nbsp;OKT&nbsp;2023</a>
+            <a class="rounded_rect button_rect_yellow" data-date="2023-10-07" href="#" onclick="updateFilter(this); return false;">7&nbsp;OKT&nbsp;2023</a>
+            <a class="rounded_rect button_rect_yellow" data-date="2023-10-08" href="#" onclick="updateFilter(this); return false;">8&nbsp;OKT&nbsp;2023</a>
           </div>
         </span>
 

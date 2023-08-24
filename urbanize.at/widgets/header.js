@@ -14,7 +14,6 @@ module.exports = urbanize => `
         <div class="hover_menu">
           <a class="rounded_rect button_rect_white font_size_1_2" href="/about/">About</a>
           <a class="rounded_rect button_rect_white font_size_1_2" href="/partnerinnen/">PartnerInnen</a>
-          <a class="rounded_rect button_rect_white font_size_1_2" href="/covid/">Covid-19</a>
         </div>
       </span>
       <a class="rounded_rect button_rect_white font_size_1_2" href="/programm/">Programm</a>
@@ -44,7 +43,6 @@ module.exports = urbanize => `
         <div class="indented">
           <a class="rounded_rect button_rect_black font_size_1_2" href="/about/">About</a>
           <a class="rounded_rect button_rect_black font_size_1_2" href="/partnerinnen/">PartnerInnen</a>
-          <a class="rounded_rect button_rect_black font_size_1_2" href="/covid/">Covid-19</a>
         </div>
         <a class="rounded_rect button_rect_accent font_size_1_2" href="/programm/">Programm</a>
         <a class="rounded_rect button_rect_accent font_size_1_2" href="/beteiligte/">Beteiligte</a>

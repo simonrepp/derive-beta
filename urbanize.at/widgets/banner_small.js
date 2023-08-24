@@ -8,7 +8,7 @@ module.exports = variant => `
             </a>
             <img alt="Around the Corner" class="slogan" src="/images/slogan_${variant === 'white' ? 'yellow' : variant}.svg">
             <div class="info font_size_1_2 font_weight_500">
-                4—9 OKT ${URBANIZE_YEAR}<br>
+                3—8 OKT ${URBANIZE_YEAR}<br>
                 WIEN
             </div>
         </div>
