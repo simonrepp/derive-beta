@@ -1,5 +1,5 @@
 :root {
-    --color-accent: #1c9bd8;
+    --color-accent: #0046ad;
     --color-black: #000000;
     --color-grey: #6f7375;
     --color-white: #ffffff;
@@ -268,7 +268,10 @@ input.input_rect_white {
     max-width: 1220px;
     padding: 1.8em;
 }
-.banner_large .alignment img { max-width: 100%; }
+.banner_large .alignment img {
+    margin-bottom: max(-18vw, -9rem); /* compensates for image ratio, to make graphic overlap the edge between color/white, usually modified each year for other sujets */
+    max-width: 100%;
+}
 .banner_large .alignment .info {
     font-size: 2vw;
     line-height: 1.3em;

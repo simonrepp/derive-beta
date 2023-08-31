@@ -22,12 +22,12 @@
             </g>
         </g>
         <g transform="matrix(.35278 0 0 -.35278 -60.79 17.163)">
-            <path d="m0 0v10.325" fill="none" stroke="#1c9bd8" stroke-linecap="round" stroke-width="3.214"/>
+            <path d="m0 0v10.325" fill="none" stroke="#0046ad" stroke-linecap="round" stroke-width="3.214"/>
         </g>
         <g transform="matrix(.35278 0 0 -.35278 -66.211 17.163)">
-            <path d="m0 0v10.325" stroke="#1c9bd8" stroke-linecap="round" stroke-width="3.214"/>
+            <path d="m0 0v10.325" stroke="#0046ad" stroke-linecap="round" stroke-width="3.214"/>
         </g>
-        <g fill="none" stroke="#1c9bd8" stroke-width=".17639">
+        <g fill="none" stroke="#0046ad" stroke-width=".17639">
             <path d="m-68.415 20.646h9.8298"/>
             <path d="m-68.415 22.41h9.8298"/>
             <path d="m-68.415 24.174h9.8298"/>
