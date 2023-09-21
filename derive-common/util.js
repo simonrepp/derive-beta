@@ -15,7 +15,8 @@ const {
     permalink,
     timeframe,
     urbanizeCategory,
-    urbanizeLanguage
+    urbanizeLanguage,
+    urlOrMailto
 } = require('./loaders/loaders.js');
 const { markdown, markdownWithMedia } = require('./loaders/loaders_markdown.js');
 
@@ -35,7 +36,8 @@ enolib.register({
     timeframe,
     urbanizeCategory,
     urbanizeLanguage,
-    url
+    url,
+    urlOrMailto
 });
 
 exports.featureSort = (a, b) => {

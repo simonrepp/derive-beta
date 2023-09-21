@@ -59,7 +59,7 @@ module.exports = async (data, enoPath) => {
       event.text = doc.field('Beschreibung (Markdown)').requiredMarkdownWithMediaValue();
       event.additionalInfo = doc.field('Zusatzinfo').optionalMarkdownValue();
       event.language = doc.field('Sprache').requiredUrbanizeLanguageValue();
-      event.signupLink = doc.field('Link zur Anmeldung').optionalUrlValue();
+      event.signupLink = doc.field('Link zur Anmeldung').optionalUrlOrMailtoValue();
 
       event.dates = doc.sections('Termin').map(date => ({
         date: date.field('Datum').requiredDatetimeValue(),

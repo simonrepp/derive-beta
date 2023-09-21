@@ -1,4 +1,5 @@
 const slug = require('speakingurl');
+const { url } = require('enotype');
 
 function boolean(value) {
     switch (value.toLowerCase()) {
@@ -85,3 +86,14 @@ function urbanizeLanguage(value) {
     throw `Einer der beiden Sprachcodes - "de" oder "en" - ist erforderlich, "${value}" ist nicht vorgesehen.`;
 }
 exports.urbanizeLanguage = urbanizeLanguage;
+
+function urlOrMailto(value) {
+    try {
+        return url(value);
+    } catch { /* fall through to mailto check below */ }
+
+    if (value.startsWith('mailto:')) return value;
+
+    throw `Eine URL oder ein mailto:alice@example.com... Link ist erforderlich`;
+}
+exports.urlOrMailto = urlOrMailto;
