@@ -1,27 +1,16 @@
 # derive-beta
 
-dérive Atom Plugin Beta
+dérive Pulsar Plugin Beta
 
-## Install note
+## sharp library compability notes
 
-In the course of the atom discontinuation, apm seems to have been left in a
-state of abandonement, meaning that package publishing currently does not
-work, or only randomly works (see issues at
-https://github.com/atom/apm/issues).
+- The latest Pulsar release at the time of writing (Pulsar 1.113.0) ships with Node.js 14.
+- sharp 0.33.0 dropped support for Node.js 14 and 16, requiring a minimum version of Node.js 18.17.0 (therefore we cannot use sharp 0.33.0+ yet)
+- sharp 0.32.6 (last release in the 0.32 series) is compatible with Node.js 14 but requires libvips 8.14.5+, while Debian 12 only ships libvips 8.14.1 (therefore we do not use sharp 0.32.6 yet)
+- sharp 8.31.3 (last release in the 0.31 series) is compatible with Node.js 14 and requires libvips 8.13.3+, and is thus supported on Debian 12 (therefore we use in on the main branch currently)
+- We might still switch to an older sharp version if significant (numbers of) devices in our collective infrastructure need an earlier version
 
-> Possible solution. Install using git repo if available like:
-> `apm install simonrepp/derive-beta`
-
-https://github.com/atom/atom/issues/25417#issuecomment-1103834423
-
-Also see https://github.com/atom/apm/pull/518
-
-## Dependency note
-
-The `sharp` dependency at present **must not** be updated past `0.20.8` because client computers currently don't support it.
-As sharp `0.20.8` however does not build on more modern machines, for testing it might need to be bumped to `0.25.4` on a branch
-so the plugin can be installed (`apm install`) and tested. Take care not to publish the bumped version though.
-
-## Atom note
-
-The last conserved `atom` binary/release on arch now only runs with `./atom --no-sandbox` invocation.
+References:
+- https://github.com/pulsar-edit/pulsar/blob/master/CHANGELOG.md
+- https://sharp.pixelplumbing.com/changelog
+- https://nodejs.org/en/about/previous-releases
