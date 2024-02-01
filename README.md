@@ -14,3 +14,9 @@ References:
 - https://github.com/pulsar-edit/pulsar/blob/master/CHANGELOG.md
 - https://sharp.pixelplumbing.com/changelog
 - https://nodejs.org/en/about/previous-releases
+
+## enolib library compatibility notes
+
+Enolib is now pure ESM, which Pulsar (respectively its node version) does not support at all,
+so for the time being we stick with enolib 0.8.2.
+

@@ -1,43 +1,43 @@
 {
-  "author": "Simon Repp <simon@fdpl.io>",
-  "dependencies": {
-    "enolib": "^0.8.2",
-    "enotype": "^0.3.0",
-    "express": "^4.17.1",
-    "fast-glob": "^3.2.7",
-    "fs-extra": "^9.0.1",
-    "ical-generator": "^1.15.0",
-    "js-base64": "^3.6.1",
-    "markdown-it": "^12.2.0",
-    "markdown-it-footnote": "^3.0.3",
-    "mobx": "^5.15.6",
-    "moment": "^2.29.1",
-    "speakingurl": "^14.0.1",
-    "striptags": "^3.2.0"
-  },
-  "description": "dérive Atom Plugin Beta",
-  "engines": {
-    "atom": ">=1.15.0 <2.0.0"
-  },
-  "license": "MIT",
-  "main": "./lib/main",
-  "name": "derive-beta",
-  "optionalDependencies": {
-    "sharp": "^0.31.3"
-  },
-  "providedServices": {
-    "autocomplete.provider": {
-      "versions": {
-        "2.0.0": "getProvider"
-      }
-    }
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/simonrepp/derive-beta.git"
-  },
-  "scripts": {
-    "derive-scripts": "parcel build derive.at/scripts/main.js --no-cache --no-source-maps --out-dir derive.at/static --out-file scripts.js"
-  },
-  "version": "1.36.0"
+    "author": "Simon Repp <simon@fdpl.io>",
+    "dependencies": {
+        "enolib": "^0.8.2",
+        "enotype": "^0.3.0",
+        "express": "^4.18.2",
+        "fast-glob": "^3.3.2",
+        "fs-extra": "^11.2.0",
+        "ical-generator": "^1.15.0",
+        "js-base64": "^3.7.6",
+        "markdown-it": "^14.0.0",
+        "markdown-it-footnote": "^4.0.0",
+        "mobx": "^6.12.0",
+        "moment": "^2.30.1",
+        "speakingurl": "^14.0.1",
+        "striptags": "^3.2.0"
+    },
+    "description": "dérive Atom Plugin Beta",
+    "engines": {
+        "atom": ">=1.15.0 <2.0.0"
+    },
+    "license": "MIT",
+    "main": "./lib/main",
+    "name": "derive-beta",
+    "optionalDependencies": {
+        "sharp": "^0.31.3"
+    },
+    "providedServices": {
+        "autocomplete.provider": {
+            "versions": {
+                "2.0.0": "getProvider"
+            }
+        }
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/simonrepp/derive-beta.git"
+    },
+    "scripts": {
+        "derive-scripts": "parcel build derive.at/scripts/main.js --no-cache --no-source-maps --out-dir derive.at/static --out-file scripts.js"
+    },
+    "version": "1.36.0"
 }
