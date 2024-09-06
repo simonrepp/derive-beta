@@ -2,7 +2,6 @@ const { writeFile } = require('../derive-common/util.js');
 
 const articlePage = require('./pages/article.js');
 const articlePrintPage = require('./pages/article-print.js');
-const articlesPage = require('./pages/articles.js');
 const authorPage = require('./pages/author.js');
 const authorsPage = require('./pages/authors.js');
 const bookPage = require('./pages/book.js');
@@ -17,14 +16,11 @@ const pagePage = require('./pages/page.js');
 const publisherPage = require('./pages/publisher.js');
 const programPage = require('./pages/program.js');
 const programsPage = require('./pages/programs.js');
-const screeningPage = require('./pages/screening.js');
-const screeningsPage = require('./pages/screenings.js');
 const searchPage = require('./pages/search.js');
 const tagPage = require('./pages/tag.js');
 
 module.exports = data => {
-    writeFile(data.buildDir, 'texte/index.html', articlesPage(data, data.articlesPaginated[0])),
-    writeFile(data.buildDir, 'autoren/index.html', authorsPage(data)),
+    writeFile(data.buildDir, 'autorinnen/index.html', authorsPage(data)),
     writeFile(data.buildDir, 'buecher/index.html', booksPage(data, data.booksPaginated[0])),
     writeFile(data.buildDir, 'festival/index.html', festivalPage(data)),
     writeFile(data.buildDir, 'index.html', indexPage(data)),
@@ -32,12 +28,7 @@ module.exports = data => {
     writeFile(data.buildDir, 'newsletter/index.html', newsletterPage(data)),
     writeFile(data.buildDir, 'seite-nicht-gefunden/index.html', siteNotFoundPage(data)),
     writeFile(data.buildDir, 'radio/index.html', programsPage(data, data.programsPaginated[0])),
-    writeFile(data.buildDir, 'kino/index.html', screeningsPage(data)),
     writeFile(data.buildDir, 'suche/index.html', searchPage(data))
-
-    for(const pagination of data.articlesPaginated) {
-        writeFile(data.buildDir, `texte/${pagination.label}/index.html`, articlesPage(data, pagination));
-    }
 
     for(const article of data.articles.values()) {
         writeFile(data.buildDir, `texte/${article.permalink}/index.html`, articlePage(data, article));
@@ -48,11 +39,7 @@ module.exports = data => {
     }
 
     for(const author of data.authors) {
-        writeFile(data.buildDir, `autoren/${author.permalink}/index.html`, authorPage(data, author));
-    }
-
-    for(const pagination of data.authorsPaginated) {
-        writeFile(data.buildDir, `autoren/${pagination.label}/index.html`, authorsPage(data, pagination));
+        writeFile(data.buildDir, `autorinnen/${author.permalink}/index.html`, authorPage(data, author));
     }
 
     for(const pagination of data.booksPaginated) {
@@ -60,7 +47,7 @@ module.exports = data => {
     }
 
     for(const author of data.bookAuthors) {
-        writeFile(data.buildDir, `autoren/${author.permalink}/index.html`, authorPage(data, author));
+        writeFile(data.buildDir, `autorinnen/${author.permalink}/index.html`, authorPage(data, author));
     }
 
     for(const issue of data.issues.values()) {
@@ -85,10 +72,6 @@ module.exports = data => {
 
     for(const program of data.programs.values()) {
         writeFile(data.buildDir, `radio/${program.permalink}/index.html`, programPage(data, program));
-    }
-
-    for(const screening of data.screenings.values()) {
-        writeFile(data.buildDir, `kino/${screening.permalink}/index.html`, screeningPage(data, screening));
     }
 
     for(const tag of data.tags.values()) {

@@ -4,17 +4,6 @@ const path = require('path');
 const { loadEno } = require('../util.js');
 const { ParseError, ValidationError } = require('enolib');
 
-const WHITELISTED_DERIVE_PERMALINKS = [
-  'datenschutzerklaerung',
-  'impressum',
-  'jahrespartner',
-  'kooperationen',
-  'medieninformationen',
-  'ueber-cinema-derive',
-  'ueber-derive',
-  'ueber-radio-derive'
-];
-
 module.exports = async (data, enoPath) => {
   const cached = data.cache.get(enoPath);
   const stats = fs.statSync(path.join(data.root, enoPath));
@@ -53,10 +42,6 @@ module.exports = async (data, enoPath) => {
       page.title = doc.field('Titel').requiredStringValue();
       page.permalinkField = doc.field('Permalink');
       page.permalink = page.permalinkField.requiredPermalinkValue();
-
-      if(!WHITELISTED_DERIVE_PERMALINKS.includes(page.permalink)) {
-        throw page.permalinkField.valueError(`Für die derive.at Seiten sind nur die folgenden Permalinks explizit vorgesehen: ${WHITELISTED_DERIVE_PERMALINKS.map(permalink => `'${permalink}'`).join(', ')}`);
-      }
 
       page.text = doc.field('Text').requiredMarkdownWithMediaValue();
 

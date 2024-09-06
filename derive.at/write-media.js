@@ -98,18 +98,6 @@ module.exports = async (data, preview) => {
     }
   }
 
-  // Cinema
-
-  for(const screening of data.screenings.values()) {
-    if(preview) {
-      screening.image.written = encodeURI(`/_root_media/${screening.image.localFilesystemPath}`);
-    } else {
-      screening.image.written = path.join('/kino', screening.permalink, `bild${path.extname(screening.image.normalizedPath)}`);
-      concurrentWrites.push( copyResized(screening.image.localFilesystemPath, screening.image.written) );
-      screening.image.written += `?${data.assetHash}`;
-    }
-  }
-
   let featureNumber = 0;
   for(let feature of data.features.values()) {
     if(feature.image) {

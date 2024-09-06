@@ -1,49 +1,59 @@
 const moment = require('moment');
 
-const editors = require('../widgets/editors.js');
 const layout = require('./layout.js');
-const programTile = require('../widgets/program-tile.js');
-const share = require('../widgets/share.js');
 const tags = require('../widgets/tags.js');
+const { editors, programListing } = require('../widgets/programs.js');
+const { SECTION_RADIO } = require('../widgets/header.js');
 
 const { stripAndTruncateHtml } = require('../../derive-common/util.js');
 
-module.exports = (data, pagination) => {
-  const { featured, programs } = pagination;
+module.exports = (data, currentPage) => {
+    const { programsPaginated } = data;
+    const { featured, programs } = currentPage;
 
-  const html = `
-    <div class="generic__featured">
-      <div class="generic__featured_image">
-        <img src="${featured.image.written}">
-      </div>
+    const html = `
+        <div class="featured">
+            <div class="featured_image">
+                <img src="${featured.image.written}">
+            </div>
+            <div class="featured_text">
+                ${editors(featured.editors)}
 
-      <div class="generic__featured_text">
-        <h1><a href="/radio/${featured.permalink}/">${featured.title}</a></h1>
+                <h1 class="big_heading no_margin">
+                    <a href="/radio/${featured.permalink}/">${featured.title}</a>
+                </h1>
 
-        <div class="generic__margin_vertical">
-          ${featured.abstract ? featured.abstract.converted : (featured.text ? stripAndTruncateHtml(featured.text.converted, 500, `/radio/${featured.permalink}/`) : 'Kein Text vorhanden.')}
+                ${featured.subtitle ? `
+                    <strong>${featured.subtitle}</strong>
+                ` : ''}
+
+                <div class="font_size_1_25 vertical_margin">
+                    ${featured.abstract ?
+                        featured.abstract.converted :
+                        (featured.text ?
+                            stripAndTruncateHtml(featured.text.converted, 500, `/radio/${featured.permalink}/`) :
+                            'Kein Text vorhanden.')}
+                </div>
+
+                <div class="call_out_buttons_spaced font_size_1_25">
+                    <a class="call_out_button" href="/radio/${featured.permalink}/">
+                        Zur Sendung
+                    </a>
+                    <a class="call_out_button" href="/ueber-radio-derive/">
+                        Über Radio <span style="text-transform: none;">dérive</span>
+                    </a>
+                </div>
+            </div>
         </div>
-
-        ${editors(featured.editors)}
-
-        <div class="generic__margin_vertical">
-          <a href="/ueber-radio-derive/">Über Radio dérive</a>
+        <div class="pagination">
+            ${programsPaginated.map(page => `
+                <a ${page === currentPage ? 'class="active"' : ''} href="/radio/${page.label}/">${page.label}</a>
+            `).join(' / ')}
         </div>
+        <div class="listings">
+            ${programs.map(program => programListing(program)).join('<hr>')}
+        </div>
+    `;
 
-        ${share(featured.title, `https://derive.at/radio/${featured.permalink}/`)}
-      </div>
-    </div>
-
-    <div class="pagination">
-      ${data.programsPaginated.map(paginationIterated => `
-        <a ${paginationIterated === pagination ? 'class="pagination--active"' : ''} href="/radio/${paginationIterated.label}/">${paginationIterated.label}</a>
-      `).join(' / ')}
-    </div>
-
-    <div class="tiles">
-      ${programs.map(programTile).join('')}
-    </div>
-  `;
-
-  return layout(data, html, { activeSection: 'Radio', title: 'Radio dérive' });
+    return layout(data, html, { section: SECTION_RADIO, title: 'Radio dérive' });
 };

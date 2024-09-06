@@ -1,52 +1,60 @@
-const authors = require('../widgets/authors.js');
-const { fullIssueTitle } = require('../widgets/issues/labeling.js');
+const { authorsSmall } = require('../widgets/authors.js');
+const { fullIssueTitle, issueSection } = require('../widgets/issues.js');
 const layout = require('./layout.js');
-const section = require('../widgets/issues/section.js');
-const share = require('../widgets/share.js');
 const tags = require('../widgets/tags.js');
+const { SECTION_MAGAZINE } = require('../widgets/header.js');
 
 module.exports = (data, issue) => {
-  const issueAuthors = new Set();
-  issue.sections.forEach(section =>
-    section.articles.forEach(article =>
-      article.authors.forEach(author => issueAuthors.add(author))
-    )
-  );
+    const issueAuthors = new Set();
+    issue.sections.forEach(section =>
+        section.articles.forEach(article =>
+            article.authors.forEach(author => issueAuthors.add(author))
+        )
+    );
 
-  const html = `
-    <div>
-      <div class="generic__featured">
-        <div class="generic__featured_image">
-          <img src="${issue.cover.written}">
-        </div>
+    const html = `
+        <div>
+            <div class="featured">
+                <div class="featured_image">
+                    <img src="${issue.cover.written}">
+                </div>
+                <div class="featured_text">
+                    <div class="subheading">
+                        ${fullIssueTitle(issue)}
+                    </div>
 
-        <div class="generic__featured_text">
-          ${fullIssueTitle(issue)}
+                    <h1 class="big_heading">
+                        <a href="/zeitschrift/${issue.permalink}/">
+                            ${issue.title}
+                        </a>
+                    </h1>
 
-          <h1>
-            <a href="/zeitschrift/${issue.permalink}/">
-              ${issue.title}
-            </a>
-          </h1>
+                    ${issue.description ? `
+                        <div class="font_size_1_25 vertical_margin">
+                            ${issue.description.converted}
+                        </div>
+                    `:''}
 
-          ${issue.description ? `
-            <div class="generic__margin_vertical">
-              ${issue.description.converted}
+                    <div class="font_size_1_25 vertical_margin">
+                        <a class="call_out_button" href="${issue.shopLink}">
+                            Heft kaufen
+                        </a>
+                    </div>
+
+                    <div class="vertical_margin">
+                        <strong>Mit Beiträgen von:</strong>
+                        ${authorsSmall([...issueAuthors].sort((a, b) => a.name.localeCompare(b.name)))}
+                    </div>
+
+                    ${tags(issue.tags)}
+                </div>
             </div>
-          `:''}
-
-          Mit Beiträgen von:<br>
-          ${authors([...issueAuthors].sort((a, b) => a.name.localeCompare(b.name)))}<br><br>
-
-          ${tags(issue.tags)}
-
-          ${share(issue.title, `https://derive.at/zeitschrift/${issue.permalink}/`)}
+            <div class="section_article_split">
+                <div class="subheading">Inhalt</div>
+            </div>
+            ${issue.sections.map(issueSection).join('')}
         </div>
-      </div>
+    `;
 
-      ${issue.sections.map(section).join('')}
-    </div>
-  `;
-
-  return layout(data, html, { activeSection: 'Zeitschrift', title: `dérive N° ${issue.number}` });
+    return layout(data, html, { section: SECTION_MAGAZINE, title: `dérive N° ${issue.number}` });
 };

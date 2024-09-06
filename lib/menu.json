@@ -37,10 +37,6 @@
         "command": "derive-beta:new-feature"
       },
       {
-        "label": "Neuer Kino Termin",
-        "command": "derive-beta:new-screening"
-      },
-      {
         "label": "Neue Radiosendung",
         "command": "derive-beta:new-program"
       },
@@ -125,10 +121,6 @@
           {
             "label": "Buch",
             "command": "derive-beta:book-reference"
-          },
-          {
-            "label": "Kino Termin",
-            "command": "derive-beta:screening-reference"
           },
           {
             "label": "Radiosendung",

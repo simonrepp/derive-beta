@@ -68,8 +68,8 @@ module.exports = events => {
                 ${event.category}
               </a>
 
-              <strong class="color_accent">${moment(date.date).locale('de').format('dd, D MMM YYYY')}</strong><br>
-              <strong class="color_accent">${timeframe(date)}</strong>
+              <strong class="color_purple">${moment(date.date).locale('de').format('dd, D MMM YYYY')}</strong><br>
+              <strong class="color_purple">${timeframe(date)}</strong>
 
               <hr class="hairline">
 

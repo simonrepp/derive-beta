@@ -1,22 +1,18 @@
 // Add scroll event handler
-window.addEventListener('load', () => { // TODO: DOMContentLoaded instead?
-    const layoutScroll = document.querySelector('.layout__scroll');
-    const header = document.querySelector('.header');
-    const linkTop = document.querySelector('.sidebar__link__top');
+window.addEventListener('load', () => {
+    const linkTop = document.querySelector('.to_top');
     let scrollActive = false;
 
     const pagination = document.querySelector('.pagination');
     let paginationDocked = false;
 
     const handleScroll = () => {
-        if (layoutScroll.scrollTop === 0) {
+        if (document.scrollingElement.scrollTop === 0) {
             if (scrollActive) {
-                header.classList.remove('compact');
                 linkTop.classList.remove('active');
                 scrollActive = false;
             }
         } else if (!scrollActive) {
-            header.classList.add('compact');
             linkTop.classList.add('active');
             scrollActive = true;
         }
@@ -24,11 +20,11 @@ window.addEventListener('load', () => { // TODO: DOMContentLoaded instead?
         if (pagination) {
             if (pagination.getBoundingClientRect().top === 100) {
                 if (!paginationDocked) {
-                    pagination.classList.add('pagination--docked');
+                    pagination.classList.add('docked');
                     paginationDocked = true;
                 }
             } else if (paginationDocked) {
-                pagination.classList.remove('pagination--docked');
+                pagination.classList.remove('docked');
                 paginationDocked = false;
             }
         }
@@ -36,42 +32,34 @@ window.addEventListener('load', () => { // TODO: DOMContentLoaded instead?
 
     handleScroll();
 
-    layoutScroll.addEventListener('scroll', handleScroll);
+    document.addEventListener('scroll', handleScroll);
 });
 
-// Handle sidebar buttons, filter checkboxes
+// Handle extra nav, filter checkboxes, etc.
 document.addEventListener('click', event => {
     if (event.button !== 0) return;
 
-    const widgetToggles = document.querySelectorAll('.sidebar__widget-toggle');
-    for (const toggleLink of widgetToggles) {
-        if (toggleLink.contains(event.target)) {
-            for (const toggleLinkReiterated of widgetToggles) {
-                if (toggleLinkReiterated === toggleLink) {
-                    toggleLinkReiterated.classList.toggle('active');
-                } else {
-                    toggleLinkReiterated.classList.remove('active');
-                }
-            }
-
-            if (toggleLink.classList.contains('sidebar__link__search')) {
-                document.querySelector('input[name="query"]').focus();
-            }
-
-            return;
-        }
+    const showExtraButton = document.querySelector('.show_extra_button');
+    if (showExtraButton && showExtraButton.contains(event.target)) {
+        document.querySelector('.features').classList.add('show_extra');
+        return;
     }
 
-    const toTopLink = document.querySelector('.sidebar__link__top');
+    const extraNavToggle = document.querySelector('.extra_nav_toggle');
+    if (extraNavToggle.contains(event.target)) {
+        document.querySelector('.extra_nav_widget').classList.toggle('active');
+        return;
+    }
+
+    const toTopLink = document.querySelector('.to_top');
     if (toTopLink.contains(event.target)) {
-        const layoutScroll = document.querySelector('.layout__scroll');
-        layoutScroll.scrollBy(0, -layoutScroll.scrollTop);
+        document.scrollingElement.scrollBy(0, -document.scrollingElement.scrollTop);
         return;
     }
 
     const filterToggleButton = document.querySelector('button[data-toggle-filters]');
     if (filterToggleButton && filterToggleButton.contains(event.target)) {
-        document.querySelector('.search__filters').classList.toggle('shown');
+        document.querySelector('.search_filters').classList.toggle('shown');
         return;
     }
 
@@ -97,21 +85,27 @@ document.addEventListener('click', event => {
     }
 });
 
-// Handle search submit from either sidebar or search page itself
+// Handle search submit from either header or search page itself
 document.addEventListener('submit', event => {
-    const pageSearchform = document.querySelector('.search__searchform');
-    const sidebarSearchform = document.querySelector('.sidebar__searchform');
+    const headerSearchform = document.querySelector('#header_searchform');
+    const pageSearchform = document.querySelector('.search_searchform');
     
-    if (event.target === sidebarSearchform || event.target === pageSearchform) {
+    if (event.target === headerSearchform || event.target === pageSearchform) {
         event.preventDefault();
 
         const query = event.target.querySelector('input[name="query"]').value;
-        
-        const sections = Array.from(event.target.querySelectorAll('span[data-section]'))
-            .filter(checkbox => checkbox.classList.contains('icon-checkbox-checked'))
-            .map(checkbox => checkbox.dataset.section)
-            .join(',');
 
-        window.location.href = `/suche/?begriff=${encodeURIComponent(query)}&filter=${sections}`;
+        let href = `/suche/?begriff=${encodeURIComponent(query)}`;
+
+        if (event.target === pageSearchform) {
+            const sections = Array.from(event.target.querySelectorAll('span[data-section]'))
+                .filter(checkbox => checkbox.classList.contains('icon-checkbox-checked'))
+                .map(checkbox => checkbox.dataset.section)
+                .join(',');
+
+            href += `&filter=${sections}`;
+        }
+
+        window.location.href = href;
     }
 });

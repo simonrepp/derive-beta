@@ -21,3 +21,14 @@ References:
 Enolib is now pure ESM, which Pulsar (respectively its node version) does not support at all,
 so for the time being we stick with enolib 0.8.2.
 
+## Release procedure
+
+- Update the `version` field `in package.json`.
+- Tag the latest commit in the format `v0.0.0`. (`git tag v0.0.0`)
+- Run `git push --tags` to update tags on the remote as well
+
+Finally publish the new version to the pulsar package registry:
+
+```
+ppm publish --tag v0.0.0
+```

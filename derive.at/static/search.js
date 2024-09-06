@@ -1,127 +1,183 @@
-const articleResult = article => `
-<div class="tile">
-  ${article.authors.map(author =>
-    `<a class="generic__smaller_text" href="/autoren/${author.permalink}/">${author.name}</a>`
-  ).join(', ')}
-  <div class="tile_header">
-    <a href="/texte/${article.permalink}/">${article.title}</a>
-  </div>
-  ${article.subtitle ? `
-    <div class="generic__subheading">
-      <a href="/texte/${article.permalink}/">${article.subtitle}</a>
-    </div>
-  `:''}
-  ${article.issue ? `
-    <div class="tile_image_split">
-      <div class="tile_image_split__image">
-        <img src="${article.issue.cover.written}">
-      </div>
-      <div class="tile_image_split__meta">
-        <a href="/zeitschrift/${article.issue.permalink}/">dérive N°${article.issue.number}</a><br>
-        Seiten: ${article.inIssueOnPages}
-      </div>
-    </div>
-  `:''}
-</div>
-`;
-
-const authorResult = author => `
-<div class="tile">
-  <div class="tile_header">
-    <a href="/autoren/${author.permalink}/">${author.name}</a>
-  </div>
-  ${author.biography ? `
-    <strong>${author.biography.converted}</strong>
-  `:''}
-</div>
-`;
-
-const bookResult = book => `
-<div class="tile">
-  <div class="tile_header">
-    <a href="/buecher/${book.permalink}/">${book.title}</a>
-  </div>
-  <div class="tile_image_split">
-    <div class="tile_image_split__image">
-      ${book.cover ? `<img src="${book.cover.written}">` : ''}
-    </div>
-    <div class="tile_image_split__meta">
-      ${book.authors.map(author => `<a class="generic__smaller_text" href="/autoren/${author.permalink}/">${author.name}</a>`).join(', ')}
-      <div class="generic__margin_vertical">
-       ${[
-          book.placeOfPublication ? book.placeOfPublication : '',
-          book.publishers.map(publisher => `<a href="/verlage/${publisher.permalink}/">${publisher.name}</a>`).join(', '),
-          book.yearOfPublication ? `(${book.yearOfPublication})` : ''
-        ].join(' ').trim()}
-      </div>
-
-      ${book.reviews.length > 1 ? `
-        Rezensionen lesen: ${book.reviews.map((review, index) => `<a href="/texte/${review.permalink}/">${index + 1}</a>`).join(' ')}
-      `:''}
-
-      ${book.reviews.length === 1 ? `
-        <a href="/texte/${book.reviews[0].permalink}/">Rezension lesen</a>
-      `:''}
-    </div>
-  </div>
-</div>
-`;
-
-const formattedQuarter = {
-  1: 'Jän - Mär',
-  2: 'Apr - Juni',
-  3: 'Juli - Sept',
-  4: 'Okt - Dez'
+const FORMATTED_QUARTER = {
+    1: 'Jän - Mär',
+    2: 'Apr - Juni',
+    3: 'Juli - Sept',
+    4: 'Okt - Dez'
 };
 
-const issueResult = issue => `
-<div class="tile">
-  <div class="tile_header">
-    <a href="/zeitschrift/${issue.permalink}/">dérive N°${issue.number}</a>
-  </div>
-  <div class="generic__subheading">
-    <a href="/zeitschrift/${issue.permalink}/">${issue.title}</a>
-  </div>
-  <div class="tile_image_split">
-    <div class="tile_image_split__image">
-      <img src="${issue.cover.written}">
-    </div>
-    <div class="tile_image_split__meta">
-    ${formattedQuarter[issue.quarter]} / ${issue.year}<br>
-    ${issue.outOfPrint ? 'Vergriffen!' : ''}
-    </div>
-  </div>
-</div>
-`;
+function articleListing(article) {
+    return `
+        <div class="listing_split">
+            <div>
+                ${article.issue ? `<img src="${article.issue.cover.written}">` : ''}
+            </div>
+            <div>
+                ${article.issue ? `
+                    <div class="subheading">
+                        <a href="/zeitschrift/${article.issue.permalink}/">
+                            dérive N° ${article.issue.number} &nbsp;&nbsp; ${FORMATTED_QUARTER[article.issue.quarter]} ${article.issue.year}
+                        </a>
+                    </div>
+                ` : ''}
 
-const programResult = program => `
-<div class="tile">
-  <div class="tile_header">
-    <a href="/radio/${program.permalink}/">${program.title}</a>
-  </div>
-  <div class="tile_image_split">
-    <div class="tile_image_split__image">
-      ${program.image ? `<img src="${program.image.written}">` : ''}
-    </div>
-    <div class="tile_image_split__meta">
-      ${program.subtitle ? `<strong><a href="/radio/${program.permalink}/">${program.subtitle}</a></strong>` : ''}
-      <div class="generic__margin_vertical">
-      <strong>Redaktion</strong><br>
-        ${program.editors.map(editor => `<a href="/autoren/${editor.permalink}/">${editor.name}</a>`).join(', ')}
-      </div>
-      <div class="generic__margin_vertical">
-        <strong>Erstaustrahlung</strong><br>
-        ${program.firstBroadcast}
-      </div>
-    </div>
-  </div>
-</div>
-`;
+                <div class="big_heading no_margin">
+                    <a href="/texte/${article.permalink}/">
+                        ${article.title}
+                    </a>
+                </div>
+                ${article.subtitle ? `<div>${article.subtitle}</div>`:''}
+
+                ${article.issue ? `
+                    <div class="vertical_margin">
+                        Seite ${article.inIssueOnPages}
+                    </div>
+                ` : ''}
+                <p>
+                    <a class="call_out_button" href="/texte/${article.permalink}/">
+                        Artikel lesen
+                    </a>
+                </p>
+            </div>
+        </div>
+    `;
+}
+
+function authorListing(author) {
+    return `
+        <div class="listing_split">
+            <div></div>
+            <div>
+                <div class="big_heading">
+                    <a href="/autorinnen/${author.permalink}/">${author.name}</a>
+                </div>
+                ${author.biography ? `
+                    <p>${author.biography.converted}</p>
+                `:''}
+                <a class="call_out_button" href="/autorinnen/${author.permalink}/">Zur Autor:in</a>
+            </div>
+        </div>
+    `;
+}
+
+function bookListing(book) {
+    return `
+        <div class="listing_split">
+            <div>
+                ${book.cover ? `<img src="${book.cover.written}">`:''}
+            </div>
+            <div>
+                <div class="authors">
+                    ${book.authors.map(author =>
+                        `<a href="/autorinnen/${author.permalink}/">${author.name}</a>`
+                    ).join(', ')}
+                </div>
+                <div class="heading">
+                    <a href="/buecher/${book.permalink}/">
+                        ${book.title}
+                    </a>
+                </div>
+                <div class="vertical_margin">
+                    ${[
+                        book.placeOfPublication ? `${book.placeOfPublication}:` : '',
+                        book.publishers.map(publisher => `<a href="/verlage/${publisher.permalink}/">${publisher.name}</a>`).join(', '),
+                        book.yearOfPublication ? `(${book.yearOfPublication})` : ''
+                    ].join(' ').trim()}
+                </div>
+                <p>
+                    ${bookReviews(book)}
+                </p>
+            </div>
+        </div>
+    `;
+}
+
+function bookReviews(book) {
+    if(book.reviews.length > 1) {
+        return `
+            <div class="call_out_buttons_spaced">
+                ${book.reviews.map((review, index) =>
+                    `<a class="call_out_button" href="/texte/${review.permalink}/">Rezension #${index + 1} lesen</a>
+                `).join(' ')}
+            </div>
+        `;
+    } else if(book.reviews.length === 1) {
+        return `<a class="call_out_button" href="/texte/${book.reviews[0].permalink}/">Rezension lesen</a>`;
+    } else {
+        return '';
+    }
+}
+
+function issueListing(issue) {
+    return `
+        <div class="listing_split">
+            <div>
+                <img src="${issue.cover.written}">
+            </div>
+            <div>
+                <div class="big_heading no_margin">
+                    <a href="/zeitschrift/${issue.permalink}/">dérive N°${issue.number}</a>
+                </div>
+                <div class="subheading">
+                    <a href="/zeitschrift/${issue.permalink}/">${issue.title}</a>
+                </div>
+                <div class="vertical_margin">
+                    ${FORMATTED_QUARTER[issue.quarter]} / ${issue.year}<br>
+                    ${issue.outOfPrint ? 'Vergriffen!' : ''}
+                </div>
+                <a class="call_out_button" href="/zeitschrift/${issue.permalink}">Inhaltsverzeichnis</a>
+            </div>
+        </div>
+    `;
+}
+
+function programListing(program) {
+    return `
+        <div class="listing_split">
+            <div>
+                ${program.image ? `
+                    <img src="${program.image.written}"
+                             ${program.imageCaption ? `alt=${program.imageCaption}" title="${program.imageCaption}"` : ''} >
+                `:''}
+            </div>
+            <div>
+                ${program.editors.length > 0 ? `
+                    <div class="subheading">
+                        Redaktion:
+                        ${program.editors.map(editor => `
+                            <a href="/autorinnen/${editor.permalink}/">${editor.name}</a>
+                        `.trim()).join(', ')}
+                    </div>
+                ` : ''}
+                <div class="big_heading no_margin">
+                    <a href="/radio/${program.permalink}/">
+                        ${program.title}
+                    </a>
+                </div>
+                ${program.subtitle ? `<strong>${program.subtitle}</strong>`:''}
+                <div class="vertical_margin">
+                    <strong>Erstaustrahlung</strong><br>
+                    ${program.firstBroadcast}
+                </div>
+                <div class="font_size_1_25 vertical_margin">
+                    ${program.abstract ?
+                        program.abstract.converted:
+                        (program.text ?
+                            stripAndTruncateHtml(program.text.converted, 500, `/radio/${program.permalink}/`) :
+                            '')}
+                </div>
+                <a class="call_out_button" href="/radio/${program.permalink}/">
+                    Zur Sendung
+                </a>
+            </div>
+        </div>
+    `;    
+}
 
 function renderSearch() {
     const search = new URLSearchParams(window.location.search);
     const query = search.get('begriff');
-    const sections = search.get('filter').split(',');
+    const sections = search.get('filter')?.split(',') ??
+        ['autorinnen', 'bücher', 'radio', 'texte', 'zeitschrift'];
 
     const sectionCheckboxes = document.querySelectorAll('span[data-section]');
     for (const checkbox of sectionCheckboxes) {
@@ -136,12 +192,11 @@ function renderSearch() {
         }
     }
 
-    document.querySelector('.search__query').innerHTML = query;
-    document.querySelector('.search__searchform input[name="query"]').value = query;
-    document.querySelector('.sidebar__searchform  input[name="query"]').value = query;
-    const results = document.querySelector('.search__results');
+    document.querySelector('.search_query').innerHTML = query;
+    document.querySelector('.search_searchform input[name="query"]').value = query;
+    const results = document.querySelector('.search_results');
 
-    if(results) {
+    if (results) {
         if (!location.hostname.match(/derive\.at/)) {
             results.innerHTML = 'Die Suche ist beim lokalen Testen nicht verfügbar da sie auf PHP angewiesen ist.';
         } else if (query.length < 1) {
@@ -151,7 +206,7 @@ function renderSearch() {
             
             const sectionsMapped = sections.map(section => 
                 ({
-                    'autoren': 'authors',
+                    'autorinnen': 'authors',
                     'bücher': 'books',
                     'radio': 'programs',
                     'texte': 'articles',
@@ -164,17 +219,24 @@ function renderSearch() {
                 .then(data => {
                     let html = '';
 
+                    let separate = false;
                     for (const result of data) {
+                        if (separate) {
+                            html += '<hr>';
+                        } else {
+                            separate = true;
+                        }
+
                         if (result.hasOwnProperty('article')) {
-                            html += articleResult(result.article);
+                            html += articleListing(result.article);
                         } else if (result.hasOwnProperty('author')) {
-                            html += authorResult(result.author);
+                            html += authorListing(result.author);
                         } else if (result.hasOwnProperty('book')) {
-                            html += bookResult(result.book);
+                            html += bookListing(result.book);
                         } else if (result.hasOwnProperty('issue')) {
-                            html += issueResult(result.issue);
+                            html += issueListing(result.issue);
                         } else if (result.hasOwnProperty('program')) {
-                            html += programResult(result.program);
+                            html += programListing(result.program);
                         }
                     }
 

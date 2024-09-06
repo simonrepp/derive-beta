@@ -10,10 +10,10 @@ module.exports = data => {
     dirs.add('api');
     dirs.add('api/search');
 
-    dirs.add('autoren');
-    data.authors.forEach(author => dirs.add(`autoren/${author.permalink}`));
-    data.authorsPaginated.forEach(pagination => dirs.add(`autoren/${pagination.label}`));
-    data.bookAuthors.forEach(author => dirs.add(`autoren/${author.permalink}`));
+    dirs.add('autorinnen');
+    data.authors.forEach(author => dirs.add(`autorinnen/${author.permalink}`));
+    data.authorsPaginated.forEach(pagination => dirs.add(`autorinnen/${pagination.label}`));
+    data.bookAuthors.forEach(author => dirs.add(`autorinnen/${author.permalink}`));
     
     dirs.add('buecher');
     data.books.forEach(book => dirs.add(`buecher/${book.permalink}`));
@@ -23,9 +23,6 @@ module.exports = data => {
     
     dirs.add('festival');
     
-    dirs.add('kino');
-    data.screenings.forEach(screening => dirs.add(`kino/${screening.permalink}`));
-
     dirs.add('newsletter');
 
     dirs.add('radio');
@@ -41,7 +38,6 @@ module.exports = data => {
 
     dirs.add('texte');
     data.articles.forEach(article => dirs.add(`texte/${article.permalink}`));
-    data.articlesPaginated.forEach(pagination => dirs.add(`texte/${pagination.label}`));
     data.articles.forEach(article => dirs.add(`texte/${article.permalink}/druckversion`));
 
     dirs.add('verlage');

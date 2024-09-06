@@ -73,17 +73,6 @@ module.exports = data => {
     }
   });
 
-  for(const screening of data.screenings.values()) {
-    if(!connectMedia(data, screening.image)) {
-      data.warnings.push({
-        files: [{ path: screening.sourceFile }],
-        message: `Das Bild "${screening.image.normalizedPath}", dass bei einem der Termine auf der Kino Seite referenziert wird, wurde nicht gefunden.` // TODO: Here and elsewhere generate an actual eno style error?
-      });
-
-      data.screenings.delete(screening.sourceFile);
-    }
-  }
-
   // TODO: Connect only urbanize events with urbanize media (and likewise for all derive-contained data)
   for(const event of Object.values(data.urbanize.events)) {
     if(event.image && !connectMedia(data, event.image)) {

@@ -49,7 +49,13 @@ module.exports = async (data, enoPath) => {
       article.image = doc.field('Bild').optionalPathValue();
       article.imageCaption = doc.field('Bilduntertitel').optionalStringValue();
       article.authorReferences = doc.list('Autoren').items().map(item => ({ item, name: item.requiredStringValue() }));
+
+      // TODO: This is not used anymore at all since soft relaunch of derive.at in fall 2024.
+      //       We could remove or reuse it. It made more sense for stand-alone articles, but now
+      //       we mostly/exclusively (?) present articles within the context of dérive issues (Zeitschriftgausgaben)
+      //       where the date context is given by the magazine itself.
       article.date = doc.field('Datum').optionalDateValue();
+
       article.language = doc.field('Sprache').optionalStringValue();
       article.categoriesDisconnected = doc.list('Kategorien').requiredStringValues();
       article.tagsDisconnected = doc.list('Tags').requiredStringValues();

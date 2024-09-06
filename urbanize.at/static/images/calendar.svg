@@ -11,23 +11,23 @@
                     <path d="m0 0s-3.037 0-3.037-3.037v-23.08s0-3.037 3.037-3.037h21.79s3.037 0 3.037 3.037v23.08s0 3.037-3.037 3.037z" fill="#ffff00"/>
                 </g>
                 <g transform="translate(576.2 805.45)">
-                    <path d="m0 0v7.289s0 3.037-3.037 3.037h-21.79s-3.037 0-3.037-3.037v-7.289z" fill="#62bdf3"/>
+                    <path d="m0 0v7.289s0 3.037-3.037 3.037h-21.79s-3.037 0-3.037-3.037v-7.289z" fill="#e87fc9"/>
                 </g>
-                <g transform="translate(554.58 807.91)" fill="#376fc8">
-                    <path d="m0 0c1.686 0 3.052 1.366 3.052 3.052s-1.366 3.052-3.052 3.052-3.052-1.366-3.052-3.052 1.366-3.052 3.052-3.052" fill="#376fc8"/>
+                <g transform="translate(554.58 807.91)">
+                    <path d="m0 0c1.686 0 3.052 1.366 3.052 3.052s-1.366 3.052-3.052 3.052-3.052-1.366-3.052-3.052 1.366-3.052 3.052-3.052" fill="#dd57b5"/>
                 </g>
-                <g transform="translate(569.95 807.91)" fill="#376fc8">
-                    <path d="m0 0c1.686 0 3.052 1.366 3.052 3.052s-1.366 3.052-3.052 3.052-3.052-1.366-3.052-3.052 1.366-3.052 3.052-3.052" fill="#376fc8"/>
+                <g transform="translate(569.95 807.91)">
+                    <path d="m0 0c1.686 0 3.052 1.366 3.052 3.052s-1.366 3.052-3.052 3.052-3.052-1.366-3.052-3.052 1.366-3.052 3.052-3.052" fill="#dd57b5"/>
                 </g>
             </g>
         </g>
         <g transform="matrix(.35278 0 0 -.35278 -60.79 17.163)">
-            <path d="m0 0v10.325" fill="none" stroke="#0046ad" stroke-linecap="round" stroke-width="3.214"/>
+            <path d="m0 0v10.325" fill="none" stroke="#ae368b" stroke-linecap="round" stroke-width="3.214"/>
         </g>
         <g transform="matrix(.35278 0 0 -.35278 -66.211 17.163)">
-            <path d="m0 0v10.325" stroke="#0046ad" stroke-linecap="round" stroke-width="3.214"/>
+            <path d="m0 0v10.325" stroke="#ae368b" stroke-linecap="round" stroke-width="3.214"/>
         </g>
-        <g fill="none" stroke="#0046ad" stroke-width=".17639">
+        <g fill="none" stroke="#ae368b" stroke-width=".17639">
             <path d="m-68.415 20.646h9.8298"/>
             <path d="m-68.415 22.41h9.8298"/>
             <path d="m-68.415 24.174h9.8298"/>

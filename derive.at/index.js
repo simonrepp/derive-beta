@@ -1,3 +1,7 @@
+// "index" here refers to building a searchable index for the php-based live
+//  search. Basically the content we have is serialized into json format in an
+//  easily searchable form.
+
 const fsExtra = require('fs-extra');
 const moment = require('moment');
 const path = require('path');

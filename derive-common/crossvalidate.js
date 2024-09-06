@@ -204,29 +204,6 @@ module.exports = data => {
     }
   });
 
-  const screeningsByPermalink = new Map();
-  for(const screening of data.screenings.values()) {
-    const existingScreening = screeningsByPermalink.get(screening.permalink);
-
-    if(existingScreening) {
-      const existingError = existingScreening.permalinkField.valueError();
-      const discardedError = screening.permalinkField.valueError();
-
-      data.warnings.push({
-        files: [
-          { path: existingScreening.sourceFile, selection: existingError.selection },
-          { path: screening.sourceFile, selection: discardedError.selection }
-        ],
-        message: `Es existieren zwei Kino Termine mit dem Permalink "${screening.permalink}"`,
-        snippet: discardedError.snippet
-      });
-
-      data.screenings.delete(screening.sourceFile);
-    } else {
-      screeningsByPermalink.set(screening.permalink, screening);
-    }
-  }
-
   const urbanizePermalinks = {};
   const urbanizePermalinkConflict = (existing, addition) => {
     const existingEntity = Object.values(existing)[0];

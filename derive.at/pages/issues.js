@@ -1,77 +1,84 @@
-const authors = require('../widgets/authors.js'),
-      { fullIssueTitle } = require('../widgets/issues/labeling.js'),
-      issueTile = require('../widgets/issues/tile.js'),
-      layout = require('./layout.js'),
-      share = require('../widgets/share.js'),
-      tags = require('../widgets/tags.js');
+const { authorsSmall } = require('../widgets/authors.js');
+const { fullIssueTitle, issueTile } = require('../widgets/issues.js');
+const layout = require('./layout.js');
+const tags = require('../widgets/tags.js');
+const { SECTION_MAGAZINE } = require('../widgets/header.js');
 
 module.exports = data => {
-  const latest = data.issuesDescending[0];
+    const latest = data.issuesDescending[0];
 
-  const years = [];
-  data.issuesDescending.forEach(issue => {
-    const year = issue.year;
+    const years = [];
+    data.issuesDescending.forEach(issue => {
+        const year = issue.year;
 
-    if(years[year]) {
-      years[year].push(issue);
-    } else {
-      years[year] = [issue];
-    }
-  });
+        if(years[year]) {
+            years[year].push(issue);
+        } else {
+            years[year] = [issue];
+        }
+    });
 
-  const latestAuthors = new Set();
-  latest.sections.forEach(section =>
-    section.articles.forEach(article =>
-      article.authors.forEach(author => latestAuthors.add(author))
-    )
-  );
+    const latestAuthors = new Set();
+    latest.sections.forEach(section =>
+        section.articles.forEach(article =>
+            article.authors.forEach(author => latestAuthors.add(author))
+        )
+    );
 
-  const html = `
-    <div>
-      <div class="generic__featured">
-        <div class="generic__featured_image_wide">
-          <img src="${latest.cover.written}">
-        </div>
+    const html = `
+        <div>
+            <div class="featured">
+                <div class="featured_image_wide">
+                    <img src="${latest.cover.written}">
+                </div>
 
-        <div class="generic__featured_text">
+                <div class="featured_text">
+                    <div class="subheading">
+                        ${fullIssueTitle(latest)}
+                    </div>
 
-          <div class="generic__subheading">
-            ${fullIssueTitle(latest)}
-          </div>
+                    <h1 class="big_heading">
+                        <a href="/zeitschrift/${latest.permalink}">
+                            ${latest.title}
+                        </a>
+                    </h1>
 
-          <div class="generic__big_heading">
-            <a href="/zeitschrift/${latest.permalink}">
-              ${latest.title}
-            </a>
-          </div>
+                    ${latest.description ? `
+                        <div class="font_size_1_25 vertical_margin">
+                            ${latest.description.converted}
+                        </div>
+                    `:''}
 
-          ${latest.description ? `
-            <div class="generic__margin_vertical generic__serif">
-              ${latest.description.converted}
+                    <div class="call_out_buttons_spaced font_size_1_25 vertical_margin">
+                        <a class="call_out_button" href="/zeitschrift/${latest.permalink}">
+                            Weiterlesen
+                        </a>
+                        <a class="call_out_button" href="${latest.shopLink}">
+                            Heft kaufen
+                        </a>
+                    </div>
+
+                    <div class="vertical_margin">
+                        <strong>Mit Beiträgen von:</strong>
+                        ${authorsSmall([...latestAuthors].sort((a, b) => a.name.localeCompare(b.name)))}
+                    </div>
+
+                    ${tags(latest.tags)}
+                </div>
             </div>
-          `:''}
 
-          <strong>Mit Beiträgen von:</strong><br>
-          ${authors([...latestAuthors].sort((a, b) => a.name.localeCompare(b.name)))}<br><br>
+            ${Object.keys(years).sort((a, b) => b - a).map(year => `
+                <hr>
 
-          ${tags(latest.tags)}
+                <strong style="display: block; margin-bottom: .5rem; margin-top: 1rem;">${year}</strong>
 
-          ${share(latest.title, `https://derive.at/zeitschrift/${latest.permalink}/`)}
+                <div class="tiles__magazine">
+                    ${years[year].map(issueTile).join('')}
+                </div>
+            `).join('')}
+
         </div>
-      </div>
+    `;
 
-      ${Object.keys(years).sort((a, b) => b - a).map(year => `
-        <hr>
-
-        <h2>${year}</h2>
-
-        <div class="tiles__magazine">
-          ${years[year].map(issueTile).join('')}
-        </div>
-      `).join('')}
-
-    </div>
-  `;
-
-  return layout(data, html, { activeSection: 'Zeitschrift', title: 'Zeitschrift' });
+    return layout(data, html, { section: SECTION_MAGAZINE, title: 'Zeitschrift' });
 };
