@@ -5,8 +5,10 @@ const { fullIssueTitle } = require('./issues.js');
 const tags = require('./tags.js');
 
 const infoDetails = article => `
-    <strong>Autor:innen</strong><br>
-    ${authors(article.authors)}
+    <strong>
+        Autor:innen<br>
+        ${authors(article.authors)}
+    </strong>
 
     <br><br>
 
@@ -102,7 +104,7 @@ function articleListing(article) {
                 ` : ''}
                 <p>
                     <a class="call_out_button" href="/texte/${article.permalink}/">
-                        Artikel lesen
+                        ${article.readable && article.text ? 'Artikel lesen' : 'Abstract lesen'}
                     </a>
                 </p>
             </div>

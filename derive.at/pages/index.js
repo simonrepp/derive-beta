@@ -1,12 +1,12 @@
-const { featureSort } = require('../../derive-common/util.js');
 const layout = require('./layout.js');
 
 const DEFAULT_LINES = 3;
 
 module.exports = data => {
-    const sortedFeatures = Array.from(data.features.values()).sort(featureSort);
+    const sortedFeatures = Array.from(data.features.values()).sort((a, b) => a.position - b.position);
 
-    const topFeature = sortedFeatures[0];
+    // The first feature is by convention always landscape, and the next magazine issue
+    const topFeature = sortedFeatures.shift();
 
     // TODO: Solve this cleanly through a field in the .eno files (and move the data linking to a prior step (connect.js?))
     let topFeatureIssue = topFeature.url.match(/derive\.at\/zeitschrift\/([0-9]+)\/$/);
@@ -15,11 +15,16 @@ module.exports = data => {
         topFeatureIssue = data.issuesDescending.find(issue => issue.number === topFeatureIssueNumber);
     }
 
+    // During urbanize we sometimes have a "secondary top feature", the festival
+    let secondaryFeature;
+    if (sortedFeatures[0].type === 'landscape') {
+        secondaryFeature = sortedFeatures.shift();
+    }
+
     let lastSpan = 4;
     let lastType = 'landscape';
     let lines = 0;
     const otherFeatures = sortedFeatures
-        .slice(1)
         .map(feature => {
             const extra = (lines >= DEFAULT_LINES ? 'extra' : '');
             const result = { extra, feature, lastSpan, lastType };
@@ -52,19 +57,19 @@ module.exports = data => {
                 </a>
                 <div class="feature_text">
                     ${topFeature.header ? `
-                        <strong>
+                        <div class="subheading">
                             ${topFeature.header}
-                        </strong>
+                        </div>
                     `:''}
 
-                    <div class="heading">
+                    <div class="big_heading">
                         ${topFeature.url ? `<a href="${topFeature.url}">${topFeature.title}</a>` : topFeature.title}
                     </div>
 
                     ${topFeature.text ? topFeature.text.converted : ''}
 
                     ${topFeatureIssue ? `
-                        <div class="call_out_buttons_spaced font_size_1_25">
+                        <div class="call_out_buttons_spaced font_size_1_1">
                             <a class="call_out_button inverse" href="/zeitschrift/${topFeatureIssue.permalink}">
                                 Vorschau
                             </a>
@@ -75,6 +80,26 @@ module.exports = data => {
                     ` : ''}
                 </div>
             </div>
+            ${secondaryFeature ? `
+                <div class="feature_${secondaryFeature.type} feature_split">
+                    <a href="${secondaryFeature.url}">
+                        <img src="${secondaryFeature.image.written}">
+                    </a>
+                    <div class="feature_text">
+                        ${secondaryFeature.header ? `
+                            <div class="subheading">
+                                ${secondaryFeature.header}
+                            </div>
+                        `:''}
+
+                        <div class="big_heading">
+                            ${secondaryFeature.url ? `<a href="${secondaryFeature.url}">${secondaryFeature.title}</a>` : secondaryFeature.title}
+                        </div>
+
+                        ${secondaryFeature.text ? secondaryFeature.text.converted : ''}
+                    </div>
+                </div>
+            ` : ''}
         </div>
         <div class="statement">
             <span>
@@ -158,7 +183,7 @@ module.exports = data => {
                         ${feature.text && feature.type !== 'card' ? `<div>${feature.text.converted}</div>` : ''}
 
                         ${feature.url && feature.type !== 'card' && feature.buttonText ? `
-                            <a class="call_out_button" href="${feature.url}">
+                            <a class="call_out_button" href="${feature.url}" ${feature.externalUrl ? 'target="_blank"' : ''}>
                                 ${feature.buttonText}
                             </a>
                         ` : ''}

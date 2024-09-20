@@ -72,8 +72,6 @@ const connectPlayers = (data, collection, referencesField, instancesField, backR
   });
 };
 
-// TODO: Strictly speaking there *could* be an article in multiple issues in which case the current model is incorrect, maybe bring this up with derive just to get an impression
-
 const connectIssuesWithArticles = data => {
   data.issues.forEach(issue => {
     issue.sections.forEach(section => {

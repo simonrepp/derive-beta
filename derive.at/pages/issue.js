@@ -1,4 +1,4 @@
-const { authorsSmall } = require('../widgets/authors.js');
+const { authors } = require('../widgets/authors.js');
 const { fullIssueTitle, issueSection } = require('../widgets/issues.js');
 const layout = require('./layout.js');
 const tags = require('../widgets/tags.js');
@@ -30,25 +30,29 @@ module.exports = (data, issue) => {
                     </h1>
 
                     ${issue.description ? `
-                        <div class="font_size_1_25 vertical_margin">
+                        <div class="font_size_1_1 vertical_margin">
                             ${issue.description.converted}
                         </div>
                     `:''}
 
-                    <div class="font_size_1_25 vertical_margin">
+                    <div class="call_out_buttons_spaced font_size_1_1 vertical_margin">
+                        <a class="call_out_button" href="#inhaltsverzeichnis">
+                            Inhaltsverzeichnis
+                        </a>
                         <a class="call_out_button" href="${issue.shopLink}">
                             Heft kaufen
                         </a>
                     </div>
 
-                    <div class="vertical_margin">
+                    <div class="smaller_font vertical_margin">
                         <strong>Mit Beiträgen von:</strong>
-                        ${authorsSmall([...issueAuthors].sort((a, b) => a.name.localeCompare(b.name)))}
+                        ${authors([...issueAuthors].sort((a, b) => a.name.localeCompare(b.name)))}
                     </div>
 
                     ${tags(issue.tags)}
                 </div>
             </div>
+            <a class="displaced_anchor" id="inhaltsverzeichnis"></a>
             <div class="section_article_split">
                 <div class="subheading">Inhalt</div>
             </div>

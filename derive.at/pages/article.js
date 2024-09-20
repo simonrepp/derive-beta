@@ -24,7 +24,9 @@ module.exports = (data, article) => {
                 ` : ''}
 
                 <div class="vertical_margin">
-                    ${authors(article.authors)}
+                    <strong>
+                        ${authors(article.authors)}
+                    </strong>
                 </div>
 
                 <h1 class="big_heading no_margin">
@@ -37,22 +39,22 @@ module.exports = (data, article) => {
 
                 ${tags(article.tags)}
 
+                ${article.abstract ?
+                    `<div class="font_size_1_1 vertical_margin">${article.abstract.converted}</div>` :
+                    (!article.readable && article.text ?
+                        `<div class="font_size_1_1 vertical_margin">${stripAndTruncateHtml(article.text.converted, 500)}</div>` :
+                        ''
+                    )
+                }
+
                 ${article.readable ?
                     (article.text ?
-                        `<div>${article.text.written}</div>` :
-                        '<div class="vertical_margin">Kein Text vorhanden</div>')
-                 : `
-                    <div class="font_size_1_25 vertical_margin">
-                        ${article.abstract ?
-                            article.abstract.converted :
-                            (article.text ?
-                                stripAndTruncateHtml(article.text.converted, 500, `/texte/${article.permalink}/`) :
-                                'Kein Text vorhanden. Die Zeitschrift mit dem gesamten Artikel kann online im Shop erworben werden!')}
-                     </div>
-                `}
+                        `<div class="vertical_margin">${article.text.written}</div>` :
+                        '<div class="font_size_1_1 vertical_margin">Kein Text vorhanden. Die Zeitschrift mit dem gesamten Artikel kann online im Shop erworben werden!</div>')
+                 : '<div class="font_size_1_1 vertical_margin">Die Zeitschrift mit dem gesamten Artikel kann online im Shop erworben werden!</div>'}
 
                 ${article.issue ? `
-                    <div class="call_out_buttons_spaced font_size_1_25">
+                    <div class="call_out_buttons_spaced font_size_1_1">
                         ${article.issue.shopLink ? `
                             <a class="call_out_button" href="${article.issue.shopLink}">Heft kaufen</a>
                         `:''}
@@ -70,7 +72,7 @@ module.exports = (data, article) => {
                 ` : ''}
 
                 ${article.readable && article.bibliography ? `
-                    <strong>Literaturliste</strong><br>
+                    <strong>Literatur</strong><br>
                     ${article.bibliography.converted}
                 `:''}
             </div>

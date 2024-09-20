@@ -24,11 +24,18 @@ so for the time being we stick with enolib 0.8.2.
 ## Release procedure
 
 - Update the `version` field `in package.json`.
-- Tag the latest commit in the format `v0.0.0`. (`git tag v0.0.0`)
+- Tag the latest commit in the format `v0.0.0`. (`git tag -s v0.0.0`)
 - Run `git push --tags` to update tags on the remote as well
-
-Finally publish the new version to the pulsar package registry:
-
-```
-ppm publish --tag v0.0.0
-```
+- Publish the new version to the pulsar package registry:
+  ```
+  ppm publish --tag v0.0.0
+  ```
+- Rebase and update blunt-tag (basically main + a change that removes the sharp optional dependency on two computers)
+   ```
+   git checkout blunt
+   git rebase main
+   git tag -d blunt-tag
+   git push origin :refs/tags/blunt-tag
+   git tag -s blunt-tag
+   git push origin blunt-tag
+   ```

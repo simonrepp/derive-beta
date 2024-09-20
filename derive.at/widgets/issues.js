@@ -1,5 +1,3 @@
-const { authorsSmall } = require('./authors.js');
-
 const FORMATTED_QUARTER = {
     1: 'Jän - Mär',
     2: 'Apr - Juni',
@@ -47,7 +45,7 @@ function issueSection(section) {
                         <br>
                     `:''}
                     <a class="accent" href="/texte/${article.permalink}/">
-                        Artikel lesen
+                        ${article.readable && article.text ? 'Artikel lesen' : 'Abstract lesen'}
                     </a>
                 </div>
             </div>
@@ -59,6 +57,7 @@ function issueTile(issue) {
     return `
         <a class="issue_tile" href="/zeitschrift/${issue.permalink}/">
             <div class="issue_tile_cover">
+                <div class="issue_tile_overlay"></div>
                 <img src="${issue.cover.written}">
             </div>
             <div>

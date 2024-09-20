@@ -48,6 +48,10 @@ module.exports = async (data, enoPath) => {
             feature.text = doc.field('Text').optionalMarkdownValue();
 
             if (feature.url) {
+                if (!feature.url.startsWith('https://derive.at')) {
+                    feature.externalUrl = true;
+                }
+
                 if (feature.url.startsWith('https://derive.at/radio')) {
                     feature.buttonText = 'Zur Sendung';
                 } else if (feature.url.startsWith('https://derive.at/zeitschrift')) {
@@ -60,6 +64,8 @@ module.exports = async (data, enoPath) => {
                     feature.buttonText = 'Zum Text';
                 } else if (feature.url.startsWith('https://shop.derive.at')) {
                     feature.buttonText = 'Zum Shop';
+                } else {
+                    feature.buttonText = 'Zur Website';
                 }
             }
 

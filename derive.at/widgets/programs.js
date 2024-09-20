@@ -40,7 +40,7 @@ function programListing(program) {
                 </div>
                 ${program.subtitle ? `<strong>${program.subtitle}</strong>`:''}
                 ${firstBroadcast(program.firstBroadcast)}
-                <div class="font_size_1_25 vertical_margin">
+                <div class="font_size_1_1 vertical_margin">
                     ${program.abstract ?
                         program.abstract.converted:
                         (program.text ?

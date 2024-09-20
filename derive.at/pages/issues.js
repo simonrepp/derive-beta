@@ -1,4 +1,4 @@
-const { authorsSmall } = require('../widgets/authors.js');
+const { authors } = require('../widgets/authors.js');
 const { fullIssueTitle, issueTile } = require('../widgets/issues.js');
 const layout = require('./layout.js');
 const tags = require('../widgets/tags.js');
@@ -28,10 +28,9 @@ module.exports = data => {
     const html = `
         <div>
             <div class="featured">
-                <div class="featured_image_wide">
+                <div class="featured_image">
                     <img src="${latest.cover.written}">
                 </div>
-
                 <div class="featured_text">
                     <div class="subheading">
                         ${fullIssueTitle(latest)}
@@ -44,13 +43,13 @@ module.exports = data => {
                     </h1>
 
                     ${latest.description ? `
-                        <div class="font_size_1_25 vertical_margin">
+                        <div class="font_size_1_1 vertical_margin">
                             ${latest.description.converted}
                         </div>
                     `:''}
 
-                    <div class="call_out_buttons_spaced font_size_1_25 vertical_margin">
-                        <a class="call_out_button" href="/zeitschrift/${latest.permalink}">
+                    <div class="call_out_buttons_spaced font_size_1_1 vertical_margin">
+                        <a class="call_out_button" href="/zeitschrift/${latest.permalink}#inhaltsverzeichnis">
                             Weiterlesen
                         </a>
                         <a class="call_out_button" href="${latest.shopLink}">
@@ -58,9 +57,9 @@ module.exports = data => {
                         </a>
                     </div>
 
-                    <div class="vertical_margin">
+                    <div class="smaller_font vertical_margin">
                         <strong>Mit Beiträgen von:</strong>
-                        ${authorsSmall([...latestAuthors].sort((a, b) => a.name.localeCompare(b.name)))}
+                        ${authors([...latestAuthors].sort((a, b) => a.name.localeCompare(b.name)))}
                     </div>
 
                     ${tags(latest.tags)}

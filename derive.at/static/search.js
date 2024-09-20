@@ -34,7 +34,7 @@ function articleListing(article) {
                 ` : ''}
                 <p>
                     <a class="call_out_button" href="/texte/${article.permalink}/">
-                        Artikel lesen
+                        ${article.readable ? 'Artikel lesen' : 'Abstract lesen'}
                     </a>
                 </p>
             </div>
@@ -158,7 +158,7 @@ function programListing(program) {
                     <strong>Erstaustrahlung</strong><br>
                     ${program.firstBroadcast}
                 </div>
-                <div class="font_size_1_25 vertical_margin">
+                <div class="font_size_1_1 vertical_margin">
                     ${program.abstract ?
                         program.abstract.converted:
                         (program.text ?

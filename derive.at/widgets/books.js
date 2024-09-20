@@ -1,6 +1,6 @@
 const moment = require('moment');
 
-const { authors, authorsSmall } = require('./authors.js');
+const { authors } = require('./authors.js');
 const tags = require('./tags.js');
 
 function bookFeature(book) {
@@ -10,11 +10,13 @@ function bookFeature(book) {
                 ${book.cover ? `<img src="${book.cover.written}">` : ''}
             </div>
             <div class="featured_text">
-                ${authors(book.authors)}
+                <strong>
+                    ${authors(book.authors)}
+                </strong>
 
                 <h1 class="heading">${book.title}</h1>
 
-                ${book.description ? `<div>${book.description.converted}</div>` : ''}
+                ${book.description ? `<div class="font_size_1_1 vertical_margin">${book.description.converted}</div>` : ''}
 
                 <div class="vertical_margin">
                     ${[
@@ -39,7 +41,9 @@ function bookListing(book) {
                 ${book.cover ? `<img src="${book.cover.written}">`:''}
             </div>
             <div>
-                ${authors(book.authors)}
+                <strong>
+                    ${authors(book.authors)}
+                </strong>
                 <div class="heading">
                     <a href="/buecher/${book.permalink}/">
                         ${book.title}

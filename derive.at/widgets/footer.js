@@ -8,7 +8,7 @@ module.exports = `
                     <img alt="dérive" src="/logo.svg">
                 </a>
                 <a href="/info/#mediadaten">Mediadaten</a>
-                <a href="/agb/">AGB</a>
+                <a href="/info/#agb">AGB</a>
                 <a href="/info/#kontakt">Kontakt</a>
                 <a href="/info/#impressum">Impressum</a>
             </div>

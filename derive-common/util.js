@@ -40,19 +40,6 @@ enolib.register({
     urlOrMailto
 });
 
-exports.featureSort = (a, b) => {
-    if(a.type === 'landscape' && b.type !== 'landscape') return -1;
-    if(b.type === 'landscape' && a.type !== 'landscape') return 1;
-
-    if(a.type === 'card' && b.type !== 'card') return -1;
-    if(b.type === 'card' && a.type !== 'card') return 1;
-
-    if(a.type === 'portrait' && b.type !== 'portrait') return -1;
-    if(b.type === 'portrait' && a.type !== 'portrait') return 1;
-
-    return a.position - b.position;
-};
-
 exports.loadEno = (directory, enoPath) => {
     const content = fs.readFileSync(path.join(directory, enoPath), 'utf-8');
     return enolib.parse(content, { locale: de, reporter: HtmlReporter });

@@ -11,14 +11,14 @@ module.exports = data => {
 
             <div class="featured_text">
                 <h1>${data.festival.title}</h1>
-                <h2>${data.festival.subtitle}</h2>
+                <div class="subheading">${data.festival.subtitle}</div>
 
-                <span>
+                <div class="font_size_1_1 vertical_margin">
                     ${data.festival.description.converted}
-                </span>
+                </div>
 
-                <div class="vertical_margin">
-                    <a href="https://urbanize.at">urbanize.at</a>
+                <div class="font_size_1_1 vertical_margin">
+                    <a class="call_out_button" href="https://urbanize.at">Zum Festival</a>
                 </div>
             </div>
         </div>

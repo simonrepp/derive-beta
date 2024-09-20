@@ -3,8 +3,6 @@ const layout = require('./layout.js');
 const tags = require('../widgets/tags.js');
 const { SECTION_BOOKS } = require('../widgets/header.js');
 
-// TODO: Centered reduced simple layout for Verlag and Autor Page
-
 module.exports = (data, publisher) => {
     const html = `
         <div>

@@ -27,6 +27,7 @@ const indexArticles = data => {
                     permalink: author.permalink
                 })),
                 image: article.image ? { written: article.image.written } : null,
+                imageCaption: article.imageCaption,
                 inIssueOnPages: article.inIssueOnPages,
                 issue: article.issue ? {
                     cover: { written: article.issue.cover.written },
@@ -36,6 +37,7 @@ const indexArticles = data => {
                     year: article.issue.year
                 } : null,
                 permalink: article.permalink,
+                readable: article.readable,
                 subtitle: article.subtitle,
                 title: article.title
             },
@@ -162,6 +164,7 @@ const indexPrograms = data => {
                     permalink: editor.permalink
                 })),
                 firstBroadcast: moment(program.firstBroadcast).locale('de').format('Do MMMMM YYYY'),
+                image: program.image ? { written: program.image.written } : null,
                 permalink: program.permalink,
                 subtitle: program.subtitle,
                 title: program.title

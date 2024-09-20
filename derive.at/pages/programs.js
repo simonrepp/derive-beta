@@ -2,7 +2,7 @@ const moment = require('moment');
 
 const layout = require('./layout.js');
 const tags = require('../widgets/tags.js');
-const { editors, programListing } = require('../widgets/programs.js');
+const { editors, firstBroadcast, programListing } = require('../widgets/programs.js');
 const { SECTION_RADIO } = require('../widgets/header.js');
 
 const { stripAndTruncateHtml } = require('../../derive-common/util.js');
@@ -27,7 +27,9 @@ module.exports = (data, currentPage) => {
                     <strong>${featured.subtitle}</strong>
                 ` : ''}
 
-                <div class="font_size_1_25 vertical_margin">
+                ${firstBroadcast(featured.firstBroadcast)}
+
+                <div class="font_size_1_1 vertical_margin">
                     ${featured.abstract ?
                         featured.abstract.converted :
                         (featured.text ?
@@ -35,7 +37,7 @@ module.exports = (data, currentPage) => {
                             'Kein Text vorhanden.')}
                 </div>
 
-                <div class="call_out_buttons_spaced font_size_1_25">
+                <div class="call_out_buttons_spaced font_size_1_1">
                     <a class="call_out_button" href="/radio/${featured.permalink}/">
                         Zur Sendung
                     </a>
