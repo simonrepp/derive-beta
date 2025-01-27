@@ -124,7 +124,7 @@ module.exports = data => {
             <hr class="span_1 span_card">
 
             <div class="feature_card feature_split feature_special">
-                <a href="https://shop.derive.at/collections/alle-produkte/products/probeheft-2018">
+                <a href="https://shop.derive.at/products/probeheft">
                     <div class="text_overlay">
                         <div>
                             <strong>Probeheft</strong>
