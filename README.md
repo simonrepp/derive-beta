@@ -39,4 +39,5 @@ so for the time being we stick with enolib 0.8.2.
    git push origin :refs/tags/blunt-tag
    git tag -s blunt-tag
    git push origin blunt-tag
+   git checkout main
    ```
