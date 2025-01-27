@@ -39,5 +39,5 @@
     "scripts": {
         "derive-scripts": "parcel build derive.at/scripts/main.js --no-cache --no-source-maps --out-dir derive.at/static --out-file scripts.js"
     },
-    "version": "2.1.1"
+    "version": "2.1.2"
 }
