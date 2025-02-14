@@ -103,8 +103,9 @@ module.exports = data => {
         </div>
         <div class="statement">
             <span>
-                dérive–Stadtforschung durchstreift Wissenschaft, Kunst und<br>
-                Aktivismus mit gesellschaftsrelevanten Fragen zum urbanen Raum
+                dérive vermittelt Wissen aus Stadtforschung, Kunst und Aktivismus,<br>
+                engagiert sich für die Demokratisierung der urbanen Gesellschaft<br>
+                und die Stärkung der kritischen Öffentlichkeit.
             </span>
         </div>
         <div class="features">
