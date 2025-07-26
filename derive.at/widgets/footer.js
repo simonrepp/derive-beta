@@ -5,7 +5,7 @@ module.exports = `
         <div class="footer_inner">
             <div class="general">
                 <a class="logo" href="/">
-                    <img alt="dérive" src="/logo.svg">
+                    <img alt="dérive" src="/logo25.svg">
                 </a>
                 <a href="/info/#mediadaten">Mediadaten</a>
                 <a href="/info/#agb">AGB</a>

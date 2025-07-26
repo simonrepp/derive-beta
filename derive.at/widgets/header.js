@@ -29,7 +29,7 @@ function header(options) {
         <header>
             <nav>
                 <a class="logo" href="/">
-                    <img alt="dérive" src="/logo.svg">
+                    <img alt="dérive" src="/logo25.svg">
                 </a>
 
                 <div class="header_compact_location">
