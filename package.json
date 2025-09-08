@@ -1,5 +1,4 @@
 {
-    "author": "Simon Repp <simon@fdpl.io>",
     "dependencies": {
         "enolib": "^0.8.2",
         "enotype": "^0.3.0",
@@ -15,7 +14,7 @@
         "speakingurl": "^14.0.1",
         "striptags": "^3.2.0"
     },
-    "description": "dérive Atom Plugin Beta",
+    "description": "dérive Atom Plugin",
     "engines": {
         "atom": ">=1.15.0 <2.0.0"
     },
@@ -35,9 +34,6 @@
     "repository": {
         "type": "git",
         "url": "https://github.com/simonrepp/derive-beta.git"
-    },
-    "scripts": {
-        "derive-scripts": "parcel build derive.at/scripts/main.js --no-cache --no-source-maps --out-dir derive.at/static --out-file scripts.js"
     },
     "version": "2.1.4"
 }

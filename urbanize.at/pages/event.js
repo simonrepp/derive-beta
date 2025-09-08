@@ -28,8 +28,8 @@ module.exports = (urbanize, event) => {
             ${event.dates.map(date => `
                 <div class="flex_split_lr flex_split_collapse_430 margin_y_0_5">
                     <div>
-                        <strong class="color_purple">${moment(date.date).locale('de').format('dd, D MMM YYYY')}</strong><br>
-                        <strong class="color_purple">${timeframe(date)}</strong>
+                        <strong class="color_green">${moment(date.date).locale('de').format('dd, D MMM YYYY')}</strong><br>
+                        <strong class="color_green">${timeframe(date)}</strong>
                     </div>
 
                     <div class="margin_y_0_5">

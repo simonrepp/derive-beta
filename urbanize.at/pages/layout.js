@@ -62,7 +62,7 @@ module.exports = (content, urbanize, options = {}) => {
             ${options.slim ? `
                 <body class="slim">
                     <div class="partition">
-                        ${smallBanner('purple')}
+                        ${smallBanner('alternate')}
 
                         <div class="content">
                             ${content}
@@ -73,7 +73,7 @@ module.exports = (content, urbanize, options = {}) => {
                 <body>
                     <div class="partition">
                         ${header(urbanize)}
-                        ${options.banner === 'small' ? smallBanner('purple') : largeBanner}
+                        ${options.banner === 'small' ? smallBanner('standard') : largeBanner}
 
                         <div>
                             <div class="content">

@@ -1,11 +1,15 @@
-const { URBANIZE_SLOGAN, URBANIZE_YEAR } = require('../config.js');
+const {
+    URBANIZE_SLOGAN,
+    URBANIZE_TIMEFRAME,
+    URBANIZE_YEAR
+} = require('../config.js');
 
 const largeBanner = `
     <div class="banner_large">
         <div class="alignment">
-            <img class="logo_static" src="/images/urbanize_static_purple.svg">
+            <img class="logo_static" src="/images/urbanize_static_alternate.svg">
             <div class="info font_weight_500">
-                <span>8—13 OKT ${URBANIZE_YEAR}</span> <span>WIEN</span>
+                <span>${URBANIZE_TIMEFRAME} ${URBANIZE_YEAR}</span> <span>WIEN</span>
             </div>
             <img alt="${URBANIZE_SLOGAN}"
                  sizes="(max-width: 270px) 270px, (max-width: 540px) 540px, 1080px"
@@ -15,6 +19,7 @@ const largeBanner = `
     </div>
 `;
 
+// variant can be 'standard' (on almost all pages) or 'alternate' (on the newsletter page)
 const smallBanner = variant => `
     <div>
         <div class="banner_small banner_small_${variant}">
@@ -23,7 +28,7 @@ const smallBanner = variant => `
             </a>
             <img alt="${URBANIZE_SLOGAN}" class="slogan" src="/images/slogan_${variant}.svg">
             <div class="info font_size_1_2 font_weight_500">
-                8—13 OKT ${URBANIZE_YEAR}<br>
+                ${URBANIZE_TIMEFRAME} ${URBANIZE_YEAR}<br>
                 WIEN
             </div>
         </div>

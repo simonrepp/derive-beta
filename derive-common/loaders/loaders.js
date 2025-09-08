@@ -74,7 +74,7 @@ function urbanizeCategory(value) {
     if (value === 'Film-Kunst-Musik' || value === 'Stadt-Praxis' || value === 'Vortrag/Diskussion' || value === 'Workshop')
         return value;
 
-    throw `Eine Urbanize Veranstaltungeskategorie ist erforderlich (eine von ${CATEGORIES.map(category => `'${category}'`).join(', ')}), '${value}' ist nicht erlaubt (auch Gross/Kleinschreibung beachten).`;
+    throw `Eine Urbanize Veranstaltungskategorie ist erforderlich (eine von ${CATEGORIES.map(category => `'${category}'`).join(', ')}), '${value}' ist nicht erlaubt (auch Gross/Kleinschreibung beachten).`;
 }
 exports.urbanizeCategory = urbanizeCategory;
 

@@ -28,8 +28,8 @@ const eventFeature = event => `
                     ${event.category}
                 </a>
 
-                <strong class="color_purple">${moment(event.dates[0].date).locale('de').format('dd, D MMM YYYY')}</strong><br>
-                <strong class="color_purple">${timeframe(event.dates[0])}</strong>
+                <strong class="color_green">${moment(event.dates[0].date).locale('de').format('dd, D MMM YYYY')}</strong><br>
+                <strong class="color_green">${timeframe(event.dates[0])}</strong>
             </div>
 
             <hr class="hairline">
