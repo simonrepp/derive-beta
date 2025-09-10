@@ -1,4 +1,4 @@
-const { MENU, SEARCH } = require('./icons.js');
+const { MENU, SEARCH } = require('../../derive-common/icons.js');
 
 const ABOUT = { name: 'About', route: '/ueber-derive/' };
 const AUTHORS = { name: 'Autor:innen', route: '/autorinnen/' };

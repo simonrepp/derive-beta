@@ -20,7 +20,7 @@ module.exports = (content, urbanize, options = {}) => {
     }
 
     if(!options.og.image) {
-        options.og.image = urbanize.base_url + '/images/facebook.png';
+        options.og.image = urbanize.base_url + '/images/facebook.jpg';
         options.og.imageHeight = 1200;
         options.og.imageWidth = 630;
     }
@@ -40,10 +40,10 @@ module.exports = (content, urbanize, options = {}) => {
                 </title>
 
                 <meta charset="utf-8">
-                <meta name="description" content="dérive">
                 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-                <link rel="icon" type="image/png" href="/favicon.png">
+                <link href="/favicon.svg" rel="icon" type="image/svg+xml">
+                <link href="/favicon.png" rel="icon" sizes="32x32" type="image/png">
 
                 <meta property="og:description" content="${options.description}">
                 <meta property="og:image" content="${options.og.image}?${urbanize.assetHash}">

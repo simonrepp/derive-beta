@@ -1,4 +1,4 @@
-const { TOP } = require('../widgets/icons.js');
+const { TOP } = require('../../derive-common/icons.js');
 const FOOTER = require('../widgets/footer.js');
 const { header } = require('../widgets/header.js');
 

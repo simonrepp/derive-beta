@@ -1,4 +1,4 @@
-const { FACEBOOK, FLICKR, INSTAGRAM, LINKEDIN, X } = require('./icons.js');
+const { FACEBOOK, FLICKR, INSTAGRAM, LINKEDIN } = require('../../derive-common/icons.js');
 
 module.exports = `
     <footer>
@@ -21,19 +21,16 @@ module.exports = `
                 </a>
             </div>
             <div class="icon_buttons">
-                <a href="https://www.instagram.com/derive_urbanize/">
+                <a href="https://www.instagram.com/derive_urbanize/" target="_blank">
                    ${INSTAGRAM}
                 </a>
-                <a href="https://x.com/derivemagazin">
-                    ${X}
-                </a>
-                <a href="https://www.facebook.com/derivemagazin/">
+                <a href="https://www.facebook.com/derivemagazin/" target="_blank">
                     ${FACEBOOK}
                 </a>
-                <a href="https://www.linkedin.com/company/derive-stadtforschung">
+                <a href="https://www.linkedin.com/company/derive-stadtforschung" target="_blank">
                     ${LINKEDIN}
                 </a>
-                <a href="https://www.flickr.com/photos/derivemagazin/">
+                <a href="https://www.flickr.com/photos/derivemagazin/" target="_blank">
                     ${FLICKR}
                 </a>
             </div>

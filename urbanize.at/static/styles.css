@@ -30,32 +30,6 @@
     font-weight: 600;
     src: url('/fonts/Jost-600-Semi.woff') format('woff');
 }
-/* icons begin */
-@font-face {
-    font-family: 'icon';
-    src: url('/fonts/icons.woff2?96992864') format('woff2');
-    font-weight: normal;
-    font-style: normal;
-}
-[class^="icon-"]:before, [class*=" icon-"]:before {
-    font-family: "icon";
-    font-style: normal;
-    font-weight: normal;
-    speak: none;
-    display: inline-block;
-    text-decoration: inherit;
-    width: 1em;
-    margin-right: .2em;
-    text-align: center;
-    font-variant: normal;
-    text-transform: none;
-    line-height: 1em;
-    margin-left: .2em;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-.icon-menu:before { content: '\f0c9'; } /* '' */
-/* icons end */
 .color_black { color: var(--color-black); }
 .color_green { color: var(--color-green); }
 .color_grey { color: var(--color-grey); }
@@ -84,18 +58,18 @@ a {
 a:hover { color: var(--color-black); }
 h1, h2, h3 { word-break: break-word; }
 h1 {
-    color: var(--color-white);
+    color: var(--color-green);
     font-size: 1.9em;
     font-weight: 500;
     margin-bottom: 1.4em;
 }
 h2 {
-    color: var(--color-white);
+    color: var(--color-green);
     font-size: 1.7em;
     font-weight: 500;
 }
 h3 {
-    color: var(--color-white);
+    color: var(--color-green);
     font-size: 1.3em;
     font-weight: 600;
 }
@@ -374,7 +348,7 @@ input.input_rect_white {
 .font_size_1_6 { font-size: 1.6em; }
 .font_weight_500 { font-weight: 500; }
 footer {
-	background: var(--color-black);
+	background: var(--color-green);
   	color: var(--color-white);
 }
 footer a { color: var(--color-white); }
@@ -410,32 +384,34 @@ footer .archive > div {
     row-gap: 1px;
 }
 footer .archive summary {
-    background: var(--color-yellow);
+    background: var(--color-black);
     border-radius: .6em;
-    color: var(--color-black);
+    color: var(--color-white);
     cursor: pointer;
     font-size: 1.3rem;
     list-style: none;
     margin-bottom: .1rem;
     padding: .1em .5em;
 }
+footer .archive summary:focus-visible,
 footer .archive summary:hover {
     background: var(--color-white);
     color: var(--color-black);
 }
 footer a.button_circle {
     align-items: center;
-    background: var(--color-white);
+    background: var(--color-black);
     border-radius: 50%;
-    color: var(--color-black);
+    color: var(--color-white);
     display: inline-flex;
     font-size: 1.6rem;
     justify-content: center;
     margin: .14em;
 }
+footer a.button_circle:focus-visible,
 footer a.button_circle:hover {
-    background: var(--color-black);
-    color: var(--color-white);
+    background: var(--color-white);
+    color: var(--color-black);
 }
 footer a.button_circle svg {
     padding: .2em;
@@ -445,15 +421,16 @@ footer .buttons {
 	flex-direction: column;
 }
 footer .buttons a {
-    background: var(--color-yellow);
+    background: var(--color-black);
     border-radius: .6em;
-    color: var(--color-black);
+    color: var(--color-white);
     padding: .1em .5em;
     font-size: 1.3rem;
 }
+footer .buttons a:focus-visible,
 footer .buttons a:hover {
-    background: var(--color-black);
-    color: var(--color-white);
+    background: var(--color-white);
+    color: var(--color-black);
 }
 footer .buttons > a:not(:first-child) { margin-top: 0.5em; }
 footer .logo {
@@ -542,11 +519,14 @@ header .alignment_mobile .backdrop {
 	z-index: -1;
 }
 header .alignment_mobile a.button_circle {
+    align-items: center;
     background: var(--color-black);
     border-radius: 50%;
     color: var(--color-white);
+    display: inline-flex;
     font-size: 1.3rem;
-    margin: .14em;
+    justify-content: center;
+    padding: .3em;
 }
 header .alignment_mobile a.button_circle:hover {
     background: var(--color-green);

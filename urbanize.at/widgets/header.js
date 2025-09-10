@@ -1,3 +1,5 @@
+const { MENU } = require('../../derive-common/icons.js');
+
 module.exports = urbanize => `
     <div class="dim_overlay"
          onclick="
@@ -32,7 +34,7 @@ module.exports = urbanize => `
                     document.querySelector('.dim_overlay').classList.toggle('visible');
                     return false;
                  ">
-                <span class="icon-menu"></span>
+                ${MENU}
             </a>
             <div class="toggle_menu">
                 <a href="/">Festival</a>
