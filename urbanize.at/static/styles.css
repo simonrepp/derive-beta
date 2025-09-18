@@ -207,6 +207,7 @@ input.input_rect_white {
     align-items: center;
     margin-bottom: max(-34%, -26rem);
 }
+.banner_large .alignment > * { min-height: 0; }
 .banner_large .alignment img { max-width: 75%; }
 .banner_large .alignment .info {
     font-size: min(4vw, 3rem);
