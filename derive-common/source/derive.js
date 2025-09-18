@@ -9,7 +9,7 @@ module.exports = async (data, enoPath) => {
     const stats = fs.statSync(path.join(data.root, enoPath));
 
     if(cached && stats.size === cached.stats.size && stats.mtimeMs === cached.stats.mtimeMs) {
-        data.festival = cached.festival;
+        data.derive = cached.derive;
     } else {
         let doc;
 
@@ -31,19 +31,19 @@ module.exports = async (data, enoPath) => {
             }
         }
 
-        const festival = { sourceFile: enoPath };
+        const derive = { sourceFile: enoPath };
 
         doc.allElementsRequired();
 
         try {
-            festival.title = doc.field('Titel').requiredStringValue();
-            festival.subtitle = doc.field('Untertitel').requiredStringValue();
-            festival.image = doc.field('Bild').requiredPathValue();
-            festival.description = doc.field('Beschreibung').requiredMarkdownValue();
-            festival.editions = doc.sections('Edition').map(edition => ({
-                image: edition.field('Bild').requiredPathValue(),
-                url: edition.field('URL').requiredUrlValue()
-            }));
+            derive.accentColor = doc.field('Akzentfarbe').optionalColorValue();
+
+            // Mark deployment configurations as touched (we don't use them here)
+            doc.elements().map(element => {
+                if (element.yieldsSection()) {
+                    element.touch();
+                }
+            });
 
             doc.assertAllTouched();
         } catch(err) {
@@ -62,7 +62,7 @@ module.exports = async (data, enoPath) => {
             }
         }
 
-        data.cache.set(enoPath, { festival: festival, stats: stats });
-        data.festival = festival;
+        data.cache.set(enoPath, { derive, stats });
+        data.derive = derive;
     }
 };

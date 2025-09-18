@@ -3,6 +3,7 @@ const path = require('path');
 
 const sourceArticle = require('./source/article.js');
 const sourceBook = require('./source/book.js');
+const sourceDerive = require('./source/derive.js');
 const sourceFeature = require('./source/feature.js');
 const sourceFestival = require('./source/festival.js');
 const sourceIssue = require('./source/issue.js');
@@ -64,7 +65,7 @@ module.exports = async data => {
             if (normalizedPath === 'urbanize.at/startseite.eno') { await sourceUrbanizeHome(data, localFilesystemPath); } else
             if (normalizedPath === 'urbanize.at/beteiligte.eno') { await sourceUrbanizeParticipants(data, localFilesystemPath); } else
             if (normalizedPath.startsWith('urbanize.at/')) { await sourceUrbanizePage(data, localFilesystemPath); } else
-            if (normalizedPath !== 'derive.eno') {
+            if (normalizedPath === 'derive.eno') { await sourceDerive(data, localFilesystemPath); } else {
                 data.warnings.push({
                     files: [{ path: localFilesystemPath }],
                     message: `Die Datei ${normalizedPath} ist nicht zuordenbar. Sie ist wahrscheinlich entweder vom System (noch) nicht vorgesehen, im falschen Ordner oder ihr Name ist falsch geschrieben.`

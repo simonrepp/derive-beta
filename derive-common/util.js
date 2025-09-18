@@ -1,7 +1,7 @@
 const fs = require('fs');
 const enolib = require('enolib');
 const { HtmlReporter } = require('enolib');
-const { date, datetime, email, integer, url } = require('enotype');
+const { color, date, datetime, email, integer, url } = require('enotype');
 const { de } = require('enolib/locales');
 const path = require('path');
 const striptags = require('striptags');
@@ -22,6 +22,7 @@ const { markdown, markdownWithMedia } = require('./loaders/loaders_markdown.js')
 
 enolib.register({
     boolean,
+    color,
     date,
     datetime,
     email,
