@@ -97,6 +97,19 @@
         ]
       },
       {
+        "label": "Auswertungen",
+        "submenu": [
+          {
+            "label": "Allgemeine Statistiken (Artikelzahlen, Zeichenzahlen, Wortlängen, etc.)",
+            "command": "derive-beta:analysis-general"
+          },
+          {
+            "label": "Bibliografische Statistiken",
+            "command": "derive-beta:analysis-bibliography"
+          }
+        ]
+      },
+      {
         "label": "Dokumentation",
         "submenu": [
           {
