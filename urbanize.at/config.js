@@ -1,4 +1,4 @@
 // Determines what year and texts to interpolate in various templates
-exports.URBANIZE_SLOGAN = "It's about time!";
-exports.URBANIZE_TIMEFRAME = '14—19 OKT';
-exports.URBANIZE_YEAR = '2025';
+exports.URBANIZE_SLOGAN = "Reclaim the Streets!";
+exports.URBANIZE_TIMEFRAME = '13—18 OKT';
+exports.URBANIZE_YEAR = '2026';

@@ -5,10 +5,10 @@ module.exports = (event, date) => {
     // return '<span class="color_accent">Keine Anmeldung notwendig</span>';
 
   if(date.fullyBooked)
-    return '<span class="color_green">Veranstaltung bereits ausgebucht</span>';
+    return '<span class="color_dark_teal">Veranstaltung bereits ausgebucht</span>';
 
   return `
-    <a class="rounded_rect button_rect_green" href="${event.signupLink}" target="_blank">
+    <a class="rounded_rect button_rect_dark_teal" href="${event.signupLink}" target="_blank">
       Anmeldung
     </a>
   `;

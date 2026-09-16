@@ -4,7 +4,7 @@ const { URBANIZE_YEAR } = require('../config.js');
 const DERIVE_INFO = `
     <img class="logo" alt="dérive" src="/images/derive.svg"><br>
     <div class="font_size_1_3">dérive — Verein für Stadtforschung</div>
-    <div class="font_size_1_3"><a href="https://derive.at">derive.at</a></div>
+    <div class="font_size_1_3"><a class="link_text" href="https://derive.at">derive.at</a></div>
     <br><br>
     <a class="button_circle" href="https://www.instagram.com/derive_urbanize/" target="_blank">
        ${INSTAGRAM}
@@ -19,7 +19,7 @@ const DERIVE_INFO = `
         ${FLICKR}
     </a>
     <br><br>
-    <span class="font_size_0_8">© ${URBANIZE_YEAR} URBANIZE! INTERNATIONALES FESTIVAL FÜR URBANE ERKUNDUNGEN WIEN</span>
+    <span class="color_black font_size_0_8">© ${URBANIZE_YEAR} URBANIZE! INTERNATIONALES FESTIVAL FÜR URBANE ERKUNDUNGEN WIEN</span>
 `;
 
 module.exports = urbanize => `
@@ -39,6 +39,7 @@ module.exports = urbanize => `
             <details class="archive">
                 <summary>Festivalarchiv</summary>
                 <div>
+                    <a href="https://2025.urbanize.at/" target="_blank">urbanize! 2025</a>
                     <a href="https://2024.urbanize.at/" target="_blank">urbanize! 2024</a>
                     <a href="https://2023.urbanize.at/" target="_blank">urbanize! 2023</a>
                     <a href="https://2022.urbanize.at/" target="_blank">urbanize! 2022</a>

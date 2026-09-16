@@ -18,7 +18,7 @@ const eventFeature = event => `
                 <img src="${event.image.written}">
             `:''}
             ${event.imageCredits ? `
-                <div class="color_grey font_size_0_8 text_align_right">${event.imageCredits}</div>
+                <div class="caption font_size_0_8 text_align_right">${event.imageCredits}</div>
             `:''}
         </div>
 
@@ -28,8 +28,8 @@ const eventFeature = event => `
                     ${event.category}
                 </a>
 
-                <strong class="color_green">${moment(event.dates[0].date).locale('de').format('dd, D MMM YYYY')}</strong><br>
-                <strong class="color_green">${timeframe(event.dates[0])}</strong>
+                <strong class="color_dark_teal">${moment(event.dates[0].date).locale('de').format('dd, D MMM YYYY')}</strong><br>
+                <strong class="color_dark_teal">${timeframe(event.dates[0])}</strong>
             </div>
 
             <hr class="hairline">
@@ -56,7 +56,7 @@ const customFeature = feature => `
     <div class="feature">
         <img src="${feature.image.written}">
         ${feature.imageCredits ? `
-            <div class="color_grey font_size_0_8 text_align_right">${feature.imageCredits}</div>
+            <div class="caption font_size_0_8 text_align_right">${feature.imageCredits}</div>
         ` : ''}
 
         <div class="extra_indent">
